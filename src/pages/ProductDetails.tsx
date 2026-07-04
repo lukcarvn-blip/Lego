@@ -481,7 +481,7 @@ export const ProductDetails = () => {
                   }}
                 >
                   <ShoppingBag size={20} />
-                  <span>{language === 'vi' ? 'Thêm Vào Giỏ Hàng' : 'Add to Cart'}</span>
+                  <span>{language === 'vi' ? 'MUA NGAY' : 'BUY NOW'}</span>
                 </button>
 
                 <div 
