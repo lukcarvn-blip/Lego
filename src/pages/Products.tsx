@@ -5,7 +5,7 @@ import { ProductCard } from '../components/ProductCard';
 import { Filter, ChevronLeft, ChevronRight, Zap, LayoutGrid, LayoutList } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const ITEMS_PER_PAGE = 8;
+const DEFAULT_ITEMS_PER_PAGE = 8;
 
 export const Products = () => {
   const { products, t, language } = useStore();
@@ -17,8 +17,26 @@ export const Products = () => {
   const [sortBy, setSortBy] = useState<string>('newest');
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
 
-  // Sync state if URL changes
+  // Sync state if URL changes and handle window resize for items per page
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      if (typeof window !== 'undefined') {
+        if (window.innerWidth >= 640 && window.innerWidth < 1280) {
+          setItemsPerPage(6); // Tablet: 3 columns, 2 rows
+        } else if (window.innerWidth >= 1280) {
+          setItemsPerPage(8); // Desktop: 4 columns, 2 rows
+        } else {
+          setItemsPerPage(6); // Mobile: 2 columns, 3 rows
+        }
+      }
+    };
+    
+    updateItemsPerPage();
+    window.addEventListener('resize', updateItemsPerPage);
+    return () => window.removeEventListener('resize', updateItemsPerPage);
+  }, []);
   useEffect(() => {
     if (categoryName) {
       setActiveCategory(categoryName);
@@ -60,13 +78,13 @@ export const Products = () => {
     return result;
   }, [products, activeCategory, activeSaleType, sortBy]);
 
-  const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   
   // Pagination
   const currentProducts = useMemo(() => {
-    const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredProducts.slice(start, start + ITEMS_PER_PAGE);
-  }, [filteredProducts, currentPage]);
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredProducts.slice(start, start + itemsPerPage);
+  }, [filteredProducts, currentPage, itemsPerPage]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);

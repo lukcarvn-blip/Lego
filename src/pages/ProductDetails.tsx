@@ -256,6 +256,71 @@ export const ProductDetails = () => {
               />
             </motion.div>
           )}
+
+          {/* Sticky Buy Button – left column */}
+          <div style={{ position: 'sticky', bottom: '20px', zIndex: 50, marginTop: '2rem' }}>
+            <div 
+              style={{ 
+                padding: '0.75rem 1rem', width: '100%', 
+                display: 'flex', flexDirection: 'column', gap: '0.75rem',
+                boxShadow: '0 10px 30px rgba(74, 222, 128, 0.3)',
+                borderRadius: 'var(--radius-lg)',
+                background: 'var(--color-accent)'
+              }}
+            >
+              {/* All 3 on same row: MUA NGAY | Price | Rocket */}
+              <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.5rem', width: '100%' }}>
+                <button 
+                  onClick={handleAddToCart}
+                  className="sticky-action-btn"
+                  style={{ 
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                    fontSize: '1rem', fontWeight: 800,
+                    background: 'rgba(0,0,0,0.2)', border: 'none', color: '#000', cursor: 'pointer',
+                    padding: '0.75rem 0.5rem', borderRadius: 'var(--radius-sm)',
+                  }}
+                >
+                  <ShoppingBag size={20} />
+                  <span>{language === 'vi' ? 'MUA NGAY' : 'BUY NOW'}</span>
+                </button>
+                <div 
+                  className="sticky-action-price-box"
+                  style={{ 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontWeight: 'bold', background: 'rgba(0,0,0,0.15)', padding: '0.5rem 0.75rem',
+                    borderRadius: 'var(--radius-sm)', fontSize: '1.1rem', color: '#000',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <AnimatedPrice priceString={currentPriceString} />
+                </div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setIsFastCrafting(!isFastCrafting); }}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: '#ef4444', color: '#fff', border: 'none',
+                    padding: '0 0.9rem', borderRadius: 'var(--radius-sm)',
+                    cursor: 'pointer', transition: 'all 0.2s',
+                    boxShadow: isFastCrafting ? 'inset 0 3px 6px rgba(0,0,0,0.4)' : '0 4px 10px rgba(239,68,68,0.4)',
+                    transform: isFastCrafting ? 'scale(0.96)' : 'scale(1)',
+                  }}
+                  title={language === 'vi' ? 'Tăng tốc chế tác (+10% phí)' : 'Fast Crafting (+10% fee)'}
+                >
+                  <Rocket size={20} />
+                </button>
+              </div>
+              {/* Summary Note */}
+              <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
+                <p className="summary-note" style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.8)', margin: 0, lineHeight: 1.5, textAlign: 'left' }}>
+                  {language === 'vi' ? (
+                    <>Bạn đang chọn: <strong>{product.name.vi}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Thời gian chế tác: <strong>{craftTimeDays} ngày</strong>. {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>Đã bật tăng tốc!</strong> : 'Nhấn 🚀 để tăng tốc.'}</>
+                  ) : (
+                    <>Selected: <strong>{product.name.en}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Crafting: <strong>{craftTimeDays} days</strong>. {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>Fast mode ON!</strong> : 'Tap 🚀 to speed up.'}</>
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Right: Product Info */}
@@ -464,72 +529,7 @@ export const ProductDetails = () => {
             </div>
           </div>
 
-          <div style={{ position: 'sticky', bottom: '20px', zIndex: 50, marginTop: '2rem' }}>
-            <div 
-              style={{ 
-                padding: '0.75rem 1rem', width: '100%', 
-                display: 'flex', flexDirection: 'column', gap: '0.75rem',
-                boxShadow: '0 10px 30px rgba(74, 222, 128, 0.3)',
-                borderRadius: 'var(--radius-lg)',
-                background: 'var(--color-accent)'
-              }}
-            >
-              {/* All 3 on same row: Add to Cart | Price | Rocket */}
-              <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.5rem', width: '100%' }}>
-                <button 
-                  onClick={handleAddToCart}
-                  className="sticky-action-btn"
-                  style={{ 
-                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-                    fontSize: '1rem', fontWeight: 800,
-                    background: 'rgba(0,0,0,0.2)', border: 'none', color: '#000', cursor: 'pointer',
-                    padding: '0.75rem 0.5rem', borderRadius: 'var(--radius-sm)',
-                  }}
-                >
-                  <ShoppingBag size={20} />
-                  <span>{language === 'vi' ? 'MUA NGAY' : 'BUY NOW'}</span>
-                </button>
-
-                <div 
-                  className="sticky-action-price-box"
-                  style={{ 
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontWeight: 'bold', background: 'rgba(0,0,0,0.15)', padding: '0.5rem 0.75rem',
-                    borderRadius: 'var(--radius-sm)', fontSize: '1.1rem', color: '#000',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  <AnimatedPrice priceString={currentPriceString} />
-                </div>
-
-                <button
-                  onClick={(e) => { e.stopPropagation(); setIsFastCrafting(!isFastCrafting); }}
-                  style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: '#ef4444', color: '#fff', border: 'none',
-                    padding: '0 0.9rem', borderRadius: 'var(--radius-sm)',
-                    cursor: 'pointer', transition: 'all 0.2s',
-                    boxShadow: isFastCrafting ? 'inset 0 3px 6px rgba(0,0,0,0.4)' : '0 4px 10px rgba(239,68,68,0.4)',
-                    transform: isFastCrafting ? 'scale(0.96)' : 'scale(1)',
-                  }}
-                  title={language === 'vi' ? 'Tăng tốc chế tác (+10% phí)' : 'Fast Crafting (+10% fee)'}
-                >
-                  <Rocket size={20} />
-                </button>
-              </div>
-
-              {/* Detailed Summary Note inside Button */}
-              <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
-                 <p className="summary-note" style={{ fontSize: '1.15rem', color: 'rgba(0,0,0,0.8)', margin: 0, lineHeight: 1.5, textAlign: 'left' }}>
-                   {language === 'vi' ? (
-                     <>Bạn đang chọn sản phẩm: <strong>{product.name.vi}</strong> với kích thước <strong>{selectedSize}</strong> và sử dụng chất liệu <strong>{selectedMaterial === 'PLA' ? 'Nhựa tiêu chuẩn (PLA)' : 'Nhựa cao cấp (PETG)'}</strong>. Với tùy chọn này chúng tôi cần thời gian chế tác là <strong>{craftTimeDays} ngày</strong>. Nếu bạn đã đồng ý với các tùy chọn này thì nhấn vào nút để tiến hành thanh toán, {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>thời gian chế tác của bạn đã giảm xuống với số ngày dự kiến là {craftTimeDays} ngày.</strong> : 'bạn có thể giảm thời gian chế tác bằng cách nhấn vào nút tên lửa.'}</>
-                   ) : (
-                     <>You have selected: <strong>{product.name.en}</strong> in size <strong>{selectedSize}</strong> using <strong>{selectedMaterial === 'PLA' ? 'Standard Plastic (PLA)' : 'Premium Plastic (PETG)'}</strong>. With these options, our estimated crafting time is <strong>{craftTimeDays} days</strong>. If you agree with these options, click the button to proceed to checkout. {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>Your crafting time has been reduced, with an estimated {craftTimeDays} days.</strong> : 'You can reduce crafting time by clicking the rocket button.'}</>
-                   )}
-                 </p>
-              </div>
-            </div>
-          </div>
+          {/* Buy button moved to left column */}
 
           <div style={{ marginTop: '2rem' }}>
             <AccordionItem title={t('description')} defaultOpen={true}>
