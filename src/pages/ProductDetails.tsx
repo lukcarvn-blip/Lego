@@ -159,19 +159,19 @@ export const ProductDetails = () => {
       </div>
       <style>{`
         .pd-main-grid {
-          display: grid;
+          display: grid !important;
           gap: 2.5rem;
           grid-template-columns: 1fr;
         }
         @media (min-width: 768px) {
           .pd-main-grid {
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr !important;
             align-items: start;
           }
         }
         @media (min-width: 1200px) {
           .pd-main-grid {
-            grid-template-columns: 500px 1fr;
+            grid-template-columns: 500px 1fr !important;
             align-items: start;
           }
         }
