@@ -16,14 +16,13 @@ const LegoHeadIcon = ({ size = 32 }: { size?: number }) => (
 
 export const Home = () => {
   const { products, blogPosts, t, language, settings, formatPrice } = useStore();
-  const [isLoading, setIsLoading] = useState(false);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-
-  // Detect iPad: show 3 initially, load 3 more. Desktop: show 4, load 4 more.
-  const isTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 1024;
+  // Tablet = 640px to 1279px (covers all iPads incl. iPad Pro landscape)
+  const isTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 1280;
   const initialCount = isTablet ? 3 : 4;
   const loadStep = isTablet ? 3 : 4;
   const [visibleCount, setVisibleCount] = useState(initialCount);
+  const [isLoading, setIsLoading] = useState(false);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
   const featuredProducts = products.slice(0, visibleCount);
 
