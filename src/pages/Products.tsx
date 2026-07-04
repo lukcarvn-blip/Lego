@@ -35,7 +35,7 @@ export const Products = () => {
     }
 
     if (activeSaleType === 'Sale') {
-      result = result.filter(p => p.saleType === 'SALE' || p.saleType === 'NORMAL_SALE');
+      result = result.filter(p => p.saleType === 'SALE' || (p.discountPercentage ?? 0) > 0);
     } else if (activeSaleType === 'Flash Sale') {
       result = result.filter(p => p.saleType === 'FLASH_SALE');
     }

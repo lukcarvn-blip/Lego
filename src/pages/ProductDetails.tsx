@@ -108,7 +108,7 @@ export const ProductDetails = () => {
   const relatedRef = useRef<HTMLDivElement>(null);
   const bestSellersRef = useRef<HTMLDivElement>(null);
 
-  const scrollSlider = (ref: React.RefObject<HTMLDivElement>, dir: 'left' | 'right') => {
+  const scrollSlider = (ref: React.RefObject<HTMLDivElement | null>, dir: 'left' | 'right') => {
     if (ref.current) {
       const scrollAmount = ref.current.clientWidth;
       ref.current.scrollBy({ left: dir === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
