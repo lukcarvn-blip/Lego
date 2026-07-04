@@ -160,7 +160,7 @@ export const ProductDetails = () => {
       <div className="pd-main-grid">
         
         {/* Left: Image Gallery */}
-        <div style={{ height: 'fit-content' }}>
+        <div style={{ height: '100%', position: 'relative' }}>
           <motion.div 
             className="glass-panel"
             initial={{ opacity: 0, x: -20 }}
@@ -340,7 +340,8 @@ export const ProductDetails = () => {
             </div>
           </div>
 
-          <div style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}>
+          <div className="material-size-wrapper">
+            <div style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', height: '100%' }}>
             <h3 style={{ marginBottom: '1rem' }}>{language === 'vi' ? 'Chất liệu' : 'Material'}</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', overflow: 'hidden' }}>
               {/* PLA Option */}
@@ -396,7 +397,7 @@ export const ProductDetails = () => {
             </div>
           </div>
 
-          <div style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}>
+            <div style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', height: '100%' }}>
             <h3 style={{ marginBottom: '1rem' }}>{t('size')}</h3>
             <div className="size-options-container" style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'flex-end', paddingTop: '1rem' }}>
               {product.availableSizes.map(size => {
@@ -437,6 +438,7 @@ export const ProductDetails = () => {
                   </button>
                 )
               })}
+            </div>
             </div>
           </div>
 
@@ -630,6 +632,16 @@ export const ProductDetails = () => {
           bottom: 20px;
           z-index: 50;
           margin-top: 2rem;
+        }
+        .material-size-wrapper {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 2rem;
+        }
+        @media (min-width: 1280px) {
+          .material-size-wrapper {
+            grid-template-columns: 1fr 1fr;
+          }
         }
         @media (max-width: 639px) {
           .size-options-container {

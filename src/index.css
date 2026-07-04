@@ -252,13 +252,13 @@ button {
 @media (min-width: 640px) {
   .pd-main-grid {
     grid-template-columns: 1fr 1fr;
-    align-items: start;
+    align-items: stretch;
   }
 }
 @media (min-width: 1280px) {
   .pd-main-grid {
     grid-template-columns: 500px 1fr;
-    align-items: start;
+    align-items: stretch;
   }
 }
 
