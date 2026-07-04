@@ -16,7 +16,7 @@ const LegoHeadIcon = ({ size = 32 }: { size?: number }) => (
 
 export const Home = () => {
   const { products, blogPosts, t, language, settings, formatPrice } = useStore();
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [visibleCount, setVisibleCount] = useState(3);
   const [isLoading, setIsLoading] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
@@ -25,7 +25,7 @@ export const Home = () => {
   const handleLoadMore = () => {
     setIsLoading(true);
     setTimeout(() => {
-      setVisibleCount(prev => prev + 4);
+      setVisibleCount(prev => prev + 3);
       setIsLoading(false);
     }, 800); // Simulate network delay
   };
@@ -337,7 +337,7 @@ export const Home = () => {
           </div>
         </div>
         <div className="home-news-grid">
-          {blogPosts.slice(0, 3).map((post, i) => (
+          {blogPosts.slice(0, 4).map((post, i) => (
             <motion.div
               key={post.id}
               initial={{ opacity: 0, x: -20 }}
@@ -423,6 +423,23 @@ export const Home = () => {
         .category-card {
           height: 300px;
         }
+        .pd-main-grid {
+          display: grid;
+          gap: 2.5rem;
+          grid-template-columns: 1fr;
+        }
+        @media (min-width: 768px) {
+          .pd-main-grid {
+            grid-template-columns: 1fr 1fr;
+            align-items: start;
+          }
+        }
+        @media (min-width: 1024px) {
+          .pd-main-grid {
+            grid-template-columns: 500px 1fr;
+            align-items: start;
+          }
+        }
         .blog-grid {
           display: grid;
           gap: 2rem;
@@ -430,7 +447,7 @@ export const Home = () => {
         }
         .home-news-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: repeat(4, 1fr);
           gap: 1.5rem;
         }
 
