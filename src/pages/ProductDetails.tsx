@@ -626,10 +626,6 @@ export const ProductDetails = () => {
           width: 130px;
         }
         @media (max-width: 639px) {
-          .pd-main-grid {
-            grid-template-columns: 1fr !important;
-            gap: 2rem !important;
-          }
           .size-options-container {
             gap: 0.5rem !important;
             flex-wrap: nowrap !important;
@@ -656,16 +652,7 @@ export const ProductDetails = () => {
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(74, 222, 128, 0.4);
           }
         }
-        @media (min-width: 640px) and (max-width: 1023px) {
-          .pd-main-grid {
-            grid-template-columns: 1fr !important;
-            gap: 3rem !important;
-          }
-        }
         @media (min-width: 1024px) {
-          .pd-main-grid {
-            grid-template-columns: 1fr 1fr;
-          }
           .bottom-split-container {
             display: grid;
             grid-template-columns: 1fr 1fr;

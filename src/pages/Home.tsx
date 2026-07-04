@@ -427,23 +427,6 @@ export const Home = () => {
         .category-card {
           height: 300px;
         }
-        .pd-main-grid {
-          display: grid;
-          gap: 2.5rem;
-          grid-template-columns: 1fr;
-        }
-        @media (min-width: 768px) {
-          .pd-main-grid {
-            grid-template-columns: 1fr 1fr;
-            align-items: start;
-          }
-        }
-        @media (min-width: 1200px) {
-          .pd-main-grid {
-            grid-template-columns: 500px 1fr;
-            align-items: start;
-          }
-        }
         .blog-grid {
           display: grid;
           gap: 2rem;
