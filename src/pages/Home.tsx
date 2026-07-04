@@ -341,7 +341,7 @@ export const Home = () => {
           </div>
         </div>
         <div className="home-news-grid">
-          {blogPosts.slice(0, 3).map((post, i) => (
+          {blogPosts.slice(0, 4).map((post, i) => (
             <motion.div
               key={post.id}
               initial={{ opacity: 0, x: -20 }}
@@ -451,7 +451,7 @@ export const Home = () => {
         }
         .home-news-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          grid-template-columns: repeat(4, 1fr);
           gap: 1.5rem;
         }
 
