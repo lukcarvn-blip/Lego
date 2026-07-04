@@ -468,51 +468,48 @@ export const ProductDetails = () => {
                 background: 'var(--color-accent)'
               }}
             >
-              <div className="sticky-action-top" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'stretch', width: '100%', gap: '0.5rem' }}>
+              {/* All 3 on same row: Add to Cart | Price | Rocket */}
+              <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.5rem', width: '100%' }}>
                 <button 
                   onClick={handleAddToCart}
                   className="sticky-action-btn"
                   style={{ 
-                    flex: 1, display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.25rem', 
-                    background: 'transparent', border: 'none', color: '#000', cursor: 'pointer', textAlign: 'left',
-                    padding: '0.25rem'
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                    fontSize: '1rem', fontWeight: 800,
+                    background: 'rgba(0,0,0,0.2)', border: 'none', color: '#000', cursor: 'pointer',
+                    padding: '0.75rem 0.5rem', borderRadius: 'var(--radius-sm)',
                   }}
                 >
-                  <ShoppingBag /> 
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span className="sticky-action-text" style={{ fontWeight: 800 }}>{language === 'vi' ? 'Thêm Vào Giỏ Hàng' : 'Add to Cart'}</span>
-                  </div>
+                  <ShoppingBag size={20} />
+                  <span>{language === 'vi' ? 'Thêm Vào Giỏ Hàng' : 'Add to Cart'}</span>
                 </button>
-                <div className="sticky-action-price-container" style={{ display: 'flex', alignItems: 'stretch', gap: '0.5rem' }}>
-                  <div 
-                    className="sticky-action-price-box"
-                    style={{ 
-                      display: 'flex', alignItems: 'center',
-                      fontWeight: 'bold', background: 'rgba(0,0,0,0.15)', padding: '0.5rem 0.75rem', borderRadius: 'var(--radius-sm)', fontSize: '1.25rem',
-                      color: '#000',
-                    }}
-                  >
-                    <AnimatedPrice priceString={currentPriceString} />
-                  </div>
-                  <button
-                    onClick={(e) => { e.stopPropagation(); setIsFastCrafting(!isFastCrafting); }}
-                    style={{
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      background: '#ef4444',
-                      color: '#fff',
-                      border: 'none',
-                      padding: '0 0.75rem',
-                      borderRadius: 'var(--radius-sm)',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      boxShadow: isFastCrafting ? 'inset 0 3px 6px rgba(0,0,0,0.4)' : '0 4px 10px rgba(239,68,68,0.4)',
-                      transform: isFastCrafting ? 'scale(0.96)' : 'scale(1)',
-                    }}
-                    title={language === 'vi' ? 'Tăng tốc chế tác (+10% phí)' : 'Fast Crafting (+10% fee)'}
-                  >
-                    <Rocket size={20} />
-                  </button>
+
+                <div 
+                  className="sticky-action-price-box"
+                  style={{ 
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontWeight: 'bold', background: 'rgba(0,0,0,0.15)', padding: '0.5rem 0.75rem',
+                    borderRadius: 'var(--radius-sm)', fontSize: '1.1rem', color: '#000',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <AnimatedPrice priceString={currentPriceString} />
                 </div>
+
+                <button
+                  onClick={(e) => { e.stopPropagation(); setIsFastCrafting(!isFastCrafting); }}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: '#ef4444', color: '#fff', border: 'none',
+                    padding: '0 0.9rem', borderRadius: 'var(--radius-sm)',
+                    cursor: 'pointer', transition: 'all 0.2s',
+                    boxShadow: isFastCrafting ? 'inset 0 3px 6px rgba(0,0,0,0.4)' : '0 4px 10px rgba(239,68,68,0.4)',
+                    transform: isFastCrafting ? 'scale(0.96)' : 'scale(1)',
+                  }}
+                  title={language === 'vi' ? 'Tăng tốc chế tác (+10% phí)' : 'Fast Crafting (+10% fee)'}
+                >
+                  <Rocket size={20} />
+                </button>
               </div>
 
               {/* Detailed Summary Note inside Button */}
