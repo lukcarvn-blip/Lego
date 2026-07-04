@@ -16,18 +16,23 @@ const LegoHeadIcon = ({ size = 32 }: { size?: number }) => (
 
 export const Home = () => {
   const { products, blogPosts, t, language, settings, formatPrice } = useStore();
-  const [visibleCount, setVisibleCount] = useState(3);
   const [isLoading, setIsLoading] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  // Detect iPad: show 3 initially, load 3 more. Desktop: show 4, load 4 more.
+  const isTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 1024;
+  const initialCount = isTablet ? 3 : 4;
+  const loadStep = isTablet ? 3 : 4;
+  const [visibleCount, setVisibleCount] = useState(initialCount);
 
   const featuredProducts = products.slice(0, visibleCount);
 
   const handleLoadMore = () => {
     setIsLoading(true);
     setTimeout(() => {
-      setVisibleCount(prev => prev + 3);
+      setVisibleCount(prev => prev + loadStep);
       setIsLoading(false);
-    }, 800); // Simulate network delay
+    }, 800);
   };
 
   return (
@@ -337,7 +342,7 @@ export const Home = () => {
           </div>
         </div>
         <div className="home-news-grid">
-          {blogPosts.slice(0, 4).map((post, i) => (
+          {blogPosts.slice(0, 3).map((post, i) => (
             <motion.div
               key={post.id}
               initial={{ opacity: 0, x: -20 }}
@@ -434,7 +439,7 @@ export const Home = () => {
             align-items: start;
           }
         }
-        @media (min-width: 1024px) {
+        @media (min-width: 1200px) {
           .pd-main-grid {
             grid-template-columns: 500px 1fr;
             align-items: start;
@@ -447,7 +452,7 @@ export const Home = () => {
         }
         .home-news-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(3, 1fr);
           gap: 1.5rem;
         }
 
