@@ -445,7 +445,7 @@ export const Home = () => {
         .sale-badge { padding: 0.25rem 0.75rem; font-size: 0.75rem; }
         .product-footer-badge { padding: 4px 10px; font-size: 0.875rem; }
         .why-panel { padding: 4rem; }
-        .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 3rem; }
+        .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
         .why-title { font-size: 2.5rem; }
 
         @media (max-width: 1023px) {

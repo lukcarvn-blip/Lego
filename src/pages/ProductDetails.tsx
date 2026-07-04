@@ -239,7 +239,7 @@ export const ProductDetails = () => {
           )}
 
           {/* Sticky Buy Button – left column */}
-          <div style={{ position: 'sticky', bottom: '20px', zIndex: 50, marginTop: '2rem' }}>
+          <div className="sticky-cart-wrapper">
             <div 
               style={{ 
                 padding: '0.75rem 1rem', width: '100%', 
@@ -624,6 +624,12 @@ export const ProductDetails = () => {
         }
         .size-option-btn {
           width: 130px;
+        }
+        .sticky-cart-wrapper {
+          position: sticky;
+          bottom: 20px;
+          z-index: 50;
+          margin-top: 2rem;
         }
         @media (max-width: 639px) {
           .size-options-container {
