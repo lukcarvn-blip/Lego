@@ -163,13 +163,13 @@ export const ProductDetails = () => {
           gap: 2.5rem;
           grid-template-columns: 1fr;
         }
-        @media (min-width: 768px) {
+        @media (min-width: 640px) {
           .pd-main-grid {
             grid-template-columns: 1fr 1fr !important;
             align-items: start;
           }
         }
-        @media (min-width: 1200px) {
+        @media (min-width: 1280px) {
           .pd-main-grid {
             grid-template-columns: 500px 1fr !important;
             align-items: start;
