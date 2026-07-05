@@ -284,7 +284,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             <motion.img 
               variants={isMobile ? {
                 rest:  { y: 0, scale: 1 },
-                hover: { y: '-8%', scale: 1.15 }
+                hover: { y: '50%', scale: 2.2 }
               } : {
                 rest:  { y: '50%', scale: 2.2 },
                 hover: { y: 0, scale: 1 }
