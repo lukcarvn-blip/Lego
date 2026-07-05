@@ -407,7 +407,7 @@ export const ProductDetails = () => {
 
             <div style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', height: '100%' }}>
             <h3 style={{ marginBottom: '1rem' }}>{t('size')}</h3>
-            <div className="size-options-container" style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'flex-end', paddingTop: '1rem' }}>
+            <div className="size-options-container" style={{ display: 'flex', gap: '1.5rem', flexWrap: 'nowrap', alignItems: 'flex-end', paddingTop: '1rem' }}>
               {product.availableSizes.map(size => {
                 const isSelected = selectedSize === size;
                 const sizeDetails = getSizeDetails(size);
@@ -633,7 +633,8 @@ export const ProductDetails = () => {
           margin-top: 4rem;
         }
         .size-option-btn {
-          width: 130px;
+          width: auto;
+          flex: 1;
         }
         .sticky-cart-wrapper {
           position: sticky;
