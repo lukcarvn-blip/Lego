@@ -91,11 +91,12 @@ export const Footer = () => {
       <div className="container" style={{
         borderTop: '1px solid var(--glass-border)',
         paddingTop: '1rem',
+        paddingBottom: '1.5rem',
         textAlign: 'center',
         color: 'var(--color-text-muted)',
         fontSize: '0.875rem'
       }}>
-        <p>&copy; {new Date().getFullYear()} Lô Gê. All rights reserved.</p>
+        <p style={{ margin: 0 }}>&copy; {new Date().getFullYear()} Lô Gê. All rights reserved.</p>
       </div>
     </motion.footer>
   );
