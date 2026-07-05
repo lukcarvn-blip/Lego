@@ -6,9 +6,9 @@ import { mockBlogPosts } from '../data/mockBlogPosts';
 import type { Product, ProductSize } from '../data/mockProducts';
 import { translations } from '../i18n/translations';
 import type { Language } from '../i18n/translations';
-import { auth, googleProvider } from '../config/firebase';
+import { auth, googleProvider, db } from '../config/firebase';
 import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
-
+import { collection, onSnapshot, doc, setDoc, addDoc, updateDoc, deleteDoc } from 'firebase/firestore';
 export type OrderStatus = 'Pending' | 'Crafting' | 'Shipping' | 'Delivered';
 
 export type ProductMaterial = 'PLA' | 'PETG';
@@ -37,6 +37,15 @@ export interface BlogPost {
   content: string;
   date: string;
   image: string;
+}
+
+export interface AppUser {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string;
+  role: 'admin' | 'user';
+  joinDate: string;
 }
 
 export interface StoreSettings {
@@ -68,11 +77,17 @@ interface StoreContextType {
   settings: StoreSettings;
   updateSettings: (newSettings: Partial<StoreSettings>) => void;
   addProduct: (product: Omit<Product, 'id'>) => void;
+  deleteProduct: (id: string) => void;
+  deleteBlogPost: (id: string) => void;
   formatPrice: (priceUSD: number, discountPercentage?: number) => { original: string, current: string, isOnSale: boolean };
   toasts: ToastMessage[];
   showToast: (message: string) => void;
   removeToast: (id: string) => void;
   user: any;
+  appUsers: AppUser[];
+  currentUserRole: 'admin' | 'user';
+  updateUserRole: (uid: string, newRole: 'admin' | 'user') => void;
+  deleteUser: (uid: string) => void;
   loginWithGoogle: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -112,17 +127,55 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   const [products, setProducts] = useState<Product[]>(mockProducts);
   const [cart, setCart] = useState<CartItem[]>([]);
-  const [orders, setOrders] = useState<Order[]>([
-    {
-      id: 'ORD-1001',
-      customerName: 'John Doe',
-      date: new Date().toISOString(),
-      status: 'Crafting',
-      total: 999.00,
-      items: []
-    }
-  ]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>(mockBlogPosts);
+  const [appUsers, setAppUsers] = useState<AppUser[]>([]);
+  const [currentUserRole, setCurrentUserRole] = useState<'admin' | 'user'>('user');
+
+  React.useEffect(() => {
+    const unsubProducts = onSnapshot(collection(db, 'products'), (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
+      if (data.length === 0) {
+        mockProducts.forEach(async (p) => { await setDoc(doc(db, 'products', p.id), p); });
+      } else { setProducts(data); }
+    });
+
+    const unsubBlogs = onSnapshot(collection(db, 'blogs'), (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as BlogPost[];
+      if (data.length === 0) {
+        mockBlogPosts.forEach(async (p) => { await setDoc(doc(db, 'blogs', p.id), p); });
+      } else { setBlogPosts(data); }
+    });
+
+    const unsubOrders = onSnapshot(collection(db, 'orders'), (snapshot) => {
+      setOrders(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Order[]);
+    });
+
+    const unsubUsers = onSnapshot(collection(db, 'users'), (snapshot) => {
+      setAppUsers(snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() })) as AppUser[]);
+    });
+
+    return () => { unsubProducts(); unsubBlogs(); unsubOrders(); unsubUsers(); };
+  }, []);
+
+  React.useEffect(() => {
+    if (user && appUsers.length > 0) {
+      const found = appUsers.find(u => u.uid === user.uid);
+      if (found) {
+        setCurrentUserRole(found.role);
+      } else {
+        setDoc(doc(db, 'users', user.uid), {
+          email: user.email,
+          displayName: user.displayName || '',
+          photoURL: user.photoURL || '',
+          role: 'user',
+          joinDate: new Date().toISOString()
+        }, { merge: true });
+      }
+    } else if (!user) {
+      setCurrentUserRole('user');
+    }
+  }, [user, appUsers]);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [flyingIcons, setFlyingIcons] = useState<{ id: string, startX: number, startY: number, image: string }[]>([]);
 
@@ -138,8 +191,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     setToasts(prev => prev.filter(t => t.id !== id));
   }, []);
 
-  const updateProduct = (updated: Product) => {
-    setProducts(prev => prev.map(p => p.id === updated.id ? updated : p));
+  const updateProduct = async (updated: Product) => {
+    try {
+      await updateDoc(doc(db, 'products', updated.id), updated as any);
+    } catch (e) { console.error(e); }
   };
 
   const addToCart = (product: Product, size: ProductSize, material: ProductMaterial, quantity: number, e?: React.MouseEvent, isFastCrafting: boolean = false) => {
@@ -172,34 +227,61 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = () => setCart([]);
 
-  const createOrder = (customerName: string) => {
+  const createOrder = async (customerName: string) => {
     const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
-    const newOrder: Order = {
-      id: `ORD-${Math.floor(1000 + Math.random() * 9000)}`,
+    const newOrder = {
       items: [...cart],
       total,
       status: 'Pending',
       date: new Date().toISOString(),
       customerName
     };
-    setOrders(prev => [newOrder, ...prev]);
-    clearCart();
+    try {
+      await addDoc(collection(db, 'orders'), newOrder);
+      clearCart();
+    } catch (e) { console.error(e); }
   };
 
-  const updateOrderStatus = (orderId: string, status: OrderStatus) => {
-    setOrders(prev => prev.map(order => 
-      order.id === orderId ? { ...order, status } : order
-    ));
+  const updateOrderStatus = async (orderId: string, status: OrderStatus) => {
+    try {
+      await updateDoc(doc(db, 'orders', orderId), { status });
+    } catch (e) { console.error(e); }
   };
 
-  const addBlogPost = (post: Omit<BlogPost, 'id'>) => {
-    const newPost = { ...post, id: `b-${Date.now()}` };
-    setBlogPosts(prev => [newPost, ...prev]);
+  const addBlogPost = async (post: Omit<BlogPost, 'id'>) => {
+    try {
+      await addDoc(collection(db, 'blogs'), post);
+    } catch (e) { console.error(e); }
   };
 
-  const addProduct = (product: Omit<Product, 'id'>) => {
-    const newProduct = { ...product, id: `p-${Date.now()}` };
-    setProducts(prev => [newProduct, ...prev]);
+  const addProduct = async (product: Omit<Product, 'id'>) => {
+    try {
+      await addDoc(collection(db, 'products'), product);
+    } catch (e) { console.error(e); }
+  };
+
+  const deleteProduct = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'products', id));
+    } catch (e) { console.error(e); }
+  };
+
+  const deleteBlogPost = async (id: string) => {
+    try {
+      await deleteDoc(doc(db, 'blogs', id));
+    } catch (e) { console.error(e); }
+  };
+
+  const updateUserRole = async (uid: string, newRole: 'admin' | 'user') => {
+    try {
+      await updateDoc(doc(db, 'users', uid), { role: newRole });
+    } catch (e) { console.error(e); }
+  };
+
+  const deleteUser = async (uid: string) => {
+    try {
+      await deleteDoc(doc(db, 'users', uid));
+    } catch (e) { console.error(e); }
   };
 
   const updateSettings = (newSettings: Partial<StoreSettings>) => {
@@ -234,10 +316,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <StoreContext.Provider value={{ 
-        products, updateProduct, addProduct,
+        products, updateProduct, addProduct, deleteProduct,
         cart, addToCart, removeFromCart, clearCart, 
         orders, createOrder, updateOrderStatus,
-        blogPosts, addBlogPost,
+        blogPosts, addBlogPost, deleteBlogPost,
         language,
         setLanguage,
         t,
@@ -248,6 +330,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         showToast,
         removeToast,
         user,
+        appUsers,
+        currentUserRole,
+        updateUserRole,
+        deleteUser,
         loginWithGoogle,
         logout
       }}

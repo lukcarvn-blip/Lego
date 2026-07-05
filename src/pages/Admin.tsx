@@ -6,13 +6,14 @@ import type { Product } from '../data/mockProducts';
 export const Admin = () => {
   const { 
     orders, updateOrderStatus, 
-    products, updateProduct, addProduct,
-    blogPosts, addBlogPost, 
+    products, updateProduct, addProduct, deleteProduct,
+    blogPosts, addBlogPost, deleteBlogPost,
     settings, updateSettings,
-    t, language, showToast
+    t, language, showToast,
+    appUsers, currentUserRole, updateUserRole, deleteUser
   } = useStore();
   
-  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'blog' | 'settings'>('orders');
+  const [activeTab, setActiveTab] = useState<'orders' | 'products' | 'blog' | 'members' | 'settings'>('orders');
 
   // --- Orders ---
   const handleStatusChange = (orderId: string, newStatus: OrderStatus) => {
@@ -92,6 +93,15 @@ export const Admin = () => {
     showToast(language === 'vi' ? 'Đã lưu cài đặt!' : 'Settings saved!');
   };
 
+  if (currentUserRole !== 'admin') {
+    return (
+      <div className="container" style={{ paddingTop: '120px', paddingBottom: '4rem', textAlign: 'center' }}>
+        <h1 style={{ color: 'var(--color-accent)' }}>Access Denied</h1>
+        <p style={{ color: 'var(--color-text-muted)' }}>You do not have permission to view this page. Please log in as an administrator.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="container" style={{ paddingTop: '120px', paddingBottom: '4rem' }}>
       <h1 style={{ fontSize: '2.5rem', marginBottom: '2rem' }}>Admin Dashboard</h1>
@@ -118,6 +128,13 @@ export const Admin = () => {
           style={{ background: activeTab === 'blog' ? 'var(--color-accent)' : 'var(--glass-bg)', color: activeTab === 'blog' ? '#000' : '#fff' }}
         >
           {t('tab_blog')}
+        </button>
+        <button 
+          onClick={() => setActiveTab('members')}
+          className="btn-primary"
+          style={{ background: activeTab === 'members' ? 'var(--color-accent)' : 'var(--glass-bg)', color: activeTab === 'members' ? '#000' : '#fff' }}
+        >
+          {language === 'vi' ? 'Thành viên' : 'Members'}
         </button>
         <button 
           onClick={() => { setActiveTab('settings'); setTempSettings(settings); }}
@@ -216,9 +233,14 @@ export const Admin = () => {
                     <td style={{ padding: '1rem' }}>${product.price}</td>
                     <td style={{ padding: '1rem' }}>{product.stock}</td>
                     <td style={{ padding: '1rem' }}>
-                      <button onClick={() => handleOpenEditProduct(product)} style={{ color: 'var(--color-accent)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                        <Edit2 size={16} /> Edit
-                      </button>
+                      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <button onClick={() => handleOpenEditProduct(product)} style={{ color: 'var(--color-accent)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                          <Edit2 size={16} /> Edit
+                        </button>
+                        <button onClick={() => { if(window.confirm('Delete product?')) deleteProduct(product.id) }} style={{ color: 'red', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                          Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -381,13 +403,65 @@ export const Admin = () => {
               <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <h3>{t('published')}</h3>
                 {blogPosts.map(post => (
-                  <div key={post.id} style={{ padding: '1rem', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)' }}>
-                    <h4 style={{ color: 'var(--color-accent)' }}>{post.title}</h4>
-                    <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>{post.date}</p>
+                  <div key={post.id} style={{ padding: '1rem', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <h4 style={{ color: 'var(--color-accent)' }}>{post.title}</h4>
+                      <p style={{ fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>{post.date}</p>
+                    </div>
+                    <button onClick={() => { if(window.confirm('Delete post?')) deleteBlogPost(post.id) }} style={{ color: 'red', fontSize: '0.9rem' }}>
+                      Delete
+                    </button>
                   </div>
                 ))}
               </div>
             </div>
+          </>
+        )}
+
+        {/* MEMBERS TAB */}
+        {activeTab === 'members' && (
+          <>
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '1.5rem' }}>{language === 'vi' ? 'Quản lý thành viên' : 'Member Management'}</h2>
+            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)' }}>
+                  <th style={{ padding: '1rem' }}>Email / Name</th>
+                  <th style={{ padding: '1rem' }}>Joined</th>
+                  <th style={{ padding: '1rem' }}>Role</th>
+                  <th style={{ padding: '1rem' }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {appUsers.map((u) => (
+                  <tr key={u.uid} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    <td style={{ padding: '1rem' }}>
+                      <div style={{ fontWeight: 600 }}>{u.displayName || 'Unknown'}</div>
+                      <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>{u.email}</div>
+                    </td>
+                    <td style={{ padding: '1rem', color: 'var(--color-text-muted)' }}>{new Date(u.joinDate).toLocaleDateString()}</td>
+                    <td style={{ padding: '1rem' }}>
+                      <select 
+                        value={u.role}
+                        onChange={(e) => updateUserRole(u.uid, e.target.value as 'admin' | 'user')}
+                        style={{
+                          padding: '0.5rem', borderRadius: 'var(--radius-sm)',
+                          background: 'rgba(0,0,0,0.5)', color: '#fff',
+                          border: '1px solid var(--glass-border)', outline: 'none'
+                        }}
+                      >
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                      </select>
+                    </td>
+                    <td style={{ padding: '1rem' }}>
+                      <button onClick={() => { if(window.confirm('Delete user?')) deleteUser(u.uid) }} style={{ color: 'red', fontSize: '0.9rem' }}>
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </>
         )}
 
