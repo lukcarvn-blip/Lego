@@ -422,7 +422,7 @@ export const ProductDetails = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', overflow: 'hidden' }}>
               {/* PLA Option */}
               <button 
-                onClick={() => setSelectedMaterial('PLA')}
+                onClick={() => { setSelectedMaterial('PLA'); setIsCartExpanded(true); }}
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem',
                   borderRadius: 'var(--radius-md)',
@@ -440,7 +440,7 @@ export const ProductDetails = () => {
 
               {/* PETG Option */}
               <button 
-                onClick={() => setSelectedMaterial('PETG')}
+                onClick={() => { setSelectedMaterial('PETG'); setIsCartExpanded(true); }}
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem',
                   borderRadius: 'var(--radius-md)',
@@ -496,7 +496,7 @@ export const ProductDetails = () => {
                   <button 
                     key={size}
                     className="size-option-btn"
-                    onClick={() => setSelectedSize(size)}
+                    onClick={() => { setSelectedSize(size); setIsCartExpanded(true); }}
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
