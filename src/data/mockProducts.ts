@@ -34,7 +34,7 @@ export const mockProducts: Product[] = [
       en: "Toad - Classic Mushroom Kingdom" 
     },
     category: "Classic",
-    price: 139.99,
+    price: 83.99, // original 139.99
     rating: 4.8,
     reviews: 128,
     likes: 3400,
@@ -58,7 +58,7 @@ export const mockProducts: Product[] = [
       en: "Deadpool - Merc with a Mouth" 
     },
     category: "Superheroes",
-    price: 199.99,
+    price: 119.99, // original 199.99
     rating: 4.9,
     reviews: 210,
     likes: 5600,
@@ -81,7 +81,7 @@ export const mockProducts: Product[] = [
       en: "Venom - Symbiote Nightmare" 
     },
     category: "Superheroes",
-    price: 219.99,
+    price: 131.99, // original 219.99
     rating: 5.0,
     reviews: 320,
     likes: 8900,
@@ -102,7 +102,7 @@ export const mockProducts: Product[] = [
       en: "Santa Claus - LEGATO Christmas Edition" 
     },
     category: "Classic",
-    price: 159.99,
+    price: 95.99, // original 159.99
     rating: 4.9,
     reviews: 145,
     likes: 4200,
@@ -123,7 +123,7 @@ export const mockProducts: Product[] = [
       en: "Black Panther - Wakanda Forever" 
     },
     category: "Superheroes",
-    price: 239.99,
+    price: 143.99, // original 239.99
     rating: 5.0,
     reviews: 410,
     likes: 9800,

@@ -156,7 +156,21 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
       if (data.length === 0) {
         mockProducts.forEach(async (p) => { await setDoc(doc(db, 'products', p.id), p); });
-      } else { setProducts(data); }
+      } else { 
+        setProducts(data); 
+
+        // One-time 40% price reduction migration for existing Firebase data
+        if (!localStorage.getItem('price_reduced_40_v1')) {
+          data.forEach(async (p) => {
+            // Apply 40% discount by multiplying current price by 0.6
+            // We only do this if price is suspiciously high (e.g., > 130) to avoid double discounting if they already started fresh.
+            if (p.price > 130) {
+              await updateDoc(doc(db, 'products', p.id), { price: p.price * 0.6 });
+            }
+          });
+          localStorage.setItem('price_reduced_40_v1', 'true');
+        }
+      }
     });
 
     const unsubBlogs = onSnapshot(collection(db, 'blogs'), (snapshot) => {
