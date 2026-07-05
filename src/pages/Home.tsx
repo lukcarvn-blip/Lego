@@ -203,32 +203,34 @@ export const Home = () => {
         </h2>
         <div className="category-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(0.5rem, 2vw, 3rem)', justifyItems: 'center' }}>
           {[
-            { title: t('cat_superheroes'), img: '/images/tube-superhero.png' },
-            { title: t('cat_scifi'), img: '/images/tube-scifi.png' },
-            { title: t('cat_classic'), img: '/images/tube-classic.png' },
+            { title: t('cat_superheroes'), img: '/images/tube-superhero.png', path: '/category/Superheroes' },
+            { title: t('cat_scifi'), img: '/images/tube-scifi.png', path: '/category/Sci-Fi' },
+            { title: t('cat_classic'), img: '/images/tube-classic.png', path: '/category/Classic' },
           ].map((cat, idx) => (
-            <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', width: '100%' }}>
-              <motion.div 
-                whileHover={{ 
-                  scale: 1.03, 
-                  borderColor: 'var(--color-accent)', 
-                  boxShadow: '0 0 30px rgba(74, 222, 128, 0.5), inset 0 0 20px rgba(74, 222, 128, 0.3)' 
-                }}
-                transition={{ duration: 0.3 }}
-                style={{ 
-                  width: '100%', 
-                  aspectRatio: '1/1',
-                  borderRadius: 'var(--radius-lg)',
-                  overflow: 'hidden',
-                  cursor: 'pointer',
-                  border: '1px solid rgba(255, 255, 255, 0.05)',
-                  background: 'transparent'
-                }}
-              >
-                <img src={cat.img} alt={cat.title} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'screen' }} />
-              </motion.div>
-              <h3 className="minecraft-font" style={{ fontWeight: 500, textAlign: 'center', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-text)' }}>{cat.title}</h3>
-            </div>
+            <Link to={cat.path} key={idx} style={{ textDecoration: 'none', width: '100%', display: 'block' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', width: '100%' }}>
+                <motion.div 
+                  whileHover={{ 
+                    scale: 1.03, 
+                    borderColor: 'var(--color-accent)', 
+                    boxShadow: '0 0 30px rgba(74, 222, 128, 0.5), inset 0 0 20px rgba(74, 222, 128, 0.3)' 
+                  }}
+                  transition={{ duration: 0.3 }}
+                  style={{ 
+                    width: '100%', 
+                    aspectRatio: '1/1',
+                    borderRadius: 'var(--radius-lg)',
+                    overflow: 'hidden',
+                    cursor: 'pointer',
+                    border: '1px solid rgba(255, 255, 255, 0.05)',
+                    background: 'transparent'
+                  }}
+                >
+                  <img src={cat.img} alt={cat.title} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'screen' }} />
+                </motion.div>
+                <h3 className="minecraft-font" style={{ fontWeight: 500, textAlign: 'center', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-text)' }}>{cat.title}</h3>
+              </div>
+            </Link>
           ))}
         </div>
       </motion.section>
