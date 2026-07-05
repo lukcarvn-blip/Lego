@@ -246,19 +246,28 @@ button {
 /* Product Details Grid */
 .pd-main-grid {
   display: grid;
-  gap: 2.5rem;
+  gap: 2rem;
   grid-template-columns: 1fr;
 }
-@media (min-width: 640px) {
+/* Tablet 640-1023px: still single column, side-by-side breaks layout */
+@media (min-width: 640px) and (max-width: 1023px) {
   .pd-main-grid {
-    grid-template-columns: 1fr 1fr;
-    align-items: stretch;
+    grid-template-columns: 1fr;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+}
+@media (min-width: 1024px) {
+  .pd-main-grid {
+    grid-template-columns: 420px 1fr;
+    align-items: start;
+    gap: 2.5rem;
   }
 }
 @media (min-width: 1280px) {
   .pd-main-grid {
     grid-template-columns: 500px 1fr;
-    align-items: stretch;
+    align-items: start;
   }
 }
 
@@ -381,6 +390,53 @@ button {
 /* Product Card Title Sizing */
 .product-title {
   font-size: 1.15rem;
+}
+
+/* Sticky bottom bar (mobile/tablet) price + quantity overflow fix */
+@media (max-width: 1023px) {
+  .sticky-cart-wrapper {
+    position: fixed;
+    bottom: 65px; /* above mobile nav */
+    left: 0;
+    right: 0;
+    z-index: 90;
+    padding: 0 0.75rem;
+  }
+}
+
+/* Size selector – prevent text overflow */
+.size-selector-btn {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+.size-selector-label {
+  font-size: clamp(0.65rem, 2.5vw, 0.85rem);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.size-selector-sub {
+  font-size: clamp(0.55rem, 2vw, 0.75rem);
+}
+
+/* Product details – image panel smaller on tablet */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .pd-image-panel {
+    aspect-ratio: 1/1 !important;
+    padding: 1rem !important;
+  }
+}
+
+/* Summary note text smaller on small devices */
+@media (max-width: 767px) {
+  .summary-note {
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+  }
+  .pd-section-panel {
+    padding: 1rem !important;
+  }
 }
 
 @media (max-width: 639px) {
