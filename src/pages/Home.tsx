@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, Clock, ChevronRight, ShieldCheck, Zap, Diamond, Sparkles, ShoppingCart, Loader2, LayoutGrid, LayoutList, ArrowRight } from 'lucide-react';
@@ -65,8 +65,10 @@ export const Home = () => {
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              opacity: 0.6,
-              mixBlendMode: 'lighten'
+              opacity: 0.4,
+              transform: 'translateZ(0)',
+              willChange: 'transform, opacity',
+              pointerEvents: 'none'
             }}
           >
             <source src={settings.heroVideoUrl} type="video/mp4" />
