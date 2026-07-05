@@ -12,6 +12,17 @@ export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
+      setIsSearchOpen(false);
+      setSearchQuery('');
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -124,9 +135,23 @@ export const Navbar = () => {
                 )}
               </Link>
 
-              <button className="desktop-action" style={{ display: 'flex', alignItems: 'center' }}>
-                <Search size={22} />
-              </button>
+              <div className="desktop-action" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+                <button onClick={() => setIsSearchOpen(!isSearchOpen)} style={{ display: 'flex', alignItems: 'center', background: 'transparent', border: 'none', color: 'var(--color-text)', cursor: 'pointer' }}>
+                  <Search size={22} />
+                </button>
+                {isSearchOpen && (
+                  <form onSubmit={handleSearchSubmit} style={{ position: 'absolute', right: '100%', marginRight: '0.5rem', display: 'flex', alignItems: 'center', background: 'var(--glass-bg)', padding: '0.25rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--glass-border)' }}>
+                    <input 
+                      type="text" 
+                      placeholder={language === 'vi' ? 'Tìm kiếm...' : 'Search...'}
+                      value={searchQuery}
+                      onChange={e => setSearchQuery(e.target.value)}
+                      style={{ background: 'transparent', border: 'none', color: '#fff', padding: '0.25rem 0.75rem', outline: 'none', width: '200px' }}
+                      autoFocus
+                    />
+                  </form>
+                )}
+              </div>
               {user ? (
                 <div className="desktop-action" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={logout} title={language === 'vi' ? 'Đăng xuất' : 'Logout'}>
                   {user.photoURL ? (

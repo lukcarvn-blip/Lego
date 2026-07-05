@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
 import { Filter, ChevronLeft, ChevronRight, Zap, LayoutGrid, LayoutList } from 'lucide-react';
@@ -11,6 +11,9 @@ export const Products = () => {
   const { products, t, language } = useStore();
   const { categoryName } = useParams<{ categoryName?: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const searchQuery = new URLSearchParams(location.search).get('q') || '';
 
   const [activeCategory, setActiveCategory] = useState<string>(categoryName || 'All');
   const [activeSaleType, setActiveSaleType] = useState<string>('All');
@@ -47,6 +50,11 @@ export const Products = () => {
   // Derived state: Filtered & Sorted products
   const filteredProducts = useMemo(() => {
     let result = [...products];
+
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(p => p.name.vi.toLowerCase().includes(q) || p.name.en.toLowerCase().includes(q));
+    }
 
     if (activeCategory !== 'All') {
       result = result.filter(p => p.category.toLowerCase() === activeCategory.toLowerCase());
