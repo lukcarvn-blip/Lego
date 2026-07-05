@@ -28,6 +28,23 @@ export interface Order {
   status: OrderStatus;
   date: string;
   customerName: string;
+  userId?: string;
+  paymentMethod?: string;
+}
+
+export interface SavedCart {
+  id: string;
+  date: string;
+  items: CartItem[];
+  expiresIn: string;
+}
+
+export interface Notification {
+  id: string;
+  message: string;
+  type: 'warning' | 'info' | 'success';
+  date: string;
+  read: boolean;
 }
 
 export interface BlogPost {
@@ -67,7 +84,9 @@ interface StoreContextType {
   removeFromCart: (productId: string, size: ProductSize, material: ProductMaterial, isFastCrafting?: boolean) => void;
   clearCart: () => void;
   orders: Order[];
-  createOrder: (customerName: string) => void;
+  savedCarts: SavedCart[];
+  notifications: Notification[];
+  createOrder: (customerName: string, paymentMethod?: string) => void;
   updateOrderStatus: (orderId: string, status: OrderStatus) => void;
   blogPosts: BlogPost[];
   addBlogPost: (post: Omit<BlogPost, 'id'>) => void;
@@ -227,14 +246,16 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = () => setCart([]);
 
-  const createOrder = async (customerName: string) => {
+  const createOrder = async (customerName: string, paymentMethod: string = 'COD') => {
     const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
     const newOrder = {
       items: [...cart],
       total,
-      status: 'Pending',
+      status: 'Pending' as OrderStatus,
       date: new Date().toISOString(),
-      customerName
+      customerName,
+      userId: user?.uid || null,
+      paymentMethod
     };
     try {
       await addDoc(collection(db, 'orders'), newOrder);
@@ -314,11 +335,45 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // Mock data for Profile Page
+  const savedCarts: SavedCart[] = user ? [
+    {
+      id: 'cart-1',
+      date: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(), // 1 day ago
+      items: [
+        {
+          product: mockProducts[0],
+          size: mockProducts[0].availableSizes[0],
+          material: 'PLA',
+          quantity: 1
+        }
+      ],
+      expiresIn: '24h'
+    }
+  ] : [];
+
+  const notifications: Notification[] = user ? [
+    {
+      id: 'notif-1',
+      message: language === 'vi' ? 'Bạn có 1 giỏ hàng chưa thanh toán! Ưu đãi 10% sẽ hết hạn sau 24h.' : 'You have 1 unpaid cart! 10% discount expires in 24h.',
+      type: 'warning',
+      date: new Date().toISOString(),
+      read: false
+    },
+    {
+      id: 'notif-2',
+      message: language === 'vi' ? 'Chào mừng bạn trở lại, chúc bạn mua sắm vui vẻ!' : 'Welcome back, happy shopping!',
+      type: 'info',
+      date: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
+      read: true
+    }
+  ] : [];
+
   return (
     <StoreContext.Provider value={{ 
         products, updateProduct, addProduct, deleteProduct,
         cart, addToCart, removeFromCart, clearCart, 
-        orders, createOrder, updateOrderStatus,
+        orders, savedCarts, notifications, createOrder, updateOrderStatus,
         blogPosts, addBlogPost, deleteBlogPost,
         language,
         setLanguage,

@@ -16,6 +16,7 @@ import { Auth } from './pages/Auth';
 import { News } from './pages/News';
 import { NewsDetail } from './pages/NewsDetail';
 import { Technology } from './pages/Technology';
+import { Profile } from './pages/Profile';
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -41,6 +42,7 @@ function App() {
               <Route path="/product/:id" element={<ProductDetails />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/faq" element={<FAQ />} />
               <Route path="/shipping-policy" element={<ShippingPolicy />} />

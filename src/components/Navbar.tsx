@@ -153,7 +153,7 @@ export const Navbar = () => {
                 )}
               </div>
               {user ? (
-                <div className="desktop-action" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }} onClick={logout} title={language === 'vi' ? 'Đăng xuất' : 'Logout'}>
+                <Link to="/profile" className="desktop-action" style={{ display: 'flex', alignItems: 'center' }} title={language === 'vi' ? 'Hồ sơ' : 'Profile'}>
                   {user.photoURL ? (
                     <img src={user.photoURL} alt={user.displayName || 'User'} style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--color-accent)' }} />
                   ) : (
@@ -161,7 +161,7 @@ export const Navbar = () => {
                       {user.email?.charAt(0).toUpperCase() || 'U'}
                     </div>
                   )}
-                </div>
+                </Link>
               ) : (
                 <Link to="/auth" className="desktop-action" style={{ display: 'flex', alignItems: 'center' }}>
                   <User size={22} />
@@ -193,14 +193,14 @@ export const Navbar = () => {
           <span>Cart</span>
         </Link>
         {user ? (
-          <div onClick={logout} className="bottom-nav-item" style={{ cursor: 'pointer' }}>
+          <Link to="/profile" className="bottom-nav-item">
             {user.photoURL ? (
               <img src={user.photoURL} alt="User" style={{ width: 22, height: 22, borderRadius: '50%', objectFit: 'cover' }} />
             ) : (
               <User size={22} color="var(--color-accent)" />
             )}
-            <span>{language === 'vi' ? 'Thoát' : 'Logout'}</span>
-          </div>
+            <span>{language === 'vi' ? 'Hồ sơ' : 'Profile'}</span>
+          </Link>
         ) : (
           <Link to="/auth" className="bottom-nav-item"><User size={22} /><span>Auth</span></Link>
         )}
