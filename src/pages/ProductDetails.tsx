@@ -121,6 +121,7 @@ export const ProductDetails = () => {
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(product?.availableSizes[0] || null);
   const [selectedMaterial, setSelectedMaterial] = useState<ProductMaterial>('PLA');
   const [isFastCrafting, setIsFastCrafting] = useState(false);
+  const [isSummaryExpanded, setIsSummaryExpanded] = useState(true);
 
   const finalPriceMultiplier = parseSizePercentage(selectedSize) * (selectedMaterial === 'PETG' ? 1.2 : 1) * (isFastCrafting ? 1.1 : 1);
 
@@ -239,7 +240,12 @@ export const ProductDetails = () => {
           )}
 
           {/* Sticky Buy Button – left column */}
-          <div className="sticky-cart-wrapper">
+          <motion.div 
+            className="sticky-cart-wrapper"
+            initial={{ y: 150, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.2 }}
+          >
             <div 
               style={{ 
                 padding: '0.75rem 1rem', width: '100%', 
@@ -253,7 +259,7 @@ export const ProductDetails = () => {
               <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.5rem', width: '100%' }}>
                 <button 
                   onClick={handleAddToCart}
-                  className="sticky-action-btn"
+                  className="sticky-action-btn bling-btn"
                   style={{ 
                     flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                     fontSize: '1rem', fontWeight: 800,
@@ -289,19 +295,42 @@ export const ProductDetails = () => {
                 >
                   <Rocket size={20} />
                 </button>
+                <button
+                  onClick={() => setIsSummaryExpanded(!isSummaryExpanded)}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    background: 'rgba(0,0,0,0.1)', color: '#000', border: 'none',
+                    padding: '0 0.5rem', borderRadius: 'var(--radius-sm)',
+                    cursor: 'pointer', transition: 'all 0.2s',
+                  }}
+                  title={isSummaryExpanded ? "Thu gọn" : "Mở rộng"}
+                >
+                  {isSummaryExpanded ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+                </button>
               </div>
               {/* Summary Note */}
-              <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
-                <p className="summary-note" style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.8)', margin: 0, lineHeight: 1.5, textAlign: 'left' }}>
-                  {language === 'vi' ? (
-                    <>Bạn đang chọn: <strong>{product.name.vi}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Thời gian chế tác: <strong>{craftTimeDays} ngày</strong>. {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>Đã bật tăng tốc!</strong> : 'Nhấn 🚀 để tăng tốc.'}</>
-                  ) : (
-                    <>Selected: <strong>{product.name.en}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Crafting: <strong>{craftTimeDays} days</strong>. {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>Fast mode ON!</strong> : 'Tap 🚀 to speed up.'}</>
-                  )}
-                </p>
-              </div>
+              <AnimatePresence>
+                {isSummaryExpanded && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    style={{ overflow: 'hidden' }}
+                  >
+                    <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
+                      <p className="summary-note" style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.8)', margin: 0, lineHeight: 1.5, textAlign: 'left' }}>
+                        {language === 'vi' ? (
+                          <>Bạn đang chọn: <strong>{product.name.vi}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Thời gian chế tác: <strong>{craftTimeDays} ngày</strong>. {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>Đã bật tăng tốc!</strong> : 'Nhấn 🚀 để tăng tốc.'}</>
+                        ) : (
+                          <>Selected: <strong>{product.name.en}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Crafting: <strong>{craftTimeDays} days</strong>. {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>Fast mode ON!</strong> : 'Tap 🚀 to speed up.'}</>
+                        )}
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Right: Product Info */}
@@ -631,6 +660,24 @@ export const ProductDetails = () => {
           flex-direction: column;
           gap: 1.5rem;
           margin-top: 2rem;
+        }
+        @keyframes btn-shine {
+          0% { left: -100%; opacity: 0; }
+          15% { left: 100%; opacity: 0.8; }
+          100% { left: 100%; opacity: 0; }
+        }
+        .bling-btn {
+          position: relative;
+          overflow: hidden;
+        }
+        .bling-btn::after {
+          content: '';
+          position: absolute;
+          top: 0; left: -100%;
+          width: 50%; height: 100%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+          transform: skewX(-20deg);
+          animation: btn-shine 5s infinite;
         }
         .size-option-btn {
           width: auto;
