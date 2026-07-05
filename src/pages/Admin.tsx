@@ -9,6 +9,8 @@ import {
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
 import { Link } from 'react-router-dom';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const formatVND = (usd: number) =>
@@ -266,7 +268,6 @@ export const Admin = () => {
     };
 
     if (editingBlogPost.id) {
-       // Currently no updateBlogPost in StoreContext, we'll delete and add as a workaround
        deleteBlogPost(editingBlogPost.id);
        addBlogPost(postData as any); 
        showToast(language === 'vi' ? 'Đã cập nhật bài viết!' : 'Post updated!');
@@ -277,6 +278,11 @@ export const Admin = () => {
     
     setIsEditingBlog(false); 
     setEditingBlogPost({});
+  };
+
+  const handleEditBlog = (post: BlogPost) => {
+    setEditingBlogPost(post);
+    setIsEditingBlog(true);
   };
 
   if (currentUserRole !== 'admin') {
@@ -754,9 +760,121 @@ export const Admin = () => {
           </form>
         )}
 
+        {/* ── BLOG TAB ──────────────────────────────────────────────── */}
+        {activeTab === 'blog' && !isEditingBlog && (
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>📝 Quản lý bài viết</h1>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{blogPosts.length} bài viết đã xuất bản</p>
+              </div>
+              <button className="btn-primary" onClick={() => { setEditingBlogPost({}); setIsEditingBlog(true); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem' }}>
+                <Plus size={18} /> Viết bài mới
+              </button>
+            </div>
 
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>
+                    {['Ảnh bìa', 'Tiêu đề', 'Lượt xem', 'Ngày đăng', 'Thao tác'].map(h => <th key={h} style={{ padding: '0.75rem 1rem' }}>{h}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {blogPosts.map(post => (
+                    <tr key={post.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                      <td style={{ padding: '0.875rem 1rem' }}>
+                        <img src={post.image} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ width: '60px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} alt="" />
+                      </td>
+                      <td style={{ padding: '0.875rem 1rem' }}>
+                        <div style={{ fontWeight: 600, fontSize: '0.9rem', marginBottom: '0.2rem' }}>{post.title}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', maxWidth: '300px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {post.excerpt}
+                        </div>
+                      </td>
+                      <td style={{ padding: '0.875rem 1rem', fontSize: '0.85rem' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '4px', color: 'var(--color-text-muted)' }}>
+                          <Eye size={14} /> {Math.floor(Math.random() * 500) + 50}
+                        </span>
+                      </td>
+                      <td style={{ padding: '0.875rem 1rem', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>{post.date}</td>
+                      <td style={{ padding: '0.875rem 1rem' }}>
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                          <button onClick={() => handleEditBlog(post)} style={{ color: 'var(--color-accent)', padding: '0.35rem' }}><Edit2 size={15} /></button>
+                          <button onClick={() => { if(window.confirm('Xóa bài viết này?')) deleteBlogPost(post.id) }} style={{ color: '#ef4444', padding: '0.35rem' }}><Trash2 size={15} /></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
-        {/* ── MEMBERS TAB ───────────────────────────────────────────── */}
+        {/* ── BLOG EDITOR MODAL ─────────────────────────────────────── */}
+        {activeTab === 'blog' && isEditingBlog && (
+          <div style={{ maxWidth: '900px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <h1 style={{ fontSize: '1.75rem' }}>{editingBlogPost.id ? '✏️ Chỉnh sửa bài viết' : '✍️ Viết bài mới'}</h1>
+              <button type="button" onClick={() => setIsEditingBlog(false)} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <X size={18} /> Hủy
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveBlog} style={panelStyle}>
+              <div style={{ display: 'grid', gap: '1.25rem', marginBottom: '1.5rem' }}>
+                <InputField label="Tiêu đề bài viết *">
+                  <input type="text" required value={editingBlogPost.title || ''} onChange={e => setEditingBlogPost({...editingBlogPost, title: e.target.value})} style={inputStyle} />
+                </InputField>
+                
+                <InputField label="Đoạn trích (Excerpt - Hiển thị ở danh sách)">
+                  <textarea rows={2} value={editingBlogPost.excerpt || ''} onChange={e => setEditingBlogPost({...editingBlogPost, excerpt: e.target.value})} style={{...inputStyle, resize: 'vertical'}} />
+                </InputField>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <InputField label="URL Ảnh bìa *">
+                    <input type="text" required value={editingBlogPost.image || ''} onChange={e => setEditingBlogPost({...editingBlogPost, image: e.target.value})} style={inputStyle} placeholder="https://..." />
+                  </InputField>
+                  <InputField label="Ngày đăng">
+                    <input type="date" required value={editingBlogPost.date || new Date().toISOString().split('T')[0]} onChange={e => setEditingBlogPost({...editingBlogPost, date: e.target.value})} style={inputStyle} />
+                  </InputField>
+                </div>
+
+                <div style={{ marginTop: '1rem' }}>
+                  <label style={{ display: 'block', marginBottom: '0.75rem', fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Nội dung bài viết *
+                  </label>
+                  <div style={{ background: '#fff', color: '#000', borderRadius: '4px', overflow: 'hidden' }}>
+                    <ReactQuill 
+                      theme="snow" 
+                      value={editingBlogPost.content || ''} 
+                      onChange={content => setEditingBlogPost({...editingBlogPost, content})} 
+                      style={{ height: '400px', border: 'none' }}
+                      modules={{
+                        toolbar: [
+                          [{ 'header': [1, 2, 3, false] }],
+                          ['bold', 'italic', 'underline', 'strike'],
+                          [{'list': 'ordered'}, {'list': 'bullet'}],
+                          ['link', 'image', 'video'],
+                          ['clean']
+                        ]
+                      }}
+                    />
+                  </div>
+                  {/* Padding to account for Quill toolbar pushing content up */}
+                  <div style={{ height: '40px' }}></div> 
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2rem' }}>
+                  {editingBlogPost.id ? '💾 Cập nhật bài viết' : '🚀 Đăng bài viết'}
+                </button>
+              </div>
+            </form>
+          </div>
+        )}        {/* ── MEMBERS TAB ───────────────────────────────────────────── */}
         {activeTab === 'members' && (
           <div>
             <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '1.5rem' }}>👥 Quản lý thành viên</h1>
