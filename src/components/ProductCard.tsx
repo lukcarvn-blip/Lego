@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, Clock, Zap, Sparkles, ShoppingCart, Shield, Rocket, Crown, Tag } from 'lucide-react';
@@ -14,7 +14,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
   const { language, formatPrice, addToCart, showToast } = useStore();
   const [craftHovered, setCraftHovered] = useState(false);
   const [displayDay, setDisplayDay] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Parse the max day number from estimatedPrintTime e.g. "2-4 days" → 4
   const parseMaxDay = (time: string) => {
@@ -142,7 +149,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
           <motion.div 
             initial="rest"
             whileHover="hover"
-            animate="rest"
+            whileTap="hover"
+            whileInView={isMobile ? "hover" : undefined}
+            viewport={{ amount: 0.5, margin: "-10% 0px -10% 0px" }}
+            animate={isMobile ? undefined : "rest"}
             style={{ 
             width: '100%', 
             aspectRatio: '1/1', 
