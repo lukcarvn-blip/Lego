@@ -73,15 +73,31 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               background: 'radial-gradient(circle, rgba(74,222,128,0.12) 0%, rgba(0,0,0,0.5) 100%)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative'
             }}>
-              {product.saleType === 'FLASH_SALE' && (
-                <div style={{ position: 'absolute', top: 8, left: 8, background: '#ef4444', color: '#fff', padding: '2px 8px', borderRadius: '20px', fontSize: '0.65rem', fontWeight: 700, zIndex: 10 }}>FLASH</div>
-              )}
-              {product.saleType === 'SALE' && (
-                <div style={{ position: 'absolute', top: 8, left: 8, background: 'var(--color-accent)', color: '#000', padding: '2px 8px', borderRadius: '20px', fontSize: '0.65rem', fontWeight: 700, zIndex: 10 }}>SALE</div>
-              )}
+              {/* Badges Container */}
+              <div style={{ position: 'absolute', top: 8, left: 8, zIndex: 10, display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start' }}>
+                {product.saleType === 'FLASH_SALE' && (
+                  <div style={{ background: '#ef4444', color: '#fff', padding: '2px 8px', borderRadius: '20px', fontSize: '0.65rem', fontWeight: 700 }}>FLASH</div>
+                )}
+                {product.saleType === 'SALE' && (
+                  <div style={{ background: 'var(--color-accent)', color: '#000', padding: '2px 8px', borderRadius: '20px', fontSize: '0.65rem', fontWeight: 700 }}>SALE</div>
+                )}
+                <div style={{ 
+                  background: 'rgba(0,0,0,0.6)', borderRadius: '20px', padding: '2px 6px', 
+                  display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.65rem',
+                  border: '1px solid rgba(239, 68, 68, 0.3)'
+                }}>
+                  <Heart size={10} fill="#ef4444" color="#ef4444" />
+                  <span style={{ color: '#ef4444', fontWeight: 700 }}>{product.likes?.toLocaleString()}</span>
+                </div>
+              </div>
+
               <img src={product.images?.[0] || product.image} alt={product.name[language as keyof typeof product.name]}
-                style={{ width: '130px', height: '130px', objectFit: 'contain', filter: 'drop-shadow(0 10px 16px rgba(0,0,0,0.5))', marginBottom: '20px' }} />
-              
+                style={{ 
+                  width: '100%', height: '100%', objectFit: 'contain', 
+                  filter: 'drop-shadow(0 10px 16px rgba(0,0,0,0.5))', 
+                  transform: 'scale(1.25)', marginTop: '20px' 
+                }} 
+              />
             </div>
 
             {/* Info */}
@@ -115,12 +131,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                   <div style={{ width: craftHovered ? '75%' : '0%', height: '100%', background: '#f59e0b', borderRadius: '9px', transition: 'width 0.85s cubic-bezier(0.4,0,0.2,1)', boxShadow: craftHovered ? '0 0 10px rgba(245,158,11,0.5)' : 'none' }} />
                 </div>
               </div>
-            </div>
-
-            {/* Like badge */}
-            <div style={{ position: 'absolute', top: 10, right: 10, background: 'rgba(0,0,0,0.6)', borderRadius: '20px', padding: '3px 8px', display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.7rem' }}>
-              <Heart size={11} fill="#ef4444" color="#ef4444" />
-              <span style={{ color: '#ef4444', fontWeight: 700 }}>{product.likes?.toLocaleString()}</span>
             </div>
           </div>
         ) : (
