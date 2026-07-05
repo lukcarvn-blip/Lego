@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home } from 'lucide-react';
@@ -122,6 +122,17 @@ export const ProductDetails = () => {
   const [selectedMaterial, setSelectedMaterial] = useState<ProductMaterial>('PLA');
   const [isFastCrafting, setIsFastCrafting] = useState(false);
   const [isCartExpanded, setIsCartExpanded] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setIsCartExpanded(true);
+      }
+    };
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const finalPriceMultiplier = parseSizePercentage(selectedSize) * (selectedMaterial === 'PETG' ? 1.2 : 1) * (isFastCrafting ? 1.1 : 1);
 
@@ -300,6 +311,7 @@ export const ProductDetails = () => {
                         <Rocket size={20} />
                       </button>
                       <button
+                        className="hide-on-desktop"
                         onClick={() => setIsCartExpanded(false)}
                         style={{
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -794,9 +806,14 @@ export const ProductDetails = () => {
             grid-template-columns: repeat(2, 1fr) !important;
           }
         }
-        /* Hide view toggle on tablet and desktop */
-        @media (min-width: 640px) {
+         .view-toggle-mobile {
+          margin-bottom: 2rem;
+        }
+        @media (min-width: 1024px) {
           .view-toggle-mobile {
+            display: none !important;
+          }
+          .hide-on-desktop {
             display: none !important;
           }
         }
