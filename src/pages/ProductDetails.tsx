@@ -652,6 +652,29 @@ export const ProductDetails = () => {
             grid-template-columns: 1fr 1fr;
           }
         }
+        @media (max-width: 1023px) {
+          .sticky-cart-wrapper {
+            position: fixed;
+            bottom: 20px;
+            left: 1rem;
+            right: 1rem;
+            z-index: 999;
+            margin: 0;
+            padding: 0;
+          }
+          /* Add padding to the bottom of the container so content is not hidden by the fixed cart */
+          .container {
+            padding-bottom: 150px !important;
+          }
+        }
+        @media (max-width: 768px) {
+          .sticky-cart-wrapper {
+            bottom: 80px;
+          }
+          .container {
+            padding-bottom: 180px !important;
+          }
+        }
         @media (max-width: 639px) {
           .size-options-container {
             gap: 0.5rem !important;
@@ -668,16 +691,6 @@ export const ProductDetails = () => {
           }
           .size-option-btn .height-text {
             font-size: 0.75rem !important;
-          }
-          .sticky-cart-wrapper {
-            position: sticky;
-            bottom: 85px;
-            z-index: 40;
-            padding-bottom: 1rem;
-            margin-top: 1rem;
-          }
-          .sticky-cart-btn {
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(74, 222, 128, 0.4);
           }
         }
         @media (min-width: 1024px) {
