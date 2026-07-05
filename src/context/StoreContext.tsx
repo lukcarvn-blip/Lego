@@ -69,6 +69,20 @@ export interface StoreSettings {
   logoText: string;
   logoImage?: string; // Optional image URL
   heroVideoUrl: string;
+  contactHotline?: string;
+  contactEmail?: string;
+  contactAddress?: string;
+  socialFacebook?: string;
+  socialInstagram?: string;
+  socialTiktok?: string;
+  socialYoutube?: string;
+  seoTitle?: string;
+  seoDescription?: string;
+  favicon?: string;
+  bannerText?: string;
+  bankName?: string;
+  bankAccount?: string;
+  bankOwner?: string;
 }
 
 export interface ToastMessage {
@@ -117,7 +131,14 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [settings, setSettings] = useState<StoreSettings>({
     logoText: 'LEGATO',
     logoImage: '/images/custom-logo.png',
-    heroVideoUrl: 'https://cdn.pixabay.com/video/2021/08/04/83894-585141019_large.mp4'
+    heroVideoUrl: 'https://cdn.pixabay.com/video/2021/08/04/83894-585141019_large.mp4',
+    contactHotline: '0123 456 789',
+    contactEmail: 'contact@legato.vn',
+    contactAddress: '123 Lego Street, Ho Chi Minh City',
+    socialFacebook: 'https://facebook.com',
+    socialInstagram: 'https://instagram.com',
+    seoTitle: 'LEGATO - Khám phá thế giới sáng tạo',
+    seoDescription: 'Cửa hàng đồ chơi thông minh và mô hình xếp khối sáng tạo hàng đầu.'
   });
   const [language, setLanguage] = useState<Language>('vi');
   const [user, setUser] = useState<any>(null);

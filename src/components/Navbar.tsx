@@ -40,6 +40,21 @@ export const Navbar = () => {
 
   return (
     <>
+      {settings.bannerText && (
+        <div style={{
+          background: 'var(--color-accent)',
+          color: '#000',
+          textAlign: 'center',
+          padding: '0.5rem',
+          fontSize: '0.85rem',
+          fontWeight: 700,
+          position: 'fixed',
+          top: 0, left: 0, right: 0,
+          zIndex: 101
+        }}>
+          {settings.bannerText}
+        </div>
+      )}
       <motion.header 
         className="nav-header"
         initial={{ y: -100 }}
@@ -47,7 +62,7 @@ export const Navbar = () => {
         transition={{ type: "spring", stiffness: 100 }}
         style={{
           position: 'fixed',
-          top: 0,
+          top: settings.bannerText ? '32px' : 0,
           left: 0,
           right: 0,
           zIndex: 100,

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useStore } from '../context/StoreContext';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -33,13 +33,18 @@ export const Footer = () => {
               settings.logoText
             )}
           </h3>
-          <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-            {t('footer_desc')}
+          <p style={{ color: 'var(--color-text-muted)', lineHeight: 1.6, marginBottom: '1rem' }}>
+            {settings.contactAddress || t('footer_desc')}
           </p>
+          <div style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
+            {settings.contactHotline && <div style={{ marginBottom: '0.25rem' }}>📞 {settings.contactHotline}</div>}
+            {settings.contactEmail && <div>✉️ {settings.contactEmail}</div>}
+          </div>
           <div style={{ display: 'flex', gap: '1rem', fontWeight: 600 }}>
-            <a href="#" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}>IG</a>
-            <a href="#" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}>TW</a>
-            <a href="#" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}>FB</a>
+            {settings.socialInstagram && <a href={settings.socialInstagram} target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}>IG</a>}
+            {settings.socialTiktok && <a href={settings.socialTiktok} target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}>TT</a>}
+            {settings.socialFacebook && <a href={settings.socialFacebook} target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}>FB</a>}
+            {settings.socialYoutube && <a href={settings.socialYoutube} target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}>YT</a>}
           </div>
         </div>
 
@@ -65,26 +70,36 @@ export const Footer = () => {
         </div>
 
         <div>
-          <h4 style={{ marginBottom: '1rem', fontWeight: 600 }}>Newsletter</h4>
-          <p style={{ color: 'var(--color-text-muted)', marginBottom: '1rem' }}>Subscribe for updates on new drops.</p>
-          <div style={{ display: 'flex', gap: '0.5rem' }}>
-            <input 
-              type="email" 
-              placeholder="Enter your email" 
-              style={{
-                flex: 1,
-                padding: '0.75rem 1rem',
-                borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--glass-border)',
-                background: 'rgba(0,0,0,0.2)',
-                color: '#fff',
-                outline: 'none'
-              }}
-            />
-            <button className="btn-primary" style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
-              Subscribe
-            </button>
-          </div>
+          <h4 style={{ marginBottom: '1rem', fontWeight: 600 }}>Thanh toán</h4>
+          {settings.bankName ? (
+            <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,255,255,0.1)' }}>
+              <p style={{ margin: '0 0 0.5rem 0', fontWeight: 700, color: 'var(--color-accent)' }}>{settings.bankName}</p>
+              <p style={{ margin: '0 0 0.25rem 0', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>STK: <strong style={{ color: '#fff' }}>{settings.bankAccount}</strong></p>
+              <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>CTK: {settings.bankOwner}</p>
+            </div>
+          ) : (
+            <>
+              <p style={{ color: 'var(--color-text-muted)', marginBottom: '1rem' }}>Đăng ký để nhận thông tin ưu đãi.</p>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <input 
+                  type="email" 
+                  placeholder="Enter your email" 
+                  style={{
+                    flex: 1,
+                    padding: '0.75rem 1rem',
+                    borderRadius: 'var(--radius-sm)',
+                    border: '1px solid var(--glass-border)',
+                    background: 'rgba(0,0,0,0.2)',
+                    color: '#fff',
+                    outline: 'none'
+                  }}
+                />
+                <button className="btn-primary" style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
+                  Đăng ký
+                </button>
+              </div>
+            </>
+          )}
         </div>
       </div>
       

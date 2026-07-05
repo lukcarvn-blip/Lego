@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { StoreProvider } from './context/StoreContext';
+import { StoreProvider, useStore } from './context/StoreContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
@@ -20,10 +20,38 @@ import { Profile } from './pages/Profile';
 
 function AppContent() {
   const { pathname } = useLocation();
+  const { settings } = useStore();
   
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
+
+  // Apply SEO Settings
+  useEffect(() => {
+    if (settings.seoTitle) {
+      document.title = settings.seoTitle;
+    }
+    
+    if (settings.seoDescription) {
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        metaDesc.setAttribute('name', 'description');
+        document.head.appendChild(metaDesc);
+      }
+      metaDesc.setAttribute('content', settings.seoDescription);
+    }
+    
+    if (settings.favicon) {
+      let linkIcon = document.querySelector('link[rel="icon"]');
+      if (!linkIcon) {
+        linkIcon = document.createElement('link');
+        linkIcon.setAttribute('rel', 'icon');
+        document.head.appendChild(linkIcon);
+      }
+      linkIcon.setAttribute('href', settings.favicon);
+    }
+  }, [settings.seoTitle, settings.seoDescription, settings.favicon]);
 
   const isAdmin = pathname.startsWith('/admin');
 

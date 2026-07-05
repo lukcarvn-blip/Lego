@@ -798,25 +798,98 @@ export const Admin = () => {
 
         {/* ── SETTINGS TAB ──────────────────────────────────────────── */}
         {activeTab === 'settings' && (
-          <form onSubmit={handleSaveSettings} style={{ maxWidth: '600px' }}>
+          <form onSubmit={handleSaveSettings} style={{ maxWidth: '800px' }}>
             <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '1.5rem' }}>⚙️ Cài đặt Website</h1>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
+              <div style={panelStyle}>
+                <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Nhận diện thương hiệu</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <InputField label="Tên thương hiệu (khi không có logo)">
+                    <input type="text" required value={tempSettings.logoText} onChange={e => setTempSettings({...tempSettings, logoText: e.target.value})} style={inputStyle} />
+                  </InputField>
+                  <InputField label="URL Logo (.png/.svg)">
+                    <input type="text" placeholder="https://..." value={tempSettings.logoImage || ''} onChange={e => setTempSettings({...tempSettings, logoImage: e.target.value})} style={inputStyle} />
+                  </InputField>
+                  <InputField label="URL Video Hero Trang chủ (.mp4)">
+                    <input type="text" required value={tempSettings.heroVideoUrl} onChange={e => setTempSettings({...tempSettings, heroVideoUrl: e.target.value})} style={inputStyle} />
+                  </InputField>
+                </div>
+              </div>
+
+              <div style={panelStyle}>
+                <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Tối ưu SEO & Trình duyệt</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                  <InputField label="Tiêu đề trang (SEO Title)">
+                    <input type="text" value={tempSettings.seoTitle || ''} onChange={e => setTempSettings({...tempSettings, seoTitle: e.target.value})} style={inputStyle} />
+                  </InputField>
+                  <InputField label="Mô tả trang (SEO Description)">
+                    <textarea rows={3} value={tempSettings.seoDescription || ''} onChange={e => setTempSettings({...tempSettings, seoDescription: e.target.value})} style={{...inputStyle, resize: 'vertical'}} />
+                  </InputField>
+                  <InputField label="URL Favicon (.ico/.png)">
+                    <input type="text" value={tempSettings.favicon || ''} onChange={e => setTempSettings({...tempSettings, favicon: e.target.value})} style={inputStyle} />
+                  </InputField>
+                </div>
+              </div>
+            </div>
+
             <div style={panelStyle}>
-              <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Brand Logo</h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <InputField label="Tên thương hiệu (nếu không có ảnh logo)">
-                  <input type="text" required value={tempSettings.logoText} onChange={e => setTempSettings({...tempSettings, logoText: e.target.value})} style={inputStyle} />
+              <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Thông tin liên hệ & Cửa hàng</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <InputField label="Hotline">
+                  <input type="text" value={tempSettings.contactHotline || ''} onChange={e => setTempSettings({...tempSettings, contactHotline: e.target.value})} style={inputStyle} />
                 </InputField>
-                <InputField label="URL Logo (tùy chọn)">
-                  <input type="text" placeholder="https://..." value={tempSettings.logoImage || ''} onChange={e => setTempSettings({...tempSettings, logoImage: e.target.value})} style={inputStyle} />
+                <InputField label="Email hỗ trợ">
+                  <input type="email" value={tempSettings.contactEmail || ''} onChange={e => setTempSettings({...tempSettings, contactEmail: e.target.value})} style={inputStyle} />
+                </InputField>
+                <div style={{ gridColumn: '1 / -1' }}>
+                  <InputField label="Địa chỉ cửa hàng">
+                    <input type="text" value={tempSettings.contactAddress || ''} onChange={e => setTempSettings({...tempSettings, contactAddress: e.target.value})} style={inputStyle} />
+                  </InputField>
+                </div>
+              </div>
+            </div>
+
+            <div style={panelStyle}>
+              <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Mạng xã hội</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <InputField label="Facebook">
+                  <input type="text" value={tempSettings.socialFacebook || ''} onChange={e => setTempSettings({...tempSettings, socialFacebook: e.target.value})} style={inputStyle} />
+                </InputField>
+                <InputField label="Instagram">
+                  <input type="text" value={tempSettings.socialInstagram || ''} onChange={e => setTempSettings({...tempSettings, socialInstagram: e.target.value})} style={inputStyle} />
+                </InputField>
+                <InputField label="TikTok">
+                  <input type="text" value={tempSettings.socialTiktok || ''} onChange={e => setTempSettings({...tempSettings, socialTiktok: e.target.value})} style={inputStyle} />
+                </InputField>
+                <InputField label="YouTube">
+                  <input type="text" value={tempSettings.socialYoutube || ''} onChange={e => setTempSettings({...tempSettings, socialYoutube: e.target.value})} style={inputStyle} />
                 </InputField>
               </div>
             </div>
+
             <div style={panelStyle}>
-              <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Trang chủ</h3>
-              <InputField label="URL Video Hero (.mp4)">
-                <input type="text" required value={tempSettings.heroVideoUrl} onChange={e => setTempSettings({...tempSettings, heroVideoUrl: e.target.value})} style={inputStyle} />
+              <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Thông tin Ngân hàng (Thanh toán)</h3>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                <InputField label="Tên Ngân hàng">
+                  <input type="text" placeholder="VD: Vietcombank" value={tempSettings.bankName || ''} onChange={e => setTempSettings({...tempSettings, bankName: e.target.value})} style={inputStyle} />
+                </InputField>
+                <InputField label="Số tài khoản">
+                  <input type="text" value={tempSettings.bankAccount || ''} onChange={e => setTempSettings({...tempSettings, bankAccount: e.target.value})} style={inputStyle} />
+                </InputField>
+                <InputField label="Tên chủ tài khoản">
+                  <input type="text" placeholder="VIET NAM" value={tempSettings.bankOwner || ''} onChange={e => setTempSettings({...tempSettings, bankOwner: e.target.value})} style={inputStyle} />
+                </InputField>
+              </div>
+            </div>
+
+            <div style={panelStyle}>
+              <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Banner Thông báo (Khuyến mãi, Freeship...)</h3>
+              <InputField label="Nội dung Banner (Để trống để ẩn)">
+                <input type="text" placeholder="Nhập thông báo sẽ hiển thị trên cùng website..." value={tempSettings.bannerText || ''} onChange={e => setTempSettings({...tempSettings, bannerText: e.target.value})} style={inputStyle} />
               </InputField>
             </div>
+
             <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2.5rem' }}>💾 Lưu cài đặt</button>
           </form>
         )}
