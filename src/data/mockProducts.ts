@@ -23,6 +23,7 @@ export interface Product {
   saleType?: 'SALE' | 'FLASH_SALE' | null;
   discountPercentage?: number;
   video?: string;
+  videos?: string[];
 }
 
 export const mockProducts: Product[] = [
