@@ -289,55 +289,57 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             
 
             {/* Hover State Slide-Up Panel */}
-            <motion.div
-              variants={{
-                rest: { y: '100%', opacity: 0 },
-                hover: { y: 0, opacity: 1 }
-              }}
-              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-              style={{
-                position: 'absolute',
-                bottom: 0, left: 0, right: 0,
-                padding: '3rem 1rem 1rem 1rem',
-                background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(74, 222, 128, 0.15) 70%, transparent 100%)',
-                display: 'flex',
-                justifyContent: 'center',
-                zIndex: 20
-              }}
-            >
-              <button 
-                onClick={(e) => {
-                  e.preventDefault(); // Prevent navigating to ProductDetails
-                  const defaultSize = product.availableSizes?.[0] || 'Size 400';
-                  addToCart(product, defaultSize, 'PLA', 1, e);
-                  showToast(language === 'vi' ? 'Đã thêm vào giỏ hàng!' : 'Added to cart!');
+            {!isMobile && (
+              <motion.div
+                variants={{
+                  rest: { y: '100%', opacity: 0 },
+                  hover: { y: 0, opacity: 1 }
                 }}
-                style={{ 
-                  width: '100%', 
-                  padding: '0.8rem', 
-                  borderRadius: 'var(--radius-sm)',
-                  background: 'var(--color-accent)',
-                  color: '#000',
-                  fontWeight: 800,
-                  fontSize: '0.9rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px',
+                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                style={{
+                  position: 'absolute',
+                  bottom: 0, left: 0, right: 0,
+                  padding: '3rem 1rem 1rem 1rem',
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(74, 222, 128, 0.15) 70%, transparent 100%)',
                   display: 'flex',
-                  alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '8px',
-                  border: 'none',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 20px rgba(74, 222, 128, 0.4)',
-                  transition: 'transform 0.2s'
+                  zIndex: 20
                 }}
-                onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
-                onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                <ShoppingCart size={18} />
-                {language === 'vi' ? 'Mua Hàng Ngay' : 'Buy Now'}
-              </button>
-            </motion.div>
+                <button 
+                  onClick={(e) => {
+                    e.preventDefault(); // Prevent navigating to ProductDetails
+                    const defaultSize = product.availableSizes?.[0] || 'Size 400';
+                    addToCart(product, defaultSize, 'PLA', 1, e);
+                    showToast(language === 'vi' ? 'Đã thêm vào giỏ hàng!' : 'Added to cart!');
+                  }}
+                  style={{ 
+                    width: '100%', 
+                    padding: '0.8rem', 
+                    borderRadius: 'var(--radius-sm)',
+                    background: 'var(--color-accent)',
+                    color: '#000',
+                    fontWeight: 800,
+                    fontSize: '0.9rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '1px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 20px rgba(74, 222, 128, 0.4)',
+                    transition: 'transform 0.2s'
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
+                  onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+                >
+                  <ShoppingCart size={18} />
+                  {language === 'vi' ? 'Mua Hàng Ngay' : 'Buy Now'}
+                </button>
+              </motion.div>
+            )}
           </motion.div>
           
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '1rem' }}>
