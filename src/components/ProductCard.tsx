@@ -145,40 +145,43 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             padding: '0',
             position: 'relative'
           }}>
-            {/* Sale Badges */}
-            {product.saleType === 'FLASH_SALE' && (
-              <div className="flash-shake sale-badge" style={{ 
-                position: 'absolute', top: '10px', left: '10px', zIndex: 10,
-                background: 'linear-gradient(45deg, #ef4444, #f97316)', color: 'white',
-                borderRadius: '20px', fontWeight: 'bold', padding: '4px 10px', fontSize: '0.7rem',
-                display: 'flex', alignItems: 'center', gap: '4px',
-                boxShadow: '0 0 15px rgba(239,68,68,0.5)'
-              }}>
-                <Zap size={14} fill="currentColor" />
-                FLASH SALE -{product.discountPercentage}%
-              </div>
-            )}
-            {product.saleType === 'NORMAL_SALE' && (
-              <div className="sale-badge" style={{ 
-                position: 'absolute', top: '10px', left: '10px', zIndex: 10,
-                background: 'var(--color-accent)', color: '#000', padding: '4px 10px', fontSize: '0.7rem',
-                borderRadius: '20px', fontWeight: 'bold'
-              }}>
-                SALE -{product.discountPercentage}%
-              </div>
-            )}
-
-            {/* Likes Badge - Top Right */}
-            <div className="sale-badge" style={{ 
-              position: 'absolute', top: '10px', right: '10px', zIndex: 10,
-              display: 'flex', alignItems: 'center', gap: '0.25rem', 
-              color: '#ef4444', fontWeight: 600, fontSize: '0.75rem',
-              background: 'rgba(20, 20, 20, 0.8)', padding: '4px 10px',
-              borderRadius: '20px', border: '1px solid rgba(239, 68, 68, 0.3)',
-              backdropFilter: 'blur(4px)'
+            {/* Badges Container */}
+            <div style={{ 
+              position: 'absolute', top: '10px', left: '10px', zIndex: 10,
+              display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.25rem'
             }}>
-              <Heart size={12} fill="#ef4444" />
-              <span>{product.likes.toLocaleString()}</span>
+              {/* Sale Badges */}
+              {product.saleType === 'FLASH_SALE' && (
+                <div className="flash-shake sale-badge" style={{ 
+                  background: 'linear-gradient(45deg, #ef4444, #f97316)', color: 'white',
+                  borderRadius: '20px', fontWeight: 'bold', padding: '4px 10px', fontSize: '0.7rem',
+                  display: 'flex', alignItems: 'center', gap: '4px',
+                  boxShadow: '0 0 15px rgba(239,68,68,0.5)'
+                }}>
+                  <Zap size={14} fill="currentColor" />
+                  FLASH SALE -{product.discountPercentage}%
+                </div>
+              )}
+              {product.saleType === 'NORMAL_SALE' && (
+                <div className="sale-badge" style={{ 
+                  background: 'var(--color-accent)', color: '#000', padding: '4px 10px', fontSize: '0.7rem',
+                  borderRadius: '20px', fontWeight: 'bold'
+                }}>
+                  SALE -{product.discountPercentage}%
+                </div>
+              )}
+
+              {/* Likes Badge - Under Sale Badge */}
+              <div className="sale-badge" style={{ 
+                display: 'flex', alignItems: 'center', gap: '0.25rem', 
+                color: '#ef4444', fontWeight: 600, fontSize: '0.75rem',
+                background: 'rgba(20, 20, 20, 0.8)', padding: '4px 10px',
+                borderRadius: '20px', border: '1px solid rgba(239, 68, 68, 0.3)',
+                backdropFilter: 'blur(4px)'
+              }}>
+                <Heart size={12} fill="#ef4444" />
+                <span>{product.likes.toLocaleString()}</span>
+              </div>
             </div>
 
 
