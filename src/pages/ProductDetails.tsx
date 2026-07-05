@@ -370,7 +370,12 @@ export const ProductDetails = () => {
           </div>
 
           <div className="material-size-wrapper">
-            <div style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', height: '100%' }}>
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.1 }}
+              style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', height: '100%' }}
+            >
             <h3 style={{ marginBottom: '1rem' }}>{language === 'vi' ? 'Chất liệu' : 'Material'}</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', overflow: 'hidden' }}>
               {/* PLA Option */}
@@ -432,9 +437,14 @@ export const ProductDetails = () => {
                 </>
               )}
             </div>
-          </div>
+            </motion.div>
 
-            <div style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', height: '100%' }}>
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.2 }}
+              style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', height: '100%' }}
+            >
             <h3 style={{ marginBottom: '1rem' }}>{t('size')}</h3>
             <div className="size-options-container" style={{ display: 'flex', gap: '1.5rem', flexWrap: 'nowrap', alignItems: 'flex-end', paddingTop: '1rem' }}>
               {product.availableSizes.map(size => {
@@ -476,11 +486,16 @@ export const ProductDetails = () => {
                 )
               })}
             </div>
-            </div>
+            </motion.div>
           </div>
 
           {/* Crafting Progress Bar UI */}
-          <div style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}>
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.3 }}
+            style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}
+          >
             <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Clock size={20} color="#f59e0b" /> 
               {language === 'vi' ? 'QUY TRÌNH CHẾ TÁC DỰ KIẾN' : 'Estimated Crafting Process'}
@@ -547,7 +562,7 @@ export const ProductDetails = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Buy button moved to left column */}
 
