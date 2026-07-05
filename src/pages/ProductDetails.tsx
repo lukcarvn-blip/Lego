@@ -662,9 +662,8 @@ export const ProductDetails = () => {
             margin: 0;
             padding: 0;
           }
-          /* Add padding to the bottom of the container so content is not hidden by the fixed cart */
           .container {
-            padding-bottom: 150px !important;
+            padding-bottom: 40px !important;
           }
         }
         @media (max-width: 768px) {
@@ -672,7 +671,7 @@ export const ProductDetails = () => {
             bottom: 80px;
           }
           .container {
-            padding-bottom: 180px !important;
+            padding-bottom: 60px !important;
           }
         }
         @media (max-width: 639px) {
