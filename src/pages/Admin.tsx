@@ -526,16 +526,26 @@ export const Admin = () => {
                 </button>
                 <button 
                   onClick={() => {
-                    if (window.confirm('Giảm thêm 40% giá TRÊN DỮ LIỆU GỐC cho TẤT CẢ sản phẩm (chỉ bấm 1 lần)?')) {
-                      products.forEach(p => {
-                        updateProduct({ ...p, price: p.price * 0.6 });
-                      });
-                      alert('Đã giảm giá 40% thành công toàn bộ kho!');
+                    const discountStr = window.prompt('Nhập phần trăm giảm giá Khuyến Mãi cho TẤT CẢ sản phẩm (0-100).\n\n(Lưu ý: Mức này sẽ hiển thị giá gạch chéo. Nhập 0 để gỡ bỏ toàn bộ sale)');
+                    if (discountStr !== null) {
+                      const discount = parseInt(discountStr, 10);
+                      if (!isNaN(discount) && discount >= 0 && discount <= 100) {
+                        products.forEach(p => {
+                          if (discount === 0) {
+                            updateProduct({ ...p, discountPercentage: 0, saleType: null });
+                          } else {
+                            updateProduct({ ...p, discountPercentage: discount, saleType: 'SALE' });
+                          }
+                        });
+                        alert(`Đã ${discount === 0 ? 'gỡ bỏ sale' : `áp dụng sale ${discount}%`} cho toàn bộ kho!`);
+                      } else {
+                        alert('Số phần trăm không hợp lệ. Vui lòng nhập từ 0 đến 100.');
+                      }
                     }
                   }}
                   style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', background: 'rgba(251, 191, 36, 0.1)', color: '#fbbf24', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem' }}
                 >
-                  <TrendingUp size={16} style={{ transform: 'scaleY(-1)' }} /> Giảm 40% Toàn Bộ
+                  <TrendingUp size={16} style={{ transform: 'scaleY(-1)' }} /> Cài Sale Hàng Loạt
                 </button>
                 <button className="btn-primary" onClick={handleOpenAddProduct} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem' }}>
                   <Plus size={18} /> Thêm sản phẩm
