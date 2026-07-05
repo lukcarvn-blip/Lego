@@ -1,4 +1,4 @@
-﻿export type ProductSize = 'Size 300' | 'Size 400' | 'Size 1000';
+export type ProductSize = 'Size 300' | 'Size 400' | 'Size 1000';
 
 export interface LocalizedString {
   vi: string;
@@ -13,6 +13,7 @@ export interface Product {
   rating: number;
   reviews: number;
   likes: number;
+  views?: number;
   estimatedPrintTime: string; // e.g. "2-4 days"
   images: string[];
   description: LocalizedString;

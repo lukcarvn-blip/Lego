@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home } from 'lucide-react';
+import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye } from 'lucide-react';
 import { mockProducts, type ProductSize } from '../data/mockProducts';
 import { useStore, type ProductMaterial } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
@@ -103,7 +103,7 @@ const AccordionItem = ({ title, children, defaultOpen = false }: { title: string
 export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { addToCart, t, language, formatPrice, showToast } = useStore();
+  const { products, updateProduct, addToCart, t, language, formatPrice, showToast } = useStore();
   
   const relatedRef = useRef<HTMLDivElement>(null);
   const bestSellersRef = useRef<HTMLDivElement>(null);
@@ -115,7 +115,31 @@ export const ProductDetails = () => {
     }
   };
 
-  const product = mockProducts.find(p => p.id === id);
+  const product = products.find(p => p.id === id) || mockProducts.find(p => p.id === id);
+  const [isLiked, setIsLiked] = useState(() => !!localStorage.getItem('liked_' + id));
+
+  useEffect(() => {
+    if (product && !sessionStorage.getItem('viewed_' + id)) {
+      sessionStorage.setItem('viewed_' + id, 'true');
+      const currentViews = typeof product.views === 'number' ? product.views : Math.floor(Math.random() * 500 + 100);
+      updateProduct({ ...product, views: currentViews + 1 });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  const handleLike = () => {
+    if (!product) return;
+    if (isLiked) {
+      setIsLiked(false);
+      localStorage.removeItem('liked_' + product.id);
+      updateProduct({ ...product, likes: Math.max(0, (product.likes || 0) - 1) });
+    } else {
+      setIsLiked(true);
+      localStorage.setItem('liked_' + product.id, 'true');
+      updateProduct({ ...product, likes: (product.likes || 0) + 1 });
+      showToast(language === 'vi' ? 'Đã yêu thích sản phẩm!' : 'Added to wishlist!');
+    }
+  };
   const [viewModeRelated, setViewModeRelated] = useState<'grid' | 'list'>('grid');
   const [viewModeBestSellers, setViewModeBestSellers] = useState<'grid' | 'list'>('grid');
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(product?.availableSizes[0] || null);
@@ -410,19 +434,25 @@ export const ProductDetails = () => {
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <h1 style={{ marginBottom: '0.5rem', lineHeight: 1.2 }}>{product.name[language]}</h1>
-              <button style={{ padding: '0.5rem', background: 'var(--glass-bg)', borderRadius: '50%', border: '1px solid var(--glass-border)' }}>
-                <Heart size={24} />
-              </button>
+              <motion.button 
+                whileTap={{ scale: 0.9 }}
+                onClick={handleLike}
+                style={{ padding: '0.5rem', background: isLiked ? 'rgba(239, 68, 68, 0.1)' : 'var(--glass-bg)', borderRadius: '50%', border: '1px solid var(--glass-border)', cursor: 'pointer', transition: 'all 0.2s' }}
+              >
+                <Heart size={24} color={isLiked ? '#ef4444' : 'currentColor'} fill={isLiked ? '#ef4444' : 'none'} />
+              </motion.button>
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--color-text-muted)', marginBottom: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#fbbf24' }}>
-                <Star size={18} fill="currentColor" />
-                <span style={{ color: 'var(--color-text)' }}>{product.rating}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--color-text-muted)', marginBottom: '1rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#ef4444' }}>
+                <Heart size={18} fill="currentColor" />
+                <span style={{ color: 'var(--color-text)' }}>{product.likes || 0}</span>
               </div>
-              <span>({product.reviews} reviews)</span>
-              <span>•</span>
-              <span style={{ color: 'var(--color-accent)' }}>{product.stock} in stock</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                <Eye size={18} />
+                <span>{product.views || 0} {language === 'vi' ? 'lượt xem' : 'views'}</span>
+              </div>
+              <span style={{ color: 'var(--color-accent)' }}>{product.stock} {language === 'vi' ? 'sẵn hàng' : 'in stock'}</span>
             </div>
 
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem' }}>

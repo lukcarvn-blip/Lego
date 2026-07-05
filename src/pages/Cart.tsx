@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, ArrowRight, Mail, LogIn, ArrowLeft, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -139,7 +139,7 @@ export const Cart = () => {
                     style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--glass-border)', background: 'transparent', color: 'white', marginBottom: '1rem' }}
                   />
                   <button type="submit" className="btn-primary" style={{ width: '100%', padding: '0.75rem', background: 'transparent', border: '1px solid var(--color-accent)', color: 'var(--color-accent)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <ChevronLeft size={20} onClick={(e) => { e.preventDefault(); setCheckoutStep('cart'); }} style={{ cursor: 'pointer' }} title={language === 'vi' ? 'Quay lại' : 'Back'} />
+                    <ChevronLeft size={20} onClick={(e) => { e.preventDefault(); setCheckoutStep('cart'); }} style={{ cursor: 'pointer' }} />
                     <span style={{ fontWeight: 'bold' }}>{language === 'vi' ? 'Tiếp tục (Bước 1/3)' : 'Continue (Step 1/3)'}</span>
                     <ChevronRight size={20} />
                   </button>
@@ -168,7 +168,7 @@ export const Cart = () => {
               
               <div style={{ width: '100%', marginTop: '1rem' }}>
                 <button type="submit" className="btn-primary" style={{ width: '100%', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: 'var(--radius-sm)' }}>
-                  <ChevronLeft size={24} onClick={(e) => { e.preventDefault(); setCheckoutStep('auth_choice'); }} style={{ cursor: 'pointer', padding: '2px' }} title={language === 'vi' ? 'Quay lại' : 'Back'} />
+                  <ChevronLeft size={24} onClick={(e) => { e.preventDefault(); setCheckoutStep('auth_choice'); }} style={{ cursor: 'pointer', padding: '2px' }} />
                   <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{language === 'vi' ? 'Xác minh (Bước 2/3)' : 'Verify (Step 2/3)'}</span>
                   <ChevronRight size={24} />
                 </button>
@@ -251,7 +251,7 @@ export const Cart = () => {
               </div>
 
               <button type="submit" className="btn-primary" style={{ width: '100%', padding: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1.125rem', marginTop: '1rem', borderRadius: 'var(--radius-sm)' }}>
-                <ChevronLeft size={24} onClick={(e) => { e.preventDefault(); setCheckoutStep('verify_email'); }} style={{ cursor: 'pointer', padding: '2px' }} title={language === 'vi' ? 'Quay lại' : 'Back'} />
+                <ChevronLeft size={24} onClick={(e) => { e.preventDefault(); setCheckoutStep('verify_email'); }} style={{ cursor: 'pointer', padding: '2px' }} />
                 <span style={{ fontWeight: 'bold' }}>{language === 'vi' ? `${t('place_order')} (Bước 3/3)` : `${t('place_order')} (Step 3/3)`}</span>
                 <CheckCircle size={24} style={{ opacity: 0.8 }} />
               </button>
