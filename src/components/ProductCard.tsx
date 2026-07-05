@@ -277,13 +277,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 }}
                 style={{ position: 'absolute', top: bling.top, left: bling.left, color: '#facc15', zIndex: 10, pointerEvents: 'none' }}
               >
-                <Sparkles size={bling.size} fill="#facc15" />
+                <Sparkles size={isMobile ? Math.round(bling.size * 0.7) : bling.size} fill="#facc15" />
               </motion.div>
             ))}
 
             <motion.img 
-              variants={{
-                rest: { y: '50%', scale: 2.2 },
+              variants={isMobile ? {
+                rest:  { y: 0, scale: 1 },
+                hover: { y: '-8%', scale: 1.15 }
+              } : {
+                rest:  { y: '50%', scale: 2.2 },
                 hover: { y: 0, scale: 1 }
               }}
               transition={{ type: 'spring', stiffness: 250, damping: 25 }}
