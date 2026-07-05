@@ -510,7 +510,7 @@ export const Admin = () => {
                 <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>🏪 Quản lý sản phẩm</h1>
                 <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{products.length} sản phẩm</p>
               </div>
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <button 
                   onClick={() => {
                     if (window.confirm('Khôi phục Lượt xem và Tim về 0 cho tất cả sản phẩm?')) {
@@ -523,6 +523,19 @@ export const Admin = () => {
                   style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem' }}
                 >
                   <RefreshCw size={16} /> Reset Tim/View
+                </button>
+                <button 
+                  onClick={() => {
+                    if (window.confirm('Giảm thêm 40% giá TRÊN DỮ LIỆU GỐC cho TẤT CẢ sản phẩm (chỉ bấm 1 lần)?')) {
+                      products.forEach(p => {
+                        updateProduct({ ...p, price: p.price * 0.6 });
+                      });
+                      alert('Đã giảm giá 40% thành công toàn bộ kho!');
+                    }
+                  }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', background: 'rgba(251, 191, 36, 0.1)', color: '#fbbf24', border: '1px solid rgba(251, 191, 36, 0.3)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem' }}
+                >
+                  <TrendingUp size={16} style={{ transform: 'scaleY(-1)' }} /> Giảm 40% Toàn Bộ
                 </button>
                 <button className="btn-primary" onClick={handleOpenAddProduct} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem' }}>
                   <Plus size={18} /> Thêm sản phẩm
