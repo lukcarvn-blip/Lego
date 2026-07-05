@@ -355,33 +355,45 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       }}>
         <AnimatePresence>
           {toasts.map(toast => (
-            <motion.div
-              key={toast.id}
-              initial={{ opacity: 0, y: '50vh', scale: 0.5, rotate: -5 }}
-              animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-              exit={{ opacity: 0, y: '50vh', scale: 0.5, rotate: 5, transition: { duration: 0.3, ease: 'easeIn' } }}
-              transition={{ type: 'spring', stiffness: 250, damping: 15 }}
-              style={{
-                background: 'var(--color-surface)',
-                color: 'var(--color-text)',
-                padding: '1.5rem 3rem',
-                borderRadius: '99px',
-                border: '2px solid var(--color-accent)',
-                boxShadow: '0 10px 40px rgba(74, 222, 128, 0.4)',
-                fontWeight: 700,
-                fontSize: '1.125rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                pointerEvents: 'auto', // But allow interacting with the toast itself
-                textAlign: 'center'
-              }}
-            >
-              {toast.message}
-            </motion.div>
-          ))}
-        </AnimatePresence>
-      </div>
+              <motion.div
+                key={toast.id}
+                className="toast-message"
+                initial={{ opacity: 0, y: '50vh', scale: 0.5, rotate: -5 }}
+                animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+                exit={{ opacity: 0, y: '50vh', scale: 0.5, rotate: 5, transition: { duration: 0.3, ease: 'easeIn' } }}
+                transition={{ type: 'spring', stiffness: 250, damping: 15 }}
+                style={{
+                  background: 'var(--color-surface)',
+                  color: 'var(--color-text)',
+                  border: '2px solid var(--color-accent)',
+                  boxShadow: '0 10px 40px rgba(74, 222, 128, 0.4)',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  pointerEvents: 'auto',
+                  textAlign: 'center'
+                }}
+              >
+                {toast.message}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+          <style>{`
+            .toast-message {
+              padding: 1.5rem 3rem;
+              border-radius: 16px;
+              font-size: 1.125rem;
+            }
+            @media (max-width: 768px) {
+              .toast-message {
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                font-size: 0.75rem;
+              }
+            }
+          `}</style>
+        </div>
 
       {/* Flying Cart Icons Container */}
       <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 10000 }}>
