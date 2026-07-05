@@ -382,16 +382,24 @@ export const ProductDetails = () => {
             </div>
 
             {/* Explanation Box */}
-            <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(0,0,0,0.3)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,255,255,0.05)', fontSize: '0.875rem', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
+            <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(0,0,0,0.3)', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,255,255,0.05)', fontSize: '0.875rem', color: 'var(--color-text-muted)', lineHeight: 1.6, wordBreak: 'break-word', wordWrap: 'break-word' }}>
               {language === 'vi' ? (
                 <>
-                  <p><strong style={{ color: 'var(--color-text)' }}>PLA (Polylactic Acid):</strong> Nhựa phân hủy sinh học thân thiện với môi trường, nguồn gốc từ tinh bột ngô. Cho độ nét in cực cao, màu sắc đẹp, phù hợp trưng bày trong nhà. Giá thành rẻ hơn.</p>
-                  <p style={{ marginTop: '0.5rem' }}><strong style={{ color: 'var(--color-text)' }}>PETG (Polyethylene Terephthalate Glycol):</strong> Độ bền vật lý cao hơn, dẻo dai và chịu nhiệt tốt hơn PLA. Phù hợp nếu bạn cần mô hình chắc chắn hơn hoặc để gần cửa sổ có nắng. Giá cao hơn 20%.</p>
+                  {selectedMaterial === 'PLA' && (
+                    <p><strong style={{ color: 'var(--color-text)' }}>PLA (Polylactic Acid):</strong> Nhựa phân hủy sinh học thân thiện với môi trường, nguồn gốc từ tinh bột ngô. Cho độ nét in cực cao, màu sắc đẹp, phù hợp trưng bày trong nhà. Giá thành rẻ hơn.</p>
+                  )}
+                  {selectedMaterial === 'PETG' && (
+                    <p><strong style={{ color: 'var(--color-text)' }}>PETG (Polyethylene Terephthalate Glycol):</strong> Độ bền vật lý cao hơn, dẻo dai và chịu nhiệt tốt hơn PLA. Phù hợp nếu bạn cần mô hình chắc chắn hơn hoặc để gần cửa sổ có nắng. Giá cao hơn 20%.</p>
+                  )}
                 </>
               ) : (
                 <>
-                  <p><strong style={{ color: 'var(--color-text)' }}>PLA (Polylactic Acid):</strong> Eco-friendly, biodegradable plastic derived from corn starch. Offers ultra-high print detail and beautiful colors, perfect for indoor display. Lower cost.</p>
-                  <p style={{ marginTop: '0.5rem' }}><strong style={{ color: 'var(--color-text)' }}>PETG:</strong> Higher physical durability, more flexible, and better heat resistance than PLA. Suitable if you need a sturdier model or plan to place it near sunny windows. Costs 20% more.</p>
+                  {selectedMaterial === 'PLA' && (
+                    <p><strong style={{ color: 'var(--color-text)' }}>PLA (Polylactic Acid):</strong> Eco-friendly, biodegradable plastic derived from corn starch. Offers ultra-high print detail and beautiful colors, perfect for indoor display. Lower cost.</p>
+                  )}
+                  {selectedMaterial === 'PETG' && (
+                    <p><strong style={{ color: 'var(--color-text)' }}>PETG:</strong> Higher physical durability, more flexible, and better heat resistance than PLA. Suitable if you need a sturdier model or plan to place it near sunny windows. Costs 20% more.</p>
+                  )}
                 </>
               )}
             </div>
@@ -649,8 +657,9 @@ export const ProductDetails = () => {
             flex-wrap: nowrap !important;
           }
           .size-option-btn {
+            width: auto !important;
             min-width: 0 !important;
-            flex: 1;
+            flex: 1 !important;
             padding: 1rem 0.25rem !important;
           }
           .size-option-btn .size-text {

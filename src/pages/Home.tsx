@@ -495,7 +495,7 @@ export const Home = () => {
           
           /* Why panel compact */
           .why-panel { padding: 2rem 1.5rem; }
-          .why-grid { gap: 2rem; }
+          .why-grid { grid-template-columns: 1fr; gap: 2rem; }
           .why-title { font-size: 1.75rem; margin-bottom: 2rem !important; }
         }
       `}</style>
