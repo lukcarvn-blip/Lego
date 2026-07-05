@@ -18,43 +18,48 @@ import { NewsDetail } from './pages/NewsDetail';
 import { Technology } from './pages/Technology';
 import { Profile } from './pages/Profile';
 
-const ScrollToTop = () => {
+function AppContent() {
   const { pathname } = useLocation();
+  
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [pathname]);
-  return null;
-};
+
+  const isAdmin = pathname.startsWith('/admin');
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      {!isAdmin && <Navbar />}
+      <main style={{ flex: 1 }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/:categoryName" element={<Products />} />
+          <Route path="/category/:categoryName" element={<Products />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
+          <Route path="/returns" element={<Returns />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/news/:id" element={<NewsDetail />} />
+          <Route path="/technology" element={<Technology />} />
+        </Routes>
+      </main>
+      {!isAdmin && <Footer />}
+    </div>
+  );
+}
 
 function App() {
   return (
     <StoreProvider>
       <Router>
-        <ScrollToTop />
-        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-          <Navbar />
-          <main style={{ flex: 1 }}>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/products/:categoryName" element={<Products />} />
-              <Route path="/category/:categoryName" element={<Products />} />
-              <Route path="/product/:id" element={<ProductDetails />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/shipping-policy" element={<ShippingPolicy />} />
-              <Route path="/returns" element={<Returns />} />
-              <Route path="/contact-us" element={<ContactUs />} />
-              <Route path="/news" element={<News />} />
-              <Route path="/news/:id" element={<NewsDetail />} />
-              <Route path="/technology" element={<Technology />} />
-            </Routes>
-          </main>
-          <Footer />
-        </div>
+        <AppContent />
       </Router>
     </StoreProvider>
   );
