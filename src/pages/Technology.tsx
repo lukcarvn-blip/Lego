@@ -126,8 +126,8 @@ export const Technology = () => {
             </h2>
             <p style={{ color: 'var(--color-text-muted)', marginBottom: '2rem', fontSize: '1.1rem', lineHeight: 1.6 }}>
               {language === 'vi' 
-                ? 'Không chỉ sản xuất mô hình đồ chơi, Lô Gê còn cung cấp dịch vụ in 3D theo yêu cầu cho mọi nhu cầu trong cuộc sống hàng ngày.'
-                : 'Beyond producing toy models, Lô Gê offers on-demand 3D printing services for all your daily life needs.'}
+                ? 'Không chỉ sản xuất mô hình đồ chơi, LEGATO còn cung cấp dịch vụ in 3D theo yêu cầu cho mọi nhu cầu trong cuộc sống hàng ngày.'
+                : 'Beyond producing toy models, LEGATO offers on-demand 3D printing services for all your daily life needs.'}
             </p>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>

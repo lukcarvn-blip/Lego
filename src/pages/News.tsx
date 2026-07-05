@@ -10,7 +10,7 @@ export const News = () => {
   return (
     <div style={{ paddingTop: '140px', paddingBottom: '5rem', minHeight: '100vh' }}>
       {/* SEO meta (title handled by page title) */}
-      <title>Tin Tức | Lô Gê - Mô Hình In 3D Cao Cấp</title>
+      <title>Tin Tức | LEGATO - Mô Hình In 3D Cao Cấp</title>
 
       <div className="container">
         {/* Header */}
@@ -24,7 +24,7 @@ export const News = () => {
             {language === 'vi' ? 'BLOG & TIN TỨC' : 'BLOG & NEWS'}
           </p>
           <h1 className="hero-title" style={{ fontWeight: 800, marginBottom: '1.5rem', lineHeight: 1.1 }}>
-            {language === 'vi' ? 'Góc Chia Sẻ Từ Lô Gê' : 'Stories From Lô Gê'}
+            {language === 'vi' ? 'Góc Chia Sẻ Từ LEGATO' : 'Stories From LEGATO'}
           </h1>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
             {language === 'vi'

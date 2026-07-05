@@ -288,7 +288,7 @@ export const Home = () => {
         )}
       </section>
 
-      {/* Why Lô Gê */}
+      {/* Why LEGATO */}
       <motion.section 
         className="container" 
         style={{ paddingTop: '6rem' }}

@@ -115,7 +115,7 @@ const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [settings, setSettings] = useState<StoreSettings>({
-    logoText: 'LÔ GÊ',
+    logoText: 'LEGATO',
     logoImage: '/images/custom-logo.png',
     heroVideoUrl: 'https://cdn.pixabay.com/video/2021/08/04/83894-585141019_large.mp4'
   });
