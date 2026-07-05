@@ -144,7 +144,7 @@ export const ProductDetails = () => {
   if (selectedSize === 'Size 1000') craftTimeDays = isFastCrafting ? '2-4' : '5-7';
 
   return (
-    <div className="container" style={{ paddingTop: '120px', paddingBottom: '4rem' }}>
+    <div className="container" style={{ paddingTop: '120px' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
         <div className="hide-scrollbar" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: 'clamp(0.6rem, 2vw, 0.9rem)', color: 'var(--color-text-muted)', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--glass-border)', backdropFilter: 'blur(10px)', whiteSpace: 'nowrap', overflowX: 'auto' }}>
           <span className="hover-text-primary" style={{ cursor: 'pointer', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '0.35rem' }} onClick={() => navigate('/')}>
@@ -629,8 +629,8 @@ export const ProductDetails = () => {
         .bottom-split-container {
           display: flex;
           flex-direction: column;
-          gap: 3rem;
-          margin-top: 4rem;
+          gap: 1.5rem;
+          margin-top: 2rem;
         }
         .size-option-btn {
           width: auto;

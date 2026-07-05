@@ -15,15 +15,15 @@ export const Footer = () => {
       style={{ 
         background: 'var(--color-surface)',
         borderTop: '1px solid var(--glass-border)',
-        padding: '4rem 0 2rem 0',
+        padding: '2rem 0 1rem 0',
         marginTop: 'auto'
       }}
     >
       <div className="container" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '2rem',
-        marginBottom: '3rem'
+        gap: '1.5rem',
+        marginBottom: '1.5rem'
       }}>
         <div>
           <h3 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '2px', marginBottom: '1rem' }}>
@@ -90,7 +90,7 @@ export const Footer = () => {
       
       <div className="container" style={{
         borderTop: '1px solid var(--glass-border)',
-        paddingTop: '2rem',
+        paddingTop: '1rem',
         textAlign: 'center',
         color: 'var(--color-text-muted)',
         fontSize: '0.875rem'
