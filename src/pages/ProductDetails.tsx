@@ -121,7 +121,7 @@ export const ProductDetails = () => {
   useEffect(() => {
     if (product && !sessionStorage.getItem('viewed_' + id)) {
       sessionStorage.setItem('viewed_' + id, 'true');
-      const currentViews = typeof product.views === 'number' ? product.views : Math.floor(Math.random() * 500 + 100);
+      const currentViews = typeof product.views === 'number' ? product.views : 0;
       updateProduct({ ...product, views: currentViews + 1 });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
