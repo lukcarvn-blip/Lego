@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ShoppingBag, Search, User, Home, ArrowUp, ArrowLeft } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
@@ -155,7 +155,7 @@ export const Navbar = () => {
               {user ? (
                 <Link to="/profile" className="desktop-action" style={{ display: 'flex', alignItems: 'center' }} title={language === 'vi' ? 'Hồ sơ' : 'Profile'}>
                   {user.photoURL ? (
-                    <img src={user.photoURL} alt={user.displayName || 'User'} style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--color-accent)' }} />
+                    <img src={user.photoURL} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={user.displayName || 'User'} style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--color-accent)' }} />
                   ) : (
                     <div style={{ width: 28, height: 28, borderRadius: '50%', background: 'var(--color-accent)', color: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
                       {user.email?.charAt(0).toUpperCase() || 'U'}
@@ -195,7 +195,7 @@ export const Navbar = () => {
         {user ? (
           <Link to="/profile" className="bottom-nav-item">
             {user.photoURL ? (
-              <img src={user.photoURL} alt="User" style={{ width: 22, height: 22, borderRadius: '50%', objectFit: 'cover' }} />
+              <img src={user.photoURL} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt="User" style={{ width: 22, height: 22, borderRadius: '50%', objectFit: 'cover' }} />
             ) : (
               <User size={22} color="var(--color-accent)" />
             )}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useStore, type OrderStatus } from '../context/StoreContext';
 import { Package, Clock, Truck, CheckCircle, Edit2, Plus, Image, Settings } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
@@ -226,7 +226,7 @@ export const Admin = () => {
                   <tr key={product.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                     <td style={{ padding: '1rem' }}>
                       <div style={{ width: '40px', height: '40px', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px' }}>
-                        <img src={product.images[0]} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" />
+                        <img src={product.images[0]} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" />
                       </div>
                     </td>
                     <td style={{ padding: '1rem', fontWeight: 600 }}>{product.name.vi}</td>

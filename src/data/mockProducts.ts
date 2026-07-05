@@ -1,4 +1,4 @@
-export type ProductSize = 'Size 300' | 'Size 400' | 'Size 1000';
+﻿export type ProductSize = 'Size 300' | 'Size 400' | 'Size 1000';
 
 export interface LocalizedString {
   vi: string;
@@ -92,8 +92,8 @@ export const mockProducts: Product[] = [
   {
     id: "p-04",
     name: { 
-      vi: "Ông Già Noel - Mùa Giáng Sinh Lô Gê", 
-      en: "Santa Claus - Lô Gê Christmas Edition" 
+      vi: "Ông Già Noel - Mùa Giáng Sinh LEGATO", 
+      en: "Santa Claus - LEGATO Christmas Edition" 
     },
     category: "Classic",
     price: 159.99,
@@ -103,8 +103,8 @@ export const mockProducts: Product[] = [
     estimatedPrintTime: "2-4 days",
     images: ["/images/santa-transparent.png"],
     description: {
-      vi: "Mang không khí Giáng Sinh ấm áp vào ngôi nhà của bạn với nhân vật Ông Già Noel Lô Gê đặc biệt. Từng chi tiết nhỏ đều được hoàn thiện bằng liquid glass.",
-      en: "Bring the warm Christmas spirit into your home with our special Lô Gê Santa Claus figure. Every tiny detail is finished with liquid glass."
+      vi: "Mang không khí Giáng Sinh ấm áp vào ngôi nhà của bạn với nhân vật Ông Già Noel LEGATO đặc biệt. Từng chi tiết nhỏ đều được hoàn thiện bằng liquid glass.",
+      en: "Bring the warm Christmas spirit into your home with our special LEGATO Santa Claus figure. Every tiny detail is finished with liquid glass."
     },
     availableSizes: ["Size 300", "Size 400", "Size 1000"],
     stock: 10,

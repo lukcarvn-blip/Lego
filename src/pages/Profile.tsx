@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, ShoppingBag, ShoppingCart, Bell, Clock, ChevronRight, Package, Truck, CheckCircle, CreditCard, XCircle, LogOut } from 'lucide-react';
@@ -136,7 +136,7 @@ export const Profile = () => {
                 {order.items.map((item, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <div style={{ width: '60px', height: '60px', borderRadius: 'var(--radius-sm)', background: 'rgba(0,0,0,0.3)', overflow: 'hidden' }}>
-                      <img src={item.product.images[0]} alt={item.product.name.en} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={item.product.images[0]} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={item.product.name.en} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 500 }}>{item.product.name[language as keyof typeof item.product.name]}</div>
@@ -191,7 +191,7 @@ export const Profile = () => {
                 {cart.items.map((item, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: 'var(--radius-sm)', background: 'rgba(0,0,0,0.3)', overflow: 'hidden' }}>
-                      <img src={item.product.images[0]} alt={item.product.name.en} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={item.product.images[0]} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={item.product.name.en} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: '0.9rem', fontWeight: 500 }}>{item.product.name[language as keyof typeof item.product.name]}</div>
@@ -220,7 +220,7 @@ export const Profile = () => {
         <div className="glass-panel profile-sidebar" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: 'fit-content' }}>
           <div style={{ width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(0,0,0,0.5)', marginBottom: '1.5rem', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid var(--color-accent)' }}>
             {user.photoURL ? (
-              <img src={user.photoURL} alt={user.displayName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={user.photoURL} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={user.displayName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
               <User size={48} color="var(--color-accent)" />
             )}

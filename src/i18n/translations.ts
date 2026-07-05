@@ -1,10 +1,10 @@
-export type Language = 'vi' | 'en';
+﻿export type Language = 'vi' | 'en';
 
 export const translations = {
   vi: {
     nav_shop: "Cửa Hàng",
     nav_new: "Mới Nhất",
-    nav_about: "Về Lô Gê",
+    nav_about: "Về LEGATO",
     nav_admin: "Quản Trị",
     cart_title: "Giỏ Hàng",
     hero_title_1: "KHỔNG LỒ.",
@@ -17,7 +17,7 @@ export const translations = {
     cat_classic: "Kinh Điển",
     featured_drops: "Sản Phẩm Mới",
     view_all: "Xem Tất Cả",
-    why_loge: "Tại Sao Chọn Lô Gê?",
+    why_loge: "Tại Sao Chọn LEGATO?",
     why_1_title: "Nhựa Màu Liền Khối",
     why_1_desc: "Nhựa in 3D màu liền khối từ trong lõi, nói không với bong tróc sơn.",
     why_2_title: "Chế Tác \"Pháp Sư\"",
@@ -87,7 +87,7 @@ export const translations = {
     cat_classic: "Classic",
     featured_drops: "Featured Drops",
     view_all: "View All",
-    why_loge: "Why Lô Gê?",
+    why_loge: "Why LEGATO?",
     why_1_title: "Liquid Glass Finish",
     why_1_desc: "Our proprietary coating gives each figure a stunning, scratch-resistant glassy sheen.",
     why_2_title: "Hand-Crafted Detail",

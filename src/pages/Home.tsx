@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, Clock, ChevronRight, ShieldCheck, Zap, Diamond, Sparkles, ShoppingCart, Loader2, LayoutGrid, LayoutList, ArrowRight } from 'lucide-react';
@@ -226,7 +226,7 @@ export const Home = () => {
                     background: 'transparent'
                   }}
                 >
-                  <img src={cat.img} alt={cat.title} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'screen' }} />
+                  <img src={cat.img} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={cat.title} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'screen' }} />
                 </motion.div>
                 <h3 className="minecraft-font" style={{ fontWeight: 500, textAlign: 'center', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-text)' }}>{cat.title}</h3>
               </div>
@@ -360,7 +360,7 @@ export const Home = () => {
                 >
                   {/* Thumbnail */}
                   <div style={{ width: '110px', flexShrink: 0, overflow: 'hidden' }}>
-                    <img src={post.image} alt={post.title}
+                    <img src={post.image} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={post.title}
                       style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
                       onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.08)')}
                       onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}

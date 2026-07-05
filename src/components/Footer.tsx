@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useStore } from '../context/StoreContext';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -28,7 +28,7 @@ export const Footer = () => {
         <div>
           <h3 style={{ fontSize: '1.5rem', fontWeight: 800, letterSpacing: '2px', marginBottom: '1rem' }}>
             {settings.logoImage ? (
-              <img src={settings.logoImage} alt="Logo" style={{ height: '80px', objectFit: 'contain' }} />
+              <img src={settings.logoImage} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt="Logo" style={{ height: '80px', objectFit: 'contain' }} />
             ) : (
               settings.logoText
             )}

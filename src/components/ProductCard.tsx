@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, Clock, Zap, Sparkles, ShoppingCart, Shield, Rocket, Crown, Tag } from 'lucide-react';
@@ -91,7 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 </div>
               </div>
 
-              <img src={product.images?.[0] || product.image} alt={product.name[language as keyof typeof product.name]}
+              <img src={product.images?.[0] || product.image} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={product.name[language as keyof typeof product.name]}
                 style={{ 
                   width: '100%', height: '100%', objectFit: 'contain', 
                   filter: 'drop-shadow(0 10px 16px rgba(0,0,0,0.5))', 

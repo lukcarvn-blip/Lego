@@ -1,13 +1,13 @@
-import type { BlogPost } from '../context/StoreContext';
+﻿import type { BlogPost } from '../context/StoreContext';
 
 export const mockBlogPosts: BlogPost[] = [
   {
     id: 'b-1',
     title: 'Bí Quyết Phủ Sơn "Liquid Glass" Tạo Đô Bóng Sâu Khó Cưỡng',
-    excerpt: 'Khám phá quy trình 5 bước độc quyền tại Lô Gê giúp mọi mô hình sở hữu bề mặt bóng loáng như pha lê.',
+    excerpt: 'Khám phá quy trình 5 bước độc quyền tại LEGATO giúp mọi mô hình sở hữu bề mặt bóng loáng như pha lê.',
     content: `
       <h2>1. Liquid Glass là gì?</h2>
-      <p>Liquid Glass (Kính lỏng) không chỉ đơn thuần là một lớp sơn phủ. Đây là công nghệ phủ siêu bóng tạo ra hiệu ứng phản chiếu sâu, giúp mô hình của bạn trông như được đúc từ pha lê màu. Tại Lô Gê, chúng tôi gọi đây là "linh hồn" của những thiết kế cao cấp.</p>
+      <p>Liquid Glass (Kính lỏng) không chỉ đơn thuần là một lớp sơn phủ. Đây là công nghệ phủ siêu bóng tạo ra hiệu ứng phản chiếu sâu, giúp mô hình của bạn trông như được đúc từ pha lê màu. Tại LEGATO, chúng tôi gọi đây là "linh hồn" của những thiết kế cao cấp.</p>
       
       <img src="/images/custom-logo.png" alt="Liquid glass coating process" style="width: 100%; border-radius: 8px; margin: 1rem 0;; background: var(--color-surface); object-fit: contain; aspect-ratio: 16/9;" />
       
@@ -27,7 +27,7 @@ export const mockBlogPosts: BlogPost[] = [
   {
     id: 'b-2',
     title: 'Kỷ Nguyên Mới: Xưởng Đúc Cập Nhật Khuôn Mẫu Size 1000% (70cm)',
-    excerpt: 'Đáp ứng nhu cầu decor không gian lớn, Lô Gê chính thức ra mắt dòng sản phẩm khổng lồ.',
+    excerpt: 'Đáp ứng nhu cầu decor không gian lớn, LEGATO chính thức ra mắt dòng sản phẩm khổng lồ.',
     content: `
       <h2>Chào Đón Size Khổng Lồ 1000%</h2>
       <p>Với chiều cao lên tới 70cm, những mô hình size 1000% không còn là món đồ chơi để bàn thông thường, chúng là những <strong>tác phẩm điêu khắc nghệ thuật</strong> thực thụ dành cho không gian sống hiện đại.</p>
@@ -35,7 +35,7 @@ export const mockBlogPosts: BlogPost[] = [
       <img src="/images/custom-logo.png" alt="Large scale mold" style="width: 100%; border-radius: 8px; margin: 1rem 0;; background: var(--color-surface); object-fit: contain; aspect-ratio: 16/9;" />
       
       <h2>Tại Sao Nên Chọn Size 1000%?</h2>
-      <p>Trong thiết kế nội thất, một điểm nhấn (focal point) có kích thước lớn luôn tạo ra ấn tượng thị giác mạnh mẽ hơn nhiều món đồ nhỏ lẻ. Một chú gấu Lô Gê Bear hay một Deadpool khổng lồ đặt tại phòng khách sẽ thể hiện cá tính độc bản của gia chủ.</p>
+      <p>Trong thiết kế nội thất, một điểm nhấn (focal point) có kích thước lớn luôn tạo ra ấn tượng thị giác mạnh mẽ hơn nhiều món đồ nhỏ lẻ. Một chú gấu LEGATO Bear hay một Deadpool khổng lồ đặt tại phòng khách sẽ thể hiện cá tính độc bản của gia chủ.</p>
       <blockquote>"Go big or go home" - Kích thước lớn mang lại sự bề thế và đẳng cấp khác biệt.</blockquote>
     `,
     date: '2026-07-01',
@@ -47,7 +47,7 @@ export const mockBlogPosts: BlogPost[] = [
     excerpt: 'So sánh chi tiết hai loại nhựa in 3D phổ biến nhất để tìm ra chân ái cho bộ sưu tập.',
     content: `
       <h2>Tổng Quan Về PLA Và PETG</h2>
-      <p>Khi đặt hàng tại Lô Gê, bạn có hai lựa chọn chất liệu chính. Mỗi loại đều có ưu điểm riêng phù hợp với từng mục đích trưng bày.</p>
+      <p>Khi đặt hàng tại LEGATO, bạn có hai lựa chọn chất liệu chính. Mỗi loại đều có ưu điểm riêng phù hợp với từng mục đích trưng bày.</p>
       
       <img src="/images/custom-logo.png" alt="3D Printing materials" style="width: 100%; border-radius: 8px; margin: 1rem 0;; background: var(--color-surface); object-fit: contain; aspect-ratio: 16/9;" />
       
@@ -63,21 +63,21 @@ export const mockBlogPosts: BlogPost[] = [
   },
   {
     id: 'b-4',
-    title: 'Top 5 Mô Hình Lô Gê Bear Được Săn Lùng Nhiều Nhất 2026',
-    excerpt: 'Điểm danh những thiết kế Lô Gê Bear đang làm mưa làm gió trên thị trường decor cao cấp.',
+    title: 'Top 5 Mô Hình LEGATO Bear Được Săn Lùng Nhiều Nhất 2026',
+    excerpt: 'Điểm danh những thiết kế LEGATO Bear đang làm mưa làm gió trên thị trường decor cao cấp.',
     content: `
-      <h2>Sức Hút Của Lô Gê Bear</h2>
-      <p>Không chỉ là một món đồ trang trí, Lô Gê Bear đã trở thành một biểu tượng của phong cách sống (lifestyle). Dưới đây là 5 mẫu được yêu thích nhất trong năm nay.</p>
+      <h2>Sức Hút Của LEGATO Bear</h2>
+      <p>Không chỉ là một món đồ trang trí, LEGATO Bear đã trở thành một biểu tượng của phong cách sống (lifestyle). Dưới đây là 5 mẫu được yêu thích nhất trong năm nay.</p>
       
       <img src="/images/custom-logo.png" alt="Trendy figures" style="width: 100%; border-radius: 8px; margin: 1rem 0;; background: var(--color-surface); object-fit: contain; aspect-ratio: 16/9;" />
       
       <h2>Bảng Xếp Hạng</h2>
       <ol>
-        <li><strong>Lô Gê Bear - Đen Nhám Huyền Bí:</strong> Sự tối giản lên ngôi. Phù hợp mọi không gian kiến trúc.</li>
-        <li><strong>Lô Gê Bear - Vàng Hồng Phủ Bóng:</strong> Dành cho những ai yêu thích sự sang trọng, quý phái.</li>
-        <li><strong>Lô Gê Bear - Gradient Biển Sâu:</strong> Kỹ thuật sơn chuyển màu đỉnh cao.</li>
-        <li><strong>Lô Gê Bear - Phiên Bản Siêu Anh Hùng:</strong> Kết hợp văn hóa pop-culture đầy màu sắc.</li>
-        <li><strong>Lô Gê Bear - Chrome Bạc:</strong> Hiệu ứng gương phản chiếu cực kỳ bắt mắt.</li>
+        <li><strong>LEGATO Bear - Đen Nhám Huyền Bí:</strong> Sự tối giản lên ngôi. Phù hợp mọi không gian kiến trúc.</li>
+        <li><strong>LEGATO Bear - Vàng Hồng Phủ Bóng:</strong> Dành cho những ai yêu thích sự sang trọng, quý phái.</li>
+        <li><strong>LEGATO Bear - Gradient Biển Sâu:</strong> Kỹ thuật sơn chuyển màu đỉnh cao.</li>
+        <li><strong>LEGATO Bear - Phiên Bản Siêu Anh Hùng:</strong> Kết hợp văn hóa pop-culture đầy màu sắc.</li>
+        <li><strong>LEGATO Bear - Chrome Bạc:</strong> Hiệu ứng gương phản chiếu cực kỳ bắt mắt.</li>
       </ol>
       <p>Bạn đã sở hữu mẫu nào trong bộ sưu tập của mình chưa?</p>
     `,
@@ -87,10 +87,10 @@ export const mockBlogPosts: BlogPost[] = [
   {
     id: 'b-5',
     title: 'Nghệ Thuật Custom Mô Hình: Khi Trí Tưởng Tượng Không Giới Hạn',
-    excerpt: 'Dịch vụ thiết kế theo yêu cầu (Custom) tại Lô Gê mang đến những tác phẩm duy nhất trên thế giới.',
+    excerpt: 'Dịch vụ thiết kế theo yêu cầu (Custom) tại LEGATO mang đến những tác phẩm duy nhất trên thế giới.',
     content: `
       <h2>Tại Sao Cần Custom Mô Hình?</h2>
-      <p>Trong một thế giới đề cao sự cá nhân hóa, việc sở hữu một món đồ không "đụng hàng" là nhu cầu tất yếu. Lô Gê tự hào mang đến dịch vụ Custom từ A-Z.</p>
+      <p>Trong một thế giới đề cao sự cá nhân hóa, việc sở hữu một món đồ không "đụng hàng" là nhu cầu tất yếu. LEGATO tự hào mang đến dịch vụ Custom từ A-Z.</p>
       
       <img src="/images/custom-logo.png" alt="Custom painting art" style="width: 100%; border-radius: 8px; margin: 1rem 0;; background: var(--color-surface); object-fit: contain; aspect-ratio: 16/9;" />
       
@@ -143,7 +143,7 @@ export const mockBlogPosts: BlogPost[] = [
         <li><strong>Giá Trị Nghệ Thuật:</strong> Sự kết hợp giữa điêu khắc, hội họa và thiết kế đương đại.</li>
         <li><strong>Cộng Đồng:</strong> Cảm giác thuộc về một cộng đồng tinh hoa, chia sẻ đam mê và phong cách sống.</li>
       </ul>
-      <p>Lô Gê tự hào là một trong những thương hiệu tiên phong mang chuẩn mực Art Toy quốc tế đến với người dùng Việt qua công nghệ in 3D hiện đại nhất.</p>
+      <p>LEGATO tự hào là một trong những thương hiệu tiên phong mang chuẩn mực Art Toy quốc tế đến với người dùng Việt qua công nghệ in 3D hiện đại nhất.</p>
     `,
     date: '2026-06-10',
     image: '/images/custom-logo.png'
@@ -151,7 +151,7 @@ export const mockBlogPosts: BlogPost[] = [
   {
     id: 'b-8',
     title: 'Hậu Trường Chế Tác: Deadpool "Kẻ Đáng Ghét"',
-    excerpt: 'Cùng xem đội ngũ Lô Gê đã đưa chàng lính đánh thuê lắm mồm từ bản vẽ 3D ra đời thực như thế nào.',
+    excerpt: 'Cùng xem đội ngũ LEGATO đã đưa chàng lính đánh thuê lắm mồm từ bản vẽ 3D ra đời thực như thế nào.',
     content: `
       <h2>Từ Concept Đến Bản In 3D</h2>
       <p>Deadpool luôn là một trong những nhân vật được yêu cầu nhiều nhất. Thử thách của chúng tôi là làm sao bắt được cái thần thái "nhây" nhưng vẫn cực kỳ ngầu của anh chàng.</p>
@@ -160,7 +160,7 @@ export const mockBlogPosts: BlogPost[] = [
       
       <h2>Quy Trình Hoàn Thiện</h2>
       <p>Bản phác thảo 3D tiêu tốn hơn 40 giờ đồng hồ để tinh chỉnh tỉ lệ cơ bắp và nếp gấp trang phục. Quá trình in 3D mất thêm 30 giờ liên tục với độ phân giải siêu cao.</p>
-      <p>Điểm nhấn chính là lớp sơn đỏ đặc trưng kết hợp với kỹ thuật giả cổ (weathering), tạo cảm giác bộ giáp đã trải qua vô số trận chiến. Mỗi phiên bản Deadpool tại Lô Gê đều được xử lý thủ công, đảm bảo không có hai bản nào hoàn toàn giống nhau.</p>
+      <p>Điểm nhấn chính là lớp sơn đỏ đặc trưng kết hợp với kỹ thuật giả cổ (weathering), tạo cảm giác bộ giáp đã trải qua vô số trận chiến. Mỗi phiên bản Deadpool tại LEGATO đều được xử lý thủ công, đảm bảo không có hai bản nào hoàn toàn giống nhau.</p>
     `,
     date: '2026-06-05',
     image: '/images/custom-logo.png'
@@ -196,9 +196,9 @@ export const mockBlogPosts: BlogPost[] = [
       
       <img src="/images/custom-logo.png" alt="Future tech 3D" style="width: 100%; border-radius: 8px; margin: 1rem 0;; background: var(--color-surface); object-fit: contain; aspect-ratio: 16/9;" />
       
-      <h2>Lô Gê - Tiên Phong Đón Đầu Xu Hướng</h2>
-      <p>Tại Lô Gê, chúng tôi kết hợp sự tinh xảo của máy móc hiện đại và cái hồn của nghệ nhân thủ công. Việc ứng dụng công nghệ cho phép chúng tôi cá nhân hóa sản phẩm tối đa với mức chi phí hợp lý nhất cho người dùng.</p>
-      <p>Decor tương lai không chỉ là đồ trang trí vô tri, mà là sự phản chiếu bản ngã của người sở hữu. Lô Gê Bear chính là minh chứng rõ ràng nhất cho triết lý này.</p>
+      <h2>LEGATO - Tiên Phong Đón Đầu Xu Hướng</h2>
+      <p>Tại LEGATO, chúng tôi kết hợp sự tinh xảo của máy móc hiện đại và cái hồn của nghệ nhân thủ công. Việc ứng dụng công nghệ cho phép chúng tôi cá nhân hóa sản phẩm tối đa với mức chi phí hợp lý nhất cho người dùng.</p>
+      <p>Decor tương lai không chỉ là đồ trang trí vô tri, mà là sự phản chiếu bản ngã của người sở hữu. LEGATO Bear chính là minh chứng rõ ràng nhất cho triết lý này.</p>
     `,
     date: '2026-05-28',
     image: '/images/custom-logo.png'

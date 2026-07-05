@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Calendar, ArrowLeft, ChevronRight, Clock } from 'lucide-react';
@@ -131,7 +131,7 @@ export const NewsDetail = () => {
                       onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--glass-border)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
                     >
                       <div style={{ height: '150px', overflow: 'hidden' }}>
-                        <img src={rel.image} alt={rel.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
+                        <img src={rel.image} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={rel.title} style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
                           onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.08)')}
                           onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
                         />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, ArrowRight, Mail, LogIn, ArrowLeft, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -86,7 +86,7 @@ export const Cart = () => {
               {cart.map((item) => (
                 <div key={`${item.product.id}-${item.size}-${item.material}`} className="glass-panel cart-item-card">
                   <div className="cart-item-img-wrapper">
-                    <img src={item.product.images[0]} alt={item.product.name[language]} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 10px rgba(0,0,0,0.5))' }} />
+                    <img src={item.product.images[0]} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={item.product.name[language]} style={{ width: '100%', height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 10px 10px rgba(0,0,0,0.5))' }} />
                   </div>
                   <div style={{ flex: 1 }}>
                     <div className="cart-item-header">
