@@ -286,76 +286,70 @@ export const ProductDetails = () => {
                       background: 'var(--color-accent)'
                     }}
                   >
-                    {/* Quantity Row */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(0,0,0,0.15)', borderRadius: 'var(--radius-sm)' }}>
-                        <button onClick={(e) => { e.stopPropagation(); setQuantity(q => Math.max(1, q - 1)); }} style={{ background: 'transparent', border: 'none', color: '#000', cursor: 'pointer', padding: '0.25rem 0.75rem', fontWeight: 'bold', fontSize: '1.2rem' }}>-</button>
-                        <span style={{ color: '#000', fontWeight: 'bold', width: '30px', textAlign: 'center' }}>{quantity}</span>
-                        <button onClick={(e) => { e.stopPropagation(); setQuantity(q => q + 1); }} style={{ background: 'transparent', border: 'none', color: '#000', cursor: 'pointer', padding: '0.25rem 0.75rem', fontWeight: 'bold', fontSize: '1.2rem' }}>+</button>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        {/* Quantity */}
+                        <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(0,0,0,0.15)', borderRadius: 'var(--radius-sm)' }}>
+                          <button onClick={(e) => { e.stopPropagation(); setQuantity(q => Math.max(1, q - 1)); }} style={{ background: 'transparent', border: 'none', color: '#000', cursor: 'pointer', padding: '0.25rem 0.75rem', fontWeight: 'bold', fontSize: '1.2rem' }}>-</button>
+                          <span style={{ color: '#000', fontWeight: 'bold', width: '30px', textAlign: 'center' }}>{quantity}</span>
+                          <button onClick={(e) => { e.stopPropagation(); setQuantity(q => q + 1); }} style={{ background: 'transparent', border: 'none', color: '#000', cursor: 'pointer', padding: '0.25rem 0.75rem', fontWeight: 'bold', fontSize: '1.2rem' }}>+</button>
+                        </div>
+                        
+                        {/* Price */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                          {qtyDiscount > 0 && (
+                            <span style={{ color: '#ef4444', fontWeight: 'bold', fontSize: '0.9rem', background: '#fff', padding: '0.2rem 0.5rem', borderRadius: '12px' }}>
+                              -{qtyDiscount * 100}%
+                            </span>
+                          )}
+                          <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#000' }}>
+                            <AnimatedPrice priceString={currentPriceString} />
+                          </div>
+                        </div>
                       </div>
-                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
-                        {qtyDiscount > 0 && (
-                          <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ background: '#ef4444', color: '#fff', fontSize: '0.85rem', padding: '0.25rem 0.75rem', borderRadius: '12px', fontWeight: 'bold' }}>
-                            {language === 'vi' ? `Giảm ${qtyDiscount * 100}%` : `Save ${qtyDiscount * 100}%`}
-                          </motion.div>
-                        )}
-                      </div>
-                    </div>
 
-                    {/* All 3 on same row: MUA NGAY | Price | Rocket */}
-                    <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.5rem', width: '100%' }}>
-                      <button 
-                        onClick={handleAddToCart}
-                        className="sticky-action-btn bling-btn"
-                        style={{ 
-                          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-                          fontSize: '1rem', fontWeight: 800,
-                          background: 'rgba(0,0,0,0.2)', border: 'none', color: '#000', cursor: 'pointer',
-                          padding: '0.75rem 0.5rem', borderRadius: 'var(--radius-sm)',
-                        }}
-                      >
-                        <ShoppingBag size={20} />
-                        <span>{language === 'vi' ? 'MUA NGAY' : 'BUY NOW'}</span>
-                      </button>
-                      <div 
-                        className="sticky-action-price-box"
-                        style={{ 
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          fontWeight: 'bold', background: 'rgba(0,0,0,0.15)', padding: '0.5rem 0.75rem',
-                          borderRadius: 'var(--radius-sm)', fontSize: '1.1rem', color: '#000',
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        <AnimatedPrice priceString={currentPriceString} />
+                      <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.5rem', width: '100%' }}>
+                        <button 
+                          onClick={handleAddToCart}
+                          className="sticky-action-btn bling-btn"
+                          style={{ 
+                            flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                            fontSize: '1rem', fontWeight: 800,
+                            background: 'rgba(0,0,0,0.2)', border: 'none', color: '#000', cursor: 'pointer',
+                            padding: '0.75rem 0.5rem', borderRadius: 'var(--radius-sm)',
+                          }}
+                        >
+                          <ShoppingBag size={20} />
+                          <span>{language === 'vi' ? 'MUA NGAY' : 'BUY NOW'}</span>
+                        </button>
+                        <button
+                          onClick={(e) => { e.stopPropagation(); setIsFastCrafting(!isFastCrafting); }}
+                          style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            background: '#ef4444', color: '#fff', border: 'none',
+                            padding: '0 0.9rem', borderRadius: 'var(--radius-sm)',
+                            cursor: 'pointer', transition: 'all 0.2s',
+                            boxShadow: isFastCrafting ? 'inset 0 3px 6px rgba(0,0,0,0.4)' : '0 4px 10px rgba(239,68,68,0.4)',
+                            transform: isFastCrafting ? 'scale(0.96)' : 'scale(1)',
+                          }}
+                          title={language === 'vi' ? 'Tăng tốc chế tác (+10% phí)' : 'Fast Crafting (+10% fee)'}
+                        >
+                          <Rocket size={20} />
+                        </button>
+                        <button
+                          className="hide-on-desktop"
+                          onClick={() => setIsCartExpanded(false)}
+                          style={{
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            background: 'rgba(0,0,0,0.1)', color: '#000', border: 'none',
+                            padding: '0 0.5rem', borderRadius: 'var(--radius-sm)',
+                            cursor: 'pointer', transition: 'all 0.2s',
+                          }}
+                        >
+                          <ChevronDown size={20} />
+                        </button>
                       </div>
-                      <button
-                        onClick={(e) => { e.stopPropagation(); setIsFastCrafting(!isFastCrafting); }}
-                        style={{
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          background: '#ef4444', color: '#fff', border: 'none',
-                          padding: '0 0.9rem', borderRadius: 'var(--radius-sm)',
-                          cursor: 'pointer', transition: 'all 0.2s',
-                          boxShadow: isFastCrafting ? 'inset 0 3px 6px rgba(0,0,0,0.4)' : '0 4px 10px rgba(239,68,68,0.4)',
-                          transform: isFastCrafting ? 'scale(0.96)' : 'scale(1)',
-                        }}
-                        title={language === 'vi' ? 'Tăng tốc chế tác (+10% phí)' : 'Fast Crafting (+10% fee)'}
-                      >
-                        <Rocket size={20} />
-                      </button>
-                      <button
-                        className="hide-on-desktop"
-                        onClick={() => setIsCartExpanded(false)}
-                        style={{
-                          display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          background: 'rgba(0,0,0,0.1)', color: '#000', border: 'none',
-                          padding: '0 0.5rem', borderRadius: 'var(--radius-sm)',
-                          cursor: 'pointer', transition: 'all 0.2s',
-                        }}
-                        title={language === 'vi' ? "Thu gọn" : "Collapse"}
-                      >
-                        <ChevronDown size={20} />
-                      </button>
-                    </div>
+                    </div>                    
                     {/* Summary Note */}
                     <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
                       <p className="summary-note" style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.8)', margin: 0, lineHeight: 1.5, textAlign: 'left' }}>
