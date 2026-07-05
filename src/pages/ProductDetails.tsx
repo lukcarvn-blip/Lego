@@ -122,6 +122,7 @@ export const ProductDetails = () => {
   const [selectedMaterial, setSelectedMaterial] = useState<ProductMaterial>('PLA');
   const [isFastCrafting, setIsFastCrafting] = useState(false);
   const [isCartExpanded, setIsCartExpanded] = useState(true);
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     const handleResize = () => {
@@ -134,7 +135,15 @@ export const ProductDetails = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const finalPriceMultiplier = parseSizePercentage(selectedSize) * (selectedMaterial === 'PETG' ? 1.2 : 1) * (isFastCrafting ? 1.1 : 1);
+  const getQuantityDiscount = (qty: number) => {
+    if (qty >= 10) return 0.15;
+    if (qty >= 6) return 0.10;
+    if (qty >= 3) return 0.05;
+    return 0;
+  };
+  const qtyDiscount = getQuantityDiscount(quantity);
+
+  const finalPriceMultiplier = parseSizePercentage(selectedSize) * (selectedMaterial === 'PETG' ? 1.2 : 1) * (isFastCrafting ? 1.1 : 1) * quantity * (1 - qtyDiscount);
 
   const currentPriceString = product 
     ? formatPrice(product.price * finalPriceMultiplier, product.discountPercentage).current 
@@ -146,14 +155,21 @@ export const ProductDetails = () => {
 
   const handleAddToCart = (e?: React.MouseEvent) => {
     if (product && selectedSize) {
-      addToCart(product, selectedSize, selectedMaterial, 1, e);
+      addToCart(product, selectedSize, selectedMaterial, quantity, e, isFastCrafting);
       showToast(language === 'vi' ? 'Đã thêm vào giỏ hàng!' : 'Added to cart!');
     }
   };
 
   // Determine crafting time based on size for the progress UI
-  let craftTimeDays = isFastCrafting ? '1-2' : '2-4';
-  if (selectedSize === 'Size 1000') craftTimeDays = isFastCrafting ? '2-4' : '5-7';
+  let minDays = isFastCrafting ? 1 : 2;
+  let maxDays = isFastCrafting ? 2 : 4;
+  if (selectedSize === 'Size 1000') {
+    minDays = isFastCrafting ? 2 : 5;
+    maxDays = isFastCrafting ? 4 : 7;
+  }
+  minDays += (quantity - 1);
+  maxDays += (quantity - 1);
+  let craftTimeDays = `${minDays}-${maxDays}`;
 
   return (
     <div className="container" style={{ paddingTop: '120px' }}>
@@ -270,6 +286,22 @@ export const ProductDetails = () => {
                       background: 'var(--color-accent)'
                     }}
                   >
+                    {/* Quantity Row */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(0,0,0,0.15)', borderRadius: 'var(--radius-sm)' }}>
+                        <button onClick={(e) => { e.stopPropagation(); setQuantity(q => Math.max(1, q - 1)); }} style={{ background: 'transparent', border: 'none', color: '#000', cursor: 'pointer', padding: '0.25rem 0.75rem', fontWeight: 'bold', fontSize: '1.2rem' }}>-</button>
+                        <span style={{ color: '#000', fontWeight: 'bold', width: '30px', textAlign: 'center' }}>{quantity}</span>
+                        <button onClick={(e) => { e.stopPropagation(); setQuantity(q => q + 1); }} style={{ background: 'transparent', border: 'none', color: '#000', cursor: 'pointer', padding: '0.25rem 0.75rem', fontWeight: 'bold', fontSize: '1.2rem' }}>+</button>
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '4px' }}>
+                        {qtyDiscount > 0 && (
+                          <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} style={{ background: '#ef4444', color: '#fff', fontSize: '0.85rem', padding: '0.25rem 0.75rem', borderRadius: '12px', fontWeight: 'bold' }}>
+                            {language === 'vi' ? `Giảm ${qtyDiscount * 100}%` : `Save ${qtyDiscount * 100}%`}
+                          </motion.div>
+                        )}
+                      </div>
+                    </div>
+
                     {/* All 3 on same row: MUA NGAY | Price | Rocket */}
                     <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.5rem', width: '100%' }}>
                       <button 
