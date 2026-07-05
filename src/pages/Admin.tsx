@@ -7,7 +7,7 @@ import {
   AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw
 } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
-import type { Order } from '../context/StoreContext';
+import type { Order, BlogPost } from '../context/StoreContext';
 import { Link } from 'react-router-dom';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -179,6 +179,11 @@ export const Admin = () => {
   const [productSearch, setProductSearch] = useState('');
   const [newTitle, setNewTitle] = useState('');
   const [newContent, setNewContent] = useState('');
+  
+  // Blog State
+  const [isEditingBlog, setIsEditingBlog] = useState(false);
+  const [editingBlogPost, setEditingBlogPost] = useState<Partial<BlogPost>>({});
+  
   const [tempSettings, setTempSettings] = useState(settings);
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
@@ -749,40 +754,7 @@ export const Admin = () => {
           </form>
         )}
 
-        {/* ── BLOG TAB ──────────────────────────────────────────────── */}
-        {activeTab === 'blog' && (
-          <div>
-            <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '1.5rem' }}>📝 Quản lý bài viết</h1>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-              <div style={panelStyle}>
-                <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Đăng bài mới</h3>
-                <form onSubmit={handleAddBlog} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  <InputField label="Tiêu đề *">
-                    <input type="text" required value={newTitle} onChange={e => setNewTitle(e.target.value)} style={inputStyle} />
-                  </InputField>
-                  <InputField label="Nội dung">
-                    <textarea rows={6} value={newContent} onChange={e => setNewContent(e.target.value)} style={{...inputStyle, resize: 'vertical'}} />
-                  </InputField>
-                  <button type="submit" className="btn-primary" style={{ alignSelf: 'flex-start' }}>Đăng bài</button>
-                </form>
-              </div>
-              <div>
-                <h3 style={{ marginBottom: '1rem' }}>Đã đăng ({blogPosts.length})</h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                  {blogPosts.map(post => (
-                    <div key={post.id} style={{ ...panelStyle, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 0, padding: '1rem' }}>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <h4 style={{ fontSize: '0.9rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{post.title}</h4>
-                        <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{post.date}</p>
-                      </div>
-                      <button onClick={() => { if (window.confirm('Xóa bài viết này?')) deleteBlogPost(post.id) }} style={{ color: '#ef4444', padding: '0.35rem', marginLeft: '0.75rem' }}><Trash2 size={15} /></button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+
 
         {/* ── MEMBERS TAB ───────────────────────────────────────────── */}
         {activeTab === 'members' && (
