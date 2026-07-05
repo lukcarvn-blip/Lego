@@ -75,11 +75,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--glass-border)'}
           >
             {/* Thumbnail */}
-            <div style={{
+            <motion.div style={{
               width: '160px', flexShrink: 0,
               background: 'radial-gradient(circle, rgba(74,222,128,0.12) 0%, rgba(0,0,0,0.5) 100%)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative'
-            }}>
+            }}
+              initial="rest"
+              whileHover="hover"
+              whileTap="hover"
+              whileInView={isMobile ? "hover" : undefined}
+              viewport={{ amount: 0.5, margin: "-10% 0px -10% 0px" }}
+              animate={isMobile ? undefined : "rest"}
+            >
               {/* Badges Container */}
               <div style={{ position: 'absolute', top: 8, left: 8, zIndex: 10, display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start' }}>
                 {product.saleType === 'FLASH_SALE' && (
@@ -98,14 +105,49 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 </div>
               </div>
 
-              <img src={product.images?.[0] || product.image} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={product.name[language as keyof typeof product.name]}
+              {[
+                { size: 24, top: '10%', left: '15%', delay: 0 },
+                { size: 14, top: '20%', left: '75%', delay: 0.1 },
+                { size: 20, top: '65%', left: '10%', delay: 0.2 },
+                { size: 12, top: '80%', left: '80%', delay: 0.15 },
+                { size: 18, top: '25%', left: '85%', delay: 0.05 },
+              ].map((bling, i) => (
+                <motion.div
+                  key={i}
+                  variants={{
+                    rest: { opacity: 0, scale: 0, y: 0, rotate: 0 },
+                    hover: { 
+                      opacity: [0, 1, 0.7, 1], 
+                      scale: [0, 1.2, 1, 1.1, 1], 
+                      y: [0, -15, 0],
+                      rotate: 360
+                    }
+                  }}
+                  transition={{ 
+                    scale: { duration: 2, repeat: Infinity, repeatType: "reverse", delay: bling.delay },
+                    opacity: { duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: bling.delay },
+                    y: { duration: 3, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: bling.delay },
+                    rotate: { duration: 4, repeat: Infinity, ease: "linear" }
+                  }}
+                  style={{ position: 'absolute', top: bling.top, left: bling.left, color: '#facc15', zIndex: 10, pointerEvents: 'none' }}
+                >
+                  <Sparkles size={bling.size} fill="#facc15" />
+                </motion.div>
+              ))}
+
+              <motion.img src={product.images?.[0] || product.image} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={product.name[language as keyof typeof product.name]}
+                variants={{
+                  rest: { y: '15%', scale: 1.4 },
+                  hover: { y: 0, scale: 1 }
+                }}
+                transition={{ type: 'spring', stiffness: 250, damping: 25 }}
                 style={{ 
                   width: '100%', height: '100%', objectFit: 'contain', 
                   filter: 'drop-shadow(0 10px 16px rgba(0,0,0,0.5))', 
-                  transform: 'scale(1.25)', marginTop: '20px' 
+                  marginTop: '10px' 
                 }} 
               />
-            </div>
+            </motion.div>
 
             {/* Info */}
             <div style={{ flex: 1, padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden' }}>
