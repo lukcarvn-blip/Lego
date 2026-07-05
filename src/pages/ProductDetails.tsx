@@ -268,7 +268,7 @@ export const ProductDetails = () => {
           </motion.div>
           
           {/* Video Section below image */}
-          {product.video && (
+          {((product.videos && product.videos.length > 0) || product.video) && (
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -279,14 +279,32 @@ export const ProductDetails = () => {
                 <Play size={16} color="var(--color-accent)" />
                 <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>{language === 'vi' ? 'Video Thực Tế' : 'Product Video'}</span>
               </div>
-              <video 
-                src={product.video} 
-                autoPlay 
-                loop 
-                muted 
-                controls
-                style={{ width: '100%', display: 'block', backgroundColor: '#000' }}
-              />
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', background: '#000' }}>
+                {/* Render old single video if it exists and not in videos array */}
+                {product.video && (!product.videos || !product.videos.includes(product.video)) && (
+                  <video 
+                    src={product.video} 
+                    autoPlay 
+                    loop 
+                    muted 
+                    controls
+                    style={{ width: '100%', display: 'block' }}
+                  />
+                )}
+                {/* Render multiple videos */}
+                {product.videos?.map((vid, idx) => (
+                  <video 
+                    key={idx}
+                    src={vid} 
+                    autoPlay={idx === 0} 
+                    loop 
+                    muted 
+                    controls
+                    style={{ width: '100%', display: 'block', borderBottom: idx < (product.videos?.length || 0) - 1 ? '1px solid #333' : 'none' }}
+                  />
+                ))}
+              </div>
             </motion.div>
           )}
 
