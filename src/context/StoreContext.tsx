@@ -178,20 +178,27 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   React.useEffect(() => {
-    if (user && appUsers.length > 0) {
+    if (user) {
       const found = appUsers.find(u => u.uid === user.uid);
+      const hasAdmins = appUsers.some(u => u.role === 'admin');
+
       if (found) {
-        setCurrentUserRole(found.role);
+        if (found.role === 'user' && !hasAdmins) {
+          updateDoc(doc(db, 'users', user.uid), { role: 'admin' });
+          setCurrentUserRole('admin');
+        } else {
+          setCurrentUserRole(found.role);
+        }
       } else {
         setDoc(doc(db, 'users', user.uid), {
           email: user.email,
           displayName: user.displayName || '',
           photoURL: user.photoURL || '',
-          role: 'user',
+          role: hasAdmins ? 'user' : 'admin',
           joinDate: new Date().toISOString()
         }, { merge: true });
       }
-    } else if (!user) {
+    } else {
       setCurrentUserRole('user');
     }
   }, [user, appUsers]);
