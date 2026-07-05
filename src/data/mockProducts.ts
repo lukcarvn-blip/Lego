@@ -7,6 +7,7 @@ export interface LocalizedString {
 
 export interface Product {
   id: string;
+  sku?: string;
   name: LocalizedString;
   category: string;
   price: number; // in USD
@@ -27,6 +28,7 @@ export interface Product {
 export const mockProducts: Product[] = [
   {
     id: "p-01",
+    sku: "LGT-CLS-001",
     name: { 
       vi: "Toad - Vương Quốc Nấm Cổ Điển", 
       en: "Toad - Classic Mushroom Kingdom" 
@@ -50,6 +52,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: "p-02",
+    sku: "LGT-SUP-001",
     name: { 
       vi: "Deadpool - Kẻ Đánh Thuê Lắm Mồm", 
       en: "Deadpool - Merc with a Mouth" 
@@ -72,6 +75,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: "p-03",
+    sku: "LGT-SUP-002",
     name: { 
       vi: "Venom - Cơn Ác Mộng Symbiote", 
       en: "Venom - Symbiote Nightmare" 
@@ -92,6 +96,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: "p-04",
+    sku: "LGT-CLS-002",
     name: { 
       vi: "Ông Già Noel - Mùa Giáng Sinh LEGATO", 
       en: "Santa Claus - LEGATO Christmas Edition" 
@@ -112,6 +117,7 @@ export const mockProducts: Product[] = [
   },
   {
     id: "p-05",
+    sku: "LGT-SUP-003",
     name: { 
       vi: "Báo Đen - Wakanda Bất Diệt", 
       en: "Black Panther - Wakanda Forever" 
