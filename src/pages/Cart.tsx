@@ -118,7 +118,7 @@ export const Cart = () => {
                 {language === 'vi' ? 'Chọn cách thanh toán' : 'Choose Checkout Method'}
               </h2>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem' }}>
                 <div style={{ background: 'rgba(0,0,0,0.2)', padding: '1.5rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--glass-border)', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <LogIn size={40} style={{ marginBottom: '1rem', color: 'var(--color-accent)' }} />
                   <h3 style={{ marginBottom: '1rem' }}>{language === 'vi' ? 'Thành viên' : 'Member'}</h3>
