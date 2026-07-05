@@ -446,13 +446,22 @@ export const ProductDetails = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--color-text-muted)', marginBottom: '1rem', flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#ef4444' }}>
                 <Heart size={18} fill="currentColor" />
-                <span style={{ color: 'var(--color-text)' }}>{product.likes || 0}</span>
+                <span style={{ color: 'var(--color-text)' }}>{(product.likes || 0) * 2}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                 <Eye size={18} />
-                <span>{product.views || 0} {language === 'vi' ? 'lượt xem' : 'views'}</span>
+                <span>{(product.views || 0) * 2} {language === 'vi' ? 'lượt xem' : 'views'}</span>
               </div>
               <span style={{ color: 'var(--color-accent)' }}>{product.stock} {language === 'vi' ? 'sẵn hàng' : 'in stock'}</span>
+              {product.sku && (
+                <span style={{ 
+                  color: 'var(--color-text)', fontSize: '0.85rem', fontWeight: 600,
+                  background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px',
+                  border: '1px solid rgba(255,255,255,0.1)'
+                }}>
+                  SKU: {product.sku}
+                </span>
+              )}
             </div>
 
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem' }}>
