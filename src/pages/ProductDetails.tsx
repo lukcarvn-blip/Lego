@@ -146,7 +146,7 @@ export const ProductDetails = () => {
   return (
     <div className="container" style={{ paddingTop: '120px', paddingBottom: '4rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
-        <div className="hide-scrollbar" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: 'clamp(0.45rem, 1.5vw, 0.9rem)', color: 'var(--color-text-muted)', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--glass-border)', backdropFilter: 'blur(10px)', whiteSpace: 'nowrap', overflowX: 'auto' }}>
+        <div className="hide-scrollbar" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: 'clamp(0.6rem, 2vw, 0.9rem)', color: 'var(--color-text-muted)', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--glass-border)', backdropFilter: 'blur(10px)', whiteSpace: 'nowrap', overflowX: 'auto' }}>
           <span className="hover-text-primary" style={{ cursor: 'pointer', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '0.35rem' }} onClick={() => navigate('/')}>
             <Home size={14} />
             {language === 'vi' ? 'Trang chủ' : 'Home'}

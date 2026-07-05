@@ -140,13 +140,13 @@ export const Navbar = () => {
                   <Search size={22} />
                 </button>
                 {isSearchOpen && (
-                  <form onSubmit={handleSearchSubmit} style={{ position: 'absolute', right: '100%', marginRight: '0.5rem', display: 'flex', alignItems: 'center', background: 'var(--glass-bg)', padding: '0.25rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--glass-border)' }}>
+                  <form onSubmit={handleSearchSubmit} style={{ position: 'absolute', right: '100%', marginRight: '0.5rem', display: 'flex', alignItems: 'center', background: 'rgba(15, 25, 15, 0.98)', padding: '0.25rem', borderRadius: 'var(--radius-full)', border: '1px solid rgba(74, 222, 128, 0.3)', boxShadow: '0 4px 15px rgba(0,0,0,0.5)', zIndex: 50 }}>
                     <input 
                       type="text" 
-                      placeholder={language === 'vi' ? 'Tìm kiếm...' : 'Search...'}
+                      placeholder={language === 'vi' ? 'Tìm kiếm sản phẩm...' : 'Search products...'}
                       value={searchQuery}
                       onChange={e => setSearchQuery(e.target.value)}
-                      style={{ background: 'transparent', border: 'none', color: '#fff', padding: '0.25rem 0.75rem', outline: 'none', width: '200px' }}
+                      style={{ background: 'transparent', border: 'none', color: '#fff', padding: '0.35rem 1rem', outline: 'none', width: '280px', fontSize: '0.95rem' }}
                       autoFocus
                     />
                   </form>
