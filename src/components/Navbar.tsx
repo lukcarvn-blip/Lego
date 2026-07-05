@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ShoppingBag, Search, User, Home, ArrowUp, ArrowLeft } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
@@ -12,6 +12,7 @@ export const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -27,6 +28,7 @@ export const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       setShowBackToTop(window.scrollY > 300);
+      setIsScrolled(window.scrollY > 50);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -89,7 +91,7 @@ export const Navbar = () => {
             <div style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
               <Link to="/" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 {settings.logoImage ? (
-                  <img className="nav-logo-img" src={settings.logoImage} alt="Logo" style={{ height: '64px', objectFit: 'contain' }} />
+                  <img className={`nav-logo-img ${isScrolled ? 'scrolled' : ''}`} src={settings.logoImage} alt="Logo" style={{ height: '64px', objectFit: 'contain' }} />
                 ) : (
                   <>
                     <div style={{
@@ -220,6 +222,13 @@ export const Navbar = () => {
           .mobile-action {
             display: none !important;
           }
+        }
+        .nav-logo-img {
+          transition: transform 0.3s ease !important;
+        }
+        .nav-logo-img:hover,
+        .nav-logo-img.scrolled {
+          transform: scale(1.3);
         }
         @media (max-width: 768px) {
           .nav-header {
