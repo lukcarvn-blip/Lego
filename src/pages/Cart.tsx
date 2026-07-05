@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { Trash2, ArrowRight, Mail, LogIn, ArrowLeft, CheckCircle } from 'lucide-react';
+import { Trash2, ArrowRight, Mail, LogIn, ArrowLeft, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 type CheckoutStep = 'cart' | 'auth_choice' | 'verify_email' | 'details';
@@ -138,8 +138,10 @@ export const Cart = () => {
                     onChange={(e) => setFastEmail(e.target.value)}
                     style={{ width: '100%', padding: '0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--glass-border)', background: 'transparent', color: 'white', marginBottom: '1rem' }}
                   />
-                  <button type="submit" className="btn-primary" style={{ width: '100%', padding: '0.75rem', background: 'transparent', border: '1px solid var(--color-accent)', color: 'var(--color-accent)' }}>
-                    {language === 'vi' ? 'Tiếp tục' : 'Continue'}
+                  <button type="submit" className="btn-primary" style={{ width: '100%', padding: '0.75rem', background: 'transparent', border: '1px solid var(--color-accent)', color: 'var(--color-accent)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <ChevronLeft size={20} onClick={(e) => { e.preventDefault(); setCheckoutStep('cart'); }} style={{ cursor: 'pointer' }} title={language === 'vi' ? 'Quay lại' : 'Back'} />
+                    <span style={{ fontWeight: 'bold' }}>{language === 'vi' ? 'Tiếp tục (Bước 1/3)' : 'Continue (Step 1/3)'}</span>
+                    <ChevronRight size={20} />
                   </button>
                 </form>
               </div>
@@ -164,9 +166,11 @@ export const Cart = () => {
                 style={{ width: '100%', maxWidth: '200px', textAlign: 'center', padding: '1rem', fontSize: '1.5rem', letterSpacing: '0.5rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: 'white', marginBottom: '2rem' }}
               />
               
-              <div>
-                <button type="submit" className="btn-primary" style={{ padding: '1rem 3rem' }}>
-                  {language === 'vi' ? 'Xác minh' : 'Verify'}
+              <div style={{ width: '100%', marginTop: '1rem' }}>
+                <button type="submit" className="btn-primary" style={{ width: '100%', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderRadius: 'var(--radius-sm)' }}>
+                  <ChevronLeft size={24} onClick={(e) => { e.preventDefault(); setCheckoutStep('auth_choice'); }} style={{ cursor: 'pointer', padding: '2px' }} title={language === 'vi' ? 'Quay lại' : 'Back'} />
+                  <span style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{language === 'vi' ? 'Xác minh (Bước 2/3)' : 'Verify (Step 2/3)'}</span>
+                  <ChevronRight size={24} />
                 </button>
               </div>
             </motion.form>
@@ -246,8 +250,10 @@ export const Cart = () => {
                 <input type="text" placeholder={language === 'vi' ? 'Số thẻ (Ghi đại cũng được)' : 'Card Number (Mock)'} style={{ width: '100%', padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--glass-border)', background: 'transparent', color: 'white', marginTop: '1rem' }} />
               </div>
 
-              <button type="submit" className="btn-primary" style={{ width: '100%', padding: '1.25rem', fontSize: '1.125rem', marginTop: '1rem' }}>
-                {t('place_order')}
+              <button type="submit" className="btn-primary" style={{ width: '100%', padding: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1.125rem', marginTop: '1rem', borderRadius: 'var(--radius-sm)' }}>
+                <ChevronLeft size={24} onClick={(e) => { e.preventDefault(); setCheckoutStep('verify_email'); }} style={{ cursor: 'pointer', padding: '2px' }} title={language === 'vi' ? 'Quay lại' : 'Back'} />
+                <span style={{ fontWeight: 'bold' }}>{language === 'vi' ? `${t('place_order')} (Bước 3/3)` : `${t('place_order')} (Step 3/3)`}</span>
+                <CheckCircle size={24} style={{ opacity: 0.8 }} />
               </button>
             </motion.form>
           )}
