@@ -121,7 +121,7 @@ export const ProductDetails = () => {
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(product?.availableSizes[0] || null);
   const [selectedMaterial, setSelectedMaterial] = useState<ProductMaterial>('PLA');
   const [isFastCrafting, setIsFastCrafting] = useState(false);
-  const [isSummaryExpanded, setIsSummaryExpanded] = useState(true);
+  const [isCartExpanded, setIsCartExpanded] = useState(true);
 
   const finalPriceMultiplier = parseSizePercentage(selectedSize) * (selectedMaterial === 'PETG' ? 1.2 : 1) * (isFastCrafting ? 1.1 : 1);
 
@@ -240,83 +240,79 @@ export const ProductDetails = () => {
           )}
 
           {/* Sticky Buy Button – left column */}
-          <motion.div 
-            className="sticky-cart-wrapper"
-            initial={{ y: 150, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 200, damping: 20, delay: 0.2 }}
-          >
-            <div 
-              style={{ 
-                padding: '0.75rem 1rem', width: '100%', 
-                display: 'flex', flexDirection: 'column', gap: '0.75rem',
-                boxShadow: '0 10px 30px rgba(74, 222, 128, 0.3)',
-                borderRadius: 'var(--radius-lg)',
-                background: 'var(--color-accent)'
-              }}
-            >
-              {/* All 3 on same row: MUA NGAY | Price | Rocket */}
-              <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.5rem', width: '100%' }}>
-                <button 
-                  onClick={handleAddToCart}
-                  className="sticky-action-btn bling-btn"
-                  style={{ 
-                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-                    fontSize: '1rem', fontWeight: 800,
-                    background: 'rgba(0,0,0,0.2)', border: 'none', color: '#000', cursor: 'pointer',
-                    padding: '0.75rem 0.5rem', borderRadius: 'var(--radius-sm)',
-                  }}
+          <div className="sticky-cart-wrapper">
+            <AnimatePresence mode="wait">
+              {isCartExpanded ? (
+                <motion.div 
+                  key="expanded"
+                  initial={{ y: 150, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: 150, opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 200, damping: 20 }}
                 >
-                  <ShoppingBag size={20} />
-                  <span>{language === 'vi' ? 'MUA NGAY' : 'BUY NOW'}</span>
-                </button>
-                <div 
-                  className="sticky-action-price-box"
-                  style={{ 
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontWeight: 'bold', background: 'rgba(0,0,0,0.15)', padding: '0.5rem 0.75rem',
-                    borderRadius: 'var(--radius-sm)', fontSize: '1.1rem', color: '#000',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  <AnimatedPrice priceString={currentPriceString} />
-                </div>
-                <button
-                  onClick={(e) => { e.stopPropagation(); setIsFastCrafting(!isFastCrafting); }}
-                  style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: '#ef4444', color: '#fff', border: 'none',
-                    padding: '0 0.9rem', borderRadius: 'var(--radius-sm)',
-                    cursor: 'pointer', transition: 'all 0.2s',
-                    boxShadow: isFastCrafting ? 'inset 0 3px 6px rgba(0,0,0,0.4)' : '0 4px 10px rgba(239,68,68,0.4)',
-                    transform: isFastCrafting ? 'scale(0.96)' : 'scale(1)',
-                  }}
-                  title={language === 'vi' ? 'Tăng tốc chế tác (+10% phí)' : 'Fast Crafting (+10% fee)'}
-                >
-                  <Rocket size={20} />
-                </button>
-                <button
-                  onClick={() => setIsSummaryExpanded(!isSummaryExpanded)}
-                  style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: 'rgba(0,0,0,0.1)', color: '#000', border: 'none',
-                    padding: '0 0.5rem', borderRadius: 'var(--radius-sm)',
-                    cursor: 'pointer', transition: 'all 0.2s',
-                  }}
-                  title={isSummaryExpanded ? "Thu gọn" : "Mở rộng"}
-                >
-                  {isSummaryExpanded ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
-                </button>
-              </div>
-              {/* Summary Note */}
-              <AnimatePresence>
-                {isSummaryExpanded && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    style={{ overflow: 'hidden' }}
+                  <div 
+                    style={{ 
+                      padding: '0.75rem 1rem', width: '100%', 
+                      display: 'flex', flexDirection: 'column', gap: '0.75rem',
+                      boxShadow: '0 10px 30px rgba(74, 222, 128, 0.3)',
+                      borderRadius: 'var(--radius-lg)',
+                      background: 'var(--color-accent)'
+                    }}
                   >
+                    {/* All 3 on same row: MUA NGAY | Price | Rocket */}
+                    <div style={{ display: 'flex', alignItems: 'stretch', gap: '0.5rem', width: '100%' }}>
+                      <button 
+                        onClick={handleAddToCart}
+                        className="sticky-action-btn bling-btn"
+                        style={{ 
+                          flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
+                          fontSize: '1rem', fontWeight: 800,
+                          background: 'rgba(0,0,0,0.2)', border: 'none', color: '#000', cursor: 'pointer',
+                          padding: '0.75rem 0.5rem', borderRadius: 'var(--radius-sm)',
+                        }}
+                      >
+                        <ShoppingBag size={20} />
+                        <span>{language === 'vi' ? 'MUA NGAY' : 'BUY NOW'}</span>
+                      </button>
+                      <div 
+                        className="sticky-action-price-box"
+                        style={{ 
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontWeight: 'bold', background: 'rgba(0,0,0,0.15)', padding: '0.5rem 0.75rem',
+                          borderRadius: 'var(--radius-sm)', fontSize: '1.1rem', color: '#000',
+                          whiteSpace: 'nowrap',
+                        }}
+                      >
+                        <AnimatedPrice priceString={currentPriceString} />
+                      </div>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setIsFastCrafting(!isFastCrafting); }}
+                        style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          background: '#ef4444', color: '#fff', border: 'none',
+                          padding: '0 0.9rem', borderRadius: 'var(--radius-sm)',
+                          cursor: 'pointer', transition: 'all 0.2s',
+                          boxShadow: isFastCrafting ? 'inset 0 3px 6px rgba(0,0,0,0.4)' : '0 4px 10px rgba(239,68,68,0.4)',
+                          transform: isFastCrafting ? 'scale(0.96)' : 'scale(1)',
+                        }}
+                        title={language === 'vi' ? 'Tăng tốc chế tác (+10% phí)' : 'Fast Crafting (+10% fee)'}
+                      >
+                        <Rocket size={20} />
+                      </button>
+                      <button
+                        onClick={() => setIsCartExpanded(false)}
+                        style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          background: 'rgba(0,0,0,0.1)', color: '#000', border: 'none',
+                          padding: '0 0.5rem', borderRadius: 'var(--radius-sm)',
+                          cursor: 'pointer', transition: 'all 0.2s',
+                        }}
+                        title={language === 'vi' ? "Thu gọn" : "Collapse"}
+                      >
+                        <ChevronDown size={20} />
+                      </button>
+                    </div>
+                    {/* Summary Note */}
                     <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
                       <p className="summary-note" style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.8)', margin: 0, lineHeight: 1.5, textAlign: 'left' }}>
                         {language === 'vi' ? (
@@ -326,11 +322,45 @@ export const ProductDetails = () => {
                         )}
                       </p>
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </motion.div>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.button
+                  key="collapsed"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => setIsCartExpanded(true)}
+                  className="bling-btn"
+                  style={{
+                    position: 'absolute',
+                    bottom: '0',
+                    right: '0',
+                    width: '60px',
+                    height: '60px',
+                    borderRadius: '50%',
+                    background: 'var(--color-accent)',
+                    color: '#000',
+                    border: 'none',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 20px rgba(74, 222, 128, 0.4)',
+                    cursor: 'pointer',
+                    zIndex: 50
+                  }}
+                  title={language === 'vi' ? "Mở rộng" : "Expand"}
+                >
+                  <ShoppingBag size={24} />
+                  <div style={{ position: 'absolute', top: '-10px', right: '-10px', background: '#ef4444', color: '#fff', borderRadius: '50%', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <ChevronUp size={16} />
+                  </div>
+                </motion.button>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         {/* Right: Product Info */}
