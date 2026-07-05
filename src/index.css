@@ -461,8 +461,13 @@ button {
   text-overflow: ellipsis;
 }
 .size-selector-sub {
-  font-size: clamp(1.1rem, 4vw, 1.5rem);
-  font-weight: 500;
+  font-size: clamp(0.55rem, 2vw, 0.75rem);
+}
+@media (max-width: 768px) {
+  .size-selector-sub {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
 }
 
 /* Product details – image panel smaller on tablet */

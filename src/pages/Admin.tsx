@@ -4,7 +4,7 @@ import {
   Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings,
   LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp,
   Search, Filter, Download, Eye, ExternalLink, Trash2, X,
-  AlertTriangle, Heart, BarChart2, ChevronRight, Award
+  AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw
 } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order } from '../context/StoreContext';
@@ -510,9 +510,24 @@ export const Admin = () => {
                 <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>🏪 Quản lý sản phẩm</h1>
                 <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{products.length} sản phẩm</p>
               </div>
-              <button className="btn-primary" onClick={handleOpenAddProduct} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem' }}>
-                <Plus size={18} /> Thêm sản phẩm
-              </button>
+              <div style={{ display: 'flex', gap: '0.75rem' }}>
+                <button 
+                  onClick={() => {
+                    if (window.confirm('Khôi phục Lượt xem và Tim về 0 cho tất cả sản phẩm?')) {
+                      products.forEach(p => {
+                        updateProduct({ ...p, views: 0, likes: 0 });
+                      });
+                      alert('Đã reset thành công!');
+                    }
+                  }}
+                  style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem' }}
+                >
+                  <RefreshCw size={16} /> Reset Tim/View
+                </button>
+                <button className="btn-primary" onClick={handleOpenAddProduct} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem' }}>
+                  <Plus size={18} /> Thêm sản phẩm
+                </button>
+              </div>
             </div>
 
             {/* Search */}
