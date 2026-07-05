@@ -243,11 +243,35 @@ export const Admin = () => {
     showToast(language === 'vi' ? 'Đã lưu cài đặt!' : 'Settings saved!');
   };
 
-  const handleAddBlog = (e: React.FormEvent) => {
-    e.preventDefault(); if (!newTitle) return;
-    addBlogPost({ title: newTitle, content: newContent, excerpt: newContent.slice(0, 80) + '...', date: new Date().toISOString().split('T')[0], image: 'https://images.unsplash.com/photo-1580477667995-15120f1fb93e?q=80&w=600' });
-    setNewTitle(''); setNewContent('');
-    showToast(language === 'vi' ? 'Đã đăng bài viết!' : 'Post published!');
+  const handleSaveBlog = (e: React.FormEvent) => {
+    e.preventDefault(); 
+    if (!editingBlogPost.title) return;
+    
+    // Create excerpt from content if it doesn't exist
+    const plainTextContent = editingBlogPost.content ? editingBlogPost.content.replace(/<[^>]+>/g, '') : '';
+    const excerpt = plainTextContent.slice(0, 150) + (plainTextContent.length > 150 ? '...' : '');
+
+    const postData = { 
+      title: editingBlogPost.title, 
+      content: editingBlogPost.content || '', 
+      excerpt: editingBlogPost.excerpt || excerpt, 
+      date: editingBlogPost.date || new Date().toISOString().split('T')[0], 
+      image: editingBlogPost.image || 'https://images.unsplash.com/photo-1580477667995-15120f1fb93e?q=80&w=600',
+      id: editingBlogPost.id || Date.now().toString()
+    };
+
+    if (editingBlogPost.id) {
+       // Currently no updateBlogPost in StoreContext, we'll delete and add as a workaround
+       deleteBlogPost(editingBlogPost.id);
+       addBlogPost(postData as any); 
+       showToast(language === 'vi' ? 'Đã cập nhật bài viết!' : 'Post updated!');
+    } else {
+       addBlogPost(postData as any);
+       showToast(language === 'vi' ? 'Đã đăng bài viết!' : 'Post published!');
+    }
+    
+    setIsEditingBlog(false); 
+    setEditingBlogPost({});
   };
 
   if (currentUserRole !== 'admin') {
