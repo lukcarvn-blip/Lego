@@ -576,16 +576,52 @@ export const ProductDetails = () => {
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'stretch', flexWrap: 'nowrap' }}>
                 {/* Single Animated Icon Container */}
                 <div style={{ 
-                  flex: '0 0 clamp(100px, 30%, 140px)', 
-                  minHeight: '180px', 
+                  flex: '0 0 clamp(120px, 45%, 170px)', 
+                  minHeight: '190px', 
                   display: 'flex', 
                   alignItems: 'flex-end', 
                   justifyContent: 'center', 
                   background: 'var(--color-surface)', 
                   borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--glass-border)',
-                  paddingBottom: '10px'
+                  paddingBottom: '10px',
+                  position: 'relative'
                 }}>
+                  {/* Vertical Ruler Bracket */}
+                  <div style={{
+                    position: 'absolute',
+                    left: '15px',
+                    bottom: '10px',
+                    display: 'flex',
+                    alignItems: 'flex-end'
+                  }}>
+                    <motion.div 
+                      animate={{ height: 135 * getSizeDetails(selectedSize || '300').scale }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                      style={{
+                        position: 'relative',
+                        borderLeft: '1px solid var(--color-accent)',
+                        borderTop: '1px solid var(--color-accent)',
+                        borderBottom: '1px solid var(--color-accent)',
+                        width: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        opacity: 0.8
+                      }}
+                    >
+                      <span style={{
+                        position: 'absolute',
+                        left: '14px',
+                        fontSize: '0.75rem',
+                        color: 'var(--color-accent)',
+                        fontWeight: 600,
+                        whiteSpace: 'nowrap'
+                      }}>
+                        {getSizeDetails(selectedSize || '300').height}
+                      </span>
+                    </motion.div>
+                  </div>
+
                   <motion.div
                     animate={{ scale: getSizeDetails(selectedSize || '300').scale }}
                     transition={{ type: 'spring', stiffness: 400, damping: 15 }}
