@@ -8,9 +8,19 @@ import {
 } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+
+const QUILL_MODULES = {
+  toolbar: [
+    [{ 'header': [1, 2, 3, false] }],
+    ['bold', 'italic', 'underline', 'strike'],
+    [{'list': 'ordered'}, {'list': 'bullet'}],
+    ['link', 'image', 'video'],
+    ['clean']
+  ]
+};
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const formatVND = (usd: number) =>
@@ -851,15 +861,7 @@ export const Admin = () => {
                       value={editingBlogPost.content || ''} 
                       onChange={content => setEditingBlogPost({...editingBlogPost, content})} 
                       style={{ height: '400px', border: 'none' }}
-                      modules={{
-                        toolbar: [
-                          [{ 'header': [1, 2, 3, false] }],
-                          ['bold', 'italic', 'underline', 'strike'],
-                          [{'list': 'ordered'}, {'list': 'bullet'}],
-                          ['link', 'image', 'video'],
-                          ['clean']
-                        ]
-                      }}
+                      modules={QUILL_MODULES}
                     />
                   </div>
                   {/* Padding to account for Quill toolbar pushing content up */}
