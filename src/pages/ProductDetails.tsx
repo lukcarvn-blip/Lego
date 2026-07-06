@@ -626,15 +626,16 @@ export const ProductDetails = () => {
                           }}></div>
                           <span style={{ 
                             position: 'absolute', 
-                            bottom: `${tickHeight - 7}px`, 
+                            bottom: `${tickHeight - 14}px`, 
                             left: '22px', 
-                            fontSize: '0.75rem', 
+                            fontSize: '1.5rem', 
                             fontWeight: 700, 
                             color: '#fbbf24', 
                             transition: 'all 0.3s', 
                             whiteSpace: 'nowrap',
                             opacity: isSelected ? 1 : 0,
-                            transform: isSelected ? 'translateX(0)' : 'translateX(-5px)'
+                            transform: isSelected ? 'translateX(0)' : 'translateX(-5px)',
+                            textTransform: 'uppercase'
                           }}>
                             {sizeDetails.height}
                           </span>
