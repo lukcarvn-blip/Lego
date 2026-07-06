@@ -19,6 +19,7 @@ import { Technology } from './pages/Technology';
 import { Profile } from './pages/Profile';
 import { NotFound } from './pages/NotFound';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { FloatingActions } from './components/FloatingActions';
 
 function AppContent() {
   const { pathname } = useLocation();
@@ -82,6 +83,7 @@ function AppContent() {
         </Routes>
       </main>
       {!isAdmin && <Footer />}
+      {!isAdmin && <FloatingActions />}
     </div>
   );
 }

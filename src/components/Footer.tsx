@@ -41,10 +41,38 @@ export const Footer = () => {
             {settings.contactEmail && <div>✉️ {settings.contactEmail}</div>}
           </div>
           <div style={{ display: 'flex', gap: '1rem', fontWeight: 600 }}>
-            {settings.socialInstagram && <a href={settings.socialInstagram} target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}>IG</a>}
-            {settings.socialTiktok && <a href={settings.socialTiktok} target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}>TT</a>}
-            {settings.socialFacebook && <a href={settings.socialFacebook} target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}>FB</a>}
-            {settings.socialYoutube && <a href={settings.socialYoutube} target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-muted)', transition: 'color 0.2s' }}>YT</a>}
+            {settings.socialInstagram && (
+              <a href={settings.socialInstagram} target="_blank" rel="noreferrer" style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '36px', height: '36px', color: '#000', transition: 'transform 0.2s' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
+                  <path d="M7 4V2H17V4M5 4H19C20.1046 4 21 4.89543 21 6V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V6C3 4.89543 3.89543 4 5 4Z" fill="#FDE047"/>
+                </svg>
+                <div style={{ position: 'relative', zIndex: 1, paddingTop: '2px', fontWeight: 800, fontSize: '13px' }}>IG</div>
+              </a>
+            )}
+            {settings.socialTiktok && (
+              <a href={settings.socialTiktok} target="_blank" rel="noreferrer" style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '36px', height: '36px', color: '#000', transition: 'transform 0.2s' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
+                  <path d="M7 4V2H17V4M5 4H19C20.1046 4 21 4.89543 21 6V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V6C3 4.89543 3.89543 4 5 4Z" fill="#FDE047"/>
+                </svg>
+                <div style={{ position: 'relative', zIndex: 1, paddingTop: '2px', fontWeight: 800, fontSize: '13px' }}>TT</div>
+              </a>
+            )}
+            {settings.socialFacebook && (
+              <a href={settings.socialFacebook} target="_blank" rel="noreferrer" style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '36px', height: '36px', color: '#000', transition: 'transform 0.2s' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
+                  <path d="M7 4V2H17V4M5 4H19C20.1046 4 21 4.89543 21 6V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V6C3 4.89543 3.89543 4 5 4Z" fill="#FDE047"/>
+                </svg>
+                <div style={{ position: 'relative', zIndex: 1, paddingTop: '2px', fontWeight: 800, fontSize: '13px' }}>FB</div>
+              </a>
+            )}
+            {settings.socialYoutube && (
+              <a href={settings.socialYoutube} target="_blank" rel="noreferrer" style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', width: '36px', height: '36px', color: '#000', transition: 'transform 0.2s' }} onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'} onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}>
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', top: 0, left: 0, zIndex: 0 }}>
+                  <path d="M7 4V2H17V4M5 4H19C20.1046 4 21 4.89543 21 6V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V6C3 4.89543 3.89543 4 5 4Z" fill="#FDE047"/>
+                </svg>
+                <div style={{ position: 'relative', zIndex: 1, paddingTop: '2px', fontWeight: 800, fontSize: '13px' }}>YT</div>
+              </a>
+            )}
           </div>
         </div>
 
