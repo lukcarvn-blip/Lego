@@ -566,55 +566,66 @@ export const ProductDetails = () => {
             </motion.div>
 
             <motion.div 
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.2 }}
-              style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', height: '100%' }}
-            >
-            <h3 style={{ marginBottom: '1rem' }}>{t('size')}</h3>
-            <div className="size-options-container" style={{ display: 'flex', gap: '0.75rem', flexWrap: 'nowrap', alignItems: 'flex-end', paddingTop: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
-              {product.availableSizes.map(size => {
-                const isSelected = selectedSize === size;
-                const sizeDetails = getSizeDetails(size);
-                return (
-                  <button 
-                    key={size}
-                    className="size-option-btn size-selector-btn"
-                    onClick={() => { setSelectedSize(size); setIsCartExpanded(true); }}
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'flex-end',
-                      gap: '0.5rem',
-                      padding: '0.75rem 0.5rem',
-                      height: '160px',
-                      minWidth: '70px',
-                      flex: '1 0 70px',
-                      borderRadius: 'var(--radius-md)',
-                      border: `2px solid ${isSelected ? 'var(--color-accent)' : 'var(--glass-border)'}`,
-                      background: isSelected ? 'rgba(74, 222, 128, 0.1)' : 'var(--color-surface)',
-                      color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)',
-                      transition: 'all 0.2s',
-                      cursor: 'pointer'
-                    }}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.2 }}
+                style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', height: '100%' }}
+              >
+              <h3 style={{ marginBottom: '1.5rem' }}>{t('size')}</h3>
+              
+              <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                {/* Single Animated Icon Container */}
+                <div style={{ 
+                  width: '140px', 
+                  height: '180px', 
+                  display: 'flex', 
+                  alignItems: 'flex-end', 
+                  justifyContent: 'center', 
+                  background: 'var(--color-surface)', 
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--glass-border)',
+                  paddingBottom: '10px'
+                }}>
+                  <motion.div
+                    animate={{ scale: getSizeDetails(selectedSize || '300').scale }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                    style={{ transformOrigin: 'bottom center' }}
                   >
-                    <div style={{ flex: 1, display: 'flex', alignItems: 'flex-end', paddingBottom: '0.5rem' }}>
-                      <LegoSilhouette scale={sizeDetails.scale} color={isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)'} />
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <span className="size-selector-label" style={{ fontWeight: 700, color: isSelected ? 'var(--color-accent)' : 'var(--color-text)' }}>
-                        {sizeDetails.label}
-                      </span>
-                      <span className="size-selector-sub" style={{ marginTop: '0.25rem' }}>
-                        {sizeDetails.height}
-                      </span>
-                    </div>
-                  </button>
-                )
-              })}
-            </div>
-            </motion.div>
+                    <LegoSilhouette scale={1.8} color="var(--color-accent)" />
+                  </motion.div>
+                </div>
+
+                {/* Vertical Size Options */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: '1 1 200px' }}>
+                  {product.availableSizes.map(size => {
+                    const isSelected = selectedSize === size;
+                    const sizeDetails = getSizeDetails(size);
+                    return (
+                      <button 
+                        key={size}
+                        onClick={() => { setSelectedSize(size); setIsCartExpanded(true); }}
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          padding: '1rem',
+                          borderRadius: 'var(--radius-md)',
+                          border: `2px solid ${isSelected ? 'var(--color-accent)' : 'var(--glass-border)'}`,
+                          background: isSelected ? 'rgba(74, 222, 128, 0.1)' : 'transparent',
+                          color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)',
+                          transition: 'all 0.2s',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <span style={{ fontWeight: 700, fontSize: '1.1rem' }}>{sizeDetails.label}</span>
+                        <span style={{ fontSize: '0.9rem', color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)', opacity: 0.8 }}>{sizeDetails.height}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              </motion.div>
           </div>
 
           {/* Crafting Progress Bar UI */}
