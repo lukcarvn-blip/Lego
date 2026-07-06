@@ -142,6 +142,7 @@ export const ProductDetails = () => {
   };
   const [viewModeRelated, setViewModeRelated] = useState<'grid' | 'list'>('grid');
   const [viewModeBestSellers, setViewModeBestSellers] = useState<'grid' | 'list'>('grid');
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(product?.availableSizes[0] || null);
   const [selectedMaterial, setSelectedMaterial] = useState<ProductMaterial>('PLA');
   const [isFastCrafting, setIsFastCrafting] = useState(false);
@@ -218,7 +219,7 @@ export const ProductDetails = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             style={{ 
-              padding: '2rem', 
+              padding: '0.5rem', 
               aspectRatio: '4/5', 
               display: 'flex', 
               alignItems: 'center', 
@@ -253,19 +254,44 @@ export const ProductDetails = () => {
             )}
 
             <motion.img 
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, type: 'spring' }}
-              src={product.images[0]} 
-              alt={product.name[language]} 
+              key={activeImageIndex}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              src={product.images[activeImageIndex]} 
+              alt={product.name[language as keyof typeof product.name]} 
               style={{ 
                 width: '100%', 
                 height: '100%', 
                 objectFit: 'contain',
-                filter: 'drop-shadow(0 30px 30px rgba(0,0,0,0.6))'
+                filter: 'drop-shadow(0 30px 30px rgba(0,0,0,0.6))',
+                transform: 'scale(1.15)' // slightly enlarge to fill space
               }} 
             />
           </motion.div>
+          
+          {/* Thumbnails Slider */}
+          {product.images && product.images.length > 1 && (
+            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }} className="hide-scrollbar">
+              {product.images.map((img, idx) => (
+                <div 
+                  key={idx}
+                  onClick={() => setActiveImageIndex(idx)}
+                  style={{ 
+                    width: '80px', height: '80px', flexShrink: 0, 
+                    borderRadius: 'var(--radius-md)', 
+                    border: activeImageIndex === idx ? '2px solid var(--color-accent)' : '2px solid transparent',
+                    background: 'var(--glass-bg)', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    padding: '0.5rem', transition: 'all 0.2s',
+                    opacity: activeImageIndex === idx ? 1 : 0.6
+                  }}
+                >
+                  <img src={img} alt={`thumb ${idx}`} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                </div>
+              ))}
+            </div>
+          )}
           
           {/* Video Section below image */}
           {((product.videos && product.videos.length > 0) || product.video) && (
