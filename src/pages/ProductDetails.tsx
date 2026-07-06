@@ -595,6 +595,19 @@ export const ProductDetails = () => {
                     height: `${135 * Math.max(...product.availableSizes.map(s => getSizeDetails(s).scale)) + 10}px`,
                     borderLeft: '2px solid rgba(251, 191, 36, 0.5)'
                   }}>
+                    {/* Minor ticks */}
+                    {Array.from({ length: Math.floor((135 * Math.max(...product.availableSizes.map(s => getSizeDetails(s).scale))) / 10) }).map((_, i) => (
+                      <div key={`tick-${i}`} style={{
+                        position: 'absolute',
+                        bottom: `${(i + 1) * 10}px`,
+                        left: 0,
+                        width: (i + 1) % 5 === 0 ? '7px' : '4px',
+                        height: '1px',
+                        background: 'rgba(251, 191, 36, 0.3)'
+                      }}></div>
+                    ))}
+
+                    {/* Main size ticks */}
                     {product.availableSizes.map(size => {
                       const sizeDetails = getSizeDetails(size);
                       const tickHeight = 135 * sizeDetails.scale;
@@ -605,15 +618,16 @@ export const ProductDetails = () => {
                             position: 'absolute', 
                             bottom: `${tickHeight}px`, 
                             left: 0, 
-                            width: '8px', 
+                            width: '16px', 
                             height: '2px', 
-                            background: isSelected ? '#fbbf24' : 'rgba(251, 191, 36, 0.5)', 
-                            transition: 'all 0.3s' 
+                            background: isSelected ? '#fbbf24' : 'rgba(251, 191, 36, 0.8)', 
+                            transition: 'all 0.3s',
+                            zIndex: 2
                           }}></div>
                           <span style={{ 
                             position: 'absolute', 
                             bottom: `${tickHeight - 7}px`, 
-                            left: '12px', 
+                            left: '22px', 
                             fontSize: '0.75rem', 
                             fontWeight: 700, 
                             color: '#fbbf24', 
