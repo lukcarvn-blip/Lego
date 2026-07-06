@@ -80,10 +80,9 @@ export const NotFound = () => {
               width: '40px',
               height: '20px',
               border: '4px solid #1f2937',
-              borderTop: 'none',
-              borderRadius: '0 0 40px 40px',
-              marginTop: '15px',
-              transform: 'rotate(180deg)' // Makes it sad
+              borderBottom: 'none',
+              borderRadius: '40px 40px 0 0',
+              marginTop: '25px'
             }}
           />
         </div>
