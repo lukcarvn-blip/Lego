@@ -4,11 +4,12 @@ import {
   Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings,
   LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp,
   Search, Filter, Download, Eye, ExternalLink, Trash2, X,
-  AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw
+  AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw,
+  Home, LogOut, DatabaseZap, Globe
 } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
@@ -200,10 +201,17 @@ export const Admin = () => {
     blogPosts, addBlogPost, deleteBlogPost,
     settings, updateSettings,
     t, language, showToast, formatPrice,
-    appUsers, currentUserRole, updateUserRole, deleteUser, user
+    appUsers, currentUserRole, updateUserRole, deleteUser, user, logout
   } = useStore();
   
-  const [activeTab, setActiveTab] = useSessionState<'dashboard' | 'orders' | 'products' | 'blog' | 'members' | 'settings'>('admin_activeTab', 'dashboard');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const initialTab = (searchParams.get('tab') || 'dashboard') as 'dashboard' | 'orders' | 'products' | 'blog' | 'members' | 'settings';
+  const [activeTab, setActiveTabState] = useSessionState<'dashboard' | 'orders' | 'products' | 'blog' | 'members' | 'settings'>('admin_tab', initialTab);
+  const setActiveTab = (tab: typeof activeTab) => {
+    setActiveTabState(tab);
+    setSearchParams({ tab });
+  };
   const [orderSearch, setOrderSearch] = useSessionState('admin_orderSearch', '');
   const [orderStatusFilter, setOrderStatusFilter] = useSessionState<OrderStatus | 'All'>('admin_orderStatusFilter', 'All');
   const [selectedOrder, setSelectedOrder] = useSessionState<Order | null>('admin_selectedOrder', null);
@@ -400,7 +408,59 @@ export const Admin = () => {
       </aside>
 
       {/* Main content */}
-      <main style={{ flex: 1, padding: '2rem', overflowX: 'auto', minWidth: 0 }}>
+      <main style={{ flex: 1, overflowX: 'auto', minWidth: 0 }}>
+
+        {/* ── ADMIN TOP UTILITY NAVBAR ──────────────────────────── */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '0.5rem',
+          padding: '0.65rem 1.5rem',
+          background: 'rgba(5,15,5,0.95)',
+          borderBottom: '1px solid var(--glass-border)',
+          flexWrap: 'wrap',
+          position: 'sticky', top: '80px', zIndex: 9
+        }}>
+          {/* Left: quick nav */}
+          <div style={{ display: 'flex', gap: '0.4rem', flex: 1, flexWrap: 'wrap' }}>
+            <a href="/" target="_blank" rel="noreferrer"
+              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.25)', color: 'var(--color-accent)', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', cursor: 'pointer' }}
+            >
+              <Globe size={14} /> Xem trang chủ
+            </a>
+            <button
+              onClick={() => { localStorage.removeItem('legato_cart'); showToast('Đã xoá cache giỏ hàng!'); }}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.25)', color: '#fbbf24', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+            >
+              <DatabaseZap size={14} /> Xoá cache giỏ hàng
+            </button>
+            <button
+              onClick={() => exportCSV(orders)}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.25)', color: '#60a5fa', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+            >
+              <Download size={14} /> Xuất CSV đơn hàng
+            </button>
+            <button
+              onClick={() => { setActiveTab('settings' as any); }}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.25)', color: '#c084fc', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+            >
+              <Settings size={14} /> Cài đặt trang
+            </button>
+            <button
+              onClick={() => { products.forEach(p => updateProduct({ ...p, views: 0, likes: 0 })); showToast('Đã reset thống kê!'); }}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', color: '#f87171', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
+            >
+              <RefreshCw size={14} /> Reset thống kê
+            </button>
+          </div>
+          {/* Right: logout */}
+          <button
+            onClick={logout}
+            style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.4)', color: '#ef4444', fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', marginLeft: 'auto', flexShrink: 0 }}
+          >
+            <LogOut size={14} /> Đăng xuất Admin
+          </button>
+        </div>
+
+        <div style={{ padding: '2rem' }}>
 
         {/* ── DASHBOARD TAB ─────────────────────────────────────────── */}
         {activeTab === 'dashboard' && (
@@ -864,8 +924,33 @@ export const Admin = () => {
                 </InputField>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  <InputField label="URL Ảnh bìa *">
-                    <input type="text" required value={editingBlogPost.image || ''} onChange={e => setEditingBlogPost({...editingBlogPost, image: e.target.value})} style={inputStyle} placeholder="https://..." />
+                  <InputField label="Ảnh bìa (Upload từ máy tính)">
+                    <div>
+                      <input 
+                        type="file" 
+                        accept="image/*"
+                        id="blog-cover-upload"
+                        style={{ display: 'none' }}
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          const reader = new FileReader();
+                          reader.onload = (ev) => {
+                            setEditingBlogPost({...editingBlogPost, image: ev.target?.result as string});
+                          };
+                          reader.readAsDataURL(file);
+                        }}
+                      />
+                      <label htmlFor="blog-cover-upload" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px dashed var(--glass-border)', cursor: 'pointer', color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 600, background: 'rgba(74,222,128,0.05)' }}>
+                        📁 Chọn ảnh từ máy tính
+                      </label>
+                      {editingBlogPost.image && (
+                        <div style={{ marginTop: '0.5rem', position: 'relative', display: 'inline-block' }}>
+                          <img src={editingBlogPost.image} alt="Preview" style={{ height: '60px', borderRadius: '6px', objectFit: 'cover', border: '1px solid var(--glass-border)' }} />
+                          <button type="button" onClick={() => setEditingBlogPost({...editingBlogPost, image: ''})} style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '50%', width: '18px', height: '18px', fontSize: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+                        </div>
+                      )}
+                    </div>
                   </InputField>
                   <InputField label="Ngày đăng">
                     <input type="date" required value={editingBlogPost.date || new Date().toISOString().split('T')[0]} onChange={e => setEditingBlogPost({...editingBlogPost, date: e.target.value})} style={inputStyle} />
@@ -876,18 +961,17 @@ export const Admin = () => {
                   <label style={{ display: 'block', marginBottom: '0.75rem', fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     Nội dung bài viết *
                   </label>
-                  <div style={{ background: '#fff', color: '#000', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ background: '#fff', color: '#111', borderRadius: '4px', overflow: 'hidden', minHeight: '480px' }}>
                     <ReactQuill 
                       theme="snow" 
                       value={editingBlogPost.content || ''} 
                       onChange={content => setEditingBlogPost({...editingBlogPost, content})} 
-                      style={{ height: '400px', border: 'none' }}
+                      style={{ height: '400px', border: 'none', color: '#111', background: '#fff' }}
                       modules={QUILL_MODULES}
                     />
                   </div>
-                  {/* Padding to account for Quill toolbar pushing content up */}
-                  <div style={{ height: '40px' }}></div> 
                 </div>
+
               </div>
 
               <div style={{ display: 'flex', gap: '1rem' }}>
@@ -1034,6 +1118,8 @@ export const Admin = () => {
             <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2.5rem' }}>💾 Lưu cài đặt</button>
           </form>
         )}
+
+        </div>
       </main>
 
       {/* Order detail modal */}
