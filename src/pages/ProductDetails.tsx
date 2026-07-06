@@ -115,7 +115,13 @@ export const ProductDetails = () => {
     }
   };
 
-  const product = products.find(p => p.id === id) || mockProducts.find(p => p.id === id);
+  let product = products.find(p => p.id === id) || mockProducts.find(p => p.id === id);
+  const mockProduct = mockProducts.find(p => p.id === id);
+  
+  if (product && mockProduct && (!product.images || product.images.length <= 1)) {
+    product = { ...product, images: mockProduct.images };
+  }
+  
   const [isLiked, setIsLiked] = useState(() => !!localStorage.getItem('liked_' + id));
 
   useEffect(() => {

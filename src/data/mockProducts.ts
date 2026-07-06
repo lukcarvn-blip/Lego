@@ -42,15 +42,15 @@ export const mockProducts: Product[] = [
     estimatedPrintTime: "2-4 days",
     images: [
       "/images/toad-transparent.png",
-      "/images/toad-transparent.png",
-      "/images/toad-transparent.png",
-      "/images/toad-transparent.png",
-      "/images/toad-transparent.png",
-      "/images/toad-transparent.png",
-      "/images/toad-transparent.png",
-      "/images/toad-transparent.png",
-      "/images/toad-transparent.png",
-      "/images/toad-transparent.png"
+      "/images/venom-transparent.png",
+      "/images/black-panther-transparent.png",
+      "/images/cat-classic.png",
+      "/images/cat-scifi.png",
+      "/images/cat-superhero.png",
+      "/images/tube-classic.png",
+      "/images/tube-scifi.png",
+      "/images/tube-superhero.png",
+      "/images/santa-transparent.png"
     ],
     description: {
       vi: "Mô hình Toad cổ điển từ vũ trụ Super Mario, được chế tác tinh xảo với độ hoàn thiện cực cao. Phù hợp để trang trí bàn làm việc hoặc bộ sưu tập game.",
@@ -77,15 +77,15 @@ export const mockProducts: Product[] = [
     estimatedPrintTime: "2-3 days",
     images: [
       "/images/deadpool-transparent.png",
-      "/images/deadpool-transparent.png",
-      "/images/deadpool-transparent.png",
-      "/images/deadpool-transparent.png",
-      "/images/deadpool-transparent.png",
-      "/images/deadpool-transparent.png",
-      "/images/deadpool-transparent.png",
-      "/images/deadpool-transparent.png",
-      "/images/deadpool-transparent.png",
-      "/images/deadpool-transparent.png"
+      "/images/venom-transparent.png",
+      "/images/black-panther-transparent.png",
+      "/images/cat-classic.png",
+      "/images/cat-scifi.png",
+      "/images/cat-superhero.png",
+      "/images/tube-classic.png",
+      "/images/tube-scifi.png",
+      "/images/tube-superhero.png",
+      "/images/santa-transparent.png"
     ],
     description: {
       vi: "Anh chàng bựa nhân được yêu thích nhất. Hoàn thiện với sắc đỏ rực rỡ và những chi tiết vũ khí được in 3D cực kỳ sắc nét.",
@@ -112,14 +112,14 @@ export const mockProducts: Product[] = [
     images: [
       "/images/venom-transparent.png",
       "/images/venom-transparent.png",
-      "/images/venom-transparent.png",
-      "/images/venom-transparent.png",
-      "/images/venom-transparent.png",
-      "/images/venom-transparent.png",
-      "/images/venom-transparent.png",
-      "/images/venom-transparent.png",
-      "/images/venom-transparent.png",
-      "/images/venom-transparent.png"
+      "/images/black-panther-transparent.png",
+      "/images/cat-classic.png",
+      "/images/cat-scifi.png",
+      "/images/cat-superhero.png",
+      "/images/tube-classic.png",
+      "/images/tube-scifi.png",
+      "/images/tube-superhero.png",
+      "/images/santa-transparent.png"
     ],
     description: {
       vi: "Nắm lấy sức mạnh symbiote. Nổi bật với miệng và biểu tượng nhện vô cùng chi tiết, tăng cường với lớp phủ bóng tối tinh xảo.",
@@ -143,14 +143,14 @@ export const mockProducts: Product[] = [
     estimatedPrintTime: "2-4 days",
     images: [
       "/images/santa-transparent.png",
-      "/images/santa-transparent.png",
-      "/images/santa-transparent.png",
-      "/images/santa-transparent.png",
-      "/images/santa-transparent.png",
-      "/images/santa-transparent.png",
-      "/images/santa-transparent.png",
-      "/images/santa-transparent.png",
-      "/images/santa-transparent.png",
+      "/images/venom-transparent.png",
+      "/images/black-panther-transparent.png",
+      "/images/cat-classic.png",
+      "/images/cat-scifi.png",
+      "/images/cat-superhero.png",
+      "/images/tube-classic.png",
+      "/images/tube-scifi.png",
+      "/images/tube-superhero.png",
       "/images/santa-transparent.png"
     ],
     description: {
@@ -175,15 +175,15 @@ export const mockProducts: Product[] = [
     estimatedPrintTime: "3-5 days",
     images: [
       "/images/black-panther-transparent.png",
+      "/images/venom-transparent.png",
       "/images/black-panther-transparent.png",
-      "/images/black-panther-transparent.png",
-      "/images/black-panther-transparent.png",
-      "/images/black-panther-transparent.png",
-      "/images/black-panther-transparent.png",
-      "/images/black-panther-transparent.png",
-      "/images/black-panther-transparent.png",
-      "/images/black-panther-transparent.png",
-      "/images/black-panther-transparent.png"
+      "/images/cat-classic.png",
+      "/images/cat-scifi.png",
+      "/images/cat-superhero.png",
+      "/images/tube-classic.png",
+      "/images/tube-scifi.png",
+      "/images/tube-superhero.png",
+      "/images/santa-transparent.png"
     ],
     description: {
       vi: "Vị vua của Wakanda đã xuất hiện dưới hình dáng cực ngầu. Nổi bật với lớp sơn mờ đen huyền bí kết hợp cùng các chi tiết bạc rực rỡ.",

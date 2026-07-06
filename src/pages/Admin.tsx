@@ -12,6 +12,8 @@ import type { Order, BlogPost } from '../context/StoreContext';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { storage } from '../config/firebase';
 
 function useSessionState<T>(key: string, initialValue: T) {
   const [state, setState] = useState<T>(() => {
@@ -269,6 +271,31 @@ export const Admin = () => {
       availableSizes: ['Size 300', 'Size 400', 'Size 1000']
     });
     setIsEditingProduct(true);
+  };
+
+  const [isUploadingImages, setIsUploadingImages] = useState(false);
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const files = Array.from(e.target.files);
+    setIsUploadingImages(true);
+    
+    try {
+      const newUrls = [...(editingProduct.images || [])];
+      for (const file of files) {
+        const storageRef = ref(storage, `products/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`);
+        const uploadTask = await uploadBytes(storageRef, file);
+        const url = await getDownloadURL(uploadTask.ref);
+        newUrls.push(url);
+      }
+      setEditingProduct({ ...editingProduct, images: newUrls });
+      showToast(language === 'vi' ? `Đã tải lên ${files.length} hình ảnh!` : `Uploaded ${files.length} images!`);
+    } catch (err) {
+      console.error("Upload error", err);
+      showToast(language === 'vi' ? 'Lỗi tải ảnh lên!' : 'Upload failed!');
+    } finally {
+      setIsUploadingImages(false);
+    }
   };
 
   const handleSaveProduct = (e: React.FormEvent) => {
@@ -827,7 +854,16 @@ export const Admin = () => {
               <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>🖼 Hình ảnh & Video</h3>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
-                  <InputField label="Danh sách URL Hình ảnh (mỗi dòng 1 link) *">
+                  <InputField label={
+                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                      <span>Danh sách URL Hình ảnh (mỗi dòng 1 link) *</span>
+                      <label style={{ cursor: isUploadingImages ? 'wait' : 'pointer', background: 'var(--color-accent)', color: '#000', padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        {isUploadingImages ? <RefreshCw size={12} className="spin" /> : <Plus size={12} />}
+                        {isUploadingImages ? 'Đang tải...' : 'Tải ảnh lên'}
+                        <input type="file" multiple accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} disabled={isUploadingImages} />
+                      </label>
+                    </div>
+                  }>
                     <textarea 
                       required 
                       placeholder="/images/product.png&#10;/images/product-2.png" 
