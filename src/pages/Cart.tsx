@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 type CheckoutStep = 'cart' | 'auth_choice' | 'verify_email' | 'details';
 
 export const Cart = () => {
-  const { cart, removeFromCart, createOrder, t, language, showToast, formatPrice, user, clearCart } = useStore();
+  const { cart, removeFromCart, createOrder, t, language, showToast, formatPrice, user, clearCart, settings } = useStore();
   const navigate = useNavigate();
   
   const [checkoutStep, setCheckoutStep] = useState<CheckoutStep>('cart');
@@ -27,6 +27,13 @@ export const Cart = () => {
   const shippingFee = paymentType === 'FULL' ? 0 : 5; // Free shipping if paid in full, else $5
   const total = subtotal + shippingFee;
   const amountToPayNow = paymentType === 'FULL' ? total : total / 2;
+  
+  const bankName = settings.bankName || 'vietcombank';
+  const bankAccount = settings.bankAccount || '9931028868';
+  const bankOwner = settings.bankOwner || 'LE NHAT HOANG';
+  const amountVND = Math.round(amountToPayNow * 25400);
+  const addInfo = encodeURIComponent(`Thanh toan don hang Legato ${user?.email || fastEmail}`.substring(0, 50));
+  const qrUrl = `https://img.vietqr.io/image/${bankName}-${bankAccount}-compact.png?amount=${amountVND}&addInfo=${addInfo}&accountName=${encodeURIComponent(bankOwner)}`;
 
   const handleProceedClick = () => {
     if (user) {
@@ -93,20 +100,28 @@ export const Cart = () => {
                       <h3 className="cart-item-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
                         {item.product.name[language]}
                         {item.isFastCrafting && (
-                          <span style={{ 
-                            fontSize: '0.7rem', 
-                            padding: '0.2rem 0.5rem', 
-                            background: 'var(--color-accent)', 
-                            color: '#000', 
-                            borderRadius: '1rem',
-                            fontWeight: 800,
-                            textTransform: 'uppercase',
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '2px'
-                          }}>
-                            <Zap size={12} fill="#000" /> {language === 'vi' ? 'Ưu tiên' : 'Priority'}
-                          </span>
+                          <motion.span 
+                            animate={{ 
+                              boxShadow: ['0 0 0px rgba(251, 191, 36, 0)', '0 0 15px rgba(251, 191, 36, 0.8)', '0 0 0px rgba(251, 191, 36, 0)']
+                            }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                            style={{ 
+                              fontSize: '0.75rem', 
+                              padding: '0.25rem 0.6rem', 
+                              background: 'linear-gradient(90deg, #fbbf24, #f59e0b, #ef4444)', 
+                              color: '#fff', 
+                              borderRadius: '1rem',
+                              fontWeight: 900,
+                              textTransform: 'uppercase',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '4px',
+                              border: '1px solid rgba(255,255,255,0.3)',
+                              textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                            }}
+                          >
+                            <Zap size={14} fill="#fff" /> {language === 'vi' ? 'Ưu tiên' : 'Priority'}
+                          </motion.span>
                         )}
                       </h3>
                       <span className="cart-item-price">{formatPrice((item.product.price * parseSizePercentage(item.size) * (item.material === 'PETG' ? 1.2 : 1) * (item.isFastCrafting ? 1.1 : 1)) * item.quantity).current}</span>
@@ -263,9 +278,16 @@ export const Cart = () => {
                 </label>
               </div>
 
-              <div style={{ padding: '1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)' }}>
-                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{language === 'vi' ? 'Đây là phiên bản dùng thử. Đơn hàng sẽ được tạo mà không cần thanh toán thật.' : 'This is a mock checkout. No real payment will be processed.'}</p>
-                <input type="text" placeholder={language === 'vi' ? 'Số thẻ (Ghi đại cũng được)' : 'Card Number (Mock)'} style={{ width: '100%', padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--glass-border)', background: 'transparent', color: 'white', marginTop: '1rem' }} />
+              <div style={{ padding: '1.5rem', background: 'rgba(255,255,255,0.05)', border: '1px solid var(--color-accent)', borderRadius: 'var(--radius-sm)', textAlign: 'center' }}>
+                <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>{language === 'vi' ? 'Quét mã QR để thanh toán' : 'Scan QR to Pay'}</h3>
+                <div style={{ background: 'white', padding: '10px', borderRadius: '12px', display: 'inline-block', marginBottom: '1rem' }}>
+                  <img src={qrUrl} alt="QR Code" style={{ width: '250px', height: '250px', objectFit: 'contain' }} />
+                </div>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
+                  {language === 'vi' 
+                    ? `Sau khi chuyển khoản thành công, vui lòng nhấn nút "Đặt Hàng" bên dưới.` 
+                    : `After successful transfer, please click the "Place Order" button below.`}
+                </p>
               </div>
 
               <button type="submit" className="btn-primary" style={{ width: '100%', padding: '1.25rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '1.125rem', marginTop: '1rem', borderRadius: 'var(--radius-sm)' }}>

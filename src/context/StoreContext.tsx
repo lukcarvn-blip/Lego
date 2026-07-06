@@ -138,7 +138,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     socialFacebook: 'https://facebook.com',
     socialInstagram: 'https://instagram.com',
     seoTitle: 'LEGATO - Khám phá thế giới sáng tạo',
-    seoDescription: 'Cửa hàng đồ chơi thông minh và mô hình xếp khối sáng tạo hàng đầu.'
+    seoDescription: 'Cửa hàng đồ chơi thông minh và mô hình xếp khối sáng tạo hàng đầu.',
+    bankName: 'vietcombank',
+    bankAccount: '9931028868',
+    bankOwner: 'LE NHAT HOANG'
   });
   const [language, setLanguage] = useState<Language>('vi');
   const [user, setUser] = useState<any>(null);
