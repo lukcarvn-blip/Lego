@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Zap } from 'lucide-react';
 import { mockProducts } from '../data/mockProducts';
 import { mockBlogPosts } from '../data/mockBlogPosts';
 import type { Product, ProductSize } from '../data/mockProducts';
@@ -464,9 +465,9 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
                 transition={{ type: 'spring', stiffness: 250, damping: 15 }}
                 style={{
                   background: 'var(--color-surface)',
-                  color: 'var(--color-text)',
-                  border: '2px solid var(--color-accent)',
-                  boxShadow: '0 10px 40px rgba(74, 222, 128, 0.4)',
+                  color: '#fbbf24',
+                  border: '2px solid #fbbf24',
+                  boxShadow: '0 10px 40px rgba(251, 191, 36, 0.4)',
                   fontWeight: 700,
                   display: 'flex',
                   alignItems: 'center',
@@ -475,6 +476,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
                   textAlign: 'center'
                 }}
               >
+                <Zap size={20} color="#fbbf24" fill="#fbbf24" />
                 {toast.message}
               </motion.div>
             ))}

@@ -82,8 +82,8 @@ export const Navbar = () => {
             {/* Left Nav / Action */}
             <div style={{ flex: 1, display: 'flex', gap: '2rem', justifyContent: 'flex-start', alignItems: 'center' }}>
               <div className="desktop-nav" style={{ display: 'flex', gap: '2rem' }}>
-                <Link to="/products/superheroes" style={{ fontWeight: 600 }}>{t('cat_superheroes')}</Link>
-                <Link to="/products/sci-fi" style={{ fontWeight: 600 }}>{t('cat_scifi')}</Link>
+                <Link to="/products" style={{ fontWeight: 800 }}>Tất Cả Sản Phẩm</Link>
+                <a href="/#collections" style={{ fontWeight: 800, textDecoration: 'none', color: 'inherit' }}>Bộ Sưu Tập</a>
               </div>
               <button 
                 className="mobile-action" 

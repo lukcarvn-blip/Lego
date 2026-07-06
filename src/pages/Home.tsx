@@ -1,71 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { Heart, Clock, ChevronRight, ShieldCheck, Zap, Diamond, Sparkles, ShoppingCart, Loader2, LayoutGrid, LayoutList, ArrowRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Heart, Clock, ChevronRight, ChevronLeft, ShieldCheck, Zap, Diamond, Sparkles, ShoppingCart, Loader2, LayoutGrid, LayoutList, ArrowRight } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
-
-import { AnimatePresence } from 'framer-motion';
-
-const faces = [
-  // 0: Smile
-  <g key="smile">
-    <circle cx="9" cy="11" r="1.5" fill="#000"/>
-    <circle cx="15" cy="11" r="1.5" fill="#000"/>
-    <path d="M9 15C9 15 10.5 17 12 17C13.5 17 15 15 15 15" stroke="#000" strokeWidth="1.5" strokeLinecap="round"/>
-  </g>,
-  // 1: Surprised
-  <g key="surprised">
-    <circle cx="9" cy="10" r="1.5" fill="#000"/>
-    <circle cx="15" cy="10" r="1.5" fill="#000"/>
-    <circle cx="12" cy="15" r="2" fill="#000" />
-  </g>,
-  // 2: Wink
-  <g key="wink">
-    <path d="M7 11L11 11" stroke="#000" strokeWidth="1.5" strokeLinecap="round" />
-    <circle cx="15" cy="11" r="1.5" fill="#000"/>
-    <path d="M9 15C9 15 10.5 17 12 17C13.5 17 15 15 15 15" stroke="#000" strokeWidth="1.5" strokeLinecap="round"/>
-  </g>,
-  // 3: Cool
-  <g key="cool">
-    <path d="M7 10H17V12C17 13.1 16.1 14 15 14H14C12.9 14 12 13.1 12 12V11V12C12 13.1 11.1 14 10 14H9C7.9 14 7 13.1 7 12V10Z" fill="#000"/>
-    <path d="M10 16H14" stroke="#000" strokeWidth="1.5" strokeLinecap="round"/>
-  </g>,
-  // 4: Mustache
-  <g key="mustache">
-    <circle cx="9" cy="11" r="1.5" fill="#000"/>
-    <circle cx="15" cy="11" r="1.5" fill="#000"/>
-    <path d="M8 15C8 15 9.5 14 12 14C14.5 14 16 15 16 15C16 15 14.5 16.5 12 16.5C9.5 16.5 8 15 8 15Z" fill="#000"/>
-  </g>
-];
-
-const LegoHeadIcon = ({ size = 32 }: { size?: number }) => {
-  const [faceIdx, setFaceIdx] = React.useState(0);
-
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setFaceIdx(Math.floor(Math.random() * faces.length));
-    }, 2000 + Math.random() * 3000); // Random interval between 2s and 5s
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M7 4V2H17V4M5 4H19C20.1046 4 21 4.89543 21 6V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V6C3 4.89543 3.89543 4 5 4Z" fill="#FDE047"/>
-      <AnimatePresence mode="wait">
-        <motion.g
-          key={faceIdx}
-          initial={{ opacity: 0, y: 2 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -2 }}
-          transition={{ duration: 0.15 }}
-        >
-          {faces[faceIdx]}
-        </motion.g>
-      </AnimatePresence>
-    </svg>
-  );
-};
+import { LegoHeadIcon } from '../components/LegoHeadIcon';
 
 export const Home = () => {
   const { products, blogPosts, t, language, settings, formatPrice } = useStore();
@@ -79,12 +18,25 @@ export const Home = () => {
 
   // Tablet = 640px to 1279px (covers all iPads incl. iPad Pro landscape)
   const isTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 1280;
-  const initialCount = isTablet ? 3 : 4;
+  const initialCount = isTablet ? 3 : 3;
   const loadStep = isTablet ? 3 : 4;
   const [visibleCount, setVisibleCount] = useState(initialCount);
   const [isLoading, setIsLoading] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
+  useEffect(() => {
+    // Tự động cuộn sang video thứ 2 trên mobile để slider trông cân đối
+    const timer = setTimeout(() => {
+      if (window.innerWidth <= 768) {
+        const slider = document.getElementById('video-slider');
+        if (slider) {
+          // Cuộn một khoảng để snap vào video thứ 2
+          slider.scrollBy({ left: 300, behavior: 'smooth' });
+        }
+      }
+    }, 800);
+    return () => clearTimeout(timer);
+  }, []);
   const featuredProducts = products.slice(0, visibleCount);
 
   const handleLoadMore = () => {
@@ -206,95 +158,222 @@ export const Home = () => {
             <LegoHeadIcon size={36} />
             {language === 'vi' ? 'Video Thực Tế' : 'Product Shorts'}
           </motion.h2>
+          {/* Scroll arrows */}
+          <span className={['https://www.youtube.com/embed/3GANf76_rYc', 'https://www.youtube.com/embed/OBCKcf3jYzI', 'https://www.youtube.com/embed/mV7G-5miEp4', 'https://www.youtube.com/embed/ZvWrQ6W-HOo'].length <= 4 ? "hide-on-desktop-if-few" : ""} style={{ display: 'flex', gap: '0.35rem', flexShrink: 0 }}>
+            <button
+              onClick={() => {
+                const el = document.getElementById('video-slider');
+                if (el) el.scrollBy({ left: -320, behavior: 'smooth' });
+              }}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '34px', height: '34px', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', cursor: 'pointer' }}
+              aria-label="Cuộn trái"
+            >
+              <ChevronLeft size={18} />
+            </button>
+            <button
+              onClick={() => {
+                const el = document.getElementById('video-slider');
+                if (el) el.scrollBy({ left: 320, behavior: 'smooth' });
+              }}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '34px', height: '34px', borderRadius: 'var(--radius-sm)', background: 'rgba(74,222,128,0.12)', border: '1px solid rgba(74,222,128,0.35)', color: 'var(--color-accent)', cursor: 'pointer' }}
+              aria-label="Cuộn phải"
+            >
+              <ChevronRight size={18} />
+            </button>
+          </span>
         </div>
-        <div 
-          className="hide-scrollbar"
-          style={{ 
-            display: 'flex', 
-            gap: '1.5rem', 
-            overflowX: 'auto', 
-            scrollSnapType: 'x mandatory',
-            paddingBottom: '1rem',
-            margin: '0 -1rem',
-            padding: '0 1rem 1rem 1rem'
-          }}
-        >
-          {[
-            'https://www.youtube.com/embed/3GANf76_rYc',
-            'https://www.youtube.com/embed/OBCKcf3jYzI',
-            'https://www.youtube.com/embed/mV7G-5miEp4',
-            'https://www.youtube.com/embed/ZvWrQ6W-HOo'
-          ].map((src, idx) => (
-            <div key={idx} style={{ 
-              flex: '0 0 calc(25% - 1.125rem)', 
-              minWidth: '280px',
-              scrollSnapAlign: 'center', 
-              aspectRatio: '9/16', 
-              borderRadius: 'var(--radius-md)', 
-              overflow: 'hidden',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-              background: '#000',
-              border: '1px solid rgba(255,255,255,0.05)'
-            }}>
-              <iframe 
-                width="100%" 
-                height="100%" 
-                src={`${src}?autoplay=0&controls=1&rel=0`}
-                title={`YouTube Short ${idx + 1}`} 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                allowFullScreen
-                style={{ border: 'none' }}
-              ></iframe>
-            </div>
-          ))}
+        <div style={{ position: 'relative', margin: '0 -1rem' }}>
+          {/* Dark fade on the left */}
+          <div style={{ position: 'absolute', left: 0, top: 0, bottom: '1rem', width: '15%', minWidth: '60px', background: 'linear-gradient(to right, rgba(5,13,5,0.95) 0%, rgba(5,13,5,0.6) 40%, transparent 100%)', pointerEvents: 'none', zIndex: 2 }} />
+          
+          <div
+            id="video-slider"
+            className="hide-scrollbar"
+            style={{
+              display: 'flex',
+              gap: '1.5rem',
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              paddingBottom: '1rem',
+              padding: '0 1rem 1rem 1rem'
+            }}
+          >
+            {[
+              'https://www.youtube.com/embed/3GANf76_rYc',
+              'https://www.youtube.com/embed/OBCKcf3jYzI',
+              'https://www.youtube.com/embed/mV7G-5miEp4',
+              'https://www.youtube.com/embed/ZvWrQ6W-HOo'
+            ].map((src, idx) => (
+              <div key={idx} style={{
+                flex: '0 0 calc(25% - 1.125rem)',
+                minWidth: '280px',
+                scrollSnapAlign: 'center',
+                aspectRatio: '9/16',
+                borderRadius: 'var(--radius-md)',
+                overflow: 'hidden',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                background: '#000',
+                border: '1px solid rgba(255,255,255,0.05)'
+              }}>
+                <iframe
+                  width="100%"
+                  height="100%"
+                  src={`${src}?autoplay=0&controls=1&rel=0`}
+                  title={`YouTube Short ${idx + 1}`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  style={{ border: 'none' }}
+                ></iframe>
+              </div>
+            ))}
+          </div>
+
+          {/* Dark fade on the right */}
+          <div style={{ position: 'absolute', right: 0, top: 0, bottom: '1rem', width: '15%', minWidth: '60px', background: 'linear-gradient(to left, rgba(5,13,5,0.95) 0%, rgba(5,13,5,0.6) 40%, transparent 100%)', pointerEvents: 'none', zIndex: 2 }} />
         </div>
       </section>
 
       {/* Categories Grid */}
-      <motion.section 
-        className="container" 
+      <motion.section
+        className="container"
         style={{ paddingTop: '5rem' }}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.6 }}
       >
-        <motion.h2 {...headerAnimProps} style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.75rem' }}>
-          <LegoHeadIcon size={36} />
-          {t('explore_categories')}
-        </motion.h2>
-        <div className="category-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(0.5rem, 2vw, 3rem)', justifyItems: 'center' }}>
-          {[
-            { title: t('cat_superheroes'), img: '/images/tube-superhero.png', path: '/category/Superheroes' },
-            { title: t('cat_scifi'), img: '/images/tube-scifi.png', path: '/category/Sci-Fi' },
-            { title: t('cat_classic'), img: '/images/tube-classic.png', path: '/category/Classic' },
-          ].map((cat, idx) => (
-            <Link to={cat.path} key={idx} style={{ textDecoration: 'none', width: '100%', display: 'block' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', width: '100%' }}>
-                <motion.div 
-                  whileHover={{ 
-                    scale: 1.03, 
-                    borderColor: 'var(--color-accent)', 
-                    boxShadow: '0 0 30px rgba(74, 222, 128, 0.5), inset 0 0 20px rgba(74, 222, 128, 0.3)' 
+        <div className="cat-collections-row">
+
+          {/* LEFT: Khám phá danh mục */}
+          <div className="cat-collections-left">
+            <motion.h2 {...headerAnimProps} style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <LegoHeadIcon size={32} />
+              {t('explore_categories')}
+            </motion.h2>
+            <div className="category-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(0.5rem, 1.5vw, 1.5rem)', justifyItems: 'center' }}>
+              {[
+                { title: t('cat_superheroes'), img: '/images/tube-superhero.png', path: '/category/Superheroes' },
+                { title: t('cat_scifi'), img: '/images/tube-scifi.png', path: '/category/Sci-Fi' },
+                { title: t('cat_classic'), img: '/images/tube-classic.png', path: '/category/Classic' },
+              ].map((cat, idx) => (
+                <Link to={cat.path} key={idx} style={{ textDecoration: 'none', width: '100%', display: 'block' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', width: '100%' }}>
+                    <motion.div
+                      whileHover={{
+                        scale: 1.03,
+                        borderColor: 'var(--color-accent)',
+                        boxShadow: '0 0 30px rgba(74, 222, 128, 0.5), inset 0 0 20px rgba(74, 222, 128, 0.3)'
+                      }}
+                      transition={{ duration: 0.3 }}
+                      style={{
+                        width: '100%',
+                        aspectRatio: '1/1',
+                        borderRadius: 'var(--radius-lg)',
+                        overflow: 'hidden',
+                        cursor: 'pointer',
+                        border: '1px solid rgba(255, 255, 255, 0.05)',
+                        background: 'transparent'
+                      }}
+                    >
+                      <img src={cat.img} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={cat.title} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'screen' }} />
+                    </motion.div>
+                    <h3 className="minecraft-font" style={{ fontWeight: 500, textAlign: 'center', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-text)', fontSize: 'clamp(0.6rem, 1.2vw, 0.9rem)' }}>{cat.title}</h3>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT: Bộ sưu tập */}
+          <div className="cat-collections-right">
+            <motion.h2 {...headerAnimProps} style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem', justifyContent: 'space-between' }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <LegoHeadIcon size={32} />
+                {language === 'vi' ? 'Bộ Sưu Tập' : 'Collections'}
+              </span>
+              {/* Scroll arrows - only visible on mobile via CSS */}
+              <span className="collections-nav" style={{ gap: '0.35rem', flexShrink: 0 }}>
+                <button
+                  onClick={() => {
+                    const el = document.querySelector('.collections-grid') as HTMLElement;
+                    if (el) el.scrollBy({ left: -200, behavior: 'smooth' });
                   }}
-                  transition={{ duration: 0.3 }}
-                  style={{ 
-                    width: '100%', 
-                    aspectRatio: '1/1',
-                    borderRadius: 'var(--radius-lg)',
-                    overflow: 'hidden',
-                    cursor: 'pointer',
-                    border: '1px solid rgba(255, 255, 255, 0.05)',
-                    background: 'transparent'
-                  }}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', cursor: 'pointer', flexShrink: 0 }}
+                  aria-label="Scroll left"
                 >
-                  <img src={cat.img} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={cat.title} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'screen' }} />
-                </motion.div>
-                <h3 className="minecraft-font" style={{ fontWeight: 500, textAlign: 'center', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-text)' }}>{cat.title}</h3>
-              </div>
-            </Link>
-          ))}
+                  <ChevronLeft size={16} />
+                </button>
+                <button
+                  onClick={() => {
+                    const el = document.querySelector('.collections-grid') as HTMLElement;
+                    if (el) el.scrollBy({ left: 200, behavior: 'smooth' });
+                  }}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', cursor: 'pointer', flexShrink: 0 }}
+                  aria-label="Scroll right"
+                >
+                  <ChevronRight size={16} />
+                </button>
+              </span>
+            </motion.h2>
+            <div className="collections-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '0.5rem' }}>
+              {[
+                { name: 'Marvel', emoji: '🕷️', color: '#e23636', bg: 'rgba(226,54,54,0.1)', border: 'rgba(226,54,54,0.3)', path: '/category/superheroes?q=marvel' },
+                { name: 'DC Comics', emoji: '🦇', color: '#0074e4', bg: 'rgba(0,116,228,0.1)', border: 'rgba(0,116,228,0.3)', path: '/category/superheroes?q=dc' },
+                { name: 'Star Wars', emoji: '⚔️', color: '#ffe81f', bg: 'rgba(255,232,31,0.1)', border: 'rgba(255,232,31,0.3)', path: '/category/sci-fi?q=starwars' },
+                { name: 'Harry Potter', emoji: '🧙', color: '#9c59b6', bg: 'rgba(156,89,182,0.1)', border: 'rgba(156,89,182,0.3)', path: '/category/fantasy?q=harrypotter' },
+                { name: 'Avengers', emoji: '🛡️', color: '#c0392b', bg: 'rgba(192,57,43,0.1)', border: 'rgba(192,57,43,0.3)', path: '/category/superheroes?q=avengers' },
+                { name: 'Anime', emoji: '⛩️', color: '#e91e8c', bg: 'rgba(233,30,140,0.1)', border: 'rgba(233,30,140,0.3)', path: '/category/anime' },
+                { name: 'Jurassic', emoji: '🦖', color: '#2ecc71', bg: 'rgba(46,204,113,0.1)', border: 'rgba(46,204,113,0.3)', path: '/category/sci-fi?q=jurassic' },
+                { name: 'Ninjago', emoji: '🥷', color: '#e67e22', bg: 'rgba(230,126,34,0.1)', border: 'rgba(230,126,34,0.3)', path: '/category/classic?q=ninjago' },
+                { name: 'Space', emoji: '🚀', color: '#3498db', bg: 'rgba(52,152,219,0.1)', border: 'rgba(52,152,219,0.3)', path: '/category/sci-fi?q=space' },
+                { name: 'Castle', emoji: '🏰', color: '#f39c12', bg: 'rgba(243,156,18,0.1)', border: 'rgba(243,156,18,0.3)', path: '/category/fantasy?q=castle' },
+                { name: 'City', emoji: '🏙️', color: '#1abc9c', bg: 'rgba(26,188,156,0.1)', border: 'rgba(26,188,156,0.3)', path: '/category/classic?q=city' },
+                { name: 'Technic', emoji: '⚙️', color: '#95a5a6', bg: 'rgba(149,165,166,0.1)', border: 'rgba(149,165,166,0.3)', path: '/category/classic?q=technic' },
+              ].map((col, i) => (
+                <Link to={col.path} key={i} style={{ textDecoration: 'none' }}>
+                  <motion.div
+                    className="col-card"
+                    whileHover={{
+                      scale: 1.06,
+                      boxShadow: `0 0 16px ${col.color}50`,
+                      borderColor: col.color,
+                    }}
+                    transition={{ duration: 0.2 }}
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '0.4rem',
+                      padding: '0.9rem 0.5rem',
+                      borderRadius: 'var(--radius-md)',
+                      background: col.bg,
+                      border: `1px solid ${col.border}`,
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                    }}
+                  >
+                    <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>{col.emoji}</span>
+                    <span style={{
+                      fontSize: '0.65rem',
+                      fontWeight: 700,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.3px',
+                      color: col.color,
+                      textAlign: 'center',
+                      lineHeight: 1.2,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      width: '100%',
+                    }}>{col.name}</span>
+                  </motion.div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
         </div>
       </motion.section>
 
@@ -322,10 +401,45 @@ export const Home = () => {
           </div>
         </div>
 
-        <div className={viewMode === 'list' ? 'product-list' : 'product-grid'}>
-          {featuredProducts.map((product, idx) => (
-            <ProductCard key={product.id} product={product} idx={idx} listMode={viewMode === 'list'} />
-          ))}
+        {/* Product grid with interspersed single-column ad banners */}
+        <div className={viewMode === 'list' ? 'product-list' : 'product-grid'} style={{ position: 'relative' }}>
+          {featuredProducts.map((product, idx) => {
+            const showAd1 = idx === 2 && viewMode === 'grid';
+
+            return (
+              <React.Fragment key={product.id}>
+                <ProductCard product={product} idx={idx} listMode={viewMode === 'list'} />
+                
+                {showAd1 && (
+                  <div className="product-card" style={{
+                    background: 'linear-gradient(135deg, #0a1c0a 0%, #1a3a1a 100%)',
+                    border: '1px solid rgba(74,222,128,0.3)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    padding: '2rem',
+                    position: 'relative',
+                    boxShadow: '0 10px 30px rgba(74,222,128,0.1)',
+                    height: '100%'
+                  }}>
+                    <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(74,222,128,0.15) 0%, transparent 60%)', pointerEvents: 'none' }} />
+                    <Zap size={48} color="var(--color-accent)" style={{ marginBottom: '1.5rem' }} className="flash-shake" />
+                    <p style={{ color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '0.5rem' }}>⚡ Flash Deal</p>
+                    <h3 className="ad-title minecraft-font" style={{ fontWeight: 800, lineHeight: 1.3, marginBottom: '1rem', color: '#fff' }}>
+                      {language === 'vi' ? 'Giảm 40%' : '40% OFF'}<br/>Marvel Sets
+                    </h3>
+                    <Link to="/category/superheroes?q=marvel" style={{ textDecoration: 'none', width: '100%', marginTop: 'auto' }}>
+                      <motion.button whileHover={{ scale: 1.05 }} style={{ width: '100%', background: 'var(--color-accent)', color: '#000', border: 'none', borderRadius: 'var(--radius-md)', padding: '0.8rem', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>
+                        {language === 'vi' ? 'Mua Ngay' : 'Shop Now'}
+                      </motion.button>
+                    </Link>
+                  </div>
+                )}
+              </React.Fragment>
+            );
+          })}
         </div>
 
         {visibleCount < products.length && (
@@ -351,39 +465,6 @@ export const Home = () => {
         )}
       </section>
 
-      {/* Why LEGATO */}
-      <motion.section 
-        className="container" 
-        style={{ paddingTop: '5rem' }}
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.6 }}
-      >
-        <div className="glass-panel why-panel" style={{ textAlign: 'center' }}>
-          <motion.h2 {...headerAnimProps} className="why-title" style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.75rem' }}>
-            <LegoHeadIcon size={36} />
-            {t('why_loge')}
-          </motion.h2>
-          <div className="why-grid">
-            <div>
-              <Diamond size={48} color="var(--color-accent)" style={{ margin: '0 auto 1.5rem auto' }} />
-              <h3 style={{ marginBottom: '1rem' }}>{t('why_1_title')}</h3>
-              <p style={{ color: 'var(--color-text-muted)' }}>{t('why_1_desc')}</p>
-            </div>
-            <div>
-              <ShieldCheck size={48} color="var(--color-accent)" style={{ margin: '0 auto 1.5rem auto' }} />
-              <h3 style={{ marginBottom: '1rem' }}>{t('why_2_title')}</h3>
-              <p style={{ color: 'var(--color-text-muted)' }}>{t('why_2_desc')}</p>
-            </div>
-            <div>
-              <Zap size={48} color="var(--color-accent)" style={{ margin: '0 auto 1.5rem auto' }} />
-              <h3 style={{ marginBottom: '1rem' }}>{t('why_3_title')}</h3>
-              <p style={{ color: 'var(--color-text-muted)' }}>{t('why_3_desc')}</p>
-            </div>
-          </div>
-        </div>
-      </motion.section>
 
       {/* Blog Section */}
       <motion.section 
