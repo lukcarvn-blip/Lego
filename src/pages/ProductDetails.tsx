@@ -647,7 +647,7 @@ export const ProductDetails = () => {
                   <motion.div
                     animate={{ scale: getSizeDetails(selectedSize || '300').scale }}
                     transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                    style={{ transformOrigin: 'bottom center', marginLeft: '30px' }}
+                    style={{ transformOrigin: 'bottom center', marginLeft: '60px' }}
                   >
                     <LegoSilhouette scale={1.8} color="var(--color-accent)" />
                   </motion.div>
