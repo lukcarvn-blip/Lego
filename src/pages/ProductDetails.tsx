@@ -584,14 +584,14 @@ export const ProductDetails = () => {
                   background: 'var(--color-surface)', 
                   borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--glass-border)',
-                  paddingBottom: '10px',
+                  paddingBottom: '0px',
                   position: 'relative'
                 }}>
                   {/* Fixed Ruler with pre-defined ticks */}
                   <div style={{
                     position: 'absolute',
                     left: '10px',
-                    bottom: '10px',
+                    bottom: '0px',
                     height: `${135 * Math.max(...product.availableSizes.map(s => getSizeDetails(s).scale)) + 10}px`,
                     borderLeft: '2px solid rgba(251, 191, 36, 0.5)'
                   }}>

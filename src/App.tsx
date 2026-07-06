@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { Navbar } from './components/Navbar';
@@ -21,12 +21,18 @@ import { NotFound } from './pages/NotFound';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { FloatingActions } from './components/FloatingActions';
 
+import { LoadingScreen } from './components/LoadingScreen';
+
 function AppContent() {
   const { pathname } = useLocation();
   const { settings } = useStore();
+  const [isLoading, setIsLoading] = useState(false);
   
   useEffect(() => {
+    setIsLoading(true);
     window.scrollTo(0, 0);
+    const timer = setTimeout(() => setIsLoading(false), 1200);
+    return () => clearTimeout(timer);
   }, [pathname]);
 
   // Apply SEO Settings
@@ -59,10 +65,12 @@ function AppContent() {
   const isAdmin = pathname.toLowerCase().startsWith('/hoang');
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      {!isAdmin && <Navbar />}
-      <main style={{ flex: 1 }}>
-        <Routes>
+    <>
+      <LoadingScreen isVisible={isLoading} />
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', opacity: isLoading ? 0 : 1, transition: 'opacity 0.3s ease-in-out' }}>
+        {!isAdmin && <Navbar />}
+        <main style={{ flex: 1 }}>
+          <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:categoryName" element={<Products />} />
@@ -82,9 +90,10 @@ function AppContent() {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
-      {!isAdmin && <Footer />}
-      {!isAdmin && <FloatingActions />}
-    </div>
+        {!isAdmin && <Footer />}
+        {!isAdmin && <FloatingActions />}
+      </div>
+    </>
   );
 }
 
