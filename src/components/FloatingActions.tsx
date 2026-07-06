@@ -123,6 +123,7 @@ export const FloatingActions = () => {
         <AnimatePresence>
           {showScrollTop && (
             <motion.button
+              className="chatbox-pc-only"
               initial={{ opacity: 0, scale: 0 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0 }}
