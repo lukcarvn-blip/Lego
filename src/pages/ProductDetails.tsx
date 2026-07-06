@@ -573,11 +573,11 @@ export const ProductDetails = () => {
               >
               <h3 style={{ marginBottom: '1.5rem' }}>{t('size')}</h3>
               
-              <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', gap: '1rem', alignItems: 'stretch', flexWrap: 'nowrap' }}>
                 {/* Single Animated Icon Container */}
                 <div style={{ 
-                  width: '140px', 
-                  height: '180px', 
+                  flex: '0 0 clamp(100px, 30%, 140px)', 
+                  minHeight: '180px', 
                   display: 'flex', 
                   alignItems: 'flex-end', 
                   justifyContent: 'center', 
@@ -596,7 +596,7 @@ export const ProductDetails = () => {
                 </div>
 
                 {/* Vertical Size Options */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: '1 1 200px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: 1, justifyContent: 'space-between' }}>
                   {product.availableSizes.map(size => {
                     const isSelected = selectedSize === size;
                     const sizeDetails = getSizeDetails(size);
@@ -608,7 +608,8 @@ export const ProductDetails = () => {
                           display: 'flex',
                           justifyContent: 'space-between',
                           alignItems: 'center',
-                          padding: '1rem',
+                          padding: '0.75rem 1rem',
+                          flex: 1,
                           borderRadius: 'var(--radius-md)',
                           border: `2px solid ${isSelected ? 'var(--color-accent)' : 'var(--glass-border)'}`,
                           background: isSelected ? 'rgba(74, 222, 128, 0.1)' : 'transparent',
@@ -617,8 +618,8 @@ export const ProductDetails = () => {
                           cursor: 'pointer'
                         }}
                       >
-                        <span style={{ fontWeight: 700, fontSize: '1.1rem' }}>{sizeDetails.label}</span>
-                        <span style={{ fontSize: '0.9rem', color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)', opacity: 0.8 }}>{sizeDetails.height}</span>
+                        <span style={{ fontWeight: 700, fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)' }}>{sizeDetails.label}</span>
+                        <span style={{ fontSize: 'clamp(0.8rem, 2vw, 0.9rem)', color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)', opacity: 0.8 }}>{sizeDetails.height}</span>
                       </button>
                     )
                   })}
