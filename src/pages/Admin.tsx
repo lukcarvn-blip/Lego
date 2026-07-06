@@ -108,7 +108,7 @@ const StatCard = ({ icon, label, value, color, sub }: { icon: React.ReactNode, l
   </div>
 );
 
-const InputField = ({ label, children }: { label: string, children: React.ReactNode }) => (
+const InputField = ({ label, children }: { label: React.ReactNode, children: React.ReactNode }) => (
   <div>
     <label style={{ display: 'block', marginBottom: '0.4rem', fontSize: '0.8rem', color: 'var(--color-text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</label>
     {children}
