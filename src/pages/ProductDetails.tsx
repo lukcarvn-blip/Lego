@@ -117,21 +117,17 @@ export const ProductDetails = () => {
 
   let product = products.find(p => p.id === id) || mockProducts.find(p => p.id === id);
   
-  if (product) {
-    const defaultLogo = settings?.logoImage || '/images/fallback-logo.jpg';
-    let images = product.images && product.images.length > 0 ? [...product.images] : [];
-    
-    // If the actual product has no images but it's a known ID from mockProducts, grab the first mock image
-    if (images.length === 0) {
-      const mockP = mockProducts.find(p => p.id === id);
-      images = mockP?.images?.length ? [mockP.images[0]] : [defaultLogo];
-    }
-    
-    // Pad up to 10 images using the default logo
-    while (images.length < 10) {
-      images.push(defaultLogo);
-    }
-    product = { ...product, images };
+  // Create padded images for display only
+  const defaultLogo = settings?.logoImage || '/images/fallback-logo.jpg';
+  let displayImages = product?.images && product.images.length > 0 ? [...product.images] : [];
+  
+  if (product && displayImages.length === 0) {
+    const mockP = mockProducts.find(p => p.id === id);
+    displayImages = mockP?.images?.length ? [mockP.images[0]] : [defaultLogo];
+  }
+  
+  while (displayImages.length < 10) {
+    displayImages.push(defaultLogo);
   }
   
   const [isLiked, setIsLiked] = useState(() => !!localStorage.getItem('liked_' + id));
@@ -276,7 +272,7 @@ export const ProductDetails = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.4 }}
-              src={product.images[activeImageIndex]} 
+              src={displayImages[activeImageIndex] || displayImages[0]} 
               alt={product.name[language as keyof typeof product.name]} 
               style={{ 
                 width: '100%', 
@@ -289,9 +285,9 @@ export const ProductDetails = () => {
           </motion.div>
           
           {/* Thumbnails Slider */}
-          {product.images && product.images.length > 1 && (
+          {displayImages.length > 1 && (
             <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem', overflowX: 'auto', paddingBottom: '0.5rem' }} className="hide-scrollbar">
-              {product.images.map((img, idx) => (
+              {displayImages.map((img, idx) => (
                 <div 
                   key={idx}
                   onClick={() => setActiveImageIndex(idx)}
