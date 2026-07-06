@@ -16,6 +16,14 @@ const LegoHeadIcon = ({ size = 32 }: { size?: number }) => (
 
 export const Home = () => {
   const { products, blogPosts, t, language, settings, formatPrice } = useStore();
+  
+  const headerAnimProps = {
+    initial: { opacity: 0, y: 30, filter: 'blur(10px)' },
+    whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
+    viewport: { once: true, margin: "-50px" },
+    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }
+  };
+
   // Tablet = 640px to 1279px (covers all iPads incl. iPad Pro landscape)
   const isTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 1280;
   const initialCount = isTablet ? 3 : 4;
@@ -141,10 +149,10 @@ export const Home = () => {
       {/* Video Shorts Slider */}
       <section className="container" style={{ paddingTop: '5rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-          <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <motion.h2 {...headerAnimProps} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <LegoHeadIcon size={36} />
             {language === 'vi' ? 'Video Thực Tế' : 'Product Shorts'}
-          </h2>
+          </motion.h2>
         </div>
         <div 
           className="hide-scrollbar"
@@ -193,16 +201,16 @@ export const Home = () => {
       {/* Categories Grid */}
       <motion.section 
         className="container" 
-        style={{ paddingTop: '5rem' }}
+        style={{ paddingTop: '6rem 1rem' }}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6 }}
       >
-        <h2 style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.75rem' }}>
+        <motion.h2 {...headerAnimProps} style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.75rem' }}>
           <LegoHeadIcon size={36} />
           {t('explore_categories')}
-        </h2>
+        </motion.h2>
         <div className="category-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(0.5rem, 2vw, 3rem)', justifyItems: 'center' }}>
           {[
             { title: t('cat_superheroes'), img: '/images/tube-superhero.png', path: '/category/Superheroes' },
@@ -240,10 +248,10 @@ export const Home = () => {
       {/* Featured Products Grid */}
       <section className="container" style={{ paddingTop: '6rem' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'nowrap', gap: '0.5rem' }}>
-          <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, fontSize: 'clamp(1rem, 4vw, 1.75rem)' }}>
+          <motion.h2 {...headerAnimProps} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, fontSize: 'clamp(1rem, 4vw, 1.75rem)' }}>
             <LegoHeadIcon size={28} />
             <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('featured_drops')}</span>
-          </h2>
+          </motion.h2>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
             <div style={{ display: 'flex', background: 'rgba(255,255,255,0.07)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--glass-border)' }} className="view-toggle-mobile">
               <button onClick={() => setViewMode('grid')} title="Grid"
@@ -293,17 +301,17 @@ export const Home = () => {
       {/* Why LEGATO */}
       <motion.section 
         className="container" 
-        style={{ paddingTop: '6rem' }}
+        style={{ padding: '6rem 1rem' }}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6 }}
       >
         <div className="glass-panel why-panel" style={{ textAlign: 'center' }}>
-          <h2 className="why-title" style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.75rem' }}>
+          <motion.h2 {...headerAnimProps} className="why-title" style={{ marginBottom: '3rem', display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: '0.75rem' }}>
             <LegoHeadIcon size={36} />
             {t('why_loge')}
-          </h2>
+          </motion.h2>
           <div className="why-grid">
             <div>
               <Diamond size={48} color="var(--color-accent)" style={{ margin: '0 auto 1.5rem auto' }} />
@@ -334,10 +342,10 @@ export const Home = () => {
         transition={{ duration: 0.6 }}
       >
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'nowrap', gap: '0.5rem' }}>
-          <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, fontSize: 'clamp(1rem, 4vw, 1.75rem)' }}>
+          <motion.h2 {...headerAnimProps} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, fontSize: 'clamp(1rem, 4vw, 1.75rem)' }}>
             <LegoHeadIcon size={28} />
             <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('latest_news')}</span>
-          </h2>
+          </motion.h2>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0 }}>
             <Link to="/news" title={language === 'vi' ? 'Xem Tất Cả' : 'View All'} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--color-accent)', color: '#000', padding: '0.4rem 0.5rem', borderRadius: '0 var(--radius-sm) var(--radius-sm) var(--radius-sm)', clipPath: 'polygon(6px 0, 100% 0, 100% 100%, 0 100%, 0 6px, 3px 6px, 3px 3px, 6px 3px)', transition: 'all 0.2s' }}>
               <ArrowRight size={16} />

@@ -12,6 +12,27 @@ import { Link, useSearchParams } from 'react-router-dom';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
+function useSessionState<T>(key: string, initialValue: T) {
+  const [state, setState] = useState<T>(() => {
+    try {
+      const item = window.sessionStorage.getItem(key);
+      return item ? JSON.parse(item) : initialValue;
+    } catch (error) {
+      return initialValue;
+    }
+  });
+  const setValue = (value: T | ((val: T) => T)) => {
+    try {
+      const valueToStore = value instanceof Function ? value(state) : value;
+      setState(valueToStore);
+      window.sessionStorage.setItem(key, JSON.stringify(valueToStore));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return [state, setValue] as const;
+}
+
 const QUILL_MODULES = {
   toolbar: [
     [{ 'header': [1, 2, 3, false] }],
@@ -182,22 +203,22 @@ export const Admin = () => {
     appUsers, currentUserRole, updateUserRole, deleteUser, user
   } = useStore();
   
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'orders' | 'products' | 'blog' | 'members' | 'settings'>('dashboard');
-  const [orderSearch, setOrderSearch] = useState('');
-  const [orderStatusFilter, setOrderStatusFilter] = useState<OrderStatus | 'All'>('All');
-  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
-  const [isEditingProduct, setIsEditingProduct] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Partial<Product>>({});
-  const [productSearch, setProductSearch] = useState('');
-  const [newTitle, setNewTitle] = useState('');
-  const [newContent, setNewContent] = useState('');
+  const [activeTab, setActiveTab] = useSessionState<'dashboard' | 'orders' | 'products' | 'blog' | 'members' | 'settings'>('admin_activeTab', 'dashboard');
+  const [orderSearch, setOrderSearch] = useSessionState('admin_orderSearch', '');
+  const [orderStatusFilter, setOrderStatusFilter] = useSessionState<OrderStatus | 'All'>('admin_orderStatusFilter', 'All');
+  const [selectedOrder, setSelectedOrder] = useSessionState<Order | null>('admin_selectedOrder', null);
+  const [isEditingProduct, setIsEditingProduct] = useSessionState('admin_isEditingProduct', false);
+  const [editingProduct, setEditingProduct] = useSessionState<Partial<Product>>('admin_editingProduct', {});
+  const [productSearch, setProductSearch] = useSessionState('admin_productSearch', '');
+  const [newTitle, setNewTitle] = useSessionState('admin_newTitle', '');
+  const [newContent, setNewContent] = useSessionState('admin_newContent', '');
   
   // Blog State
-  const [isEditingBlog, setIsEditingBlog] = useState(false);
-  const [editingBlogPost, setEditingBlogPost] = useState<Partial<BlogPost>>({});
+  const [isEditingBlog, setIsEditingBlog] = useSessionState('admin_isEditingBlog', false);
+  const [editingBlogPost, setEditingBlogPost] = useSessionState<Partial<BlogPost>>('admin_editingBlogPost', {});
   
   const [tempSettings, setTempSettings] = useState(settings);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useSessionState('admin_sidebarOpen', true);
 
   // ── Dashboard stats ────────────────────────────────────────────────────
   const todayStr = new Date().toISOString().split('T')[0];
