@@ -587,52 +587,57 @@ export const ProductDetails = () => {
                   paddingBottom: '10px',
                   position: 'relative'
                 }}>
-                  {/* Vertical Ruler Bracket */}
+                  {/* Fixed Ruler with pre-defined ticks */}
                   <div style={{
                     position: 'absolute',
-                    left: '15px',
+                    left: '25px',
                     bottom: '10px',
-                    display: 'flex',
-                    alignItems: 'flex-end'
+                    height: `${135 * Math.max(...product.availableSizes.map(s => getSizeDetails(s).scale)) + 10}px`,
+                    borderLeft: '2px solid var(--glass-border)'
                   }}>
-                    <motion.div 
-                      animate={{ height: 135 * getSizeDetails(selectedSize || '300').scale }}
-                      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                      style={{
-                        position: 'relative',
-                        borderLeft: '1px solid var(--color-accent)',
-                        borderTop: '1px solid var(--color-accent)',
-                        borderBottom: '1px solid var(--color-accent)',
-                        width: '8px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        opacity: 0.8
-                      }}
-                    >
-                      <span style={{
-                        position: 'absolute',
-                        left: '14px',
-                        fontSize: '0.75rem',
-                        color: 'var(--color-accent)',
-                        fontWeight: 600,
-                        whiteSpace: 'nowrap'
-                      }}>
-                        {getSizeDetails(selectedSize || '300').height}
-                      </span>
-                    </motion.div>
+                    {product.availableSizes.map(size => {
+                      const sizeDetails = getSizeDetails(size);
+                      const tickHeight = 135 * sizeDetails.scale;
+                      const isSelected = selectedSize === size;
+                      return (
+                        <React.Fragment key={size}>
+                          <div style={{ 
+                            position: 'absolute', 
+                            bottom: `${tickHeight}px`, 
+                            left: 0, 
+                            width: '8px', 
+                            height: '2px', 
+                            background: isSelected ? 'var(--color-accent)' : 'var(--glass-border)', 
+                            transition: 'all 0.3s' 
+                          }}></div>
+                          <span style={{ 
+                            position: 'absolute', 
+                            bottom: `${tickHeight - 7}px`, 
+                            left: '12px', 
+                            fontSize: '0.7rem', 
+                            fontWeight: 600, 
+                            color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)', 
+                            transition: 'all 0.3s', 
+                            whiteSpace: 'nowrap' 
+                          }}>
+                            {sizeDetails.height}
+                          </span>
+                        </React.Fragment>
+                      );
+                    })}
                   </div>
 
                   <motion.div
                     animate={{ scale: getSizeDetails(selectedSize || '300').scale }}
                     transition={{ type: 'spring', stiffness: 400, damping: 15 }}
-                    style={{ transformOrigin: 'bottom center' }}
+                    style={{ transformOrigin: 'bottom center', marginLeft: '30px' }}
                   >
                     <LegoSilhouette scale={1.8} color="var(--color-accent)" />
                   </motion.div>
                 </div>
 
                 {/* Vertical Size Options */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: 1, justifyContent: 'space-between' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: 1, justifyContent: 'center' }}>
                   {product.availableSizes.map(size => {
                     const isSelected = selectedSize === size;
                     const sizeDetails = getSizeDetails(size);
@@ -642,10 +647,9 @@ export const ProductDetails = () => {
                         onClick={() => { setSelectedSize(size); setIsCartExpanded(true); }}
                         style={{
                           display: 'flex',
-                          justifyContent: 'space-between',
+                          justifyContent: 'center',
                           alignItems: 'center',
                           padding: '0.75rem 1rem',
-                          flex: 1,
                           borderRadius: 'var(--radius-md)',
                           border: `2px solid ${isSelected ? 'var(--color-accent)' : 'var(--glass-border)'}`,
                           background: isSelected ? 'rgba(74, 222, 128, 0.1)' : 'transparent',
@@ -654,8 +658,7 @@ export const ProductDetails = () => {
                           cursor: 'pointer'
                         }}
                       >
-                        <span style={{ fontWeight: 700, fontSize: 'clamp(0.9rem, 2.5vw, 1.1rem)' }}>{sizeDetails.label}</span>
-                        <span style={{ fontSize: 'clamp(0.8rem, 2vw, 0.9rem)', color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)', opacity: 0.8 }}>{sizeDetails.height}</span>
+                        <span style={{ fontWeight: 700, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{sizeDetails.label}</span>
                       </button>
                     )
                   })}
