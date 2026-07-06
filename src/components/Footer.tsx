@@ -97,38 +97,6 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div>
-          <h4 style={{ marginBottom: '1rem', fontWeight: 600 }}>Thanh toán</h4>
-          {settings.bankName ? (
-            <div style={{ background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,255,255,0.1)' }}>
-              <p style={{ margin: '0 0 0.5rem 0', fontWeight: 700, color: 'var(--color-accent)' }}>{settings.bankName}</p>
-              <p style={{ margin: '0 0 0.25rem 0', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>STK: <strong style={{ color: '#fff' }}>{settings.bankAccount}</strong></p>
-              <p style={{ margin: 0, fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>CTK: {settings.bankOwner}</p>
-            </div>
-          ) : (
-            <>
-              <p style={{ color: 'var(--color-text-muted)', marginBottom: '1rem' }}>Đăng ký để nhận thông tin ưu đãi.</p>
-              <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <input 
-                  type="email" 
-                  placeholder="Enter your email" 
-                  style={{
-                    flex: 1,
-                    padding: '0.75rem 1rem',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--glass-border)',
-                    background: 'rgba(0,0,0,0.2)',
-                    color: '#fff',
-                    outline: 'none'
-                  }}
-                />
-                <button className="btn-primary" style={{ padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
-                  Đăng ký
-                </button>
-              </div>
-            </>
-          )}
-        </div>
       </div>
       
       <div className="container" style={{
