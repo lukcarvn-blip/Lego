@@ -103,7 +103,7 @@ const AccordionItem = ({ title, children, defaultOpen = false }: { title: string
 export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { products, updateProduct, addToCart, t, language, formatPrice, showToast } = useStore();
+  const { products, updateProduct, addToCart, t, language, formatPrice, showToast, settings } = useStore();
   
   const relatedRef = useRef<HTMLDivElement>(null);
   const bestSellersRef = useRef<HTMLDivElement>(null);
@@ -116,10 +116,22 @@ export const ProductDetails = () => {
   };
 
   let product = products.find(p => p.id === id) || mockProducts.find(p => p.id === id);
-  const mockProduct = mockProducts.find(p => p.id === id);
   
-  if (product && mockProduct && (!product.images || product.images.length <= 1)) {
-    product = { ...product, images: mockProduct.images };
+  if (product) {
+    const defaultLogo = settings?.logoImage || '/images/fallback-logo.jpg';
+    let images = product.images && product.images.length > 0 ? [...product.images] : [];
+    
+    // If the actual product has no images but it's a known ID from mockProducts, grab the first mock image
+    if (images.length === 0) {
+      const mockP = mockProducts.find(p => p.id === id);
+      images = mockP?.images?.length ? [mockP.images[0]] : [defaultLogo];
+    }
+    
+    // Pad up to 10 images using the default logo
+    while (images.length < 10) {
+      images.push(defaultLogo);
+    }
+    product = { ...product, images };
   }
   
   const [isLiked, setIsLiked] = useState(() => !!localStorage.getItem('liked_' + id));
