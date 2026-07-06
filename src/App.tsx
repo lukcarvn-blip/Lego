@@ -53,7 +53,7 @@ function AppContent() {
     }
   }, [settings.seoTitle, settings.seoDescription, settings.favicon]);
 
-  const isAdmin = pathname.toLowerCase().startsWith('/admin');
+  const isAdmin = pathname.toLowerCase().startsWith('/hoang');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -68,7 +68,7 @@ function AppContent() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/admin" element={<Admin />} />
+          <Route path="/hoang" element={<Admin />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/shipping-policy" element={<ShippingPolicy />} />
           <Route path="/returns" element={<Returns />} />
