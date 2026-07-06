@@ -590,10 +590,10 @@ export const ProductDetails = () => {
                   {/* Fixed Ruler with pre-defined ticks */}
                   <div style={{
                     position: 'absolute',
-                    left: '25px',
+                    left: '10px',
                     bottom: '10px',
                     height: `${135 * Math.max(...product.availableSizes.map(s => getSizeDetails(s).scale)) + 10}px`,
-                    borderLeft: '2px solid var(--glass-border)'
+                    borderLeft: '2px solid rgba(251, 191, 36, 0.5)'
                   }}>
                     {product.availableSizes.map(size => {
                       const sizeDetails = getSizeDetails(size);
@@ -607,18 +607,20 @@ export const ProductDetails = () => {
                             left: 0, 
                             width: '8px', 
                             height: '2px', 
-                            background: isSelected ? 'var(--color-accent)' : 'var(--glass-border)', 
+                            background: isSelected ? '#fbbf24' : 'rgba(251, 191, 36, 0.5)', 
                             transition: 'all 0.3s' 
                           }}></div>
                           <span style={{ 
                             position: 'absolute', 
                             bottom: `${tickHeight - 7}px`, 
                             left: '12px', 
-                            fontSize: '0.7rem', 
-                            fontWeight: 600, 
-                            color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)', 
+                            fontSize: '0.75rem', 
+                            fontWeight: 700, 
+                            color: '#fbbf24', 
                             transition: 'all 0.3s', 
-                            whiteSpace: 'nowrap' 
+                            whiteSpace: 'nowrap',
+                            opacity: isSelected ? 1 : 0,
+                            transform: isSelected ? 'translateX(0)' : 'translateX(-5px)'
                           }}>
                             {sizeDetails.height}
                           </span>
