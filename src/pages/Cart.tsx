@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { Trash2, ArrowRight, Mail, LogIn, ArrowLeft, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Trash2, ArrowRight, Mail, LogIn, ArrowLeft, CheckCircle, ChevronLeft, ChevronRight, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 type CheckoutStep = 'cart' | 'auth_choice' | 'verify_email' | 'details';
@@ -90,7 +90,25 @@ export const Cart = () => {
                   </div>
                   <div style={{ flex: 1 }}>
                     <div className="cart-item-header">
-                      <h3 className="cart-item-title">{item.product.name[language]}</h3>
+                      <h3 className="cart-item-title" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        {item.product.name[language]}
+                        {item.isFastCrafting && (
+                          <span style={{ 
+                            fontSize: '0.7rem', 
+                            padding: '0.2rem 0.5rem', 
+                            background: 'var(--color-accent)', 
+                            color: '#000', 
+                            borderRadius: '1rem',
+                            fontWeight: 800,
+                            textTransform: 'uppercase',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '2px'
+                          }}>
+                            <Zap size={12} fill="#000" /> {language === 'vi' ? 'Ưu tiên' : 'Priority'}
+                          </span>
+                        )}
+                      </h3>
                       <span className="cart-item-price">{formatPrice((item.product.price * parseSizePercentage(item.size) * (item.material === 'PETG' ? 1.2 : 1) * (item.isFastCrafting ? 1.1 : 1)) * item.quantity).current}</span>
                     </div>
                     <p className="cart-item-meta">Size: {item.size} &bull; {language === 'vi' ? 'Chất liệu' : 'Material'}: {item.material}{item.isFastCrafting ? ` \u2022 ${language === 'vi' ? 'Tăng tốc chế tác (+10%)' : 'Fast Crafting (+10%)'}` : ''}</p>
