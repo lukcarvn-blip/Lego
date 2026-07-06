@@ -626,9 +626,9 @@ export const ProductDetails = () => {
                           }}></div>
                           <span style={{ 
                             position: 'absolute', 
-                            bottom: `${tickHeight - 14}px`, 
+                            bottom: `${tickHeight - 10}px`, 
                             left: '22px', 
-                            fontSize: '1.5rem', 
+                            fontSize: '1rem', 
                             fontWeight: 700, 
                             color: '#fbbf24', 
                             transition: 'all 0.3s', 
