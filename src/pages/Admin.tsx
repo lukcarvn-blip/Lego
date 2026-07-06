@@ -827,12 +827,21 @@ export const Admin = () => {
               <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>🖼 Hình ảnh & Video</h3>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                 <div>
-                  <InputField label="URL Hình ảnh chính *">
-                    <input type="text" required placeholder="/images/product.png" value={editingProduct.images?.[0] || ''} onChange={e => setEditingProduct({...editingProduct, images: [e.target.value]})} style={inputStyle} />
+                  <InputField label="Danh sách URL Hình ảnh (mỗi dòng 1 link) *">
+                    <textarea 
+                      required 
+                      placeholder="/images/product.png&#10;/images/product-2.png" 
+                      rows={4} 
+                      value={(editingProduct.images || []).join('\n')} 
+                      onChange={e => setEditingProduct({...editingProduct, images: e.target.value.split('\n').map(s => s.trim()).filter(s => s)})} 
+                      style={{...inputStyle, resize: 'vertical'}} 
+                    />
                   </InputField>
-                  {editingProduct.images?.[0] && (
-                    <div style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)', display: 'flex', justifyContent: 'center' }}>
-                      <img src={editingProduct.images[0]} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ height: '100px', objectFit: 'contain' }} alt="preview" />
+                  {editingProduct.images && editingProduct.images.length > 0 && (
+                    <div className="hide-scrollbar" style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)', display: 'flex', gap: '0.5rem', overflowX: 'auto' }}>
+                      {editingProduct.images.map((img, idx) => (
+                        <img key={idx} src={img} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ height: '60px', width: '60px', objectFit: 'contain', flexShrink: 0, background: 'rgba(255,255,255,0.05)', borderRadius: '4px', padding: '2px' }} alt="preview" />
+                      ))}
                     </div>
                   )}
                 </div>

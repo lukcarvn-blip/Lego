@@ -82,8 +82,9 @@ export const Navbar = () => {
             {/* Left Nav / Action */}
             <div style={{ flex: 1, display: 'flex', gap: '2rem', justifyContent: 'flex-start', alignItems: 'center' }}>
               <div className="desktop-nav" style={{ display: 'flex', gap: '2rem' }}>
-                <Link to="/products" style={{ fontWeight: 800 }}>Tất Cả Sản Phẩm</Link>
-                <a href="/#collections" style={{ fontWeight: 800, textDecoration: 'none', color: 'inherit' }}>Bộ Sưu Tập</a>
+                <Link to="/partnership" style={{ fontWeight: 800, textTransform: 'uppercase' }}>
+                  {language === 'vi' ? 'Trở Thành Đối Tác' : 'Partnership'}
+                </Link>
               </div>
               <button 
                 className="mobile-action" 

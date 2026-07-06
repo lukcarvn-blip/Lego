@@ -16,6 +16,7 @@ import { Auth } from './pages/Auth';
 import { News } from './pages/News';
 import { NewsDetail } from './pages/NewsDetail';
 import { Technology } from './pages/Technology';
+import { Partnership } from './pages/Partnership';
 import { Profile } from './pages/Profile';
 import { NotFound } from './pages/NotFound';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -87,6 +88,7 @@ function AppContent() {
           <Route path="/news" element={<News />} />
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/technology" element={<Technology />} />
+          <Route path="/partnership" element={<Partnership />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
