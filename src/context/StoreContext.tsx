@@ -169,7 +169,19 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const [products, setProducts] = useState<Product[]>(mockProducts);
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>(() => {
+    try {
+      const saved = localStorage.getItem('legato_cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem('legato_cart', JSON.stringify(cart));
+  }, [cart]);
+
   const [orders, setOrders] = useState<Order[]>([]);
   const [blogPosts, setBlogPosts] = useState<BlogPost[]>(mockBlogPosts);
   const [appUsers, setAppUsers] = useState<AppUser[]>([]);
