@@ -8,15 +8,24 @@ export const NotFound = () => {
 
   return (
     <div style={{
-      minHeight: '80vh',
+      minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       padding: '2rem',
+      paddingTop: '6rem',
       textAlign: 'center',
       background: 'radial-gradient(circle at center, rgba(34,197,94,0.05) 0%, transparent 70%)'
     }}>
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 'clamp(1rem, 4vw, 3rem)',
+        marginBottom: '1rem',
+        flexWrap: 'wrap'
+      }}>
       {/* CSS Lego Sad Face */}
       <motion.div
         initial={{ y: -50, opacity: 0 }}
@@ -26,7 +35,7 @@ export const NotFound = () => {
           position: 'relative',
           width: '120px',
           height: '140px',
-          marginBottom: '2rem'
+          flexShrink: 0
         }}
       >
         {/* Lego Stud */}
@@ -105,6 +114,7 @@ export const NotFound = () => {
       >
         404
       </motion.h1>
+      </div>
       
       <motion.h2
         initial={{ opacity: 0, y: 10 }}
