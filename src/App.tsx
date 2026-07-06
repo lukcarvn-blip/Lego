@@ -17,6 +17,8 @@ import { News } from './pages/News';
 import { NewsDetail } from './pages/NewsDetail';
 import { Technology } from './pages/Technology';
 import { Profile } from './pages/Profile';
+import { NotFound } from './pages/NotFound';
+import { ErrorBoundary } from './components/ErrorBoundary';
 
 function AppContent() {
   const { pathname } = useLocation();
@@ -76,6 +78,7 @@ function AppContent() {
           <Route path="/news" element={<News />} />
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/technology" element={<Technology />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       {!isAdmin && <Footer />}
@@ -85,11 +88,13 @@ function AppContent() {
 
 function App() {
   return (
-    <StoreProvider>
-      <Router>
-        <AppContent />
-      </Router>
-    </StoreProvider>
+    <ErrorBoundary>
+      <StoreProvider>
+        <Router>
+          <AppContent />
+        </Router>
+      </StoreProvider>
+    </ErrorBoundary>
   );
 }
 
