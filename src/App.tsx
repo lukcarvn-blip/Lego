@@ -53,7 +53,7 @@ function AppContent() {
     }
   }, [settings.seoTitle, settings.seoDescription, settings.favicon]);
 
-  const isAdmin = pathname.startsWith('/admin');
+  const isAdmin = pathname.toLowerCase().startsWith('/admin');
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
