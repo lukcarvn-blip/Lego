@@ -201,7 +201,7 @@ export const Home = () => {
 
       {/* Video Shorts Slider */}
       <section className="container" style={{ paddingTop: '5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
           <motion.h2 {...headerAnimProps} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             <LegoHeadIcon size={36} />
             {language === 'vi' ? 'Video Thực Tế' : 'Product Shorts'}
@@ -254,7 +254,7 @@ export const Home = () => {
       {/* Categories Grid */}
       <motion.section 
         className="container" 
-        style={{ paddingTop: '6rem 1rem' }}
+        style={{ paddingTop: '5rem' }}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -299,8 +299,8 @@ export const Home = () => {
       </motion.section>
 
       {/* Featured Products Grid */}
-      <section className="container" style={{ paddingTop: '6rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'nowrap', gap: '0.5rem' }}>
+      <section className="container" style={{ paddingTop: '5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexWrap: 'nowrap', gap: '0.5rem' }}>
           <motion.h2 {...headerAnimProps} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, fontSize: 'clamp(1rem, 4vw, 1.75rem)' }}>
             <LegoHeadIcon size={28} />
             <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('featured_drops')}</span>
@@ -354,7 +354,7 @@ export const Home = () => {
       {/* Why LEGATO */}
       <motion.section 
         className="container" 
-        style={{ padding: '6rem 1rem' }}
+        style={{ paddingTop: '5rem' }}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
@@ -388,13 +388,13 @@ export const Home = () => {
       {/* Blog Section */}
       <motion.section 
         className="container" 
-        style={{ paddingTop: '6rem' }}
+        style={{ paddingTop: '5rem' }}
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6 }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', flexWrap: 'nowrap', gap: '0.5rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', flexWrap: 'nowrap', gap: '0.5rem' }}>
           <motion.h2 {...headerAnimProps} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, fontSize: 'clamp(1rem, 4vw, 1.75rem)' }}>
             <LegoHeadIcon size={28} />
             <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{t('latest_news')}</span>
