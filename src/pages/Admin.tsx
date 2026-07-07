@@ -94,17 +94,17 @@ const exportCSV = (orders: Order[]) => {
 
 const StatCard = ({ icon, label, value, color, sub }: { icon: React.ReactNode, label: string, value: string | number, color: string, sub?: string }) => (
   <div style={{
-    background: '#ffffff', border: `1px solid #e2e8f0`,
+    background: 'rgba(0,0,0,0.2)', border: `1px solid var(--glass-border)`,
     borderRadius: 'var(--radius-md)', padding: '1.25rem',
     display: 'flex', flexDirection: 'column', gap: '0.5rem',
     boxShadow: `0 2px 5px rgba(0,0,0,0.02)`
   }}>
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-      <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
+      <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</span>
       <span style={{ color, opacity: 0.8 }}>{icon}</span>
     </div>
-    <div style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a' }}>{value}</div>
-    {sub && <div style={{ fontSize: '0.75rem', color: '#10b981' }}>{sub}</div>}
+    <div style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-text)' }}>{value}</div>
+    {sub && <div style={{ fontSize: '0.75rem', color: 'var(--color-accent)' }}>{sub}</div>}
   </div>
 );
 
@@ -117,8 +117,8 @@ const InputField = ({ label, children }: { label: React.ReactNode, children: Rea
 
 const inputStyle: React.CSSProperties = {
   width: '100%', padding: '0.7rem 1rem', borderRadius: 'var(--radius-sm)',
-  background: '#ffffff', border: '1px solid #cbd5e1',
-  color: '#0f172a', outline: 'none', fontSize: '0.9rem'
+  background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)',
+  color: 'var(--color-text)', outline: 'none', fontSize: '0.9rem'
 };
 
 // ── Order Detail Modal ──────────────────────────────────────────────────────
