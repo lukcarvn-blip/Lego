@@ -377,7 +377,7 @@ export const Admin = () => {
   };
 
   return (
-    <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', background: '#f8fafc', color: '#0f172a' }}>
+    <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', background: 'var(--bg-dark, #050f05)', color: 'var(--color-text)' }}>
       {/* Sidebar */}
       <aside style={{
         width: sidebarOpen ? '220px' : '60px', flexShrink: 0,
