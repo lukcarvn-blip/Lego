@@ -908,7 +908,16 @@ export const Admin = () => {
                 </InputField>
 
                 <InputField label="Kích thước (LxWxH)">
-                  <input type="text" placeholder="vd: 15x15x20 cm" value={editingProduct.dimensions || ''} onChange={e => setEditingProduct({...editingProduct, dimensions: e.target.value})} style={inputStyle} />
+                  <select 
+                    value={editingProduct.dimensions || ''} 
+                    onChange={e => setEditingProduct({...editingProduct, dimensions: e.target.value})} 
+                    style={inputStyle}
+                  >
+                    <option value="">Tùy chỉnh (Nhập tay)...</option>
+                    <option value="300% (21cm)">300% (21cm)</option>
+                    <option value="400% (28cm)">400% (28cm)</option>
+                    <option value="1000% (70cm)">1000% (70cm)</option>
+                  </select>
                 </InputField>
 
                 <InputField label="Cân nặng">
