@@ -166,9 +166,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowGallery(true); setGalleryIndex(0); }}
                 transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 style={{ 
-                  width: '100%', height: '100%', objectFit: 'contain', 
-                  filter: 'drop-shadow(0 10px 16px rgba(0,0,0,0.5))', 
-                  marginTop: '10px', cursor: 'pointer' 
+                  width: '100%', height: '100%', objectFit: 'cover', 
+                  cursor: 'pointer' 
                 }} 
               />
             </motion.div>
@@ -313,7 +312,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               src={product.images?.[0] || product.image}
               onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }}
               alt={product.name[language as keyof typeof product.name]}
-              style={{ width: '80%', height: '80%', objectFit: 'contain', filter: 'drop-shadow(0 20px 20px rgba(0,0,0,0.8))', cursor: 'pointer' }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer' }}
             />
             
             {/* Quick Add To Cart - Cyber Slide-Up Style */}
