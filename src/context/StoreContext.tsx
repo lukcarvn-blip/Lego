@@ -218,12 +218,6 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
           mockProducts.forEach(async (p) => { await setDoc(doc(db, 'products', p.id), p); });
         } else {
           setProducts(data);
-          const existingIds = new Set(data.map(d => d.id));
-          mockProducts.forEach(async (p) => {
-            if (!existingIds.has(p.id) || p.category === '3d-printer') {
-              await setDoc(doc(db, 'products', p.id), p);
-            }
-          });
         }
         markLoaded();
       },

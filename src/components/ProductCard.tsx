@@ -182,16 +182,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               <div style={{ minWidth: 0, width: '100%' }}>
                 <p style={{ fontSize: 'clamp(0.65rem, 2vw, 0.75rem)', color: 'var(--color-text-muted)', fontWeight: 600, letterSpacing: '0.08em', marginBottom: '0.2rem' }}>{product.category?.toUpperCase()}</p>
                 <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block', minWidth: 0 }}>
-                  <h3 className="product-title" style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 600, fontSize: 'clamp(0.9rem, 3.5vw, 1.1rem)', marginBottom: '0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', transition: 'color 0.2s', width: '100%' }}>
+                  <h3 className="product-title" style={{ fontWeight: 600, fontSize: 'clamp(0.9rem, 3.5vw, 1.1rem)', marginBottom: '0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', transition: 'color 0.2s', width: '100%' }}>
                     {product.name[language as keyof typeof product.name]}
                   </h3>
                 </Link>
                 <div className="mobile-only" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
-                  <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)', color: formatPrice(product.price, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
+                  <span style={{ fontWeight: 700, fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)', color: formatPrice(product.price, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
                     {formatPrice(product.price, product.discountPercentage).current}
                   </span>
                   {formatPrice(product.price, product.discountPercentage).isOnSale && (
-                    <span style={{ fontFamily: "'Outfit', sans-serif", color: 'var(--color-text-muted)', textDecoration: 'line-through', fontSize: '0.6rem' }}>
+                    <span style={{ color: 'var(--color-text-muted)', textDecoration: 'line-through', fontSize: '0.6rem' }}>
                       {formatPrice(product.price, product.discountPercentage).original}
                     </span>
                   )}
@@ -351,11 +351,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: '0.85rem', color: formatPrice(product.price, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
+                <span style={{ fontWeight: 700, fontSize: '0.85rem', color: formatPrice(product.price, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
                   {formatPrice(product.price, product.discountPercentage).current}
                 </span>
                 {formatPrice(product.price, product.discountPercentage).isOnSale && (
-                  <span style={{ fontFamily: "'Outfit', sans-serif", color: 'rgba(255,255,255,0.6)', textDecoration: 'line-through', fontSize: '0.65rem' }}>
+                  <span style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'line-through', fontSize: '0.65rem' }}>
                     {formatPrice(product.price, product.discountPercentage).original}
                   </span>
                 )}
@@ -429,7 +429,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             </p>
             <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
               <h3 className="product-title" style={{ 
-                fontFamily: "'Outfit', sans-serif",
+                
                 fontWeight: 600, 
                 marginBottom: '0.5rem',
                 display: '-webkit-box',
@@ -449,11 +449,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             </Link>
             
             <div className="mobile-only" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
-              <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: '0.85rem', color: formatPrice(product.price, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
+              <span style={{ fontWeight: 700, fontSize: '0.85rem', color: formatPrice(product.price, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
                 {formatPrice(product.price, product.discountPercentage).current}
               </span>
               {formatPrice(product.price, product.discountPercentage).isOnSale && (
-                <span style={{ fontFamily: "'Outfit', sans-serif", color: 'var(--color-text-muted)', textDecoration: 'line-through', fontSize: '0.65rem' }}>
+                <span style={{ color: 'var(--color-text-muted)', textDecoration: 'line-through', fontSize: '0.65rem' }}>
                   {formatPrice(product.price, product.discountPercentage).original}
                 </span>
               )}

@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
-
 :root {
   --color-bg: #050d05; /* Deepest green/black */
   --color-surface: #0a1c0a;
@@ -44,18 +41,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-@font-face {
-  font-family: 'Minecraft';
-  src: url('/fonts/minecraft-f2d-v1-42.otf') format('opentype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 /* Typography */
-h1, h2, h3, h4, h5, h6, .minecraft-font {
-  font-family: 'Minecraft', -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  font-weight: normal;
-  letter-spacing: 0.05em;
+h1, h2, h3, h4, h5, h6 {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   text-transform: none;
 }
 

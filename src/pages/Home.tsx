@@ -134,7 +134,7 @@ export const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="minecraft-font hero-title"
+            className=" hero-title"
             style={{ lineHeight: 1.1, marginBottom: '1.5rem', fontWeight: 900 }}
           >
             {t('hero_title_1')} <br/>
@@ -301,7 +301,7 @@ export const Home = () => {
                     >
                       <img src={cat.img} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={cat.title} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'screen' }} />
                     </motion.div>
-                    <h3 className="minecraft-font" style={{ fontWeight: 500, textAlign: 'center', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-text)', fontSize: 'clamp(0.6rem, 1.2vw, 0.9rem)' }}>{cat.title}</h3>
+                    <h3 className="" style={{ fontWeight: 500, textAlign: 'center', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-text)', fontSize: 'clamp(0.6rem, 1.2vw, 0.9rem)' }}>{cat.title}</h3>
                   </div>
                 </Link>
               ))}
@@ -461,7 +461,7 @@ export const Home = () => {
                     <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(74,222,128,0.15) 0%, transparent 60%)', pointerEvents: 'none' }} />
                     <Zap size={48} color="var(--color-accent)" style={{ marginBottom: '1.5rem' }} className="flash-shake" />
                     <p style={{ color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '0.5rem' }}>⚡ Flash Deal</p>
-                    <h3 className="ad-title minecraft-font" style={{ fontWeight: 800, lineHeight: 1.3, marginBottom: '1rem', color: '#fff' }}>
+                    <h3 className="ad-title" style={{ fontWeight: 800, lineHeight: 1.3, marginBottom: '1rem', color: '#fff' }}>
                       {language === 'vi' ? 'Giảm 40%' : '40% OFF'}<br/>Marvel Sets
                     </h3>
                     <Link to="/category/superheroes?q=marvel" style={{ textDecoration: 'none', width: '100%', marginTop: 'auto' }}>
