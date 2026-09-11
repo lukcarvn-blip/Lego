@@ -1,4 +1,4 @@
-export type ProductSize = 'Size 300' | 'Size 400' | 'Size 1000';
+export type ProductSize = 'Size 300' | 'Size 400' | 'Size 1000' | 'Standard';
 
 export interface LocalizedString {
   vi: string;
@@ -191,5 +191,76 @@ export const mockProducts: Product[] = [
     },
     availableSizes: ["Size 300", "Size 400", "Size 1000"],
     stock: 3,
+  },
+  {
+    id: "p-printer-01",
+    sku: "PRT-BAMBU-X1C",
+    name: { 
+      vi: "Bambu Lab X1 Carbon Combo", 
+      en: "Bambu Lab X1 Carbon Combo" 
+    },
+    category: "3d-printer",
+    price: 1449.00,
+    rating: 4.9,
+    reviews: 320,
+    likes: 8500,
+    estimatedPrintTime: "Tốc độ in tối đa 500mm/s",
+    images: [
+      "/images/fdm_3d_printer_neon.png"
+    ],
+    description: {
+      vi: "Bambu Lab X1 Carbon Combo là siêu phẩm máy in 3D tốc độ cao, được trang bị hệ thống AMS cho phép in đa sắc màu lên đến 16 màu. Tích hợp AI Lidar quét lớp in đầu tiên cực kỳ chính xác. Phù hợp cho dân chuyên nghiệp và xưởng in nhỏ.",
+      en: "Bambu Lab X1 Carbon Combo is a high-speed 3D printer masterpiece, equipped with the AMS system allowing multi-color printing up to 16 colors. Features AI Lidar for precise first-layer scanning. Perfect for professionals and small print farms."
+    },
+    availableSizes: ["Standard"],
+    stock: 5,
+    saleType: 'FLASH_SALE',
+    discountPercentage: 10
+  },
+  {
+    id: "p-printer-02",
+    sku: "PRT-CREA-K1M",
+    name: { 
+      vi: "Creality K1 Max", 
+      en: "Creality K1 Max" 
+    },
+    category: "3d-printer",
+    price: 899.00,
+    rating: 4.8,
+    reviews: 215,
+    likes: 6200,
+    estimatedPrintTime: "Tốc độ in tối đa 600mm/s",
+    images: [
+      "/images/fdm_3d_printer_neon.png"
+    ],
+    description: {
+      vi: "K1 Max là cỗ máy in 3D CoreXY khổng lồ từ Creality với khổ in lớn 300x300x300mm. Tốc độ kinh hoàng 600mm/s và tích hợp sẵn camera AI theo dõi lỗi in theo thời gian thực.",
+      en: "The K1 Max is a giant CoreXY 3D printer from Creality with a large 300x300x300mm build volume. Blazing fast 600mm/s speed and built-in AI camera for real-time print failure detection."
+    },
+    availableSizes: ["Standard"],
+    stock: 12
+  },
+  {
+    id: "p-printer-03",
+    sku: "PRT-ULTI-S5",
+    name: { 
+      vi: "Ultimaker S5 (U1 Marker)", 
+      en: "Ultimaker S5 (U1 Marker)" 
+    },
+    category: "3d-printer",
+    price: 6950.00,
+    rating: 4.7,
+    reviews: 150,
+    likes: 4100,
+    estimatedPrintTime: "Chuyên dụng kỹ thuật cao",
+    images: [
+      "/images/fdm_3d_printer_neon.png"
+    ],
+    description: {
+      vi: "Ultimaker S5 là dòng máy in 3D công nghiệp để bàn, cung cấp độ tin cậy tuyệt đối và hiệu suất vượt trội. Hỗ trợ hàng loạt vật liệu kỹ thuật cao, hệ thống lõi đùn kép siêu thông minh.",
+      en: "The Ultimaker S5 is a desktop industrial 3D printer delivering ultimate reliability and performance. Supports a wide range of engineering materials with an ultra-smart dual extrusion system."
+    },
+    availableSizes: ["Standard"],
+    stock: 2
   }
 ];

@@ -8,7 +8,7 @@ export const Partnership = () => {
   return (
     <div style={{ paddingTop: '120px', paddingBottom: '4rem', minHeight: '100vh' }}>
       <div className="container" style={{ maxWidth: '800px' }}>
-        <h1 style={{ fontSize: '3rem', marginBottom: '1rem', fontWeight: 800 }}>
+        <h1 style={{ marginBottom: '1rem', fontWeight: 800 }}>
           {language === 'vi' ? 'Trở Thành Đối Tác' : 'Become a Partner'}
         </h1>
         <p style={{ fontSize: '1.2rem', color: 'var(--color-text-muted)', marginBottom: '2.5rem' }}>
@@ -16,7 +16,7 @@ export const Partnership = () => {
         </p>
 
         <div className="glass-panel" style={{ padding: '2.5rem' }}>
-          <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--color-accent)', fontWeight: 700 }}>
+          <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)', fontWeight: 700 }}>
             {language === 'vi' ? 'Mời Các Creator Hợp Tác' : 'Inviting Creators to Partner'}
           </h3>
           <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem', lineHeight: 1.8, fontSize: '1.1rem' }}>
@@ -26,7 +26,7 @@ export const Partnership = () => {
           </p>
 
           <div style={{ background: 'rgba(74, 222, 128, 0.1)', border: '1px solid rgba(74, 222, 128, 0.2)', padding: '1.5rem', borderRadius: 'var(--radius-md)', marginBottom: '2rem' }}>
-            <h4 style={{ fontSize: '1.25rem', color: 'var(--color-accent)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <h4 style={{ color: 'var(--color-accent)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <span style={{ fontSize: '1.5rem' }}>💰</span> Mức Lợi Nhuận
             </h4>
             <p style={{ fontSize: '1.1rem', fontWeight: 600 }}>
@@ -34,7 +34,7 @@ export const Partnership = () => {
             </p>
           </div>
 
-          <h4 style={{ fontSize: '1.25rem', marginBottom: '1rem', fontWeight: 700 }}>
+          <h4 style={{ marginBottom: '1rem', fontWeight: 700 }}>
             {language === 'vi' ? 'Liên hệ với chúng tôi để bắt đầu' : 'Contact us to get started'}
           </h4>
           
@@ -45,7 +45,7 @@ export const Partnership = () => {
               </div>
               <div>
                 <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Email</div>
-                <a href="mailto:legatovn@gmail.com" style={{ color: 'var(--color-text)', fontWeight: 600, textDecoration: 'none' }}>legatovn@gmail.com</a>
+                <a href="mailto:legatorvn@gmail.com" style={{ color: 'var(--color-text)', fontWeight: 600, textDecoration: 'none' }}>legatorvn@gmail.com</a>
               </div>
             </div>
             

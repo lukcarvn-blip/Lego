@@ -48,8 +48,8 @@ export const ContactUs = () => {
             <h3 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--color-accent)' }}>
               {language === 'vi' ? 'Thông tin khác' : 'Other Info'}
             </h3>
-            <p style={{ color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Email: support@logestore.com</p>
-            <p style={{ color: 'var(--color-text-muted)' }}>Hotline: +84 123 456 789</p>
+            <p style={{ color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>Email: legatorvn@gmail.com</p>
+            <p style={{ color: 'var(--color-text-muted)' }}>Hotline: 0586339686</p>
           </div>
         </div>
       </div>

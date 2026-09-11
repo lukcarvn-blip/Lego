@@ -1,10 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye } from 'lucide-react';
+import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X } from 'lucide-react';
 import { mockProducts, type ProductSize } from '../data/mockProducts';
 import { useStore, type ProductMaterial } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
+import { LegoHeadIcon } from '../components/LegoHeadIcon';
 
 const getSizeDetails = (sizeStr: string) => {
   if (sizeStr.includes('300')) return { label: '300%', height: '21 cm', scale: 0.6 };
@@ -173,10 +174,14 @@ export const ProductDetails = () => {
   const [isFastCrafting, setIsFastCrafting] = useState(false);
   const [isCartExpanded, setIsCartExpanded] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
+      const mobile = window.innerWidth < 1024;
+      setIsMobile(mobile);
+      if (!mobile) {
         setIsCartExpanded(true);
       }
     };
@@ -278,49 +283,118 @@ export const ProductDetails = () => {
               </div>
             )}
 
-            <AnimatePresence mode="popLayout">
-              <motion.img 
-                key={activeImageIndex}
-                initial={{ opacity: 0, y: slideDirection * 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -slideDirection * 40 }}
-                transition={{ duration: 0.3 }}
-                src={displayImages[activeImageIndex] || displayImages[0]} 
-                alt={product.name[language as keyof typeof product.name]} 
-                style={{ 
-                  width: '100%', 
-                  height: '100%', 
-                  objectFit: 'contain',
-                  filter: 'drop-shadow(0 30px 30px rgba(0,0,0,0.6))',
-                  transform: 'scale(1.15)', // slightly enlarge to fill space
-                  position: 'absolute'
-                }} 
-              />
-            </AnimatePresence>
-
-            {/* Vertical Slider Counter */}
-            {displayImages.length > 1 && (
-              <div style={{
-                position: 'absolute', right: '1.5rem', top: '50%', transform: 'translateY(-50%)',
-                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem',
-                zIndex: 30, background: 'rgba(0,0,0,0.4)', padding: '1rem 0.5rem',
-                borderRadius: '100px', border: '1px solid var(--glass-border)',
-                backdropFilter: 'blur(10px)'
-              }}>
-                <button onClick={prevImage} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'} onMouseLeave={e => e.currentTarget.style.color = '#fff'}>
-                  <ChevronUp size={24} />
-                </button>
-                <div style={{ 
-                  fontFamily: 'monospace', fontWeight: 600, fontSize: '0.9rem', 
-                  color: 'var(--color-accent)', writingMode: 'vertical-rl', transform: 'rotate(180deg)',
-                  letterSpacing: '2px', padding: '0.5rem 0'
-                }}>
-                  {(activeImageIndex + 1).toString().padStart(2, '0')} / {displayImages.length.toString().padStart(2, '0')}
+            {isMobile ? (
+              <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                {/* Previous Image */}
+                <motion.img 
+                  src={displayImages[(activeImageIndex - 1 + displayImages.length) % displayImages.length]}
+                  style={{ position: 'absolute', left: '-50%', width: '70%', height: '70%', objectFit: 'contain', filter: 'blur(5px)', opacity: 0.4, zIndex: 1, pointerEvents: 'none' }}
+                />
+                {/* Next Image */}
+                <motion.img 
+                  src={displayImages[(activeImageIndex + 1) % displayImages.length]}
+                  style={{ position: 'absolute', right: '-50%', width: '70%', height: '70%', objectFit: 'contain', filter: 'blur(5px)', opacity: 0.4, zIndex: 1, pointerEvents: 'none' }}
+                />
+                {/* Active Image */}
+                <AnimatePresence mode="popLayout">
+                  <motion.img 
+                    key={activeImageIndex}
+                    drag="x"
+                    dragConstraints={{ left: 0, right: 0 }}
+                    dragElastic={0.2}
+                    onDragEnd={(e, { offset, velocity }) => {
+                      const swipe = Math.abs(offset.x) * velocity.x;
+                      if (swipe < -100 || offset.x < -100) nextImage();
+                      else if (swipe > 100 || offset.x > 100) prevImage();
+                    }}
+                    initial={{ opacity: 0, scale: 0.8, x: slideDirection * 100 }}
+                    animate={{ opacity: 1, scale: 1.1, x: 0 }}
+                    exit={{ opacity: 0, scale: 0.8, x: -slideDirection * 100 }}
+                    transition={{ duration: 0.3 }}
+                    src={displayImages[activeImageIndex]} 
+                    alt={product.name[language as keyof typeof product.name]} 
+                    style={{ 
+                      width: '80%', 
+                      height: '80%', 
+                      objectFit: 'contain',
+                      filter: 'drop-shadow(0 20px 20px rgba(0,0,0,0.5))',
+                      position: 'absolute',
+                      zIndex: 10,
+                      cursor: 'grab'
+                    }} 
+                    whileTap={{ cursor: 'grabbing' }}
+                  />
+                </AnimatePresence>
+                
+                {/* Mobile indicators */}
+                <div style={{ position: 'absolute', bottom: '1rem', display: 'flex', gap: '6px', zIndex: 20 }}>
+                  {displayImages.map((_, idx) => (
+                    <div key={idx} style={{ width: idx === activeImageIndex ? '16px' : '6px', height: '6px', borderRadius: '3px', background: idx === activeImageIndex ? 'var(--color-accent)' : 'rgba(255,255,255,0.3)', transition: 'all 0.3s' }} />
+                  ))}
                 </div>
-                <button onClick={nextImage} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'} onMouseLeave={e => e.currentTarget.style.color = '#fff'}>
-                  <ChevronDown size={24} />
-                </button>
               </div>
+            ) : (
+              <>
+                <AnimatePresence mode="popLayout">
+                  <motion.img 
+                    key={activeImageIndex}
+                    initial={{ opacity: 0, x: slideDirection * 40 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -slideDirection * 40 }}
+                    transition={{ duration: 0.3 }}
+                    src={displayImages[activeImageIndex] || displayImages[0]} 
+                    alt={product.name[language as keyof typeof product.name]} 
+                    style={{ 
+                      width: '100%', 
+                      height: '100%', 
+                      objectFit: 'contain',
+                      filter: 'drop-shadow(0 30px 30px rgba(0,0,0,0.6))',
+                      transform: 'scale(1.15)', // slightly enlarge to fill space
+                      position: 'absolute'
+                    }} 
+                  />
+                </AnimatePresence>
+
+                {/* Horizontal Slider Counter (PC Only) */}
+                {displayImages.length > 1 && (
+                  <div style={{
+                    position: 'absolute', bottom: '1.5rem', left: '50%', transform: 'translateX(-50%)',
+                    display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '1rem',
+                    zIndex: 30, background: 'rgba(0,0,0,0.4)', padding: '0.5rem 1rem',
+                    borderRadius: '100px', border: '1px solid var(--glass-border)',
+                    backdropFilter: 'blur(10px)'
+                  }}>
+                    <button onClick={prevImage} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'} onMouseLeave={e => e.currentTarget.style.color = '#fff'}>
+                      <ChevronLeft size={24} />
+                    </button>
+                    <div style={{ 
+                      fontFamily: 'monospace', fontWeight: 600, fontSize: '1rem', 
+                      color: 'var(--color-accent)', letterSpacing: '2px', padding: '0 0.5rem'
+                    }}>
+                      {(activeImageIndex + 1).toString().padStart(2, '0')} / {displayImages.length.toString().padStart(2, '0')}
+                    </div>
+                    <button onClick={nextImage} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '0.25rem', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = 'var(--color-accent)'} onMouseLeave={e => e.currentTarget.style.color = '#fff'}>
+                      <ChevronRight size={24} />
+                    </button>
+                  </div>
+                )}
+                
+                {/* Maximize Button */}
+                <button 
+                  onClick={() => setIsLightboxOpen(true)}
+                  style={{
+                    position: 'absolute', top: '1.5rem', right: '1.5rem', zIndex: 30,
+                    background: 'rgba(0,0,0,0.4)', color: '#fff', border: '1px solid var(--glass-border)',
+                    borderRadius: '50%', width: '44px', height: '44px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.2s'
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-accent)'; e.currentTarget.style.color = '#000'; }}
+                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.4)'; e.currentTarget.style.color = '#fff'; }}
+                >
+                  <Maximize size={20} />
+                </button>
+              </>
             )}
           </motion.div>
           
@@ -851,16 +925,19 @@ export const ProductDetails = () => {
         {/* Related Products */}
         <div style={{ position: 'relative', overflow: 'hidden' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
-            <h3 style={{ fontWeight: 700 }}>
+            <h3 style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <LegoHeadIcon size={24} />
               {language === 'vi' ? 'Sản Phẩm Liên Quan' : 'Related Products'}
             </h3>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button onClick={() => scrollSlider(relatedRef, 'left')}
-                style={{ padding: '0.4rem', background: 'rgba(255,255,255,0.07)', borderRadius: '50%', color: 'var(--color-text-muted)', border: '1px solid var(--glass-border)', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                className="chamfer-btn"
+                style={{ padding: '0.4rem', background: 'rgba(255,255,255,0.07)', color: 'var(--color-text-muted)', border: '1px solid var(--glass-border)', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <ChevronLeft size={20} />
               </button>
               <button onClick={() => scrollSlider(relatedRef, 'right')}
-                style={{ padding: '0.4rem', background: 'rgba(255,255,255,0.07)', borderRadius: '50%', color: 'var(--color-text-muted)', border: '1px solid var(--glass-border)', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                className="chamfer-btn"
+                style={{ padding: '0.4rem', background: 'rgba(255,255,255,0.07)', color: 'var(--color-text-muted)', border: '1px solid var(--glass-border)', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <ChevronRight size={20} />
               </button>
             </div>
@@ -887,16 +964,19 @@ export const ProductDetails = () => {
         {/* Best Sellers */}
         <div style={{ position: 'relative', overflow: 'hidden' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
-            <h3 style={{ fontWeight: 700 }}>
+            <h3 style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <LegoHeadIcon size={24} />
               {language === 'vi' ? 'Sản Phẩm Bán Chạy' : 'Best Sellers'}
             </h3>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button onClick={() => scrollSlider(bestSellersRef, 'left')}
-                style={{ padding: '0.4rem', background: 'rgba(255,255,255,0.07)', borderRadius: '50%', color: 'var(--color-text-muted)', border: '1px solid var(--glass-border)', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                className="chamfer-btn"
+                style={{ padding: '0.4rem', background: 'rgba(255,255,255,0.07)', color: 'var(--color-text-muted)', border: '1px solid var(--glass-border)', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <ChevronLeft size={20} />
               </button>
               <button onClick={() => scrollSlider(bestSellersRef, 'right')}
-                style={{ padding: '0.4rem', background: 'rgba(255,255,255,0.07)', borderRadius: '50%', color: 'var(--color-text-muted)', border: '1px solid var(--glass-border)', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                className="chamfer-btn"
+                style={{ padding: '0.4rem', background: 'rgba(255,255,255,0.07)', color: 'var(--color-text-muted)', border: '1px solid var(--glass-border)', cursor: 'pointer', transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <ChevronRight size={20} />
               </button>
             </div>
@@ -913,7 +993,7 @@ export const ProductDetails = () => {
               paddingBottom: '1rem'
             }}
           >
-            {[...mockProducts].sort((a, b) => b.likes - a.likes).filter(p => p.id !== product.id).slice(0, 10).map((p, idx) => (
+            {[...mockProducts].sort((a, b) => b.likes - a.likes).filter(p => (product.category === '3d-printer' ? p.category === '3d-printer' : p.category !== '3d-printer') && p.id !== product.id).slice(0, 10).map((p, idx) => (
               <div key={p.id} style={{ flex: '0 0 calc(50% - 0.5rem)', width: 'calc(50% - 0.5rem)', scrollSnapAlign: 'start' }}>
                 <ProductCard product={p} idx={idx} listMode={false} />
               </div>
@@ -1029,6 +1109,73 @@ export const ProductDetails = () => {
           }
         }
       `}</style>
+      <AnimatePresence>
+        {isLightboxOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+              background: 'rgba(0,0,0,0.95)', zIndex: 1000,
+              display: 'flex', flexDirection: 'column',
+              padding: '2rem', backdropFilter: 'blur(10px)'
+            }}
+          >
+            <button 
+              onClick={() => setIsLightboxOpen(false)}
+              style={{ position: 'absolute', top: '2rem', right: '2rem', background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', zIndex: 1010 }}
+            >
+              <X size={32} />
+            </button>
+            <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', width: '100%', height: '100%' }}>
+              <AnimatePresence mode="popLayout">
+                <motion.img 
+                  key={activeImageIndex}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                  src={displayImages[activeImageIndex]} 
+                  style={{ maxWidth: '100%', maxHeight: '75vh', objectFit: 'contain' }} 
+                  alt="large preview" 
+                />
+              </AnimatePresence>
+              
+              {/* Prev / Next controls for Lightbox */}
+              <button onClick={(e) => { e.stopPropagation(); prevImage(); }} className="chamfer-btn" style={{ position: 'absolute', left: '2rem', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}>
+                <ChevronLeft size={32} />
+              </button>
+              <button onClick={(e) => { e.stopPropagation(); nextImage(); }} className="chamfer-btn" style={{ position: 'absolute', right: '2rem', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', width: '60px', height: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}>
+                <ChevronRight size={32} />
+              </button>
+            </div>
+            
+            {/* Thumbnails */}
+            <div className="hide-scrollbar" style={{ display: 'flex', gap: '1rem', overflowX: 'auto', padding: '1rem', justifyContent: 'center', marginTop: 'auto' }}>
+              {displayImages.map((img, idx) => (
+                <img 
+                  key={idx} 
+                  src={img} 
+                  onClick={() => {
+                    setSlideDirection(idx > activeImageIndex ? 1 : -1);
+                    setActiveImageIndex(idx);
+                  }}
+                  style={{ 
+                    height: '80px', width: '80px', objectFit: 'contain', cursor: 'pointer',
+                    background: 'rgba(255,255,255,0.05)', borderRadius: '8px', padding: '4px',
+                    border: idx === activeImageIndex ? '2px solid var(--color-accent)' : '2px solid transparent',
+                    opacity: idx === activeImageIndex ? 1 : 0.5,
+                    transition: 'all 0.2s'
+                  }} 
+                  alt={`thumbnail ${idx}`} 
+                />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </div>
   );
 };

@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { StoreProvider, useStore } from './context/StoreContext';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import { Home } from './pages/Home';
 import { Products } from './pages/Products';
 import { ProductDetails } from './pages/ProductDetails';
+import { PrinterDetails } from './pages/PrinterDetails';
 import { FAQ } from './pages/FAQ';
 import { ShippingPolicy } from './pages/ShippingPolicy';
 import { Returns } from './pages/Returns';
 import { ContactUs } from './pages/ContactUs';
 import { Cart } from './pages/Cart';
 import { Admin } from './pages/Admin';
+import { CheckoutSuccess } from './pages/CheckoutSuccess';
 import { Auth } from './pages/Auth';
 import { News } from './pages/News';
 import { NewsDetail } from './pages/NewsDetail';
@@ -26,13 +29,13 @@ import { LoadingScreen } from './components/LoadingScreen';
 
 function AppContent() {
   const { pathname } = useLocation();
-  const { settings } = useStore();
-  const [isLoading, setIsLoading] = useState(false);
+  const { settings, isDataLoading, dataError } = useStore();
+  const [isNavLoading, setIsNavLoading] = useState(false);
   
   useEffect(() => {
-    setIsLoading(true);
+    setIsNavLoading(true);
     window.scrollTo(0, 0);
-    const timer = setTimeout(() => setIsLoading(false), 1200);
+    const timer = setTimeout(() => setIsNavLoading(false), 1200);
     return () => clearTimeout(timer);
   }, [pathname]);
 
@@ -65,21 +68,50 @@ function AppContent() {
 
   const isAdmin = pathname.toLowerCase().startsWith('/hoang');
 
+  // Show full-page spinner only on first data load
+  if (isDataLoading) {
+    return <LoadingScreen isVisible={true} />;
+  }
+
   return (
     <>
-      <LoadingScreen isVisible={isLoading} />
-      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', opacity: isLoading ? 0 : 1, transition: 'opacity 0.3s ease-in-out' }}>
+      <LoadingScreen isVisible={isNavLoading} />
+
+      {/* Firebase error banner */}
+      <AnimatePresence>
+        {dataError && (
+          <motion.div
+            initial={{ y: -60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -60, opacity: 0 }}
+            style={{
+              position: 'fixed', top: 0, left: 0, right: 0, zIndex: 99999,
+              background: 'rgba(239,68,68,0.95)', color: '#fff',
+              padding: '0.75rem 1.5rem', textAlign: 'center',
+              fontWeight: 700, fontSize: '0.9rem',
+              backdropFilter: 'blur(8px)'
+            }}
+          >
+            ⚠️ {dataError} — Đang thử kết nối lại với Firebase...
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', opacity: isNavLoading ? 0 : 1, transition: 'opacity 0.3s ease-in-out' }}>
         {!isAdmin && <Navbar />}
         <main style={{ flex: 1 }}>
+
           <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:categoryName" element={<Products />} />
           <Route path="/category/:categoryName" element={<Products />} />
           <Route path="/product/:id" element={<ProductDetails />} />
+          <Route path="/printer/:id" element={<PrinterDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/checkout/success/:orderId" element={<CheckoutSuccess />} />
           <Route path="/hoang" element={<Admin />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/shipping-policy" element={<ShippingPolicy />} />

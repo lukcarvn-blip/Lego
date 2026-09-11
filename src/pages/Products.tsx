@@ -3,7 +3,7 @@ import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
 import { Filter, ChevronLeft, ChevronRight, Zap, Sparkles, LayoutGrid, LayoutList } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { LegoHeadIcon } from '../components/LegoHeadIcon';
 
 
@@ -22,8 +22,10 @@ export const Products = () => {
   const [sortBy, setSortBy] = useState<string>('newest');
   const [currentPage, setCurrentPage] = useState(1);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [itemsPerPage, setItemsPerPage] = useState(DEFAULT_ITEMS_PER_PAGE);
   const [isGridLoading, setIsGridLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
+  const [cols, setCols] = useState(3);
+  const [showMobileFilter, setShowMobileFilter] = useState(false);
 
   const colScrollRef = useRef<HTMLDivElement>(null);
   const scrollCol = (dir: 'left' | 'right') => {
@@ -33,23 +35,24 @@ export const Products = () => {
     }
   };
 
-  // Sync state if URL changes and handle window resize for items per page
+  // Sync state if URL changes and handle window resize for columns
   useEffect(() => {
-    const updateItemsPerPage = () => {
+    const updateLayout = () => {
       if (typeof window !== 'undefined') {
-        if (window.innerWidth >= 640 && window.innerWidth < 1280) {
-          setItemsPerPage(6); // Tablet: 3 columns, 2 rows
-        } else if (window.innerWidth >= 1280) {
-          setItemsPerPage(8); // Desktop: 4 columns, 2 rows
+        setIsMobile(window.innerWidth <= 768);
+        if (window.innerWidth >= 1280) {
+          setCols(4);
+        } else if (window.innerWidth >= 640) {
+          setCols(3);
         } else {
-          setItemsPerPage(6); // Mobile: 2 columns, 3 rows
+          setCols(2);
         }
       }
     };
     
-    updateItemsPerPage();
-    window.addEventListener('resize', updateItemsPerPage);
-    return () => window.removeEventListener('resize', updateItemsPerPage);
+    updateLayout();
+    window.addEventListener('resize', updateLayout);
+    return () => window.removeEventListener('resize', updateLayout);
   }, []);
   useEffect(() => {
     if (categoryName) {
@@ -74,7 +77,7 @@ export const Products = () => {
 
   // Derived state: Filtered & Sorted products
   const filteredProducts = useMemo(() => {
-    let result = [...products];
+    let result = products.filter(p => p.category !== '3d-printer');
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -111,13 +114,19 @@ export const Products = () => {
     return result;
   }, [products, activeCategory, activeSaleType, sortBy]);
 
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  // Page 1 = (cols * 3) items shown (2 rows + ad slot + 1 more row = 5 on mobile, 7 on tablet, 9 on desktop)
+  // But the ad takes 1 slot visually so we fetch cols*3 - 1 actual products
+  const firstPageItems = cols * 3 - 1; // 5 on mobile (2 cols), 8 on tablet (3 cols), 11 on desktop (4 cols)
+  const subsequentPageItems = cols * 2; // 4 on mobile, 6 on tablet, 8 on desktop
+  
+  const totalPages = 1 + Math.ceil(Math.max(0, filteredProducts.length - firstPageItems) / subsequentPageItems);
   
   // Pagination
   const currentProducts = useMemo(() => {
-    const start = (currentPage - 1) * itemsPerPage;
-    return filteredProducts.slice(start, start + itemsPerPage);
-  }, [filteredProducts, currentPage, itemsPerPage]);
+    const start = currentPage === 1 ? 0 : firstPageItems + (currentPage - 2) * subsequentPageItems;
+    const count = currentPage === 1 ? firstPageItems : subsequentPageItems;
+    return filteredProducts.slice(start, start + count);
+  }, [filteredProducts, currentPage, cols]);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -131,11 +140,6 @@ export const Products = () => {
   const handleCategoryChange = (cat: string) => {
     setActiveCategory(cat);
     setCurrentPage(1);
-    if (cat === 'All') {
-      navigate('/products');
-    } else {
-      navigate(`/products/${cat}`);
-    }
   };
 
 
@@ -169,13 +173,15 @@ export const Products = () => {
                 <span style={{ display: 'flex', gap: '0.35rem', flexShrink: 0 }}>
                   <button
                     onClick={() => scrollCol('left')}
-                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-text)' }}
+                    className="chamfer-btn"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-text)' }}
                   >
                     <ChevronLeft size={16} />
                   </button>
                   <button
                     onClick={() => scrollCol('right')}
-                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-text)' }}
+                    className="chamfer-btn"
+                    style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--color-text)' }}
                   >
                     <ChevronRight size={16} />
                   </button>
@@ -236,80 +242,116 @@ export const Products = () => {
 
             <div style={{ height: '1px', background: 'var(--glass-border)', width: '100%' }} />
 
-            {/* Bottom Row: Sort & Display Controls */}
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center' }}>
-              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                <Filter size={20} color="var(--color-text-muted)" />
-                {['All', 'Superheroes', 'Sci-Fi', 'Classic'].map(cat => (
-                  <button
-                    key={cat}
-                    onClick={() => handleCategoryChange(cat)}
-                    style={{
-                      padding: '0.5rem 1rem',
-                      borderRadius: '20px',
-                      background: activeCategory === cat ? 'var(--color-accent)' : 'rgba(255,255,255,0.1)',
-                      color: activeCategory === cat ? '#000' : 'var(--color-text)',
-                      fontWeight: activeCategory === cat ? 700 : 500,
-                      border: 'none',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s'
-                    }}
-                  >
-                    {cat === 'All' ? (language === 'vi' ? 'Tất cả' : 'All') : cat}
-                  </button>
-                ))}
-                
-                <select 
-                  value={activeSaleType} 
-                  onChange={(e) => { setActiveSaleType(e.target.value); setCurrentPage(1); }}
-                  style={{
-                    background: 'rgba(0,0,0,0.3)',
-                    border: '1px solid var(--glass-border)',
-                    color: 'var(--color-text)',
-                    padding: '0.5rem 1rem',
-                    borderRadius: 'var(--radius-sm)',
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="All">{language === 'vi' ? 'Loại Sale' : 'Sale Type'}</option>
-                  <option value="Sale">Sale</option>
-                  <option value="Flash Sale">Flash Sale</option>
-                </select>
+            {/* Filter + View Controls Row */}
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', width: '100%' }}>
+              {/* Filter Toggle Icon (all screens) */}
+              <button 
+                onClick={() => setShowMobileFilter(!showMobileFilter)}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  padding: '0.5rem 0.75rem',
+                  background: showMobileFilter ? 'var(--color-accent)' : 'rgba(255,255,255,0.07)',
+                  borderRadius: 'var(--radius-sm)',
+                  border: '1px solid var(--glass-border)',
+                  color: showMobileFilter ? '#000' : 'var(--color-text-muted)',
+                  cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0
+                }}
+              >
+                <Filter size={18} />
+              </button>
 
-                <select 
-                  value={sortBy} 
-                  onChange={(e) => { setSortBy(e.target.value); setCurrentPage(1); }}
-                  style={{
-                    background: 'rgba(0,0,0,0.3)',
-                    border: '1px solid var(--glass-border)',
-                    color: 'var(--color-text)',
-                    padding: '0.5rem 1rem',
-                    borderRadius: 'var(--radius-sm)',
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="newest">{language === 'vi' ? 'Mới nhất' : 'Newest'}</option>
-                  <option value="price_asc">{language === 'vi' ? 'Giá: Thấp đến Cao' : 'Price: Low to High'}</option>
-                  <option value="price_desc">{language === 'vi' ? 'Giá: Cao đến Thấp' : 'Price: High to Low'}</option>
-                </select>
-              </div>
-
-              {/* View Mode Toggle - mobile only */}
-              <div className="view-toggle-mobile" style={{ display: 'flex', background: 'rgba(255,255,255,0.07)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--glass-border)' }}>
-                <button
-                  onClick={() => setViewMode('grid')}
-                  title="Grid view"
+              {/* View Mode Toggle */}
+              <div style={{ display: 'flex', background: 'rgba(255,255,255,0.07)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', border: '1px solid var(--glass-border)', flexShrink: 0 }}>
+                <button onClick={() => setViewMode('grid')} title="Grid view"
                   style={{ padding: '0.5rem 0.75rem', background: viewMode === 'grid' ? 'var(--color-accent)' : 'transparent', color: viewMode === 'grid' ? '#000' : 'var(--color-text-muted)', transition: 'all 0.2s', border: 'none', cursor: 'pointer' }}
                 ><LayoutGrid size={18} /></button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  title="List view"
+                <button onClick={() => setViewMode('list')} title="List view"
                   style={{ padding: '0.5rem 0.75rem', background: viewMode === 'list' ? 'var(--color-accent)' : 'transparent', color: viewMode === 'list' ? '#000' : 'var(--color-text-muted)', transition: 'all 0.2s', border: 'none', cursor: 'pointer' }}
                 ><LayoutList size={18} /></button>
               </div>
             </div>
+
+            {/* Expandable Filter Panel — 50/50 layout */}
+            <AnimatePresence>
+              {showMobileFilter && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  style={{ overflow: 'hidden', width: '100%' }}
+                >
+                  <div style={{ display: 'flex', gap: '0.75rem', width: '100%', paddingTop: '0.5rem' }}>
+                    {/* Tags — 70% on PC, 60% on tablet, 50% on mobile */}
+                    <div style={{ flex: cols >= 4 ? '7 1 0%' : (cols === 3 ? '6 1 0%' : '5 1 0%'), display: 'flex', gap: '0.4rem', flexWrap: 'wrap', minWidth: 0 }}>
+                      {['All', 'Superheroes', 'Sci-Fi', 'Classic'].map(cat => (
+                        <button
+                          key={cat}
+                          onClick={() => handleCategoryChange(cat)}
+                          style={{
+                            padding: '0.45rem 0.8rem',
+                            borderRadius: '20px',
+                            background: activeCategory === cat ? 'var(--color-accent)' : 'rgba(255,255,255,0.1)',
+                            color: activeCategory === cat ? '#000' : 'var(--color-text)',
+                            fontWeight: activeCategory === cat ? 700 : 500,
+                            border: 'none',
+                            cursor: 'pointer',
+                            flex: '1 1 auto',
+                            fontSize: '0.85rem',
+                            transition: 'all 0.2s'
+                          }}
+                        >
+                          {cat === 'All' ? (language === 'vi' ? 'Tất cả' : 'All') : cat}
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Selects — 30% on PC, 40% on tablet, 50% on mobile */}
+                    <div style={{ flex: cols >= 4 ? '3 1 0%' : (cols === 3 ? '4 1 0%' : '5 1 0%'), display: 'flex', flexDirection: 'column', gap: '0.4rem', minWidth: 0 }}>
+                      <select 
+                        value={activeSaleType} 
+                        onChange={(e) => { setActiveSaleType(e.target.value); setCurrentPage(1); }}
+                        style={{
+                          flex: 1,
+                          background: 'rgba(0,0,0,0.3)',
+                          border: '1px solid var(--glass-border)',
+                          color: 'var(--color-text)',
+                          padding: '0.45rem 0.75rem',
+                          borderRadius: 'var(--radius-sm)',
+                          outline: 'none',
+                          cursor: 'pointer',
+                          fontSize: '0.85rem'
+                        }}
+                      >
+                        <option value="All">{language === 'vi' ? 'Loại Sale' : 'Sale Type'}</option>
+                        <option value="Sale">Sale</option>
+                        <option value="Flash Sale">Flash Sale</option>
+                      </select>
+
+                      <select 
+                        value={sortBy} 
+                        onChange={(e) => { setSortBy(e.target.value); setCurrentPage(1); }}
+                        style={{
+                          flex: 1,
+                          background: 'rgba(0,0,0,0.3)',
+                          border: '1px solid var(--glass-border)',
+                          color: 'var(--color-text)',
+                          padding: '0.45rem 0.75rem',
+                          borderRadius: 'var(--radius-sm)',
+                          outline: 'none',
+                          cursor: 'pointer',
+                          fontSize: '0.85rem'
+                        }}
+                      >
+                        <option value="newest">{language === 'vi' ? 'Mới nhất' : 'Newest'}</option>
+                        <option value="price_asc">{language === 'vi' ? 'Giá: Thấp đến Cao' : 'Price: Low to High'}</option>
+                        <option value="price_desc">{language === 'vi' ? 'Giá: Cao đến Thấp' : 'Price: High to Low'}</option>
+                      </select>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
 
@@ -337,8 +379,8 @@ export const Products = () => {
         ) : (
           <div className={viewMode === 'list' ? 'product-list' : 'product-grid'}>
             {currentProducts.map((product, idx) => {
-              const showAd1 = idx === 3 && viewMode === 'grid';
-              const showAd2 = idx === 7 && viewMode === 'grid';
+              // Ad appears after the first full row (cols items), pushing remaining products down
+              const showAd1 = idx === (cols - 1) && viewMode === 'grid' && currentPage === 1;
 
               return (
                 <React.Fragment key={product.id}>
@@ -365,34 +407,6 @@ export const Products = () => {
                       <Link to="/category/superheroes?q=marvel" style={{ textDecoration: 'none', width: '100%', marginTop: 'auto' }}>
                         <motion.button whileHover={{ scale: 1.05 }} style={{ width: '100%', background: 'var(--color-accent)', color: '#000', border: 'none', borderRadius: 'var(--radius-md)', padding: '0.8rem', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>
                           {language === 'vi' ? 'Mua Ngay' : 'Shop Now'}
-                        </motion.button>
-                      </Link>
-                    </div>
-                  )}
-
-                  {showAd2 && (
-                    <div className="product-card" style={{
-                      background: 'linear-gradient(135deg, #12080d 0%, #2a0a1a 100%)',
-                      border: '1px solid rgba(233,30,140,0.3)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      textAlign: 'center',
-                      padding: '2rem',
-                      position: 'relative',
-                      boxShadow: '0 10px 30px rgba(233,30,140,0.1)',
-                      height: '100%'
-                    }}>
-                      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(233,30,140,0.15) 0%, transparent 60%)', pointerEvents: 'none' }} />
-                      <Sparkles size={48} color="#e91e8c" style={{ marginBottom: '1.5rem' }} />
-                      <p style={{ color: '#e91e8c', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '0.5rem' }}>🆕 New</p>
-                      <h3 className="ad-title minecraft-font" style={{ fontWeight: 800, lineHeight: 1.3, marginBottom: '1rem', color: '#fff' }}>
-                        {language === 'vi' ? 'Bộ Anime' : 'Anime Sets'}<br/>Vừa Cập Bến
-                      </h3>
-                      <Link to="/category/anime" style={{ textDecoration: 'none', width: '100%', marginTop: 'auto' }}>
-                        <motion.button whileHover={{ scale: 1.05 }} style={{ width: '100%', background: '#e91e8c', color: '#fff', border: 'none', borderRadius: 'var(--radius-md)', padding: '0.8rem', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}>
-                          {language === 'vi' ? 'Khám Phá' : 'Explore'}
                         </motion.button>
                       </Link>
                     </div>

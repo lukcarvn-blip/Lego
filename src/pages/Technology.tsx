@@ -1,10 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Printer, Zap, Hexagon, Layers, Cpu, Wrench } from 'lucide-react';
+import { Printer, Zap, Hexagon, Layers, Cpu, Wrench, ShoppingCart, ChevronRight } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { Link } from 'react-router-dom';
 
 export const Technology = () => {
-  const { language } = useStore();
+  const { language, products, formatPrice } = useStore();
+  const printers = products.filter(p => p.category === '3d-printer');
 
   return (
     <div className="technology-page" style={{ paddingTop: '80px', paddingBottom: '6rem' }}>
@@ -38,28 +40,68 @@ export const Technology = () => {
         </motion.div>
       </section>
 
-      {/* Main Image Section */}
+      {/* Main Image Section with Products */}
       <section className="container" style={{ marginBottom: '6rem' }}>
-        <motion.div
-          initial={{ opacity: 1, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          style={{ 
-            borderRadius: 'var(--radius-lg)', 
-            overflow: 'hidden',
-            border: '1px solid var(--glass-border)',
-            boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
-            position: 'relative'
-          }}
-        >
-          <img 
-            src="/images/fdm_3d_printer_neon.png" 
-            alt="FDM 3D Printer Neon Concept" 
-            style={{ width: '100%', height: 'auto', display: 'block', objectFit: 'cover' }}
-          />
-          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, var(--color-bg), transparent 50%)' }}></div>
-        </motion.div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+          
+          <motion.div
+            initial={{ opacity: 1, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            style={{ 
+              borderRadius: 'var(--radius-lg)', 
+              overflow: 'hidden',
+              border: '1px solid var(--glass-border)',
+              boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+              position: 'relative'
+            }}
+          >
+            <img 
+              src="/images/fdm_3d_printer_neon.png" 
+              alt="FDM 3D Printer Neon Concept" 
+              style={{ width: '100%', height: '100%', display: 'block', objectFit: 'cover', minHeight: '400px' }}
+            />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, var(--color-bg), transparent 50%)' }}></div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 1, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+          >
+            <h2 style={{ fontWeight: 800, marginBottom: '1.5rem' }}>
+              {language === 'vi' ? 'Sản Phẩm Máy In Nổi Bật' : 'Featured 3D Printers'}
+            </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {printers.map(printer => {
+                const priceInfo = formatPrice(printer.price, printer.discountPercentage);
+                return (
+                  <Link to={`/printer/${printer.id}`} key={printer.id} style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <div className="glass-panel" style={{ display: 'flex', gap: '1rem', padding: '1rem', alignItems: 'center', transition: 'all 0.3s ease', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
+                      <img src={printer.images[0]} alt={printer.name[language]} style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }} />
+                      <div style={{ flex: 1 }}>
+                        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.25rem' }}>{printer.name[language]}</h3>
+                        <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', marginBottom: '0.5rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                          {printer.description[language]}
+                        </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <span style={{ fontWeight: 700, color: 'var(--color-accent)' }}>{priceInfo.current}</span>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--color-accent)', fontSize: '0.875rem' }}>
+                            {language === 'vi' ? 'Xem ngay' : 'View'} <ChevronRight size={16} />
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </motion.div>
+
+        </div>
       </section>
 
       {/* Printer Manufacturers Section */}

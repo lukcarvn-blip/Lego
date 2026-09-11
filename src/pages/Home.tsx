@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Clock, ChevronRight, ChevronLeft, ShieldCheck, Zap, Diamond, Sparkles, ShoppingCart, Loader2, LayoutGrid, LayoutList, ArrowRight } from 'lucide-react';
@@ -16,13 +16,32 @@ export const Home = () => {
     transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }
   };
 
-  // Tablet = 640px to 1279px (covers all iPads incl. iPad Pro landscape)
-  const isTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 1280;
-  const initialCount = isTablet ? 3 : 3;
-  const loadStep = isTablet ? 3 : 4;
+  const getInitialCols = () => {
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth >= 1280) return 4;
+      if (window.innerWidth >= 640) return 3;
+      return 2;
+    }
+    return 3;
+  };
+  
+  const [cols, setCols] = useState(getInitialCols());
+  const initialCount = cols * 2 - 1;
+  const loadStep = cols * 2;
   const [visibleCount, setVisibleCount] = useState(initialCount);
   const [isLoading, setIsLoading] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+
+  useEffect(() => {
+    const updateLayout = () => {
+      if (typeof window !== 'undefined') {
+        const newCols = window.innerWidth >= 1280 ? 4 : (window.innerWidth >= 640 ? 3 : 2);
+        if (newCols !== cols) setCols(newCols);
+      }
+    };
+    window.addEventListener('resize', updateLayout);
+    return () => window.removeEventListener('resize', updateLayout);
+  }, [cols]);
 
   useEffect(() => {
     // Tự động cuộn sang video thứ 2 trên mobile để slider trông cân đối
@@ -37,7 +56,9 @@ export const Home = () => {
     }, 800);
     return () => clearTimeout(timer);
   }, []);
-  const featuredProducts = products.slice(0, visibleCount);
+  const allFeaturedProducts = useMemo(() => products.filter(p => p.category !== '3d-printer'), [products]);
+  const featuredProducts = allFeaturedProducts.slice(0, visibleCount);
+  const hasMore = visibleCount < allFeaturedProducts.length;
 
   const handleLoadMore = () => {
     setIsLoading(true);
@@ -165,7 +186,8 @@ export const Home = () => {
                 const el = document.getElementById('video-slider');
                 if (el) el.scrollBy({ left: -320, behavior: 'smooth' });
               }}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '34px', height: '34px', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', cursor: 'pointer' }}
+              className="chamfer-btn"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '34px', height: '34px', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', cursor: 'pointer' }}
               aria-label="Cuộn trái"
             >
               <ChevronLeft size={18} />
@@ -175,7 +197,8 @@ export const Home = () => {
                 const el = document.getElementById('video-slider');
                 if (el) el.scrollBy({ left: 320, behavior: 'smooth' });
               }}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '34px', height: '34px', borderRadius: 'var(--radius-sm)', background: 'rgba(74,222,128,0.12)', border: '1px solid rgba(74,222,128,0.35)', color: 'var(--color-accent)', cursor: 'pointer' }}
+              className="chamfer-btn"
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '34px', height: '34px', background: 'rgba(74,222,128,0.12)', border: '1px solid rgba(74,222,128,0.35)', color: 'var(--color-accent)', cursor: 'pointer' }}
               aria-label="Cuộn phải"
             >
               <ChevronRight size={18} />
@@ -299,7 +322,8 @@ export const Home = () => {
                     const el = document.querySelector('.collections-grid') as HTMLElement;
                     if (el) el.scrollBy({ left: -200, behavior: 'smooth' });
                   }}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', cursor: 'pointer', flexShrink: 0 }}
+                  className="chamfer-btn"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', cursor: 'pointer', flexShrink: 0 }}
                   aria-label="Scroll left"
                 >
                   <ChevronLeft size={16} />
@@ -309,7 +333,8 @@ export const Home = () => {
                     const el = document.querySelector('.collections-grid') as HTMLElement;
                     if (el) el.scrollBy({ left: 200, behavior: 'smooth' });
                   }}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', cursor: 'pointer', flexShrink: 0 }}
+                  className="chamfer-btn"
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '30px', height: '30px', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', cursor: 'pointer', flexShrink: 0 }}
                   aria-label="Scroll right"
                 >
                   <ChevronRight size={16} />
@@ -402,13 +427,22 @@ export const Home = () => {
         </div>
 
         {/* Product grid with interspersed single-column ad banners */}
-        <div className={viewMode === 'list' ? 'product-list' : 'product-grid'} style={{ position: 'relative' }}>
-          {featuredProducts.map((product, idx) => {
-            const showAd1 = idx === 2 && viewMode === 'grid';
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={featuredProducts.length}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.35, ease: 'easeOut' }}
+            className={viewMode === 'list' ? 'product-list' : 'product-grid'}
+            style={{ position: 'relative' }}
+          >
+            {featuredProducts.map((product: typeof featuredProducts[0], idx: number) => {
+              const showAd1 = idx === (cols - 1) && viewMode === 'grid';
 
-            return (
-              <React.Fragment key={product.id}>
-                <ProductCard product={product} idx={idx} listMode={viewMode === 'list'} />
+              return (
+                <React.Fragment key={product.id}>
+                  <ProductCard product={product} idx={idx} listMode={viewMode === 'list'} />
                 
                 {showAd1 && (
                   <div className="product-card" style={{
@@ -440,29 +474,33 @@ export const Home = () => {
               </React.Fragment>
             );
           })}
-        </div>
+          </motion.div>
+        </AnimatePresence>
 
-        {visibleCount < products.length && (
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
-            <button 
-              className="btn-primary" 
-              onClick={handleLoadMore}
-              disabled={isLoading}
-              style={{ 
-                padding: '1rem 3rem', 
-                fontSize: '1.1rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                opacity: isLoading ? 0.7 : 1,
-                cursor: isLoading ? 'not-allowed' : 'pointer'
-              }}
-            >
-              {isLoading && <Loader2 size={20} className="animate-spin" />}
-              {isLoading ? (language === 'vi' ? 'Đang tải...' : 'Loading...') : (language === 'vi' ? 'Xem Thêm Sản Phẩm' : 'Load More')}
-            </button>
-          </div>
-        )}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
+          <button 
+            className="btn-primary" 
+            onClick={hasMore ? handleLoadMore : undefined}
+            disabled={isLoading || !hasMore}
+            style={{ 
+              padding: '1rem 3rem', 
+              fontSize: '1.1rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              opacity: isLoading ? 0.7 : (!hasMore ? 0.5 : 1),
+              cursor: (isLoading || !hasMore) ? 'not-allowed' : 'pointer',
+              background: !hasMore ? 'rgba(255,255,255,0.1)' : undefined,
+              color: !hasMore ? 'var(--color-text-muted)' : undefined,
+              border: !hasMore ? '1px solid var(--glass-border)' : undefined,
+            }}
+          >
+            {isLoading && <Loader2 size={20} className="animate-spin" />}
+            {isLoading ? (language === 'vi' ? 'Đang tải...' : 'Loading...') : 
+             (!hasMore ? (language === 'vi' ? 'Đã hết sản phẩm' : 'No More Products') : 
+             (language === 'vi' ? 'Xem Thêm Sản Phẩm' : 'Load More'))}
+          </button>
+        </div>
       </section>
 
 

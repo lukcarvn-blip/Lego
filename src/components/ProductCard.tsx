@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Clock, Zap, Sparkles, ShoppingCart, Shield, Rocket, Crown, Tag } from 'lucide-react';
+import { Heart, Clock, Zap, Sparkles, ShoppingCart, Shield, Rocket, Crown, Tag, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
+import { AnimatePresence } from 'framer-motion';
 
 interface ProductCardProps {
   product: any;
@@ -15,6 +16,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
   const [craftHovered, setCraftHovered] = useState(false);
   const [displayDay, setDisplayDay] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [showGallery, setShowGallery] = useState(false);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [slideDirection, setSlideDirection] = useState(1);
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -22,6 +26,28 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  // Prevent scrolling when gallery is open
+  useEffect(() => {
+    if (showGallery) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [showGallery]);
+
+  const handleNextImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setSlideDirection(1);
+    setGalleryIndex((prev) => (prev + 1) % (product.images?.length || 1));
+  };
+
+  const handlePrevImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setSlideDirection(-1);
+    setGalleryIndex((prev) => (prev - 1 + (product.images?.length || 1)) % (product.images?.length || 1));
+  };
 
   // Parse the max day number from estimatedPrintTime e.g. "2-4 days" → 4
   const parseMaxDay = (time: string) => {
@@ -63,20 +89,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5, delay: idx * 0.1 }}
     >
-      <Link to={`/product/${product.id}`} style={{ display: 'block' }}>
+      {/* Remove whole card Link, only link the title */}
+      <div style={{ display: 'block', height: '100%', cursor: 'default' }}>
         {listMode ? (
-          /* ── LIST ROW LAYOUT ── */
           <div className="glass-panel" style={{
             display: 'flex', flexDirection: 'row', overflow: 'hidden',
-            height: '160px', position: 'relative', gap: 0,
-            border: '1px solid var(--glass-border)', transition: 'border-color 0.3s'
+            height: 'clamp(120px, 30vw, 160px)', position: 'relative', gap: 0,
+            border: '1px solid var(--glass-border)', transition: 'border-color 0.3s',
+            width: '100%'
           }}
             onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,222,128,0.35)'}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--glass-border)'}
           >
             {/* Thumbnail */}
             <motion.div style={{
-              width: '160px', flexShrink: 0,
+              flex: '0 0 35%', maxWidth: '160px',
               background: 'radial-gradient(circle, rgba(74,222,128,0.12) 0%, rgba(0,0,0,0.5) 100%)',
               display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative'
             }}
@@ -136,6 +163,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               ))}
 
               <motion.img src={product.images?.[0] || product.image} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={product.name[language as keyof typeof product.name]}
+                onClick={() => { setShowGallery(true); setGalleryIndex(0); }}
                 variants={{
                   rest: { y: '15%', scale: 1.4 },
                   hover: { y: 0, scale: 1 }
@@ -144,20 +172,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 style={{ 
                   width: '100%', height: '100%', objectFit: 'contain', 
                   filter: 'drop-shadow(0 10px 16px rgba(0,0,0,0.5))', 
-                  marginTop: '10px' 
+                  marginTop: '10px', cursor: 'pointer' 
                 }} 
               />
             </motion.div>
 
             {/* Info */}
-            <div style={{ flex: 1, padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden' }}>
-              <div>
-                <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', fontWeight: 600, letterSpacing: '0.08em', marginBottom: '0.3rem' }}>{product.category?.toUpperCase()}</p>
-                <h3 style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 600, fontSize: '1.05rem', marginBottom: '0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {product.name[language as keyof typeof product.name]}
-                </h3>
-                <div className="mobile-only" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                  <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: '0.75rem', color: formatPrice(product.price, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
+            <div style={{ flex: '1 1 auto', minWidth: 0, padding: isMobile ? '0.75rem' : '1rem 1.25rem', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', overflow: 'hidden' }}>
+              <div style={{ minWidth: 0, width: '100%' }}>
+                <p style={{ fontSize: 'clamp(0.65rem, 2vw, 0.75rem)', color: 'var(--color-text-muted)', fontWeight: 600, letterSpacing: '0.08em', marginBottom: '0.2rem' }}>{product.category?.toUpperCase()}</p>
+                <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block', minWidth: 0 }}>
+                  <h3 className="product-title" style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 600, fontSize: 'clamp(0.9rem, 3.5vw, 1.1rem)', marginBottom: '0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', transition: 'color 0.2s', width: '100%' }}>
+                    {product.name[language as keyof typeof product.name]}
+                  </h3>
+                </Link>
+                <div className="mobile-only" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
+                  <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)', color: formatPrice(product.price, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
                     {formatPrice(product.price, product.discountPercentage).current}
                   </span>
                   {formatPrice(product.price, product.discountPercentage).isOnSale && (
@@ -282,6 +312,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             ))}
 
             <motion.img 
+              onClick={() => { setShowGallery(true); setGalleryIndex(0); }}
               variants={isMobile ? {
                 rest:  { y: 0, scale: 1 },
                 hover: { y: '50%', scale: 2.2 }
@@ -296,7 +327,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 height: '80%', 
                 objectFit: 'contain',
                 filter: 'drop-shadow(0 20px 20px rgba(0,0,0,0.8))',
-                transformOrigin: 'center center'
+                transformOrigin: 'center center',
+                cursor: 'pointer'
               }}
             />
             
@@ -395,20 +427,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               {['superheroes', 'sci-fi', 'classic'].indexOf(product.category.toLowerCase()) === -1 && <Tag size={12} />}
               {product.category}
             </p>
-            <h3 className="product-title" style={{ 
-              fontFamily: "'Outfit', sans-serif",
-              fontWeight: 600, 
-              marginBottom: '0.5rem',
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              lineHeight: '1.4',
-              height: '2.8em'
-            }}>
-              {product.name[language as keyof typeof product.name]}
-            </h3>
+            <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <h3 className="product-title" style={{ 
+                fontFamily: "'Outfit', sans-serif",
+                fontWeight: 600, 
+                marginBottom: '0.5rem',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                lineHeight: '1.4',
+                height: '2.8em',
+                transition: 'color 0.2s'
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-accent)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'inherit'}
+              >
+                {product.name[language as keyof typeof product.name]}
+              </h3>
+            </Link>
             
             <div className="mobile-only" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.25rem', marginBottom: '0.5rem' }}>
               <span style={{ fontFamily: "'Outfit', sans-serif", fontWeight: 700, fontSize: '0.85rem', color: formatPrice(product.price, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
@@ -468,7 +506,126 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
           </div>
           </div>
         )}
-      </Link>
+      </div>
+
+      {/* Cool Image Gallery Modal */}
+      <AnimatePresence>
+        {showGallery && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              position: 'fixed', inset: 0, zIndex: 9999,
+              background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(15px)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'
+            }}
+            onClick={() => setShowGallery(false)}
+          >
+            <button 
+              onClick={() => setShowGallery(false)}
+              style={{ position: 'absolute', top: '20px', right: '20px', background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', borderRadius: '50%', padding: '10px', cursor: 'pointer', zIndex: 10001, transition: 'background 0.3s' }}
+              onMouseOver={(e) => e.currentTarget.style.background = 'rgba(239,68,68,0.8)'}
+              onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
+            >
+              <X size={24} />
+            </button>
+
+            <div style={{ position: 'relative', width: '100%', height: isMobile ? '80vh' : '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }} onClick={(e) => e.stopPropagation()}>
+              
+              {/* Prev / Next blurred images for mobile */}
+              {isMobile && product.images.length > 1 && (
+                <>
+                  <motion.img 
+                    src={product.images[(galleryIndex - 1 + product.images.length) % product.images.length]}
+                    style={{ position: 'absolute', left: '-60%', width: '70%', height: '70%', objectFit: 'contain', filter: 'blur(5px)', opacity: 0.3, zIndex: 1, pointerEvents: 'none' }}
+                  />
+                  <motion.img 
+                    src={product.images[(galleryIndex + 1) % product.images.length]}
+                    style={{ position: 'absolute', right: '-60%', width: '70%', height: '70%', objectFit: 'contain', filter: 'blur(5px)', opacity: 0.3, zIndex: 1, pointerEvents: 'none' }}
+                  />
+                </>
+              )}
+
+              <AnimatePresence mode="popLayout">
+                <motion.img
+                  key={galleryIndex}
+                  src={product.images[galleryIndex]}
+                  drag={isMobile ? "x" : false}
+                  dragConstraints={{ left: 0, right: 0 }}
+                  dragElastic={0.2}
+                  onDragEnd={(e, { offset, velocity }) => {
+                    const swipe = Math.abs(offset.x) * velocity.x;
+                    if (swipe < -50 || offset.x < -50) handleNextImage(e as any);
+                    else if (swipe > 50 || offset.x > 50) handlePrevImage(e as any);
+                  }}
+                  initial={{ opacity: 0, scale: 0.8, x: isMobile ? slideDirection * 100 : 0, filter: 'blur(10px)' }}
+                  animate={{ opacity: 1, scale: 1, x: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, scale: isMobile ? 0.8 : 1.2, x: isMobile ? -slideDirection * 100 : 0, filter: 'blur(10px)' }}
+                  transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+                  style={{ maxHeight: '100%', maxWidth: '90%', objectFit: 'contain', filter: 'drop-shadow(0 20px 30px rgba(74,222,128,0.2))', cursor: isMobile ? 'grab' : 'default', zIndex: 10 }}
+                  whileTap={isMobile ? { cursor: 'grabbing' } : undefined}
+                />
+              </AnimatePresence>
+
+              {!isMobile && product.images.length > 1 && (
+                <>
+                  <button onClick={handlePrevImage} style={{ position: 'absolute', left: '50px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '50%', padding: '15px', cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.3s', zIndex: 20 }}
+                    onMouseOver={(e) => { e.currentTarget.style.background = 'var(--color-accent)'; e.currentTarget.style.color = 'black'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'white'; }}
+                  ><ChevronLeft size={32} /></button>
+                  <button onClick={handleNextImage} style={{ position: 'absolute', right: '50px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '50%', padding: '15px', cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.3s', zIndex: 20 }}
+                    onMouseOver={(e) => { e.currentTarget.style.background = 'var(--color-accent)'; e.currentTarget.style.color = 'black'; }}
+                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'white'; }}
+                  ><ChevronRight size={32} /></button>
+                </>
+              )}
+
+              {/* Mobile indicators (Dots) */}
+              {isMobile && product.images.length > 1 && (
+                <div style={{ position: 'absolute', bottom: '2rem', display: 'flex', gap: '8px', zIndex: 20 }}>
+                  {product.images.map((_: any, idx: number) => (
+                    <div key={idx} style={{ 
+                      width: idx === galleryIndex ? '20px' : '8px', 
+                      height: '8px', 
+                      borderRadius: '4px', 
+                      background: idx === galleryIndex ? 'var(--color-accent)' : 'rgba(255,255,255,0.3)', 
+                      transition: 'all 0.3s' 
+                    }} />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Desktop Thumbnails */}
+            {!isMobile && product.images.length > 1 && (
+              <div style={{ display: 'flex', gap: '10px', marginTop: '20px', maxWidth: '90%', overflowX: 'auto', padding: '10px', scrollbarWidth: 'none' }} onClick={(e) => e.stopPropagation()}>
+                {product.images.map((img: string, idx: number) => (
+                  <motion.div
+                    key={idx}
+                    onClick={() => {
+                      setSlideDirection(idx > galleryIndex ? 1 : -1);
+                      setGalleryIndex(idx);
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    style={{
+                      width: '60px', height: '60px', borderRadius: 'var(--radius-sm)', overflow: 'hidden', cursor: 'pointer',
+                      border: galleryIndex === idx ? '2px solid var(--color-accent)' : '2px solid transparent',
+                      opacity: galleryIndex === idx ? 1 : 0.5,
+                      transition: 'opacity 0.3s',
+                      flexShrink: 0
+                    }}
+                  >
+                    <img src={img} alt={`Thumb ${idx}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

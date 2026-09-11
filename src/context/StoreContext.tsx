@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap } from 'lucide-react';
@@ -93,6 +93,8 @@ export interface ToastMessage {
 
 interface StoreContextType {
   products: Product[];
+  isDataLoading: boolean;
+  dataError: string | null;
   updateProduct: (updated: Product) => void;
   cart: CartItem[];
   addToCart: (product: Product, size: ProductSize, material: ProductMaterial, quantity: number, e?: React.MouseEvent, isFastCrafting?: boolean) => void;
@@ -101,10 +103,13 @@ interface StoreContextType {
   orders: Order[];
   savedCarts: SavedCart[];
   notifications: Notification[];
-  createOrder: (customerName: string, paymentMethod?: string) => void;
-  updateOrderStatus: (orderId: string, status: OrderStatus) => void;
+  createOrder: (customerName: string, paymentMethod?: string, additionalInfo?: any) => Promise<string | null>;
+  updateOrder: (orderId: string, data: any) => Promise<void>;
+  updateOrderStatus: (orderId: string, status: OrderStatus) => Promise<void>;
   blogPosts: BlogPost[];
-  addBlogPost: (post: Omit<BlogPost, 'id'>) => void;
+  addBlogPost: (post: Omit<BlogPost, 'id'>) => Promise<void>;
+  updateBlogPost: (post: BlogPost) => Promise<void>;
+  deleteBlogPost: (id: string) => Promise<void>;
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: keyof typeof translations['vi']) => string;
@@ -112,7 +117,6 @@ interface StoreContextType {
   updateSettings: (newSettings: Partial<StoreSettings>) => void;
   addProduct: (product: Omit<Product, 'id'>) => void;
   deleteProduct: (id: string) => void;
-  deleteBlogPost: (id: string) => void;
   formatPrice: (priceUSD: number, discountPercentage?: number) => { original: string, current: string, isOnSale: boolean };
   toasts: ToastMessage[];
   showToast: (message: string) => void;
@@ -133,11 +137,13 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     logoText: 'LEGATO',
     logoImage: '/images/custom-logo.png',
     heroVideoUrl: 'https://cdn.pixabay.com/video/2021/08/04/83894-585141019_large.mp4',
-    contactHotline: '0123 456 789',
-    contactEmail: 'contact@legato.vn',
-    contactAddress: '123 Lego Street, Ho Chi Minh City',
+    contactHotline: '0586339686',
+    contactEmail: 'legatorvn@gmail.com',
+    contactAddress: 'Số 44 Đường 13 - LakeView City,\nBình Trưng Đông, Tp.Hồ Chí Minh',
     socialFacebook: 'https://facebook.com',
     socialInstagram: 'https://instagram.com',
+    socialTiktok: 'https://tiktok.com',
+    socialYoutube: 'https://youtube.com',
     seoTitle: 'LEGATO - Khám phá thế giới sáng tạo',
     seoDescription: 'Cửa hàng đồ chơi thông minh và mô hình xếp khối sáng tạo hàng đầu.',
     bankName: 'vietcombank',
@@ -146,8 +152,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   });
   const [language, setLanguage] = useState<Language>('vi');
   const [user, setUser] = useState<any>(null);
+  const [isDataLoading, setIsDataLoading] = useState(true);
+  const [dataError, setDataError] = useState<string | null>(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
@@ -188,52 +196,102 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [appUsers, setAppUsers] = useState<AppUser[]>([]);
   const [currentUserRole, setCurrentUserRole] = useState<'admin' | 'user'>('user');
 
-  React.useEffect(() => {
-    const unsubProducts = onSnapshot(collection(db, 'products'), (snapshot) => {
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Product[];
-      if (data.length === 0) {
-        mockProducts.forEach(async (p) => { await setDoc(doc(db, 'products', p.id), p); });
-      } else { 
-        setProducts(data); 
-      }
-    });
+  // Track how many collections have finished their first snapshot load
+  const loadedRef = React.useRef(0);
+  const TOTAL_COLLECTIONS = 4; // products, blogs, orders, users
 
-    const unsubBlogs = onSnapshot(collection(db, 'blogs'), (snapshot) => {
-      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as BlogPost[];
-      if (data.length === 0) {
-        mockBlogPosts.forEach(async (p) => { await setDoc(doc(db, 'blogs', p.id), p); });
-      } else { setBlogPosts(data); }
-    });
+  useEffect(() => {
+    setIsDataLoading(true);
+    setDataError(null);
+    loadedRef.current = 0;
 
-    const unsubOrders = onSnapshot(collection(db, 'orders'), (snapshot) => {
-      setOrders(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Order[]);
-    });
+    const markLoaded = () => {
+      loadedRef.current += 1;
+      if (loadedRef.current >= TOTAL_COLLECTIONS) setIsDataLoading(false);
+    };
 
-    const unsubUsers = onSnapshot(collection(db, 'users'), (snapshot) => {
-      setAppUsers(snapshot.docs.map(doc => ({ uid: doc.id, ...doc.data() })) as AppUser[]);
-    });
+    const unsubProducts = onSnapshot(
+      collection(db, 'products'),
+      (snapshot) => {
+        const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as Product[];
+        if (data.length === 0) {
+          mockProducts.forEach(async (p) => { await setDoc(doc(db, 'products', p.id), p); });
+        } else {
+          setProducts(data);
+          const existingIds = new Set(data.map(d => d.id));
+          mockProducts.forEach(async (p) => {
+            if (!existingIds.has(p.id) || p.category === '3d-printer') {
+              await setDoc(doc(db, 'products', p.id), p);
+            }
+          });
+        }
+        markLoaded();
+      },
+      (err) => { console.error('products:', err); setDataError('Lỗi tải sản phẩm'); markLoaded(); }
+    );
 
-    return () => { unsubProducts(); unsubBlogs(); unsubOrders(); unsubUsers(); };
+    const unsubBlogs = onSnapshot(
+      collection(db, 'blogs'),
+      (snapshot) => {
+        const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as BlogPost[];
+        if (data.length === 0) {
+          mockBlogPosts.forEach(async (p) => { await setDoc(doc(db, 'blogs', p.id), p); });
+        } else { setBlogPosts(data); }
+        markLoaded();
+      },
+      (err) => { console.error('blogs:', err); markLoaded(); }
+    );
+
+    const unsubOrders = onSnapshot(
+      collection(db, 'orders'),
+      (snapshot) => {
+        setOrders(snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as Order[]);
+        markLoaded();
+      },
+      (err) => { console.error('orders:', err); markLoaded(); }
+    );
+
+    const unsubUsers = onSnapshot(
+      collection(db, 'users'),
+      (snapshot) => {
+        setAppUsers(snapshot.docs.map(d => ({ uid: d.id, ...d.data() })) as AppUser[]);
+        markLoaded();
+      },
+      (err) => { console.error('users:', err); markLoaded(); }
+    );
+
+    // Listen to settings from Firestore
+    const unsubSettings = onSnapshot(
+      doc(db, 'settings', 'main'),
+      (snap) => {
+        if (snap.exists()) {
+          setSettings(prev => ({ ...prev, ...snap.data() as Partial<StoreSettings> }));
+        }
+      },
+      (err) => console.error('settings:', err)
+    );
+
+    return () => { unsubProducts(); unsubBlogs(); unsubOrders(); unsubUsers(); unsubSettings(); };
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (user) {
       const found = appUsers.find(u => u.uid === user.uid);
       const hasAdmins = appUsers.some(u => u.role === 'admin');
 
       if (found) {
+        setCurrentUserRole(found.role);
         if (found.role === 'user' && !hasAdmins) {
           updateDoc(doc(db, 'users', user.uid), { role: 'admin' });
-          setCurrentUserRole('admin');
-        } else {
-          setCurrentUserRole(found.role);
         }
       } else {
+        const role = hasAdmins ? 'user' : 'admin';
+        setCurrentUserRole(role);
         setDoc(doc(db, 'users', user.uid), {
           email: user.email,
           displayName: user.displayName || '',
           photoURL: user.photoURL || '',
-          role: hasAdmins ? 'user' : 'admin',
+          role,
           joinDate: new Date().toISOString()
         }, { merge: true });
       }
@@ -292,7 +350,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = () => setCart([]);
 
-  const createOrder = async (customerName: string, paymentMethod: string = 'COD') => {
+  const createOrder = async (customerName: string, paymentMethod: string = 'COD', additionalInfo: any = {}) => {
     const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
     const newOrder = {
       items: [...cart],
@@ -301,11 +359,22 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       date: new Date().toISOString(),
       customerName,
       userId: user?.uid || null,
-      paymentMethod
+      paymentMethod,
+      ...additionalInfo
     };
     try {
-      await addDoc(collection(db, 'orders'), newOrder);
+      const docRef = await addDoc(collection(db, 'orders'), newOrder);
       clearCart();
+      return docRef.id;
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  };
+
+  const updateOrder = async (orderId: string, data: any) => {
+    try {
+      await updateDoc(doc(db, 'orders', orderId), data);
     } catch (e) { console.error(e); }
   };
 
@@ -318,6 +387,12 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const addBlogPost = async (post: Omit<BlogPost, 'id'>) => {
     try {
       await addDoc(collection(db, 'blogs'), post);
+    } catch (e) { console.error(e); }
+  };
+
+  const updateBlogPost = async (updated: BlogPost) => {
+    try {
+      await updateDoc(doc(db, 'blogs', updated.id), updated as any);
     } catch (e) { console.error(e); }
   };
 
@@ -351,8 +426,11 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     } catch (e) { console.error(e); }
   };
 
-  const updateSettings = (newSettings: Partial<StoreSettings>) => {
+  const updateSettings = async (newSettings: Partial<StoreSettings>) => {
     setSettings(prev => ({ ...prev, ...newSettings }));
+    try {
+      await setDoc(doc(db, 'settings', 'main'), newSettings, { merge: true });
+    } catch (e) { console.error('updateSettings:', e); }
   };
 
   const t = (key: keyof typeof translations['vi']) => {
@@ -417,10 +495,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <StoreContext.Provider value={{ 
-        products, updateProduct, addProduct, deleteProduct,
+        products, isDataLoading, dataError, updateProduct, addProduct, deleteProduct,
         cart, addToCart, removeFromCart, clearCart, 
-        orders, savedCarts, notifications, createOrder, updateOrderStatus,
-        blogPosts, addBlogPost, deleteBlogPost,
+        orders, savedCarts, notifications, createOrder, updateOrder, updateOrderStatus,
+        blogPosts, addBlogPost, updateBlogPost, deleteBlogPost,
         language,
         setLanguage,
         t,

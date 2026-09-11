@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { ShoppingBag, Search, User, Home, ArrowUp, ArrowLeft } from 'lucide-react';
+import { ShoppingBag, Search, User, Home, ArrowUp, ArrowLeft, Handshake } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { motion } from 'framer-motion';
 
@@ -86,21 +86,25 @@ export const Navbar = () => {
                   {language === 'vi' ? 'Trở Thành Đối Tác' : 'Partnership'}
                 </Link>
               </div>
-              <button 
-                className="mobile-action" 
-                onClick={() => {
-                  if (showBackToTop) {
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  } else {
-                    if (location.pathname !== '/') {
-                      navigate(-1);
+              <div className="mobile-action" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <button 
+                  onClick={() => {
+                    if (showBackToTop) {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                      if (location.pathname !== '/') {
+                        navigate(-1);
+                      }
                     }
-                  }
-                }}
-                style={{ display: 'flex', alignItems: 'center', color: 'var(--color-text)', background: 'transparent', border: 'none', cursor: 'pointer' }}
-              >
-                {showBackToTop ? <ArrowUp size={24} /> : (location.pathname !== '/' ? <ArrowLeft size={24} /> : <div style={{width: 24, height: 24}}></div>)}
-              </button>
+                  }}
+                  style={{ display: 'flex', alignItems: 'center', color: 'var(--color-text)', background: 'transparent', border: 'none', cursor: 'pointer' }}
+                >
+                  {showBackToTop ? <ArrowUp size={24} /> : (location.pathname !== '/' ? <ArrowLeft size={24} /> : <div style={{width: 24, height: 24}}></div>)}
+                </button>
+                <Link to="/partnership" style={{ display: 'flex', alignItems: 'center', color: 'var(--color-text)' }}>
+                  <Handshake size={22} />
+                </Link>
+              </div>
             </div>
 
             {/* Center Logo */}

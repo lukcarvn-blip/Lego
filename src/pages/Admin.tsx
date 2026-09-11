@@ -5,13 +5,13 @@ import {
   LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp,
   Search, Filter, Download, Eye, ExternalLink, Trash2, X,
   AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw,
-  Home, LogOut, DatabaseZap, Globe
+  Home, LogOut, DatabaseZap, Globe, Menu, Printer
 } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill-new';
+import 'react-quill-new/dist/quill.snow.css';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../config/firebase';
 
@@ -19,7 +19,11 @@ function useSessionState<T>(key: string, initialValue: T) {
   const [state, setState] = useState<T>(() => {
     try {
       const item = window.sessionStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
+      if (item) {
+        const parsed = JSON.parse(item);
+        return parsed !== null ? parsed : initialValue;
+      }
+      return initialValue;
     } catch (error) {
       return initialValue;
     }
@@ -65,6 +69,7 @@ const statusLabel: Record<OrderStatus, string> = {
 };
 
 const generateSKU = (category: string, existingProducts: Product[]) => {
+  if (!category) return `LGT-UNK-${String(existingProducts.length + 1).padStart(3, '0')}`;
   const catMap: Record<string, string> = {
     classic: 'CLS', superheroes: 'SUP', 'sci-fi': 'SCI',
     fantasy: 'FAN', anime: 'ANI',
@@ -200,16 +205,16 @@ export const Admin = () => {
   const { 
     orders, updateOrderStatus, 
     products, updateProduct, addProduct, deleteProduct,
-    blogPosts, addBlogPost, deleteBlogPost,
+    blogPosts, addBlogPost, updateBlogPost, deleteBlogPost,
     settings, updateSettings,
     t, language, showToast, formatPrice,
-    appUsers, currentUserRole, updateUserRole, deleteUser, user, logout
+    appUsers, currentUserRole, updateUserRole, deleteUser, user, logout, loginWithGoogle
   } = useStore();
   
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const initialTab = (searchParams.get('tab') || 'dashboard') as 'dashboard' | 'orders' | 'products' | 'blog' | 'members' | 'settings';
-  const [activeTab, setActiveTabState] = useSessionState<'dashboard' | 'orders' | 'products' | 'blog' | 'members' | 'settings'>('admin_tab', initialTab);
+  const initialTab = (searchParams.get('tab') || 'dashboard') as 'dashboard' | 'orders' | 'products' | 'printers' | 'blog' | 'members' | 'settings';
+  const [activeTab, setActiveTabState] = useSessionState<'dashboard' | 'orders' | 'products' | 'printers' | 'blog' | 'members' | 'settings'>('admin_tab', initialTab);
   const setActiveTab = (tab: typeof activeTab) => {
     setActiveTabState(tab);
     setSearchParams({ tab });
@@ -232,40 +237,44 @@ export const Admin = () => {
 
   // ── Dashboard stats ────────────────────────────────────────────────────
   const todayStr = new Date().toISOString().split('T')[0];
-  const todayOrders = orders.filter(o => o.date.startsWith(todayStr));
+  const todayOrders = orders.filter(o => o.date?.startsWith(todayStr));
   const todayRevenue = todayOrders.reduce((s, o) => s + o.total, 0);
   const totalRevenue = orders.reduce((s, o) => s + o.total, 0);
   const pendingCount = orders.filter(o => o.status === 'Pending').length;
   const craftingCount = orders.filter(o => o.status === 'Crafting').length;
   const shippingCount = orders.filter(o => o.status === 'Shipping').length;
   const topProducts = [...products].sort((a, b) => (b.likes || 0) - (a.likes || 0)).slice(0, 5);
-  const recentOrders = [...orders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).slice(0, 5);
+  const recentOrders = [...orders].sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()).slice(0, 5);
 
   // ── Filtered orders ───────────────────────────────────────────────────
   const filteredOrders = useMemo(() => {
     return orders.filter(o => {
       const matchSearch = orderSearch === '' || 
-        o.customerName.toLowerCase().includes(orderSearch.toLowerCase()) ||
-        o.id.toLowerCase().includes(orderSearch.toLowerCase());
+        o.customerName?.toLowerCase().includes(orderSearch.toLowerCase()) ||
+        o.id?.toLowerCase().includes(orderSearch.toLowerCase());
       const matchStatus = orderStatusFilter === 'All' || o.status === orderStatusFilter;
       return matchSearch && matchStatus;
-    }).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    }).sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
   }, [orders, orderSearch, orderStatusFilter]);
 
   // ── Filtered products ─────────────────────────────────────────────────
   const filteredProducts = useMemo(() =>
     products.filter(p =>
       productSearch === '' ||
-      p.name.vi.toLowerCase().includes(productSearch.toLowerCase()) ||
+      p.name?.vi?.toLowerCase().includes(productSearch.toLowerCase()) ||
       (p.sku || '').toLowerCase().includes(productSearch.toLowerCase()) ||
-      p.category.toLowerCase().includes(productSearch.toLowerCase())
+      (p.category || '').toLowerCase().includes(productSearch.toLowerCase())
     ), [products, productSearch]);
+
+  const currentDisplayProducts = useMemo(() => 
+    filteredProducts.filter(p => activeTab === 'printers' ? p.category === '3d-printer' : p.category !== '3d-printer'),
+  [filteredProducts, activeTab]);
 
   // ── Handlers ───────────────────────────────────────────────────────────
   const handleOpenAddProduct = () => {
     setEditingProduct({
       name: { vi: '', en: '' }, description: { vi: '', en: '' },
-      price: 0, stock: 0, category: 'Classic',
+      price: 0, stock: 0, category: activeTab === 'printers' ? '3d-printer' : 'Classic',
       images: [''], estimatedPrintTime: '2-4 days',
       rating: 5, reviews: 0, likes: 0,
       availableSizes: ['Size 300', 'Size 400', 'Size 1000']
@@ -275,20 +284,31 @@ export const Admin = () => {
 
   const [isUploadingImages, setIsUploadingImages] = useState(false);
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUploadFiles = async (e: React.ChangeEvent<HTMLInputElement>, type: 'cover' | 'secondary') => {
     if (!e.target.files || e.target.files.length === 0) return;
     const files = Array.from(e.target.files);
     setIsUploadingImages(true);
     
     try {
-      const newUrls = [...(editingProduct.images || [])];
+      const currentImages = editingProduct.images || [];
+      const cover = currentImages[0] || '';
+      let secondary = currentImages.slice(1);
+      
+      let uploadedUrls: string[] = [];
       for (const file of files) {
         const storageRef = ref(storage, `products/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`);
         const uploadTask = await uploadBytes(storageRef, file);
         const url = await getDownloadURL(uploadTask.ref);
-        newUrls.push(url);
+        uploadedUrls.push(url);
       }
-      setEditingProduct({ ...editingProduct, images: newUrls });
+
+      if (type === 'cover') {
+        setEditingProduct({ ...editingProduct, images: [uploadedUrls[0], ...secondary] });
+      } else {
+        secondary = [...secondary, ...uploadedUrls].slice(0, 10);
+        setEditingProduct({ ...editingProduct, images: [cover, ...secondary] });
+      }
+      
       showToast(language === 'vi' ? `Đã tải lên ${files.length} hình ảnh!` : `Uploaded ${files.length} images!`);
     } catch (err) {
       console.error("Upload error", err);
@@ -334,8 +354,7 @@ export const Admin = () => {
     };
 
     if (editingBlogPost.id) {
-       deleteBlogPost(editingBlogPost.id);
-       addBlogPost(postData as any); 
+       updateBlogPost(postData as BlogPost);
        showToast(language === 'vi' ? 'Đã cập nhật bài viết!' : 'Post updated!');
     } else {
        addBlogPost(postData as any);
@@ -353,10 +372,24 @@ export const Admin = () => {
 
   if (currentUserRole !== 'admin') {
     return (
-      <div className="container" style={{ paddingTop: '120px', textAlign: 'center' }}>
+      <div className="container" style={{ paddingTop: '120px', textAlign: 'center', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
         <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔒</div>
-        <h1 style={{ color: '#ef4444' }}>Truy cập bị từ chối</h1>
-        <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem' }}>Bạn cần quyền Admin để xem trang này.</p>
+        <h1 style={{ color: '#ef4444', marginBottom: '1rem' }}>Khu Vực Quản Trị</h1>
+        <p style={{ color: 'var(--color-text-muted)', marginBottom: '2rem' }}>
+          {user ? 'Tài khoản của bạn không có quyền truy cập trang này.' : 'Vui lòng đăng nhập bằng tài khoản Quản trị viên.'}
+        </p>
+        
+        {!user && (
+          <button onClick={loginWithGoogle} className="btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '1rem' }}>
+            🔑 Đăng nhập bằng Google
+          </button>
+        )}
+        
+        {user && (
+          <button onClick={logout} className="btn-secondary" style={{ padding: '0.75rem 2rem', fontSize: '1rem', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: 'var(--radius-md)' }}>
+            Đăng xuất
+          </button>
+        )}
       </div>
     );
   }
@@ -366,6 +399,7 @@ export const Admin = () => {
     { id: 'dashboard', label: 'Dashboard', icon: <LayoutDashboard size={18} /> },
     { id: 'orders', label: 'Đơn hàng', icon: <ShoppingBag size={18} />, badge: pendingCount > 0 ? pendingCount : undefined },
     { id: 'products', label: 'Sản phẩm', icon: <Package size={18} /> },
+    { id: 'printers', label: 'Máy in 3D', icon: <Printer size={18} /> },
     { id: 'blog', label: 'Bài viết', icon: <BookOpen size={18} /> },
     { id: 'members', label: 'Thành viên', icon: <Users size={18} /> },
     { id: 'settings', label: 'Cài đặt', icon: <Settings size={18} /> },
@@ -377,14 +411,14 @@ export const Admin = () => {
   };
 
   return (
-    <div style={{ paddingTop: '80px', minHeight: '100vh', display: 'flex', background: 'var(--bg-dark, #050f05)', color: 'var(--color-text)' }}>
+    <div style={{ paddingTop: 0, minHeight: '100vh', display: 'flex', background: 'var(--bg-dark, #050f05)', color: 'var(--color-text)', position: 'relative' }}>
       {/* Sidebar */}
-      <aside style={{
+      <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`} style={{
         width: sidebarOpen ? '220px' : '60px', flexShrink: 0,
         background: 'rgba(10,28,10,0.95)', borderRight: '1px solid var(--glass-border)',
-        height: 'calc(100vh - 80px)', position: 'sticky', top: '80px',
-        display: 'flex', flexDirection: 'column', transition: 'width 0.3s ease',
-        overflow: 'hidden', zIndex: 10
+        height: '100vh', position: 'sticky', top: 0,
+        display: 'flex', flexDirection: 'column', transition: 'width 0.3s ease, transform 0.3s ease',
+        overflow: 'hidden', zIndex: 50
       }}>
         {/* Admin identity */}
         <div style={{ padding: '1.5rem 1rem', borderBottom: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -444,10 +478,17 @@ export const Admin = () => {
           background: 'rgba(5,15,5,0.95)',
           borderBottom: '1px solid var(--glass-border)',
           flexWrap: 'wrap',
-          position: 'sticky', top: '80px', zIndex: 9
+          position: 'sticky', top: 0, zIndex: 9
         }}>
           {/* Left: quick nav */}
           <div style={{ display: 'flex', gap: '0.4rem', flex: 1, flexWrap: 'wrap' }}>
+            <button 
+              className="admin-mobile-menu-btn"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.4rem 0.6rem', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', cursor: 'pointer' }}
+            >
+              <Menu size={16} />
+            </button>
             <a href="/" target="_blank" rel="noreferrer"
               style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.25)', color: 'var(--color-accent)', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', cursor: 'pointer' }}
             >
@@ -655,13 +696,13 @@ export const Admin = () => {
           </div>
         )}
 
-        {/* ── PRODUCTS TAB ──────────────────────────────────────────── */}
-        {activeTab === 'products' && !isEditingProduct && (
+        {/* ── PRODUCTS & PRINTERS TAB ──────────────────────────────────────────── */}
+        {(activeTab === 'products' || activeTab === 'printers') && !isEditingProduct && (
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>🏪 Quản lý sản phẩm</h1>
-                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{products.length} sản phẩm</p>
+                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>{activeTab === 'printers' ? '🖨️ Quản lý máy in' : '🏪 Quản lý sản phẩm'}</h1>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{currentDisplayProducts.length} sản phẩm</p>
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <button 
@@ -722,7 +763,7 @@ export const Admin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredProducts.map(product => (
+                  {currentDisplayProducts.map(product => (
                     <tr key={product.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}
                       onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.02)')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
@@ -852,38 +893,94 @@ export const Admin = () => {
 
             <div style={panelStyle}>
               <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>🖼 Hình ảnh & Video</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                
+                {/* Ảnh Bìa */}
                 <div>
                   <InputField label={
                     <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                      <span>Danh sách URL Hình ảnh (mỗi dòng 1 link) *</span>
+                      <span>Ảnh bìa (1 hình đại diện) *</span>
                       <label style={{ cursor: isUploadingImages ? 'wait' : 'pointer', background: 'var(--color-accent)', color: '#000', padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
                         {isUploadingImages ? <RefreshCw size={12} className="spin" /> : <Plus size={12} />}
-                        {isUploadingImages ? 'Đang tải...' : 'Tải ảnh lên'}
-                        <input type="file" multiple accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} disabled={isUploadingImages} />
+                        Tải ảnh bìa lên
+                        <input type="file" accept="image/*" onChange={(e) => handleUploadFiles(e, 'cover')} style={{ display: 'none' }} disabled={isUploadingImages} />
+                      </label>
+                    </div>
+                  }>
+                    <input 
+                      type="text"
+                      required 
+                      placeholder="URL Ảnh bìa..." 
+                      value={editingProduct.images?.[0] || ''} 
+                      onChange={e => {
+                        const newImages = [...(editingProduct.images || [])];
+                        newImages[0] = e.target.value;
+                        setEditingProduct({...editingProduct, images: newImages});
+                      }} 
+                      style={inputStyle} 
+                    />
+                  </InputField>
+                  <div style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)', display: 'inline-block' }}>
+                    <img src={editingProduct.images?.[0] || '/images/fallback-logo.jpg'} style={{ height: '80px', width: '80px', objectFit: 'contain', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', padding: '2px' }} alt="cover preview" />
+                  </div>
+                </div>
+
+                {/* Ảnh Phụ */}
+                <div style={{ paddingTop: '1.5rem', borderTop: '1px solid var(--glass-border)' }}>
+                  <InputField label={
+                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                      <span>Danh sách URL Ảnh phụ (tối đa 10 ảnh, mỗi dòng 1 link)</span>
+                      <label style={{ cursor: isUploadingImages ? 'wait' : 'pointer', background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)', border: '1px solid var(--glass-border)', padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        {isUploadingImages ? <RefreshCw size={12} className="spin" /> : <Plus size={12} />}
+                        Tải ảnh phụ
+                        <input type="file" multiple accept="image/*" onChange={(e) => handleUploadFiles(e, 'secondary')} style={{ display: 'none' }} disabled={isUploadingImages} />
                       </label>
                     </div>
                   }>
                     <textarea 
-                      required 
-                      placeholder="/images/product.png&#10;/images/product-2.png" 
+                      placeholder="/images/phu-1.png&#10;/images/phu-2.png" 
                       rows={4} 
-                      value={(editingProduct.images || []).join('\n')} 
-                      onChange={e => setEditingProduct({...editingProduct, images: e.target.value.split('\n').map(s => s.trim()).filter(s => s)})} 
+                      value={(editingProduct.images?.slice(1) || []).join('\n')} 
+                      onChange={e => {
+                        const cover = editingProduct.images?.[0] || '';
+                        const secondary = e.target.value.split('\n').map(s => s.trim()).filter(s => s).slice(0, 10);
+                        setEditingProduct({...editingProduct, images: [cover, ...secondary]});
+                      }} 
                       style={{...inputStyle, resize: 'vertical'}} 
                     />
                   </InputField>
-                  {editingProduct.images && editingProduct.images.length > 0 && (
-                    <div className="hide-scrollbar" style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)', display: 'flex', gap: '0.5rem', overflowX: 'auto' }}>
-                      {editingProduct.images.map((img, idx) => (
-                        <img key={idx} src={img} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ height: '60px', width: '60px', objectFit: 'contain', flexShrink: 0, background: 'rgba(255,255,255,0.05)', borderRadius: '4px', padding: '2px' }} alt="preview" />
-                      ))}
-                    </div>
-                  )}
+                  
+                  <div className="hide-scrollbar" style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.5rem' }}>
+                    {Array.from({ length: 10 }).map((_, idx) => {
+                      const img = editingProduct.images?.[idx + 1];
+                      return (
+                        <div key={idx} style={{ aspectRatio: '1/1', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative', border: '1px solid rgba(255,255,255,0.1)' }}>
+                          {img ? (
+                            <>
+                              <img src={img} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '2px' }} alt={`secondary preview ${idx}`} />
+                              <button type="button" onClick={() => {
+                                const newSecondary = [...(editingProduct.images?.slice(1) || [])];
+                                newSecondary.splice(idx, 1);
+                                setEditingProduct({...editingProduct, images: [editingProduct.images?.[0] || '', ...newSecondary]});
+                              }} style={{ position: 'absolute', top: 2, right: 2, background: 'rgba(239, 68, 68, 0.9)', color: '#fff', border: 'none', borderRadius: '50%', width: '16px', height: '16px', fontSize: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+                            </>
+                          ) : (
+                            <div style={{ opacity: 0.3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                              <img src="/images/fallback-logo.jpg" style={{ width: '24px', height: '24px', filter: 'grayscale(100%)' }} alt="placeholder" />
+                              <span style={{ fontSize: '0.6rem', marginTop: '4px' }}>{idx + 1}</span>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-                <InputField label="URL Video (tùy chọn)">
-                  <input type="text" placeholder="https://..." value={editingProduct.video || ''} onChange={e => setEditingProduct({...editingProduct, video: e.target.value})} style={inputStyle} />
-                </InputField>
+
+                <div style={{ paddingTop: '1.5rem', borderTop: '1px solid var(--glass-border)' }}>
+                  <InputField label="URL Video (tùy chọn)">
+                    <input type="text" placeholder="https://..." value={editingProduct.video || ''} onChange={e => setEditingProduct({...editingProduct, video: e.target.value})} style={inputStyle} />
+                  </InputField>
+                </div>
               </div>
             </div>
 
