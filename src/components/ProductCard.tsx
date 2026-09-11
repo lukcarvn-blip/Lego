@@ -192,19 +192,36 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                   )}
                 </div>
               </div>
-              {/* Craft time mini bar - full width */}
-              <div
-                onMouseEnter={() => setCraftHovered(true)}
-                onMouseLeave={() => setCraftHovered(false)}
-                style={{ cursor: 'default' }}
-              >
-                <span style={{ fontSize: '0.62rem', color: craftHovered ? '#f59e0b' : 'rgba(255,255,255,0.3)', fontWeight: 600, transition: 'color 0.3s', display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.3rem' }}>
-                  <Clock size={10} />{craftHovered ? `${displayDay} ngày` : product.estimatedPrintTime.replace('days', 'ngày')}
-                </span>
-                <div style={{ width: '100%', height: '18px', background: 'rgba(255,255,255,0.08)', borderRadius: '9px', overflow: 'hidden' }}>
-                  <div style={{ width: craftHovered ? '75%' : '0%', height: '100%', background: '#f59e0b', borderRadius: '9px', transition: 'width 0.85s cubic-bezier(0.4,0,0.2,1)', boxShadow: craftHovered ? '0 0 10px rgba(245,158,11,0.5)' : 'none' }} />
+              {/* Craft time or Ready Stock Info */}
+              {product.isReadyStock ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', marginTop: 'auto' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: 'var(--color-text-muted)' }}>
+                    <span>📏 Size:</span>
+                    <span style={{ color: 'var(--color-text)', fontWeight: 600 }}>{product.dimensions || '300% (21cm)'}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: 'var(--color-text-muted)' }}>
+                    <span>🎨 Nhựa:</span>
+                    <span style={{ color: 'var(--color-text)', fontWeight: 600 }}>{product.availableMaterials?.[0] || 'PLA'}</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: 'var(--color-text-muted)' }}>
+                    <span>📦 Sẵn:</span>
+                    <span style={{ color: '#4ade80', fontWeight: 600 }}>{product.stock || 1} hộp</span>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div
+                  onMouseEnter={() => setCraftHovered(true)}
+                  onMouseLeave={() => setCraftHovered(false)}
+                  style={{ cursor: 'default' }}
+                >
+                  <span style={{ fontSize: '0.62rem', color: craftHovered ? '#f59e0b' : 'rgba(255,255,255,0.3)', fontWeight: 600, transition: 'color 0.3s', display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.3rem' }}>
+                    <Clock size={10} />{craftHovered ? `${displayDay} ngày` : product.estimatedPrintTime.replace('days', 'ngày')}
+                  </span>
+                  <div style={{ width: '100%', height: '18px', background: 'rgba(255,255,255,0.08)', borderRadius: '9px', overflow: 'hidden' }}>
+                    <div style={{ width: craftHovered ? '75%' : '0%', height: '100%', background: '#f59e0b', borderRadius: '9px', transition: 'width 0.85s cubic-bezier(0.4,0,0.2,1)', boxShadow: craftHovered ? '0 0 10px rgba(245,158,11,0.5)' : 'none' }} />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         ) : (
@@ -440,48 +457,65 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
 
             <div style={{ flex: 1 }}></div>
 
-            <div
-              style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)', cursor: 'default' }}
-              onMouseEnter={() => setCraftHovered(true)}
-              onMouseLeave={() => setCraftHovered(false)}
-            >
-              <div style={{ 
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
-                marginBottom: '0.5rem', fontSize: '0.7rem',
-                color: craftHovered ? '#f59e0b' : 'rgba(255,255,255,0.35)',
-                fontWeight: 600,
-                transition: 'color 0.3s ease'
-              }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                  <Clock size={12} />
-                  {language === 'vi' ? 'THỜI GIAN CHẾ TÁC' : 'CRAFT TIME'}
-                </span>
-                <span style={{ 
-                  color: craftHovered ? '#f59e0b' : 'rgba(255,255,255,0.35)',
-                  fontWeight: 700,
-                  transition: 'color 0.3s ease',
-                  minWidth: '60px', textAlign: 'right'
-                }}>
-                  {craftHovered
-                    ? `${displayDay} ${language === 'vi' ? 'ngày' : 'days'}`
-                    : product.estimatedPrintTime.replace('days', language === 'vi' ? 'ngày' : 'days')
-                  }
-                </span>
+            {product.isReadyStock ? (
+              <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>📏 Kích thước:</span>
+                  <span style={{ color: 'var(--color-text)', fontWeight: 600 }}>{product.dimensions || '300% (21cm)'}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>🎨 Loại nhựa:</span>
+                  <span style={{ color: 'var(--color-text)', fontWeight: 600 }}>{product.availableMaterials?.[0] || 'PLA'}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>📦 Có sẵn:</span>
+                  <span style={{ color: '#4ade80', fontWeight: 600 }}>{product.stock || 1} hộp</span>
+                </div>
               </div>
-              <div style={{ 
-                width: '100%', height: '18px', background: 'rgba(255,255,255,0.1)', 
-                borderRadius: '9px', overflow: 'hidden'
-              }}>
+            ) : (
+              <div
+                style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)', cursor: 'default' }}
+                onMouseEnter={() => setCraftHovered(true)}
+                onMouseLeave={() => setCraftHovered(false)}
+              >
                 <div style={{ 
-                  width: craftHovered ? '75%' : '0%',
-                  height: '100%',
-                  background: '#f59e0b',
-                  borderRadius: '9px',
-                  transition: 'width 0.85s cubic-bezier(0.4, 0, 0.2, 1)',
-                  boxShadow: craftHovered ? '0 0 12px rgba(245,158,11,0.6)' : 'none'
-                }}></div>
+                  display: 'flex', justifyContent: 'space-between', alignItems: 'center', 
+                  marginBottom: '0.5rem', fontSize: '0.7rem',
+                  color: craftHovered ? '#f59e0b' : 'rgba(255,255,255,0.35)',
+                  fontWeight: 600,
+                  transition: 'color 0.3s ease'
+                }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                    <Clock size={12} />
+                    {language === 'vi' ? 'THỜI GIAN CHẾ TÁC' : 'CRAFT TIME'}
+                  </span>
+                  <span style={{ 
+                    color: craftHovered ? '#f59e0b' : 'rgba(255,255,255,0.35)',
+                    fontWeight: 700,
+                    transition: 'color 0.3s ease',
+                    minWidth: '60px', textAlign: 'right'
+                  }}>
+                    {craftHovered
+                      ? `${displayDay} ${language === 'vi' ? 'ngày' : 'days'}`
+                      : product.estimatedPrintTime.replace('days', language === 'vi' ? 'ngày' : 'days')
+                    }
+                  </span>
+                </div>
+                <div style={{ 
+                  width: '100%', height: '18px', background: 'rgba(255,255,255,0.1)', 
+                  borderRadius: '9px', overflow: 'hidden'
+                }}>
+                  <div style={{ 
+                    width: craftHovered ? '75%' : '0%',
+                    height: '100%',
+                    background: '#f59e0b',
+                    borderRadius: '9px',
+                    transition: 'width 0.85s cubic-bezier(0.4, 0, 0.2, 1)',
+                    boxShadow: craftHovered ? '0 0 12px rgba(245,158,11,0.6)' : 'none'
+                  }}></div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
           </div>
         )}
