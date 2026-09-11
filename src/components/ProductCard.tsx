@@ -163,12 +163,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               ))}
 
               <motion.img src={product.images?.[0] || product.image} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={product.name[language as keyof typeof product.name]}
-                onClick={() => { setShowGallery(true); setGalleryIndex(0); }}
-                variants={{
-                  rest: { y: '15%', scale: 1.4 },
-                  hover: { y: 0, scale: 1 }
-                }}
-                transition={{ type: 'spring', stiffness: 250, damping: 25 }}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowGallery(true); setGalleryIndex(0); }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 style={{ 
                   width: '100%', height: '100%', objectFit: 'contain', 
                   filter: 'drop-shadow(0 10px 16px rgba(0,0,0,0.5))', 
@@ -312,24 +308,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             ))}
 
             <motion.img 
-              onClick={() => { setShowGallery(true); setGalleryIndex(0); }}
-              variants={isMobile ? {
-                rest:  { y: 0, scale: 1 },
-                hover: { y: '50%', scale: 2.2 }
-              } : {
-                rest:  { y: '50%', scale: 2.2 },
-                hover: { y: 0, scale: 1 }
-              }}
-              transition={{ type: 'spring', stiffness: 250, damping: 25 }}
-              src={product.images[0]} alt={product.name[language as keyof typeof product.name]} 
-              style={{ 
-                width: '80%', 
-                height: '80%', 
-                objectFit: 'contain',
-                filter: 'drop-shadow(0 20px 20px rgba(0,0,0,0.8))',
-                transformOrigin: 'center center',
-                cursor: 'pointer'
-              }}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowGallery(true); setGalleryIndex(0); }}
+              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              src={product.images?.[0] || product.image}
+              onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }}
+              alt={product.name[language as keyof typeof product.name]}
+              style={{ width: '80%', height: '80%', objectFit: 'contain', filter: 'drop-shadow(0 20px 20px rgba(0,0,0,0.8))', cursor: 'pointer' }}
             />
             
             {/* Quick Add To Cart - Cyber Slide-Up Style */}
@@ -535,14 +519,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             <div style={{ position: 'relative', width: '100%', height: isMobile ? '80vh' : '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }} onClick={(e) => e.stopPropagation()}>
               
               {/* Prev / Next blurred images for mobile */}
-              {isMobile && product.images.length > 1 && (
+              {isMobile && product.images?.length > 1 && (
                 <>
                   <motion.img 
-                    src={product.images[(galleryIndex - 1 + product.images.length) % product.images.length]}
+                    src={product.images[(galleryIndex - 1 + product.images?.length) % product.images?.length]}
                     style={{ position: 'absolute', left: '-60%', width: '70%', height: '70%', objectFit: 'contain', filter: 'blur(5px)', opacity: 0.3, zIndex: 1, pointerEvents: 'none' }}
                   />
                   <motion.img 
-                    src={product.images[(galleryIndex + 1) % product.images.length]}
+                    src={product.images[(galleryIndex + 1) % product.images?.length]}
                     style={{ position: 'absolute', right: '-60%', width: '70%', height: '70%', objectFit: 'contain', filter: 'blur(5px)', opacity: 0.3, zIndex: 1, pointerEvents: 'none' }}
                   />
                 </>
@@ -569,7 +553,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 />
               </AnimatePresence>
 
-              {!isMobile && product.images.length > 1 && (
+              {!isMobile && product.images?.length > 1 && (
                 <>
                   <button onClick={handlePrevImage} style={{ position: 'absolute', left: '50px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '50%', padding: '15px', cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.3s', zIndex: 20 }}
                     onMouseOver={(e) => { e.currentTarget.style.background = 'var(--color-accent)'; e.currentTarget.style.color = 'black'; }}
@@ -583,7 +567,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               )}
 
               {/* Mobile indicators (Dots) */}
-              {isMobile && product.images.length > 1 && (
+              {isMobile && product.images?.length > 1 && (
                 <div style={{ position: 'absolute', bottom: '2rem', display: 'flex', gap: '8px', zIndex: 20 }}>
                   {product.images.map((_: any, idx: number) => (
                     <div key={idx} style={{ 
@@ -599,7 +583,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             </div>
 
             {/* Desktop Thumbnails */}
-            {!isMobile && product.images.length > 1 && (
+            {!isMobile && product.images?.length > 1 && (
               <div style={{ display: 'flex', gap: '10px', marginTop: '20px', maxWidth: '90%', overflowX: 'auto', padding: '10px', scrollbarWidth: 'none' }} onClick={(e) => e.stopPropagation()}>
                 {product.images.map((img: string, idx: number) => (
                   <motion.div
