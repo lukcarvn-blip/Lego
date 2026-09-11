@@ -71,35 +71,7 @@ const AnimatedPrice = ({ priceString }: { priceString: string }) => {
   );
 };
 
-const AccordionItem = ({ title, children, defaultOpen = false }: { title: string, children: React.ReactNode, defaultOpen?: boolean }) => {
-  const [isOpen, setIsOpen] = useState(defaultOpen);
-  return (
-    <div style={{ borderBottom: '1px solid var(--glass-border)', padding: '1rem 0' }}>
-      <button 
-        onClick={() => setIsOpen(!isOpen)} 
-        style={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.5rem 0' }}
-      >
-        <h4 style={{ fontWeight: 600 }}>{title}</h4>
-        {isOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-      </button>
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            style={{ overflow: 'hidden' }}
-          >
-            <div style={{ paddingTop: '1rem', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
-              {children}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
+
 
 export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
@@ -189,6 +161,7 @@ export const ProductDetails = () => {
   const [isFastCrafting, setIsFastCrafting] = useState(false);
   const [engravingText, setEngravingText] = useState('');
   const [selectedMicaBox, setSelectedMicaBox] = useState('');
+  const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'tags'>('desc');
   const [isCartExpanded, setIsCartExpanded] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
@@ -1004,28 +977,77 @@ export const ProductDetails = () => {
 
           {/* Buy button moved to left column */}
 
-          <div style={{ marginTop: '2rem' }}>
-            <AccordionItem title={t('description')} defaultOpen={true}>
-              {product.description[language]}
-            </AccordionItem>
-            <AccordionItem title={t('specifications')}>
-              <ul>
-                <li>{t('spec_material')}: {t('material_val')}</li>
-                <li>{t('spec_finish')}: {t('finish_val')}</li>
-                <li>{t('size')}: 300% (21cm), 400% (28cm), 1000% (70cm)</li>
-                <li>{t('spec_weight')}: {t('weight_val')}</li>
-              </ul>
-            </AccordionItem>
-          </div>
+          {/* Tabs Section */}
+          <div style={{ marginTop: '2.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', overflow: 'hidden' }}>
+            {/* Tab Headers */}
+            <div style={{ display: 'flex', borderBottom: '1px solid var(--glass-border)', overflowX: 'auto' }} className="hide-scrollbar">
+              <button 
+                onClick={() => setActiveTab('desc')}
+                style={{ flex: 1, padding: '1rem', background: activeTab === 'desc' ? 'rgba(74, 222, 128, 0.1)' : 'transparent', borderBottom: activeTab === 'desc' ? '2px solid var(--color-accent)' : '2px solid transparent', color: activeTab === 'desc' ? 'var(--color-accent)' : 'var(--color-text-muted)', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', borderTop: 'none', borderLeft: 'none', borderRight: 'none', outline: 'none', whiteSpace: 'nowrap' }}
+              >
+                {t('description')}
+              </button>
+              <button 
+                onClick={() => setActiveTab('specs')}
+                style={{ flex: 1, padding: '1rem', background: activeTab === 'specs' ? 'rgba(74, 222, 128, 0.1)' : 'transparent', borderBottom: activeTab === 'specs' ? '2px solid var(--color-accent)' : '2px solid transparent', color: activeTab === 'specs' ? 'var(--color-accent)' : 'var(--color-text-muted)', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', borderTop: 'none', borderLeft: 'none', borderRight: 'none', outline: 'none', whiteSpace: 'nowrap' }}
+              >
+                {t('specifications')}
+              </button>
+              <button 
+                onClick={() => setActiveTab('tags')}
+                style={{ flex: 1, padding: '1rem', background: activeTab === 'tags' ? 'rgba(74, 222, 128, 0.1)' : 'transparent', borderBottom: activeTab === 'tags' ? '2px solid var(--color-accent)' : '2px solid transparent', color: activeTab === 'tags' ? 'var(--color-accent)' : 'var(--color-text-muted)', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', borderTop: 'none', borderLeft: 'none', borderRight: 'none', outline: 'none', whiteSpace: 'nowrap' }}
+              >
+                Tags
+              </button>
+            </div>
 
-          {/* Tags */}
-          <div style={{ marginTop: '2rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-            <span style={{ fontWeight: 600, color: 'var(--color-text-muted)', marginRight: '0.5rem' }}>Tags:</span>
-            {['Mô Hình Lắp Ráp', 'Lego 3D', 'Decor', product.category].map(tag => (
-              <span key={tag} style={{ background: 'rgba(255,255,255,0.05)', padding: '0.25rem 0.75rem', borderRadius: '4px', fontSize: '0.85rem', color: 'var(--color-text-muted)', border: '1px solid var(--glass-border)' }}>
-                #{tag}
-              </span>
-            ))}
+            {/* Tab Content */}
+            <div style={{ padding: '1.5rem', minHeight: '150px' }}>
+              <AnimatePresence mode="wait">
+                {activeTab === 'desc' && (
+                  <motion.div key="desc" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
+                    <p style={{ lineHeight: 1.6, color: 'var(--color-text)', whiteSpace: 'pre-wrap' }}>
+                      {product.description[language]}
+                    </p>
+                  </motion.div>
+                )}
+                
+                {activeTab === 'specs' && (
+                  <motion.div key="specs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
+                    <ul style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', listStyle: 'none', padding: 0, margin: 0 }}>
+                      <li style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>
+                        <span style={{ color: 'var(--color-text-muted)' }}>{t('spec_material')}</span>
+                        <span style={{ fontWeight: 500, textAlign: 'right' }}>{product.availableMaterials ? product.availableMaterials.join(', ') : t('material_val')}</span>
+                      </li>
+                      <li style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>
+                        <span style={{ color: 'var(--color-text-muted)' }}>{t('spec_finish')}</span>
+                        <span style={{ fontWeight: 500, textAlign: 'right' }}>{t('finish_val')}</span>
+                      </li>
+                      <li style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px dashed rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>
+                        <span style={{ color: 'var(--color-text-muted)' }}>{t('size')}</span>
+                        <span style={{ fontWeight: 500, textAlign: 'right' }}>{product.dimensions ? product.dimensions : '300% (21cm), 400% (28cm), 1000% (70cm)'}</span>
+                      </li>
+                      <li style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <span style={{ color: 'var(--color-text-muted)' }}>{t('spec_weight')}</span>
+                        <span style={{ fontWeight: 500, textAlign: 'right' }}>{product.weight ? product.weight : t('weight_val')}</span>
+                      </li>
+                    </ul>
+                  </motion.div>
+                )}
+
+                {activeTab === 'tags' && (
+                  <motion.div key="tags" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2 }}>
+                    <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                      {['Mô Hình Lắp Ráp', 'Lego 3D', 'Decor', product.category].map(tag => (
+                        <span key={tag} style={{ background: 'rgba(74, 222, 128, 0.1)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', fontSize: '0.85rem', color: 'var(--color-accent)', border: '1px solid rgba(74, 222, 128, 0.3)', fontWeight: 600 }}>
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
         </motion.div>
