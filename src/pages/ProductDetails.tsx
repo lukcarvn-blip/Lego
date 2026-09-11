@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X } from 'lucide-react';
+import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift } from 'lucide-react';
 import { mockProducts, type ProductSize } from '../data/mockProducts';
 import { useStore, type ProductMaterial } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
@@ -134,6 +134,21 @@ export const ProductDetails = () => {
   const [isLiked, setIsLiked] = useState(() => !!localStorage.getItem('liked_' + id));
 
   useEffect(() => {
+    if (product && product.isReadyStock) {
+      if (product.availableMaterials && product.availableMaterials.length > 0) {
+        // If ready stock and specific materials are set, default to first available
+        if (product.availableMaterials.includes('PETG')) setSelectedMaterial('PETG');
+        else setSelectedMaterial('PLA');
+      }
+      if (product.availableSizes && product.availableSizes.length > 0) {
+        setSelectedSize(product.availableSizes[0]);
+      }
+    } else if (product && product.availableSizes && !selectedSize) {
+      setSelectedSize(product.availableSizes[0]);
+    }
+  }, [product?.id]);
+
+  useEffect(() => {
     if (product && !sessionStorage.getItem('viewed_' + id)) {
       sessionStorage.setItem('viewed_' + id, 'true');
       const currentViews = typeof product.views === 'number' ? product.views : 0;
@@ -172,6 +187,8 @@ export const ProductDetails = () => {
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(product?.availableSizes[0] || null);
   const [selectedMaterial, setSelectedMaterial] = useState<ProductMaterial>('PLA');
   const [isFastCrafting, setIsFastCrafting] = useState(false);
+  const [engravingText, setEngravingText] = useState('');
+  const [selectedMicaBox, setSelectedMicaBox] = useState('');
   const [isCartExpanded, setIsCartExpanded] = useState(true);
   const [quantity, setQuantity] = useState(1);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
@@ -210,7 +227,7 @@ export const ProductDetails = () => {
 
   const handleAddToCart = (e?: React.MouseEvent) => {
     if (product && selectedSize) {
-      addToCart(product, selectedSize, selectedMaterial, quantity, e, isFastCrafting);
+      addToCart(product, selectedSize, selectedMaterial, quantity, e, isFastCrafting, engravingText, selectedMicaBox);
       showToast(language === 'vi' ? 'Đã thêm vào giỏ hàng!' : 'Added to cart!');
     }
   };
@@ -495,20 +512,22 @@ export const ProductDetails = () => {
                           <ShoppingBag size={20} />
                           <span>{language === 'vi' ? 'MUA NGAY' : 'BUY NOW'}</span>
                         </button>
-                        <button
-                          onClick={(e) => { e.stopPropagation(); setIsFastCrafting(!isFastCrafting); }}
-                          style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            background: '#ef4444', color: '#fff', border: 'none',
-                            padding: '0 0.9rem', borderRadius: 'var(--radius-sm)',
-                            cursor: 'pointer', transition: 'all 0.2s',
-                            boxShadow: isFastCrafting ? 'inset 0 3px 6px rgba(0,0,0,0.4)' : '0 4px 10px rgba(239,68,68,0.4)',
-                            transform: isFastCrafting ? 'scale(0.96)' : 'scale(1)',
-                          }}
-                          title={language === 'vi' ? 'Tăng tốc chế tác (+10% phí)' : 'Fast Crafting (+10% fee)'}
-                        >
-                          <Rocket size={20} />
-                        </button>
+                        {!product.isReadyStock && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setIsFastCrafting(!isFastCrafting); }}
+                            style={{
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              background: '#ef4444', color: '#fff', border: 'none',
+                              padding: '0 0.9rem', borderRadius: 'var(--radius-sm)',
+                              cursor: 'pointer', transition: 'all 0.2s',
+                              boxShadow: isFastCrafting ? 'inset 0 3px 6px rgba(0,0,0,0.4)' : '0 4px 10px rgba(239,68,68,0.4)',
+                              transform: isFastCrafting ? 'scale(0.96)' : 'scale(1)',
+                            }}
+                            title={language === 'vi' ? 'Tăng tốc chế tác (+10% phí)' : 'Fast Crafting (+10% fee)'}
+                          >
+                            <Rocket size={20} />
+                          </button>
+                        )}
                         <button
                           className="hide-on-desktop"
                           onClick={() => setIsCartExpanded(false)}
@@ -526,10 +545,18 @@ export const ProductDetails = () => {
                     {/* Summary Note */}
                     <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
                       <p className="summary-note" style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.8)', margin: 0, lineHeight: 1.5, textAlign: 'left' }}>
-                        {language === 'vi' ? (
-                          <>Bạn đang chọn: <strong>{product.name.vi}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Thời gian chế tác: <strong>{craftTimeDays} ngày</strong>. {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>Đã bật tăng tốc!</strong> : 'Nhấn 🚀 để tăng tốc.'}</>
+                        {product.isReadyStock ? (
+                          language === 'vi' ? (
+                            <>Bạn đang chọn: <strong>{product.name.vi}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Giao hàng ngay trong: <strong>1-2 ngày</strong>.</>
+                          ) : (
+                            <>Selected: <strong>{product.name.en}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Fast delivery: <strong>1-2 days</strong>.</>
+                          )
                         ) : (
-                          <>Selected: <strong>{product.name.en}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Crafting: <strong>{craftTimeDays} days</strong>. {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>Fast mode ON!</strong> : 'Tap 🚀 to speed up.'}</>
+                          language === 'vi' ? (
+                            <>Bạn đang chọn: <strong>{product.name.vi}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Thời gian chế tác: <strong>{craftTimeDays} ngày</strong>. {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>Đã bật tăng tốc!</strong> : 'Nhấn 🚀 để tăng tốc.'}</>
+                          ) : (
+                            <>Selected: <strong>{product.name.en}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Crafting: <strong>{craftTimeDays} days</strong>. {isFastCrafting ? <strong style={{ color: '#b91c1c' }}>Fast mode ON!</strong> : 'Tap 🚀 to speed up.'}</>
+                          )
                         )}
                       </p>
                     </div>
@@ -659,15 +686,17 @@ export const ProductDetails = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', overflow: 'hidden' }}>
               {/* PLA Option */}
               <button 
-                onClick={() => { setSelectedMaterial('PLA'); setIsCartExpanded(true); }}
+                onClick={() => { if(!product.isReadyStock) { setSelectedMaterial('PLA'); setIsCartExpanded(true); } }}
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem',
                   borderRadius: 'var(--radius-md)',
-                  border: `2px solid ${selectedMaterial === 'PLA' ? 'var(--color-accent)' : 'var(--glass-border)'}`,
+                  border: `2px solid ${selectedMaterial === 'PLA' ? '#4ade80' : 'var(--glass-border)'}`,
                   background: selectedMaterial === 'PLA' ? 'rgba(74, 222, 128, 0.1)' : 'var(--color-surface)',
-                  color: selectedMaterial === 'PLA' ? 'var(--color-accent)' : 'var(--color-text)',
-                  cursor: 'pointer', transition: 'all 0.2s',
-                  position: 'relative', overflow: 'hidden', minWidth: 0
+                  color: selectedMaterial === 'PLA' ? '#4ade80' : 'var(--color-text)',
+                  cursor: product.isReadyStock ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
+                  position: 'relative', overflow: 'hidden', minWidth: 0,
+                  opacity: product.isReadyStock && selectedMaterial !== 'PLA' ? 0.3 : 1,
+                  pointerEvents: product.isReadyStock && selectedMaterial !== 'PLA' ? 'none' : 'auto'
                 }}
               >
                 <FilamentSpool color={selectedMaterial === 'PLA' ? '#4ade80' : 'var(--color-text-muted)'} isActive={selectedMaterial === 'PLA'} />
@@ -677,15 +706,17 @@ export const ProductDetails = () => {
 
               {/* PETG Option */}
               <button 
-                onClick={() => { setSelectedMaterial('PETG'); setIsCartExpanded(true); }}
+                onClick={() => { if(!product.isReadyStock) { setSelectedMaterial('PETG'); setIsCartExpanded(true); } }}
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem',
                   borderRadius: 'var(--radius-md)',
                   border: `2px solid ${selectedMaterial === 'PETG' ? '#fbbf24' : 'var(--glass-border)'}`,
                   background: selectedMaterial === 'PETG' ? 'rgba(251, 191, 36, 0.1)' : 'var(--color-surface)',
                   color: selectedMaterial === 'PETG' ? '#fbbf24' : 'var(--color-text)',
-                  cursor: 'pointer', transition: 'all 0.2s',
-                  position: 'relative', overflow: 'hidden', minWidth: 0
+                  cursor: product.isReadyStock ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
+                  position: 'relative', overflow: 'hidden', minWidth: 0,
+                  opacity: product.isReadyStock && selectedMaterial !== 'PETG' ? 0.3 : 1,
+                  pointerEvents: product.isReadyStock && selectedMaterial !== 'PETG' ? 'none' : 'auto'
                 }}
               >
                 <FilamentSpool color={selectedMaterial === 'PETG' ? '#fbbf24' : 'var(--color-text-muted)'} isActive={selectedMaterial === 'PETG'} />
@@ -814,7 +845,7 @@ export const ProductDetails = () => {
                     return (
                       <button 
                         key={size}
-                        onClick={() => { setSelectedSize(size); setIsCartExpanded(true); }}
+                        onClick={() => { if(!product.isReadyStock) { setSelectedSize(size); setIsCartExpanded(true); } }}
                         style={{
                           display: 'flex',
                           justifyContent: 'center',
@@ -825,7 +856,8 @@ export const ProductDetails = () => {
                           background: isSelected ? 'rgba(74, 222, 128, 0.1)' : 'transparent',
                           color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)',
                           transition: 'all 0.2s',
-                          cursor: 'pointer'
+                          cursor: product.isReadyStock ? 'not-allowed' : 'pointer',
+                          opacity: product.isReadyStock && !isSelected ? 0.3 : 1
                         }}
                       >
                         <span style={{ fontWeight: 700, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{sizeDetails.label}</span>
@@ -839,79 +871,136 @@ export const ProductDetails = () => {
           </div>
 
           {/* Crafting Progress Bar UI */}
-          <motion.div 
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.3 }}
-            style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}
-          >
-            <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Clock size={20} color="#f59e0b" /> 
-              {language === 'vi' ? 'QUY TRÌNH CHẾ TÁC DỰ KIẾN' : 'Estimated Crafting Process'}
-            </h3>
-            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
-              {language === 'vi' ? `Tổng thời gian: khoảng ${craftTimeDays} ngày` : `Total time: approx ${craftTimeDays} days`}
-            </p>
-            
-            <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', padding: '0 5%' }}>
-              {/* Line behind steps */}
-              <div style={{ position: 'absolute', top: '20px', left: '15%', right: '15%', height: '12px', background: 'var(--glass-border)', zIndex: 0, borderRadius: '6px' }}>
-                 {/* Animated fill line */}
-                 <motion.div 
-                   initial={{ width: 0 }}
-                   animate={{ width: '50%' }}
-                   transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
-                   style={{ height: '100%', background: '#f59e0b', borderRadius: '6px', boxShadow: '0 0 14px rgba(245,158,11,0.6)' }}
-                 />
-              </div>
+          {/* Alternative UI for Ready Stock vs Crafting */}
+          {!product.isReadyStock ? (
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.3 }}
+              style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}
+            >
+              <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Clock size={20} color="#f59e0b" /> 
+                {language === 'vi' ? 'QUY TRÌNH CHẾ TÁC DỰ KIẾN' : 'Estimated Crafting Process'}
+              </h3>
+              <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+                {language === 'vi' ? `Tổng thời gian: khoảng ${craftTimeDays} ngày` : `Total time: approx ${craftTimeDays} days`}
+              </p>
               
-              {/* Step 1: Order Placed */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 1, gap: '0.75rem', width: '80px' }}>
-                <motion.div 
-                  whileHover={{ scale: 1.1 }}
-                  style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--color-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000', boxShadow: '0 0 15px rgba(74, 222, 128, 0.4)' }}
-                >
-                  <ClipboardCheck size={24} />
-                </motion.div>
-                <div style={{ textAlign: 'center' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', display: 'block' }}>
-                    {language === 'vi' ? 'Đặt Hàng' : 'Order Placed'}
-                  </span>
+              <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', padding: '0 5%' }}>
+                {/* Line behind steps */}
+                <div style={{ position: 'absolute', top: '20px', left: '15%', right: '15%', height: '12px', background: 'var(--glass-border)', zIndex: 0, borderRadius: '6px' }}>
+                   {/* Animated fill line */}
+                   <motion.div 
+                     initial={{ width: 0 }}
+                     animate={{ width: '50%' }}
+                     transition={{ duration: 1.5, ease: "easeOut", delay: 0.5 }}
+                     style={{ height: '100%', background: '#f59e0b', borderRadius: '6px', boxShadow: '0 0 14px rgba(245,158,11,0.6)' }}
+                   />
                 </div>
-              </div>
+                
+                {/* Step 1: Order Placed */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 1, gap: '0.75rem', width: '80px' }}>
+                  <motion.div 
+                    whileHover={{ scale: 1.1 }}
+                    style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--color-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#000', boxShadow: '0 0 15px rgba(74, 222, 128, 0.4)' }}
+                  >
+                    <ClipboardCheck size={24} />
+                  </motion.div>
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', display: 'block' }}>
+                      {language === 'vi' ? 'Đặt Hàng' : 'Order Placed'}
+                    </span>
+                  </div>
+                </div>
 
-              {/* Step 2: Crafting */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 1, gap: '0.75rem', width: '80px' }}>
-                <motion.div 
-                  animate={{ rotate: [-10, 10, -10] }}
-                  transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
-                  style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--color-surface)', border: '2px solid var(--color-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-accent)' }}
-                >
-                  <Hammer size={24} />
-                </motion.div>
-                <div style={{ textAlign: 'center' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', display: 'block' }}>
-                    {language === 'vi' ? 'Chế Tác' : 'Crafting'}
-                  </span>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                    ({craftTimeDays} {language === 'vi' ? 'ngày' : 'days'})
-                  </span>
+                {/* Step 2: Crafting */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 1, gap: '0.75rem', width: '80px' }}>
+                  <motion.div 
+                    animate={{ rotate: [-10, 10, -10] }}
+                    transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut" }}
+                    style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--color-surface)', border: '2px solid var(--color-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-accent)' }}
+                  >
+                    <Hammer size={24} />
+                  </motion.div>
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text)', display: 'block' }}>
+                      {language === 'vi' ? 'Chế Tác' : 'Crafting'}
+                    </span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                      ({craftTimeDays} {language === 'vi' ? 'ngày' : 'days'})
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              {/* Step 3: Shipped */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 1, gap: '0.75rem', width: '80px' }}>
-                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--color-surface)', border: '2px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)' }}>
-                  <Truck size={24} />
-                </div>
-                <div style={{ textAlign: 'center' }}>
-                  <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-muted)', display: 'block' }}>
-                    {language === 'vi' ? 'Giao Hàng' : 'Shipped'}
-                  </span>
+                {/* Step 3: Shipped */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 1, gap: '0.75rem', width: '80px' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--color-surface)', border: '2px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)' }}>
+                    <Truck size={24} />
+                  </div>
+                  <div style={{ textAlign: 'center' }}>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-text-muted)', display: 'block' }}>
+                      {language === 'vi' ? 'Giao Hàng' : 'Shipped'}
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          ) : (
+            <motion.div 
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.3 }}
+              style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}
+            >
+              <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Gift size={20} color="var(--color-accent)" /> 
+                {language === 'vi' ? 'TÙY CHỌN DÀNH CHO HÀNG SẴN' : 'READY STOCK OPTIONS'}
+              </h3>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {/* Engraving */}
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem' }}>
+                    {language === 'vi' ? 'Khắc tên / Lời nhắn (Miễn phí)' : 'Custom Engraving (Free)'}
+                  </label>
+                  <input 
+                    type="text" 
+                    value={engravingText}
+                    onChange={(e) => setEngravingText(e.target.value)}
+                    placeholder={language === 'vi' ? 'Nhập nội dung cần khắc...' : 'Enter text to engrave...'} 
+                    style={{ width: '100%', padding: '0.75rem 1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', color: '#fff', outline: 'none' }}
+                  />
+                </div>
+
+                {/* Mica Box */}
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem' }}>
+                    {language === 'vi' ? 'Hộp Mica Bảo Vệ' : 'Protective Mica Box'}
+                  </label>
+                  <div style={{ position: 'relative' }}>
+                    <select 
+                      value={selectedMicaBox}
+                      onChange={(e) => setSelectedMicaBox(e.target.value)}
+                      style={{ background: 'rgba(0,0,0,0.2)', color: '#fff', border: '1px solid var(--glass-border)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)', width: '100%', appearance: 'none', cursor: 'pointer', outline: 'none' }}
+                    >
+                      <option style={{ background: '#111' }} value="">{language === 'vi' ? 'Không mua kèm hộp' : 'No Box'}</option>
+                      <option style={{ background: '#111' }} value="standard">{language === 'vi' ? 'Hộp Mica Thường' : 'Standard Mica Box'}</option>
+                      <option style={{ background: '#111' }} value="led">{language === 'vi' ? 'Hộp Mica + Đèn LED' : 'Mica Box with LED'}</option>
+                    </select>
+                    <div style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
+                      <ChevronDown size={16} color="var(--color-text-muted)" />
+                    </div>
+                  </div>
+                  <div style={{ marginTop: '0.5rem', textAlign: 'right' }}>
+                    <a href="/products/accessories" target="_blank" style={{ fontSize: '0.8rem', color: 'var(--color-accent)', textDecoration: 'underline' }}>
+                      {language === 'vi' ? 'Xem chi tiết các loại hộp Mica' : 'View Mica Box details'}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
 
           {/* Buy button moved to left column */}
 

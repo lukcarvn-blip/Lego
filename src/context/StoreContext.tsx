@@ -20,6 +20,8 @@ export interface CartItem {
   material: ProductMaterial;
   quantity: number;
   isFastCrafting?: boolean;
+  engravingText?: string;
+  micaBox?: string;
 }
 
 export interface Order {
@@ -97,7 +99,7 @@ interface StoreContextType {
   dataError: string | null;
   updateProduct: (updated: Product) => void;
   cart: CartItem[];
-  addToCart: (product: Product, size: ProductSize, material: ProductMaterial, quantity: number, e?: React.MouseEvent, isFastCrafting?: boolean) => void;
+  addToCart: (product: Product, size: ProductSize, material: ProductMaterial, quantity: number, e?: React.MouseEvent, isFastCrafting?: boolean, engravingText?: string, micaBox?: string) => void;
   removeFromCart: (productId: string, size: ProductSize, material: ProductMaterial, isFastCrafting?: boolean) => void;
   clearCart: () => void;
   orders: Order[];
@@ -314,8 +316,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     } catch (e) { console.error(e); }
   };
 
-  const addToCart = (product: Product, size: ProductSize, material: ProductMaterial, quantity: number, e?: React.MouseEvent, isFastCrafting: boolean = false) => {
+  const addToCart = (product: Product, size: ProductSize, material: ProductMaterial, quantity: number, e?: React.MouseEvent, isFastCrafting: boolean = false, engravingText?: string, micaBox?: string) => {
     if (e) {
+      e.stopPropagation();
+      e.preventDefault();
       const startX = e.clientX;
       const startY = e.clientY;
       const id = `fly-${Date.now()}-${Math.random()}`;
@@ -326,15 +330,11 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     }
     
     setCart(prev => {
-      const existing = prev.find(item => item.product.id === product.id && item.size === size && item.material === material && item.isFastCrafting === isFastCrafting);
+      const existing = prev.find(item => item.product.id === product.id && item.size === size && item.material === material && item.isFastCrafting === isFastCrafting && item.engravingText === engravingText && item.micaBox === micaBox);
       if (existing) {
-        return prev.map(item => 
-          item.product.id === product.id && item.size === size && item.material === material && item.isFastCrafting === isFastCrafting
-            ? { ...item, quantity: item.quantity + quantity }
-            : item
-        );
+        return prev.map(item => item === existing ? { ...item, quantity: item.quantity + quantity } : item);
       }
-      return [...prev, { product, size, material, quantity, isFastCrafting }];
+      return [...prev, { product, size, material, quantity, isFastCrafting, engravingText, micaBox }];
     });
   };
 
