@@ -870,12 +870,7 @@ export const Admin = () => {
                 <InputField label="Giá ($USD) *">
                   <input type="number" required step="0.01" value={editingProduct.price || 0} onChange={e => setEditingProduct({...editingProduct, price: parseFloat(e.target.value)})} style={inputStyle} />
                 </InputField>
-                <InputField label="Tồn kho *">
-                  <input type="number" required value={editingProduct.stock || 0} onChange={e => setEditingProduct({...editingProduct, stock: parseInt(e.target.value)})} style={inputStyle} />
-                </InputField>
-                <InputField label="Thời gian in *">
-                  <input type="text" required placeholder="vd: 2-4 days" value={editingProduct.estimatedPrintTime || ''} onChange={e => setEditingProduct({...editingProduct, estimatedPrintTime: e.target.value})} style={inputStyle} />
-                </InputField>
+                
                 <InputField label="Loại khuyến mãi">
                   <select value={editingProduct.saleType || ''} onChange={e => setEditingProduct({...editingProduct, saleType: e.target.value ? e.target.value as any : null})} style={inputStyle}>
                     <option value="">Không có</option>
@@ -888,6 +883,37 @@ export const Admin = () => {
                     <input type="number" min="1" max="100" value={editingProduct.discountPercentage || 0} onChange={e => setEditingProduct({...editingProduct, discountPercentage: parseInt(e.target.value)})} style={inputStyle} />
                   </InputField>
                 )}
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)' }}>
+                <InputField label="Nguồn hàng *">
+                  <select value={editingProduct.isReadyStock ? 'ready' : 'crafting'} onChange={e => setEditingProduct({...editingProduct, isReadyStock: e.target.value === 'ready'})} style={inputStyle}>
+                    <option value="crafting">Chế tác (In 3D)</option>
+                    <option value="ready">Hàng sẵn</option>
+                  </select>
+                </InputField>
+
+                {editingProduct.isReadyStock ? (
+                  <InputField label="Số lượng sẵn có *">
+                    <input type="number" required min="0" value={editingProduct.stock || 0} onChange={e => setEditingProduct({...editingProduct, stock: parseInt(e.target.value)})} style={inputStyle} />
+                  </InputField>
+                ) : (
+                  <InputField label="Thời gian chế tác *">
+                    <input type="text" required placeholder="vd: 2-4 days" value={editingProduct.estimatedPrintTime || ''} onChange={e => setEditingProduct({...editingProduct, estimatedPrintTime: e.target.value})} style={inputStyle} />
+                  </InputField>
+                )}
+
+                <InputField label="Loại nhựa (phân cách bằng dấu phẩy)">
+                  <input type="text" placeholder="vd: PLA, PETG, ABS" value={editingProduct.availableMaterials?.join(', ') || ''} onChange={e => setEditingProduct({...editingProduct, availableMaterials: e.target.value.split(',').map(s => s.trim()).filter(s => s)})} style={inputStyle} />
+                </InputField>
+
+                <InputField label="Kích thước (LxWxH)">
+                  <input type="text" placeholder="vd: 15x15x20 cm" value={editingProduct.dimensions || ''} onChange={e => setEditingProduct({...editingProduct, dimensions: e.target.value})} style={inputStyle} />
+                </InputField>
+
+                <InputField label="Cân nặng">
+                  <input type="text" placeholder="vd: 500g" value={editingProduct.weight || ''} onChange={e => setEditingProduct({...editingProduct, weight: e.target.value})} style={inputStyle} />
+                </InputField>
               </div>
             </div>
 

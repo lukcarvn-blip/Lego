@@ -24,6 +24,10 @@ export interface Product {
   discountPercentage?: number;
   video?: string;
   videos?: string[];
+  availableMaterials?: string[];
+  dimensions?: string;
+  weight?: string;
+  isReadyStock?: boolean;
 }
 
 export const mockProducts: Product[] = [

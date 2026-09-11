@@ -601,7 +601,29 @@ export const ProductDetails = () => {
                 <Eye size={18} />
                 <span>{(product.views || 0) * 2} {language === 'vi' ? 'lượt xem' : 'views'}</span>
               </div>
-              <span style={{ color: 'var(--color-accent)' }}>{product.stock} {language === 'vi' ? 'sẵn hàng' : 'in stock'}</span>
+              {product.isReadyStock ? (
+                <span style={{ color: 'var(--color-accent)', fontWeight: 600 }}>📦 {product.stock} {language === 'vi' ? 'sẵn hàng' : 'in stock'}</span>
+              ) : (
+                <span style={{ color: '#f59e0b', fontWeight: 600 }}>🛠️ {language === 'vi' ? 'Chế tác theo yêu cầu' : 'Made to order'}</span>
+              )}
+              {product.dimensions && (
+                <span style={{ 
+                  color: 'var(--color-text)', fontSize: '0.85rem', fontWeight: 600,
+                  background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px',
+                  border: '1px solid rgba(255,255,255,0.1)'
+                }}>
+                  📏 {product.dimensions}
+                </span>
+              )}
+              {product.weight && (
+                <span style={{ 
+                  color: 'var(--color-text)', fontSize: '0.85rem', fontWeight: 600,
+                  background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px',
+                  border: '1px solid rgba(255,255,255,0.1)'
+                }}>
+                  ⚖️ {product.weight}
+                </span>
+              )}
               {product.sku && (
                 <span style={{ 
                   color: 'var(--color-text)', fontSize: '0.85rem', fontWeight: 600,
