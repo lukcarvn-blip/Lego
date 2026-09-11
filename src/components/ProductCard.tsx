@@ -132,35 +132,35 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 </div>
               </div>
 
-              {[
-                { size: 24, top: '10%', left: '15%', delay: 0 },
-                { size: 14, top: '20%', left: '75%', delay: 0.1 },
-                { size: 20, top: '65%', left: '10%', delay: 0.2 },
-                { size: 12, top: '80%', left: '80%', delay: 0.15 },
-                { size: 18, top: '25%', left: '85%', delay: 0.05 },
-              ].map((bling, i) => (
+              {/* LED Running Border Effect */}
+              <motion.div
+                variants={{
+                  rest: { opacity: 0 },
+                  hover: { opacity: 1 }
+                }}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  zIndex: 12,
+                  pointerEvents: 'none',
+                  borderRadius: 'inherit',
+                  padding: '3px',
+                  WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                  WebkitMaskComposite: 'xor',
+                  maskComposite: 'exclude',
+                  overflow: 'hidden'
+                }}
+              >
                 <motion.div
-                  key={i}
-                  variants={{
-                    rest: { opacity: 0, scale: 0, y: 0, rotate: 0 },
-                    hover: { 
-                      opacity: [0, 1, 0.7, 1], 
-                      scale: [0, 1.2, 1, 1.1, 1], 
-                      y: [0, -15, 0],
-                      rotate: 360
-                    }
+                  animate={{ rotate: 360 }}
+                  transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
+                  style={{
+                    position: 'absolute',
+                    top: '-50%', left: '-50%', right: '-50%', bottom: '-50%',
+                    background: 'conic-gradient(from 0deg, transparent 70%, #3b82f6 85%, #93c5fd 100%)',
                   }}
-                  transition={{ 
-                    scale: { duration: 2, repeat: Infinity, repeatType: "reverse", delay: bling.delay },
-                    opacity: { duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: bling.delay },
-                    y: { duration: 3, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: bling.delay },
-                    rotate: { duration: 4, repeat: Infinity, ease: "linear" }
-                  }}
-                  style={{ position: 'absolute', top: bling.top, left: bling.left, color: '#facc15', zIndex: 10, pointerEvents: 'none' }}
-                >
-                  <Sparkles size={bling.size} fill="#facc15" />
-                </motion.div>
-              ))}
+                />
+              </motion.div>
 
               <motion.img src={product.images?.[0] || product.image} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={product.name[language as keyof typeof product.name]}
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowGallery(true); setGalleryIndex(0); }}
@@ -272,39 +272,35 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             </div>
 
 
-            {/* Bling Bling Effects (Scattered) */}
-            {[
-              { size: 28, top: '20%', left: '15%', delay: 0 },
-              { size: 16, top: '15%', left: '75%', delay: 0.1 },
-              { size: 24, top: '65%', left: '10%', delay: 0.2 },
-              { size: 14, top: '80%', left: '80%', delay: 0.15 },
-              { size: 22, top: '25%', left: '85%', delay: 0.05 },
-              { size: 12, top: '75%', left: '20%', delay: 0.25 },
-              { size: 18, top: '40%', left: '10%', delay: 0.12 },
-              { size: 18, top: '55%', left: '85%', delay: 0.08 },
-            ].map((bling, i) => (
+            {/* LED Running Border Effect */}
+            <motion.div
+              variants={{
+                rest: { opacity: 0 },
+                hover: { opacity: 1 }
+              }}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                zIndex: 12,
+                pointerEvents: 'none',
+                borderRadius: 'inherit',
+                padding: '3px',
+                WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                WebkitMaskComposite: 'xor',
+                maskComposite: 'exclude',
+                overflow: 'hidden'
+              }}
+            >
               <motion.div
-                key={i}
-                variants={{
-                  rest: { opacity: 0, scale: 0, y: 0, rotate: 0 },
-                  hover: { 
-                    opacity: [0, 1, 0.7, 1], 
-                    scale: [0, 1.2, 1, 1.1, 1], 
-                    y: [0, -15, 0],
-                    rotate: 360
-                  }
+                animate={{ rotate: 360 }}
+                transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
+                style={{
+                  position: 'absolute',
+                  top: '-50%', left: '-50%', right: '-50%', bottom: '-50%',
+                  background: 'conic-gradient(from 0deg, transparent 70%, #3b82f6 85%, #93c5fd 100%)',
                 }}
-                transition={{ 
-                  scale: { duration: 2, repeat: Infinity, repeatType: "reverse", delay: bling.delay },
-                  opacity: { duration: 1.5, repeat: Infinity, repeatType: "reverse", delay: bling.delay },
-                  y: { duration: 3, repeat: Infinity, repeatType: "reverse", ease: "easeInOut", delay: bling.delay },
-                  rotate: { duration: 4, repeat: Infinity, ease: "linear" }
-                }}
-                style={{ position: 'absolute', top: bling.top, left: bling.left, color: '#facc15', zIndex: 10, pointerEvents: 'none' }}
-              >
-                <Sparkles size={isMobile ? Math.round(bling.size * 0.7) : bling.size} fill="#facc15" />
-              </motion.div>
-            ))}
+              />
+            </motion.div>
 
             <motion.img 
               onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowGallery(true); setGalleryIndex(0); }}
