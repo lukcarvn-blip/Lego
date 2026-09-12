@@ -620,7 +620,7 @@ export const Admin = () => {
                   borderRadius: '50%', width: '18px', height: '18px',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '0.65rem', fontWeight: 800, flexShrink: 0
-                }}>{tab.badge}</span>
+                }}>{(tab as any).badge}</span>
               )}
             </button>
           ))}
@@ -2070,9 +2070,9 @@ export const Admin = () => {
           >
             <div style={{ position: 'relative' }}>
               {tab.icon}
-              {tab.badge && (
+              {(tab as any).badge && (
                 <span style={{ position: 'absolute', top: -6, right: -10, background: '#ef4444', color: 'white', fontSize: '0.6rem', padding: '0 4px', borderRadius: '10px', fontWeight: 800 }}>
-                  {tab.badge}
+                  {(tab as any).badge}
                 </span>
               )}
             </div>
