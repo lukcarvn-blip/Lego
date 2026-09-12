@@ -242,8 +242,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             viewport={{ amount: 0.5, margin: "-10% 0px -10% 0px" }}
             animate={isMobile ? undefined : "rest"}
             style={{ 
-            width: '100%', 
-            aspectRatio: '1/1', 
+            width: '100%',
+          flexShrink: 0,
+          aspectRatio: '1/1', 
             borderRadius: 'var(--radius-md)', 
             overflow: 'hidden', 
             background: 'radial-gradient(circle at 50% 50%, rgba(74, 222, 128, 0.15) 0%, rgba(0,0,0,0.5) 100%)',
