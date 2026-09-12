@@ -109,11 +109,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative'
             }}
               initial="rest"
-              whileHover="hover"
-              whileTap="hover"
-              whileInView={isMobile ? "hover" : undefined}
-              viewport={{ amount: 0.5, margin: "-10% 0px -10% 0px" }}
-              animate={isMobile ? undefined : "rest"}
+              whileHover={isMobile ? undefined : "hover"}
+            whileTap={isMobile ? undefined : "hover"}
+            animate="rest"
             >
               {/* Badges Container */}
               <div style={{ position: 'absolute', top: 8, left: 8, zIndex: 10, display: 'flex', flexDirection: 'column', gap: '4px', alignItems: 'flex-start' }}>
@@ -242,11 +240,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
           }}>
           <motion.div 
             initial="rest"
-            whileHover="hover"
-            whileTap="hover"
-            whileInView={isMobile ? "hover" : undefined}
-            viewport={{ amount: 0.5, margin: "-10% 0px -10% 0px" }}
-            animate={isMobile ? undefined : "rest"}
+            whileHover={isMobile ? undefined : "hover"}
+            whileTap={isMobile ? undefined : "hover"}
+            animate="rest"
             style={{ 
             width: '100%',
           flexShrink: 0,
