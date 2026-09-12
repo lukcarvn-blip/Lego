@@ -364,70 +364,53 @@ export const Admin = () => {
   const [isUploadingImages, setIsUploadingImages] = useState(false);
   const [isAILoading, setIsAILoading] = useState(false);
 
-  const handleAIFill = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const handleAIFill = async () => {
+    const coverUrl = editingProduct.images?.[0];
+    if (!coverUrl) {
+      alert("⚠️ Bắt buộc phải tải ảnh bìa lên trước khi sử dụng tính năng AI! Vui lòng tải ảnh bìa ở phần [Hình ảnh & Video] bên dưới.");
+      return;
+    }
+    
     setIsAILoading(true);
 
     try {
-      // Convert image to base64
+      const response = await fetch(coverUrl);
+      const blob = await response.blob();
+      
       const base64 = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = () => {
           const result = reader.result as string;
-          resolve(result.split(',')[1]); // strip data:image/xxx;base64, prefix
+          resolve(result.split(',')[1]); // strip prefix
         };
         reader.onerror = reject;
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(blob);
       });
 
-      // 1. Upload the image to S3 to get a URL for the cover photo
-      const uploadUrlRes = await fetch('/api/get-upload-url', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filename: file.name, contentType: file.type })
-      });
-      let coverImageUrl = '';
-      if (uploadUrlRes.ok) {
-        const { signedUrl, publicUrl } = await uploadUrlRes.json();
-        await fetch(signedUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } });
-        coverImageUrl = publicUrl;
-      }
-
-      // 2. Call AI description API
       const aiRes = await fetch('/api/ai-describe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageBase64: base64, mimeType: file.type })
+        body: JSON.stringify({ imageBase64: base64, mimeType: blob.type })
       });
-
+      
       if (!aiRes.ok) {
         throw new Error('AI API failed');
       }
 
-      const { result } = await aiRes.json();
-
-      // 3. Auto-fill the form
-      setEditingProduct(prev => ({
-        ...prev,
-        name: { vi: result.nameVi || '', en: result.nameEn || '' },
-        description: { vi: result.descriptionVi || '', en: result.descriptionEn || '' },
-        category: result.category || 'Classic',
-        availableMaterials: result.materials ? result.materials.split(',').map((s: string) => s.trim()).filter(Boolean) : ['PLA'],
-        price: result.estimatedPrice ? result.estimatedPrice / 25400 : prev.price,
-        dimensions: result.dimensions || '',
-        images: coverImageUrl ? [coverImageUrl, ...(prev.images?.slice(1) || [])] : (prev.images || ['']),
-      }));
-
-      showToast('🤖 AI đã tự động điền thông tin sản phẩm!');
-    } catch (err) {
-      console.error('AI fill error:', err);
-      showToast('Lỗi AI: Không thể phân tích ảnh. Vui lòng thêm GEMINI_API_KEY vào Vercel.');
+      const data = await aiRes.json();
+      setEditingProduct({
+        ...editingProduct,
+        name: { vi: data.nameVi || editingProduct.name?.vi, en: data.nameEn || editingProduct.name?.en },
+        description: { vi: data.descriptionVi || editingProduct.description?.vi, en: data.descriptionEn || editingProduct.description?.en }
+      });
+      showToast('AI đã điền thành công!');
+    } catch (error: any) {
+      console.error(error);
+      alert('Lỗi khi phân tích ảnh AI: ' + error.message);
     } finally {
       setIsAILoading(false);
-      e.target.value = '';
     }
-  };
+  };;
 
   const handleUploadFiles = async (e: React.ChangeEvent<HTMLInputElement>, type: 'cover' | 'secondary') => {
     if (!e.target.files || e.target.files.length === 0) return;
@@ -1078,7 +1061,7 @@ export const Admin = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
               <h1 style={{ fontSize: '1.75rem' }}>{editingProduct.id ? <span><Edit2 size={24} style={{marginRight:8}}/> Sửa sản phẩm</span> : <span><Plus size={24} style={{marginRight:8}}/> Thêm sản phẩm mới</span>}</h1>
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                <label style={{
+                <button type="button" onClick={handleAIFill} disabled={isAILoading} style={{
                   display: 'flex', alignItems: 'center', gap: '0.5rem',
                   padding: '0.6rem 1.1rem', borderRadius: 'var(--radius-sm)',
                   background: isAILoading ? 'rgba(139, 92, 246, 0.2)' : 'linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(59, 130, 246, 0.25))',
@@ -1088,9 +1071,8 @@ export const Admin = () => {
                   boxShadow: isAILoading ? 'none' : '0 0 12px rgba(139,92,246,0.2)',
                   transition: 'all 0.3s'
                 }}>
-                  {isAILoading ? (<><RefreshCw size={16} className="spin" /> Đang phân tích ảnh...</>) : (<><Sparkles size={16} /> AI Đăng Nhanh</>)}
-                  <input type="file" accept="image/*" onChange={handleAIFill} style={{ display: 'none' }} disabled={isAILoading} />
-                </label>
+                  {isAILoading ? (<><RefreshCw size={16} className="spin" /> Đang phân tích...</>) : (<><Sparkles size={16} /> AI Đăng Nhanh</>)}
+                </button>
                 <button type="button" onClick={() => setIsEditingProduct(false)} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                   <X size={18} /> Hủy
                 </button>
