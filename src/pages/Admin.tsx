@@ -1739,6 +1739,39 @@ export const Admin = () => {
               </InputField>
             </div>
 
+            <div style={panelStyle}>
+              <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Banner Giữa (Thay thế Video Thực Tế)</h3>
+              <InputField label="Upload Ảnh Banner Giữa">
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                  {tempSettings.middleBannerImage && (
+                    <img src={tempSettings.middleBannerImage} alt="Middle Banner" style={{ height: '60px', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
+                  )}
+                  <input type="text" value={tempSettings.middleBannerImage || ''} onChange={e => setTempSettings({...tempSettings, middleBannerImage: e.target.value})} placeholder="URL ảnh banner hoặc tải lên" style={{ ...inputStyle, flex: 1 }} />
+                  <label style={{ cursor: isUploadingImages ? 'wait' : 'pointer', background: 'rgba(255,255,255,0.1)', border: '1px solid var(--glass-border)', padding: '0.6rem 1rem', borderRadius: '4px', whiteSpace: 'nowrap' }}>
+                    {isUploadingImages ? 'Đang tải...' : 'Tải ảnh lên'}
+                    <input type="file" accept="image/*" onChange={async (e) => {
+                      if (!e.target.files?.length) return;
+                      // using the same upload logic as other images but setting directly
+                      // wait, handleUploadFiles is for products. Let's write a small inline uploader using the api.
+                      setIsUploadingImages(true);
+                      try {
+                        const file = e.target.files[0];
+                        const res = await fetch(`/api/get-upload-url?filename=${encodeURIComponent(file.name)}&contentType=${encodeURIComponent(file.type)}`);
+                        const { uploadUrl, fileUrl } = await res.json();
+                        await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } });
+                        setTempSettings({...tempSettings, middleBannerImage: fileUrl});
+                      } catch(err) {
+                        console.error('Upload failed', err);
+                        alert('Upload failed');
+                      } finally {
+                        setIsUploadingImages(false);
+                      }
+                    }} style={{ display: 'none' }} disabled={isUploadingImages} />
+                  </label>
+                </div>
+              </InputField>
+            </div>
+
             <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2.5rem' }}>💾 Lưu cài đặt</button>
           </form>
         )}

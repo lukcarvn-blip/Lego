@@ -83,6 +83,7 @@ export interface StoreSettings {
   seoDescription?: string;
   favicon?: string;
   bannerText?: string;
+  middleBannerImage?: string; // Banner replacing video shorts
   bankName?: string;
   bankAccount?: string;
   bankOwner?: string;

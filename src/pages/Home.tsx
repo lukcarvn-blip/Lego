@@ -172,90 +172,30 @@ export const Home = () => {
         }}></div>
       </section>
 
-      {/* Video Shorts Slider */}
-      <section className="container" style={{ paddingTop: '5rem' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
-          <motion.h2 {...headerAnimProps} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <LegoHeadIcon size={36} />
-            {language === 'vi' ? 'Video Thực Tế' : 'Product Shorts'}
-          </motion.h2>
-          {/* Scroll arrows */}
-          <span className={['https://www.youtube.com/embed/3GANf76_rYc', 'https://www.youtube.com/embed/OBCKcf3jYzI', 'https://www.youtube.com/embed/mV7G-5miEp4', 'https://www.youtube.com/embed/ZvWrQ6W-HOo'].length <= 4 ? "hide-on-desktop-if-few" : ""} style={{ display: 'flex', gap: '0.35rem', flexShrink: 0 }}>
-            <button
-              onClick={() => {
-                const el = document.getElementById('video-slider');
-                if (el) el.scrollBy({ left: -320, behavior: 'smooth' });
-              }}
-              className="chamfer-btn"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '34px', height: '34px', background: 'rgba(255,255,255,0.06)', border: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', cursor: 'pointer' }}
-              aria-label="Cuộn trái"
-            >
-              <ChevronLeft size={18} />
-            </button>
-            <button
-              onClick={() => {
-                const el = document.getElementById('video-slider');
-                if (el) el.scrollBy({ left: 320, behavior: 'smooth' });
-              }}
-              className="chamfer-btn"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '34px', height: '34px', background: 'rgba(74,222,128,0.12)', border: '1px solid rgba(74,222,128,0.35)', color: 'var(--color-accent)', cursor: 'pointer' }}
-              aria-label="Cuộn phải"
-            >
-              <ChevronRight size={18} />
-            </button>
-          </span>
-        </div>
-        <div style={{ position: 'relative', margin: '0 -1rem' }}>
-          {/* Dark fade on the left */}
-          <div style={{ position: 'absolute', left: 0, top: 0, bottom: '1rem', width: '15%', minWidth: '60px', background: 'linear-gradient(to right, rgba(5,13,5,0.95) 0%, rgba(5,13,5,0.6) 40%, transparent 100%)', pointerEvents: 'none', zIndex: 2 }} />
-          
-          <div
-            id="video-slider"
-            className="hide-scrollbar"
+      {/* Middle Banner replacing Video Shorts Slider */}
+      {settings.middleBannerImage && (
+        <section className="container" style={{ paddingTop: '5rem' }}>
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.6 }}
             style={{
-              display: 'flex',
-              gap: '1.5rem',
-              overflowX: 'auto',
-              scrollSnapType: 'x mandatory',
-              paddingBottom: '1rem',
-              padding: '0 1rem 1rem 1rem'
+              width: '100%',
+              borderRadius: 'var(--radius-md)',
+              overflow: 'hidden',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+              border: '1px solid rgba(255,255,255,0.05)'
             }}
           >
-            {[
-              'https://www.youtube.com/embed/3GANf76_rYc',
-              'https://www.youtube.com/embed/OBCKcf3jYzI',
-              'https://www.youtube.com/embed/mV7G-5miEp4',
-              'https://www.youtube.com/embed/ZvWrQ6W-HOo'
-            ].map((src, idx) => (
-              <div key={idx} style={{
-                flex: '0 0 calc(25% - 1.125rem)',
-                minWidth: '280px',
-                scrollSnapAlign: 'center',
-                aspectRatio: '9/16',
-                borderRadius: 'var(--radius-md)',
-                overflow: 'hidden',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
-                background: '#000',
-                border: '1px solid rgba(255,255,255,0.05)'
-              }}>
-                <iframe
-                  width="100%"
-                  height="100%"
-                  src={`${src}?autoplay=0&controls=1&rel=0`}
-                  title={`YouTube Short ${idx + 1}`}
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  style={{ border: 'none' }}
-                ></iframe>
-              </div>
-            ))}
-          </div>
-
-          {/* Dark fade on the right */}
-          <div style={{ position: 'absolute', right: 0, top: 0, bottom: '1rem', width: '15%', minWidth: '60px', background: 'linear-gradient(to left, rgba(5,13,5,0.95) 0%, rgba(5,13,5,0.6) 40%, transparent 100%)', pointerEvents: 'none', zIndex: 2 }} />
-        </div>
-      </section>
+            <img 
+              src={settings.middleBannerImage} 
+              alt="Middle Banner" 
+              style={{ width: '100%', height: 'auto', display: 'block' }} 
+            />
+          </motion.div>
+        </section>
+      )}
 
       {/* Categories Grid */}
       <motion.section
