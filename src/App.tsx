@@ -1,3 +1,4 @@
+﻿import { AlertTriangle } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { StoreProvider, useStore } from './context/StoreContext';
@@ -92,7 +93,7 @@ function AppContent() {
               backdropFilter: 'blur(8px)'
             }}
           >
-            ⚠️ {dataError} — Đang thử kết nối lại với Firebase...
+            <AlertTriangle size={16} style={{marginRight:'4px'}} /> {dataError} â€” Äang thá»­ káº¿t ná»‘i láº¡i vá»›i Firebase...
           </motion.div>
         )}
       </AnimatePresence>
@@ -144,3 +145,4 @@ function App() {
 }
 
 export default App;
+

@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift, Plus, Minus, Info } from 'lucide-react';
+import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift, Plus, Minus, Info, Weight } from 'lucide-react';
 import { mockProducts, type ProductSize } from '../data/mockProducts';
 import { useStore, type ProductMaterial } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
@@ -646,7 +646,7 @@ export const ProductDetails = () => {
                   background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px',
                   border: '1px solid rgba(255,255,255,0.1)'
                 }}>
-                  📏 {product.dimensions}
+                  <Maximize size={16} style={{marginRight: '8px'}}/> {product.dimensions}
                 </span>
               )}
               {product.weight && (
@@ -655,7 +655,7 @@ export const ProductDetails = () => {
                   background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px',
                   border: '1px solid rgba(255,255,255,0.1)'
                 }}>
-                  ⚖️ {product.weight}
+                  <Weight size={16} style={{marginRight: '8px'}}/> {product.weight}
                 </span>
               )}
               {product.sku && (

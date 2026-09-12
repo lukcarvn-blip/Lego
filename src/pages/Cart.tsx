@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Trash2, ArrowRight, Mail, LogIn, ArrowLeft, CheckCircle, ChevronLeft, ChevronRight, Zap, ShieldCheck, PieChart, QrCode, Wallet, CreditCard, MapPin, Navigation, Loader2 } from 'lucide-react';
+import { Trash2, ArrowRight, Mail, LogIn, ArrowLeft, CheckCircle, ChevronLeft, ChevronRight, Zap, ShieldCheck, PieChart, QrCode, Wallet, CreditCard, MapPin, Navigation, Loader2, FileText } from 'lucide-react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 
@@ -692,7 +692,7 @@ export const Cart = () => {
             
             {/* Header */}
             <h2 style={{ fontSize: '1.1rem', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '1.5rem', color: 'var(--color-accent)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              📋 {language === 'vi' ? 'Tạm Tính' : 'Order Summary'}
+              <FileText size={18} style={{marginRight: '8px'}}/> {language === 'vi' ? 'Tạm Tính' : 'Order Summary'}
             </h2>
 
             {/* Summary rows */}

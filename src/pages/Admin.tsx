@@ -1,12 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useStore, type OrderStatus } from '../context/StoreContext';
-import { 
-  Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings,
-  LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp,
-  Search, Filter, Download, Eye, ExternalLink, Trash2, X,
-  AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw,
-  Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List
-} from 'lucide-react';
+import { Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
@@ -61,10 +55,10 @@ const statusColor: Record<OrderStatus, string> = {
 };
 
 const statusLabel: Record<OrderStatus, string> = {
-  Pending: '⏳ Chờ xử lý',
-  Crafting: '🛠 Đang chế tác',
-  Shipping: '🚚 Đang giao',
-  Delivered: '✅ Đã giao',
+  Pending: 'Chờ xử lý',
+  Crafting: 'Đang chế tác',
+  Shipping: 'Đang giao',
+  Delivered: 'Đã giao',
 };
 
 const generateSKU = (category: string, existingProducts: Product[]) => {
@@ -474,7 +468,7 @@ export const Admin = () => {
         
         {!user && (
           <button onClick={loginWithGoogle} className="btn-primary" style={{ padding: '0.75rem 2rem', fontSize: '1rem' }}>
-            🔑 Đăng nhập bằng Google
+            <Key size={18} style={{marginRight:8}}/> Đăng nhập bằng Google
           </button>
         )}
         
@@ -627,7 +621,7 @@ export const Admin = () => {
         {/* ── DASHBOARD TAB ─────────────────────────────────────────── */}
         {activeTab === 'dashboard' && (
           <div>
-            <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '0.5rem' }}>📊 Dashboard</h1>
+            <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '0.5rem' }}><BarChart2 size={28} style={{marginRight:8}}/> Dashboard</h1>
             <p style={{ color: 'var(--color-text-muted)', marginBottom: '2rem', fontSize: '0.875rem' }}>Tổng quan hệ thống LEGATO</p>
 
             {/* Stats grid */}
@@ -795,7 +789,7 @@ export const Admin = () => {
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>{activeTab === 'printers' ? '🖨️ Quản lý máy in' : '🏪 Quản lý sản phẩm'}</h1>
+                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>{activeTab === 'printers' ? '<Printer size={28} style={{marginRight:8}}/> Quản lý máy in' : '🏪 Quản lý sản phẩm'}</h1>
                 <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{currentDisplayProducts.length} sản phẩm</p>
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -881,7 +875,7 @@ export const Admin = () => {
                       </td>
                       <td style={{ padding: '0.75rem 1rem' }}>
                         <span style={{ padding: '2px 8px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 700, background: product.stock <= 3 ? 'rgba(239,68,68,0.15)' : 'rgba(74,222,128,0.1)', color: product.stock <= 3 ? '#ef4444' : 'var(--color-accent)' }}>
-                          {product.stock <= 3 && '⚠ '}{product.stock}
+                          {product.stock <= 3 && <AlertTriangle size={14} style={{display:'inline-block', verticalAlign:'middle', marginRight: 4}}/>}{product.stock}
                         </span>
                       </td>
                       <td style={{ padding: '0.75rem 1rem', fontSize: '0.85rem', color: '#ef4444' }}>
@@ -922,7 +916,7 @@ export const Admin = () => {
         {activeTab === 'products' && isEditingProduct && (
           <form onSubmit={handleSaveProduct} style={{ maxWidth: '900px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h1 style={{ fontSize: '1.75rem' }}>{editingProduct.id ? '✏️ Sửa sản phẩm' : '➕ Thêm sản phẩm mới'}</h1>
+              <h1 style={{ fontSize: '1.75rem' }}>{editingProduct.id ? <span><Edit2 size={24} style={{marginRight:8}}/> Sửa sản phẩm</span> : <span><Plus size={24} style={{marginRight:8}}/> Thêm sản phẩm mới</span>}</h1>
               <button type="button" onClick={() => setIsEditingProduct(false)} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                 <X size={18} /> Hủy
               </button>
@@ -1115,7 +1109,7 @@ export const Admin = () => {
 
             <div style={{ display: 'flex', gap: '1rem' }}>
               <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2rem', fontSize: '1rem' }}>
-                {editingProduct.id ? '💾 Lưu thay đổi' : '🚀 Thêm sản phẩm'}
+                {editingProduct.id ? <span><Save size={16} style={{marginRight:6}}/> Lưu thay đổi</span> : '🚀 Thêm sản phẩm'}
               </button>
               <button type="button" onClick={() => setIsEditingProduct(false)} style={{ padding: '0.875rem 1.5rem', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', color: 'var(--color-text-muted)' }}>Hủy</button>
             </div>
@@ -1127,7 +1121,7 @@ export const Admin = () => {
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>📝 Quản lý bài viết</h1>
+                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}><BookOpen size={28} style={{marginRight:8}}/> Quản lý bài viết</h1>
                 <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{blogPosts.length} bài viết đã xuất bản</p>
               </div>
               <button className="btn-primary" onClick={() => { setEditingBlogPost({}); setIsEditingBlog(true); }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem' }}>
@@ -1178,7 +1172,7 @@ export const Admin = () => {
         {activeTab === 'blog' && isEditingBlog && (
           <div style={{ maxWidth: '900px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h1 style={{ fontSize: '1.75rem' }}>{editingBlogPost.id ? '✏️ Chỉnh sửa bài viết' : '✍️ Viết bài mới'}</h1>
+              <h1 style={{ fontSize: '1.75rem' }}>{editingBlogPost.id ? <span><Edit2 size={24} style={{marginRight:8}}/> Chỉnh sửa bài viết</span> : '✍️ Viết bài mới'}</h1>
               <button type="button" onClick={() => setIsEditingBlog(false)} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                 <X size={18} /> Hủy
               </button>
@@ -1269,7 +1263,7 @@ export const Admin = () => {
 
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2rem' }}>
-                  {editingBlogPost.id ? '💾 Cập nhật bài viết' : '🚀 Đăng bài viết'}
+                  {editingBlogPost.id ? <span><Save size={16} style={{marginRight:6}}/> Cập nhật bài viết</span> : '🚀 Đăng bài viết'}
                 </button>
               </div>
             </form>
@@ -1281,7 +1275,7 @@ export const Admin = () => {
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>🗂 Quản lý File (Vietnix S3)</h1>
+                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}><Folder size={28} style={{marginRight:8}}/> Quản lý File (Vietnix S3)</h1>
                 <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{cloudFiles.length} tệp trong thư mục hiện tại</p>
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
@@ -1476,7 +1470,7 @@ export const Admin = () => {
         {/* ── MEMBERS TAB ───────────────────────────────────────────── */}
         {activeTab === 'members' && (
           <div>
-            <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '1.5rem' }}>👥 Quản lý thành viên</h1>
+            <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '1.5rem' }}><Users size={28} style={{marginRight:8}}/> Quản lý thành viên</h1>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
                 <thead>
@@ -1516,7 +1510,7 @@ export const Admin = () => {
         {/* ── SETTINGS TAB ──────────────────────────────────────────── */}
         {activeTab === 'settings' && (
           <form onSubmit={handleSaveSettings} style={{ maxWidth: '800px' }}>
-            <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '1.5rem' }}>⚙️ Cài đặt Website</h1>
+            <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '1.5rem' }}><Settings size={28} style={{marginRight:8}}/> Cài đặt Website</h1>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
               <div style={panelStyle}>

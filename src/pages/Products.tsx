@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
-import { Filter, ChevronLeft, ChevronRight, Zap, Sparkles, LayoutGrid, LayoutList } from 'lucide-react';
+import { Filter, ChevronLeft, ChevronRight, Zap, Sparkles, LayoutGrid, LayoutList, Shield, Moon, Star, Wand2, Swords, PawPrint, Rocket, Castle, Building2, Settings } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LegoHeadIcon } from '../components/LegoHeadIcon';
 
@@ -202,18 +202,18 @@ export const Products = () => {
                 className="hide-scrollbar"
               >
                 {[
-                  { name: 'Marvel', emoji: '🕷️', color: '#e23636', bg: 'rgba(226,54,54,0.1)', border: 'rgba(226,54,54,0.3)', path: '/category/superheroes?q=marvel' },
-                  { name: 'DC Comics', emoji: '🦇', color: '#0074e4', bg: 'rgba(0,116,228,0.1)', border: 'rgba(0,116,228,0.3)', path: '/category/superheroes?q=dc' },
+                  { name: 'Marvel', icon: <Shield size={24} />, color: '#e23636', bg: 'rgba(226,54,54,0.1)', border: 'rgba(226,54,54,0.3)', path: '/category/superheroes?q=marvel' },
+                  { name: 'DC Comics', icon: <Moon size={24} />, color: '#0074e4', bg: 'rgba(0,116,228,0.1)', border: 'rgba(0,116,228,0.3)', path: '/category/superheroes?q=dc' },
                   { name: 'Star Wars', emoji: '⚔️', color: '#ffe81f', bg: 'rgba(255,232,31,0.1)', border: 'rgba(255,232,31,0.3)', path: '/category/sci-fi?q=starwars' },
-                  { name: 'Harry Potter', emoji: '🧙', color: '#9c59b6', bg: 'rgba(156,89,182,0.1)', border: 'rgba(156,89,182,0.3)', path: '/category/fantasy?q=harrypotter' },
+                  { name: 'Harry Potter', icon: <Wand2 size={24} />, color: '#9c59b6', bg: 'rgba(156,89,182,0.1)', border: 'rgba(156,89,182,0.3)', path: '/category/fantasy?q=harrypotter' },
                   { name: 'Avengers', emoji: '🛡️', color: '#c0392b', bg: 'rgba(192,57,43,0.1)', border: 'rgba(192,57,43,0.3)', path: '/category/superheroes?q=avengers' },
-                  { name: 'Anime', emoji: '⛩️', color: '#e91e8c', bg: 'rgba(233,30,140,0.1)', border: 'rgba(233,30,140,0.3)', path: '/category/anime' },
-                  { name: 'Jurassic', emoji: '🦖', color: '#2ecc71', bg: 'rgba(46,204,113,0.1)', border: 'rgba(46,204,113,0.3)', path: '/category/sci-fi?q=jurassic' },
-                  { name: 'Ninjago', emoji: '🥷', color: '#e67e22', bg: 'rgba(230,126,34,0.1)', border: 'rgba(230,126,34,0.3)', path: '/category/classic?q=ninjago' },
-                  { name: 'Space', emoji: '🚀', color: '#3498db', bg: 'rgba(52,152,219,0.1)', border: 'rgba(52,152,219,0.3)', path: '/category/sci-fi?q=space' },
-                  { name: 'Castle', emoji: '🏰', color: '#f39c12', bg: 'rgba(243,156,18,0.1)', border: 'rgba(243,156,18,0.3)', path: '/category/fantasy?q=castle' },
-                  { name: 'City', emoji: '🏙️', color: '#1abc9c', bg: 'rgba(26,188,156,0.1)', border: 'rgba(26,188,156,0.3)', path: '/category/classic?q=city' },
-                  { name: 'Technic', emoji: '⚙️', color: '#95a5a6', bg: 'rgba(149,165,166,0.1)', border: 'rgba(149,165,166,0.3)', path: '/category/classic?q=technic' },
+                  { name: 'Anime', icon: <Swords size={24} />, color: '#e91e8c', bg: 'rgba(233,30,140,0.1)', border: 'rgba(233,30,140,0.3)', path: '/category/anime' },
+                  { name: 'Jurassic', icon: <PawPrint size={24} />, color: '#2ecc71', bg: 'rgba(46,204,113,0.1)', border: 'rgba(46,204,113,0.3)', path: '/category/sci-fi?q=jurassic' },
+                  { name: 'Ninjago', icon: <Swords size={24} />, color: '#e67e22', bg: 'rgba(230,126,34,0.1)', border: 'rgba(230,126,34,0.3)', path: '/category/classic?q=ninjago' },
+                  { name: 'Space', icon: <Rocket size={24} />, color: '#3498db', bg: 'rgba(52,152,219,0.1)', border: 'rgba(52,152,219,0.3)', path: '/category/sci-fi?q=space' },
+                  { name: 'Castle', icon: <Castle size={24} />, color: '#f39c12', bg: 'rgba(243,156,18,0.1)', border: 'rgba(243,156,18,0.3)', path: '/category/fantasy?q=castle' },
+                  { name: 'City', icon: <Building2 size={24} />, color: '#1abc9c', bg: 'rgba(26,188,156,0.1)', border: 'rgba(26,188,156,0.3)', path: '/category/classic?q=city' },
+                  { name: 'Technic', icon: <Settings size={24} />, color: '#95a5a6', bg: 'rgba(149,165,166,0.1)', border: 'rgba(149,165,166,0.3)', path: '/category/classic?q=technic' },
                 ].map((col, i) => (
                   <Link to={col.path} key={i} style={{ textDecoration: 'none', flexShrink: 0, scrollSnapAlign: 'start' }}>
                     <motion.div
@@ -230,7 +230,7 @@ export const Products = () => {
                         transition: 'all 0.2s',
                       }}
                     >
-                      <span className="collection-icon">{col.emoji}</span>
+                      <span className="collection-icon">{col.icon}</span>
                       <span style={{ color: col.color, fontSize: '0.55rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', width: '100%', textAlign: 'center' }}>
                         {col.name}
                       </span>
@@ -400,7 +400,7 @@ export const Products = () => {
                     }}>
                       <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle at 50% 0%, rgba(74,222,128,0.15) 0%, transparent 60%)', pointerEvents: 'none' }} />
                       <Zap size={48} color="var(--color-accent)" style={{ marginBottom: '1.5rem' }} className="flash-shake" />
-                      <p style={{ color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '0.5rem' }}>⚡ Flash Deal</p>
+                      <p style={{ color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '0.5rem' }}><Zap size={14} style={{display:'inline-block', verticalAlign:'middle', marginRight:'4px'}}/> Flash Deal</p>
                       <h3 className="ad-title" style={{ fontWeight: 800, lineHeight: 1.3, marginBottom: '1rem', color: '#fff' }}>
                         {language === 'vi' ? 'Giảm 40%' : '40% OFF'}<br/>Marvel Sets
                       </h3>
