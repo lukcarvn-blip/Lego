@@ -1136,3 +1136,82 @@ input:focus, select:focus, textarea:focus {
   from { opacity: 0; transform: scale(0.92) translateY(8px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
+
+/* -----------------------------------------------
+   ADMIN MOBILE APP OPTIMIZATIONS
+------------------------------------------------ */
+@media (min-width: 769px) {
+  .admin-mobile-menu-btn {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* 1. Optimize sidebar overlay */
+  .admin-sidebar {
+    width: 280px !important;
+    background: rgba(10, 28, 10, 0.98) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.5);
+  }
+  
+  /* Sidebar backdrop */
+  .admin-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 199;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease;
+  }
+
+  /* 2. Optimize padding and spacing for mobile */
+  .admin-content-wrapper {
+    padding: 1rem !important;
+  }
+  
+  /* 3. Optimize tables for horizontal scroll */
+  .admin-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -1rem;
+    padding: 0 1rem;
+  }
+  
+  /* 4. Optimize forms and inputs for mobile */
+  input[type="text"], input[type="number"], select, textarea {
+    font-size: 16px !important; /* Prevents iOS Safari from zooming in */
+    padding: 0.8rem 1rem !important; /* Larger touch targets */
+  }
+  
+  /* 5. Optimize Notification Cards */
+  .notif-card {
+    padding: 1rem !important;
+  }
+  .notif-card h3 {
+    font-size: 0.9rem !important;
+  }
+  
+  /* 6. Optimize Modals to be full-screen or bottom-sheet like on mobile */
+  .admin-modal {
+    width: 100% !important;
+    height: 100% !important;
+    max-height: 100vh !important;
+    max-width: 100vw !important;
+    border-radius: 0 !important;
+    padding: 1.25rem !important;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .admin-modal-overlay {
+    padding: 0 !important;
+  }
+}
+
+/* Global hide for sidebar backdrop */
+.admin-sidebar-backdrop {
+  display: none;
+}

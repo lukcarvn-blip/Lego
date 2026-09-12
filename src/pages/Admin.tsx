@@ -577,6 +577,7 @@ export const Admin = () => {
   return (
     <div style={{ paddingTop: 0, minHeight: '100vh', display: 'flex', background: 'var(--bg-dark, #050f05)', color: 'var(--color-text)', position: 'relative' }}>
       {/* Sidebar */}
+      {sidebarOpen && <div className="admin-sidebar-backdrop" onClick={() => setSidebarOpen(false)} />}
       <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`} style={{
         width: sidebarOpen ? '220px' : '60px', flexShrink: 0,
         background: 'rgba(10,28,10,0.95)', borderRight: '1px solid var(--glass-border)',
@@ -880,7 +881,7 @@ export const Admin = () => {
             {filteredOrders.length === 0 ? (
               <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--color-text-muted)' }}>Không tìm thấy đơn hàng nào.</div>
             ) : (
-              <div style={{ overflowX: 'auto' }}>
+              <div className="admin-table-container" style={{ overflowX: 'auto' }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '700px' }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -999,7 +1000,7 @@ export const Admin = () => {
               <input value={productSearch} onChange={e => setProductSearch(e.target.value)} placeholder="Tìm SKU, tên, danh mục..." style={{ ...inputStyle, paddingLeft: '2.25rem' }} />
             </div>
 
-            <div style={{ overflowX: 'auto' }}>
+            <div className="admin-table-container" style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
@@ -1413,7 +1414,7 @@ export const Admin = () => {
               </button>
             </div>
 
-            <div style={{ overflowX: 'auto' }}>
+            <div className="admin-table-container" style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>
@@ -1690,7 +1691,7 @@ export const Admin = () => {
                   })()}
                 </div>
               ) : (
-                <div style={{ overflowX: 'auto' }}>
+                <div className="admin-table-container" style={{ overflowX: 'auto' }}>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
                     <thead>
                       <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>
@@ -1819,7 +1820,7 @@ export const Admin = () => {
                   </p>
                 </div>
               </div>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="admin-table-container" style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>
