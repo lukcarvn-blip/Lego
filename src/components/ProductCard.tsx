@@ -329,7 +329,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               src={product.images?.[0] || product.image}
               onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }}
               alt={product.name[language as keyof typeof product.name]}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer' }}
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', cursor: 'pointer', zIndex: 0 }}
             />
             
             {/* Quick Add To Cart - Cyber Slide-Up Style */}
