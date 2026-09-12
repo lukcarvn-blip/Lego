@@ -1,4 +1,8 @@
 {
+  "env": {
+    "S3_ACCESS_KEY": "c50868ad876ffd5555Z3",
+    "S3_SECRET_KEY": "HsbseY1srG6hj8cgVDvwpVtEPb6HZ3WkDMWbIJHE"
+  },
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
