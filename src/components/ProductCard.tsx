@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Heart, Clock, Zap, Sparkles, ShoppingCart, Shield, Rocket, Crown, Tag, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, Clock, Zap, Sparkles, ShoppingCart, Shield, Rocket, Crown, Tag, X, ChevronLeft, ChevronRight, Ruler, Palette, Package } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { AnimatePresence } from 'framer-motion';
 
@@ -194,18 +194,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               </div>
               {/* Craft time or Ready Stock Info */}
               {product.isReadyStock ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem', marginTop: 'auto' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: 'var(--color-text-muted)' }}>
-                    <span>📏 Size:</span>
-                    <span style={{ color: 'var(--color-text)', fontWeight: 600 }}>{product.dimensions || '300% (21cm)'}</span>
+                <div style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', 
+                  gap: '0.25rem', 
+                  marginTop: 'auto' 
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', padding: '0.25rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <Ruler size={10} color="var(--color-text-muted)" />
+                    <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.dimensions?.split(' ')[0] || '300%'}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: 'var(--color-text-muted)' }}>
-                    <span>🎨 Nhựa:</span>
-                    <span style={{ color: 'var(--color-text)', fontWeight: 600 }}>{product.availableMaterials?.[0] || 'PLA'}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', padding: '0.25rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <Palette size={10} color="var(--color-text-muted)" />
+                    <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.availableMaterials?.[0] || 'PLA'}</span>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.65rem', color: 'var(--color-text-muted)' }}>
-                    <span>📦 Sẵn:</span>
-                    <span style={{ color: '#4ade80', fontWeight: 600 }}>{product.stock || 1} hộp</span>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', padding: '0.25rem', background: 'rgba(74, 222, 128, 0.1)', borderRadius: '4px', border: '1px solid rgba(74, 222, 128, 0.2)', gridColumn: isMobile ? '1 / -1' : 'auto' }}>
+                    <Package size={10} color="#4ade80" />
+                    <span style={{ fontSize: '0.6rem', fontWeight: 600, color: '#4ade80' }}>{product.stock || 1} hộp</span>
                   </div>
                 </div>
               ) : (
@@ -458,18 +463,23 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             <div style={{ flex: 1 }}></div>
 
             {product.isReadyStock ? (
-              <div style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>📏 Kích thước:</span>
-                  <span style={{ color: 'var(--color-text)', fontWeight: 600 }}>{product.dimensions || '300% (21cm)'}</span>
+              <div style={{ 
+                marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)', 
+                display: 'grid', 
+                gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', 
+                gap: '0.4rem' 
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', padding: '0.3rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <Ruler size={12} color="var(--color-text-muted)" />
+                  <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.dimensions?.split(' ')[0] || '300%'}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>🎨 Loại nhựa:</span>
-                  <span style={{ color: 'var(--color-text)', fontWeight: 600 }}>{product.availableMaterials?.[0] || 'PLA'}</span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', padding: '0.3rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <Palette size={12} color="var(--color-text-muted)" />
+                  <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.availableMaterials?.[0] || 'PLA'}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>📦 Có sẵn:</span>
-                  <span style={{ color: '#4ade80', fontWeight: 600 }}>{product.stock || 1} hộp</span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.25rem', padding: '0.3rem', background: 'rgba(74, 222, 128, 0.1)', borderRadius: '4px', border: '1px solid rgba(74, 222, 128, 0.2)', gridColumn: isMobile ? '1 / -1' : 'auto' }}>
+                  <Package size={12} color="#4ade80" />
+                  <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#4ade80' }}>{product.stock || 1} hộp</span>
                 </div>
               </div>
             ) : (
