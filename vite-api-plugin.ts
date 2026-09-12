@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, ListObjectsV2Command, DeleteObjectCommand, CopyObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 export default function apiPlugin() {
@@ -63,14 +63,36 @@ export default function apiPlugin() {
                 let body = '';
                 req.on('data', chunk => body += chunk.toString());
                 req.on('end', async () => {
-                  const { key } = JSON.parse(body);
-                  const command = new DeleteObjectCommand({
-                    Bucket: "benchydrop",
-                    Key: key,
-                  });
-                  await client.send(command);
+                  const { keys } = JSON.parse(body);
+                  for (const key of keys) {
+                    const command = new DeleteObjectCommand({
+                      Bucket: "benchydrop",
+                      Key: key,
+                    });
+                    await client.send(command);
+                  }
                   res.setHeader('Content-Type', 'application/json');
                   res.end(JSON.stringify({ success: true }));
+                });
+                return;
+              } else if (req.method === 'PUT') {
+                let body = '';
+                req.on('data', chunk => body += chunk.toString());
+                req.on('end', async () => {
+                  const { oldKey, newKey } = JSON.parse(body);
+                  const copyCmd = new CopyObjectCommand({
+                    Bucket: "benchydrop",
+                    CopySource: `benchydrop/${encodeURIComponent(oldKey)}`,
+                    Key: newKey,
+                  });
+                  await client.send(copyCmd);
+                  const deleteCmd = new DeleteObjectCommand({
+                    Bucket: "benchydrop",
+                    Key: oldKey,
+                  });
+                  await client.send(deleteCmd);
+                  res.setHeader('Content-Type', 'application/json');
+                  res.end(JSON.stringify({ success: true, newUrl: `https://s3.vn-hcm-1.vietnix.cloud/benchydrop/${newKey}` }));
                 });
                 return;
               }

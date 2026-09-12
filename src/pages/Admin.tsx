@@ -5,7 +5,7 @@ import {
   LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp,
   Search, Filter, Download, Eye, ExternalLink, Trash2, X,
   AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw,
-  Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder
+  Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List
 } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
@@ -239,6 +239,9 @@ export const Admin = () => {
   const [cloudFolders, setCloudFolders] = useState<string[]>([]);
   const [currentFolder, setCurrentFolder] = useState<string>('');
   const [isFetchingFiles, setIsFetchingFiles] = useState(false);
+  const [fileViewMode, setFileViewMode] = useState<'grid' | 'list'>('grid');
+  const [fileCurrentPage, setFileCurrentPage] = useState(1);
+  const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   
   const fetchCloudFiles = async (prefix: string = '') => {
     setIsFetchingFiles(true);
@@ -253,26 +256,52 @@ export const Admin = () => {
       console.error(e);
     } finally {
       setIsFetchingFiles(false);
+      setSelectedFiles([]);
+      setFileCurrentPage(1);
     }
   };
 
-  const deleteCloudFile = async (key: string) => {
-    if (!window.confirm(language === 'vi' ? `Xóa file ${key}?` : `Delete ${key}?`)) return;
+  const deleteCloudFiles = async (keys: string[]) => {
+    if (!window.confirm(language === 'vi' ? `Xóa ${keys.length} file?` : `Delete ${keys.length} files?`)) return;
     try {
       const res = await fetch(`/api/manage-files`, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ key })
+        body: JSON.stringify({ keys })
       });
       if (res.ok) {
-        showToast(language === 'vi' ? 'Đã xóa file' : 'File deleted');
+        showToast(language === 'vi' ? 'Đã xóa file' : 'Files deleted');
         fetchCloudFiles(currentFolder);
       } else {
-        showToast(language === 'vi' ? 'Lỗi khi xóa file' : 'Error deleting file');
+        showToast(language === 'vi' ? 'Lỗi khi xóa file' : 'Error deleting files');
       }
     } catch (e) {
       console.error(e);
-      showToast(language === 'vi' ? 'Lỗi khi xóa file' : 'Error deleting file');
+      showToast(language === 'vi' ? 'Lỗi khi xóa file' : 'Error deleting files');
+    }
+  };
+
+  const renameCloudFile = async (oldKey: string) => {
+    const oldName = oldKey.replace(currentFolder, '');
+    const newName = window.prompt(language === 'vi' ? 'Nhập tên mới (bao gồm cả phần mở rộng):' : 'Enter new name (including extension):', oldName);
+    if (!newName || newName === oldName) return;
+    
+    const newKey = currentFolder + newName;
+    try {
+      const res = await fetch(`/api/manage-files`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ oldKey, newKey })
+      });
+      if (res.ok) {
+        showToast(language === 'vi' ? 'Đã đổi tên file' : 'File renamed');
+        fetchCloudFiles(currentFolder);
+      } else {
+        showToast(language === 'vi' ? 'Lỗi khi đổi tên' : 'Error renaming file');
+      }
+    } catch (e) {
+      console.error(e);
+      showToast(language === 'vi' ? 'Lỗi khi đổi tên' : 'Error renaming file');
     }
   };
 
@@ -1255,9 +1284,20 @@ export const Admin = () => {
                 <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>🗂 Quản lý File (Vietnix S3)</h1>
                 <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{cloudFiles.length} tệp trong thư mục hiện tại</p>
               </div>
-              <button className="btn-primary" onClick={() => fetchCloudFiles(currentFolder)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem' }}>
-                <RefreshCw size={18} className={isFetchingFiles ? 'spin' : ''} /> Tải lại
-              </button>
+              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                {selectedFiles.length > 0 && (
+                  <button className="btn-primary" onClick={() => deleteCloudFiles(selectedFiles)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', background: '#ef4444', border: 'none', color: '#fff' }}>
+                    <Trash2 size={16} /> Xóa {selectedFiles.length} file
+                  </button>
+                )}
+                <div style={{ display: 'flex', background: 'rgba(255,255,255,0.05)', borderRadius: 'var(--radius-sm)', padding: '0.2rem' }}>
+                  <button onClick={() => setFileViewMode('grid')} style={{ padding: '0.4rem 0.6rem', border: 'none', background: fileViewMode === 'grid' ? 'rgba(74,222,128,0.2)' : 'transparent', color: fileViewMode === 'grid' ? 'var(--color-accent)' : 'var(--color-text-muted)', borderRadius: '4px', cursor: 'pointer' }}><LayoutGrid size={16} /></button>
+                  <button onClick={() => setFileViewMode('list')} style={{ padding: '0.4rem 0.6rem', border: 'none', background: fileViewMode === 'list' ? 'rgba(74,222,128,0.2)' : 'transparent', color: fileViewMode === 'list' ? 'var(--color-accent)' : 'var(--color-text-muted)', borderRadius: '4px', cursor: 'pointer' }}><List size={16} /></button>
+                </div>
+                <button className="btn-primary" onClick={() => fetchCloudFiles(currentFolder)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem' }}>
+                  <RefreshCw size={18} className={isFetchingFiles ? 'spin' : ''} /> Tải lại
+                </button>
+              </div>
             </div>
             
             <div style={panelStyle}>
@@ -1271,40 +1311,158 @@ export const Admin = () => {
                 </button>
               )}
               
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
-                {cloudFolders.map(folder => {
-                  // display name is the folder without the parent path
-                  const displayName = folder.replace(currentFolder, '').replace(/\/$/, '');
-                  return (
-                    <div key={folder} onClick={() => setCurrentFolder(folder)} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', padding: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}>
-                      <Folder size={24} color="var(--color-accent)" />
-                      <span style={{ fontWeight: 600, wordBreak: 'break-all' }}>{displayName}</span>
-                    </div>
-                  );
-                })}
-                
-                {cloudFiles.map(file => (
-                  <div key={file.key} style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ height: '140px', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                      {file.url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
-                        <img src={file.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-                      ) : (
-                        <DatabaseZap size={40} color="var(--color-text-muted)" />
-                      )}
-                      <button onClick={() => deleteCloudFile(file.key)} style={{ position: 'absolute', top: '8px', right: '8px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.5)' }}>
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                    <div style={{ padding: '0.75rem', fontSize: '0.75rem' }}>
-                      <div style={{ fontWeight: 600, marginBottom: '0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={file.key}>{file.key.replace(currentFolder, '')}</div>
-                      <div style={{ color: 'var(--color-text-muted)', display: 'flex', justifyContent: 'space-between' }}>
-                        <span>{(file.size / 1024).toFixed(1)} KB</span>
-                        <span>{new Date(file.lastModified).toLocaleDateString()}</span>
+              {fileViewMode === 'grid' ? (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+                  {cloudFolders.map(folder => {
+                    const displayName = folder.replace(currentFolder, '').replace(/\/$/, '');
+                    return (
+                      <div key={folder} onClick={() => setCurrentFolder(folder)} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', padding: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}>
+                        <Folder size={24} color="var(--color-accent)" />
+                        <span style={{ fontWeight: 600, wordBreak: 'break-all' }}>{displayName}</span>
                       </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                    );
+                  })}
+                  
+                  {(() => {
+                    const startIndex = (fileCurrentPage - 1) * 20;
+                    return cloudFiles.slice(startIndex, startIndex + 20).map(file => {
+                      const isSelected = selectedFiles.includes(file.key);
+                      return (
+                        <div key={file.key} style={{ background: isSelected ? 'rgba(74,222,128,0.1)' : 'rgba(0,0,0,0.3)', border: isSelected ? '1px solid var(--color-accent)' : '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                          <input type="checkbox" checked={isSelected} onChange={e => {
+                            if (e.target.checked) setSelectedFiles([...selectedFiles, file.key]);
+                            else setSelectedFiles(selectedFiles.filter(k => k !== file.key));
+                          }} style={{ position: 'absolute', top: '8px', left: '8px', zIndex: 2, cursor: 'pointer', width: '18px', height: '18px', accentColor: 'var(--color-accent)' }} />
+                          <div style={{ height: '140px', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                            {file.url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+                              <img src={file.url} alt="" onClick={() => window.open(file.url, '_blank')} style={{ cursor: 'pointer', width: '100%', height: '100%', objectFit: 'contain' }} />
+                            ) : (
+                              <DatabaseZap size={40} color="var(--color-text-muted)" />
+                            )}
+                            <div style={{ position: 'absolute', top: '8px', right: '8px', display: 'flex', gap: '0.4rem' }}>
+                              <button onClick={() => renameCloudFile(file.key)} style={{ background: 'var(--color-accent)', color: '#000', border: 'none', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.5)' }}>
+                                <Edit2 size={13} />
+                              </button>
+                              <button onClick={() => deleteCloudFiles([file.key])} style={{ background: '#ef4444', color: '#fff', border: 'none', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.5)' }}>
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          </div>
+                          <div style={{ padding: '0.75rem', fontSize: '0.75rem' }}>
+                            <div style={{ fontWeight: 600, marginBottom: '0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={file.key}>{file.key.replace(currentFolder, '')}</div>
+                            <div style={{ color: 'var(--color-text-muted)', display: 'flex', justifyContent: 'space-between' }}>
+                              <span>{(file.size / 1024).toFixed(1)} KB</span>
+                              <span>{new Date(file.lastModified).toLocaleDateString()}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    });
+                  })()}
+                </div>
+              ) : (
+                <div style={{ overflowX: 'auto' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
+                    <thead>
+                      <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>
+                        <th style={{ padding: '0.75rem 1rem', width: '40px' }}>
+                          <input type="checkbox" onChange={e => {
+                            if (e.target.checked) {
+                              const startIndex = (fileCurrentPage - 1) * 20;
+                              const visibleFiles = cloudFiles.slice(startIndex, startIndex + 20).map(f => f.key);
+                              setSelectedFiles(Array.from(new Set([...selectedFiles, ...visibleFiles])));
+                            } else {
+                              const startIndex = (fileCurrentPage - 1) * 20;
+                              const visibleFiles = cloudFiles.slice(startIndex, startIndex + 20).map(f => f.key);
+                              setSelectedFiles(selectedFiles.filter(k => !visibleFiles.includes(k)));
+                            }
+                          }} checked={cloudFiles.length > 0 && (() => {
+                            const startIndex = (fileCurrentPage - 1) * 20;
+                            const visibleFiles = cloudFiles.slice(startIndex, startIndex + 20);
+                            return visibleFiles.length > 0 && visibleFiles.every(f => selectedFiles.includes(f.key));
+                          })()} style={{ accentColor: 'var(--color-accent)' }} />
+                        </th>
+                        <th style={{ padding: '0.75rem 1rem' }}>Tên tệp/Thư mục</th>
+                        <th style={{ padding: '0.75rem 1rem' }}>Kích thước</th>
+                        <th style={{ padding: '0.75rem 1rem' }}>Ngày sửa đổi</th>
+                        <th style={{ padding: '0.75rem 1rem' }}>Thao tác</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cloudFolders.map(folder => (
+                        <tr key={folder} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+                          <td style={{ padding: '0.75rem 1rem' }}></td>
+                          <td style={{ padding: '0.75rem 1rem', cursor: 'pointer', fontWeight: 600 }} onClick={() => setCurrentFolder(folder)}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <Folder size={18} color="var(--color-accent)" />
+                              {folder.replace(currentFolder, '').replace(/\/$/, '')}
+                            </div>
+                          </td>
+                          <td style={{ padding: '0.75rem 1rem', color: 'var(--color-text-muted)' }}>—</td>
+                          <td style={{ padding: '0.75rem 1rem', color: 'var(--color-text-muted)' }}>—</td>
+                          <td style={{ padding: '0.75rem 1rem' }}></td>
+                        </tr>
+                      ))}
+                      
+                      {(() => {
+                        const startIndex = (fileCurrentPage - 1) * 20;
+                        return cloudFiles.slice(startIndex, startIndex + 20).map(file => {
+                          const isSelected = selectedFiles.includes(file.key);
+                          return (
+                            <tr key={file.key} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', background: isSelected ? 'rgba(74,222,128,0.05)' : 'transparent' }}>
+                              <td style={{ padding: '0.75rem 1rem' }}>
+                                <input type="checkbox" checked={isSelected} onChange={e => {
+                                  if (e.target.checked) setSelectedFiles([...selectedFiles, file.key]);
+                                  else setSelectedFiles(selectedFiles.filter(k => k !== file.key));
+                                }} style={{ accentColor: 'var(--color-accent)' }} />
+                              </td>
+                              <td style={{ padding: '0.75rem 1rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                  {file.url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+                                    <img src={file.url} alt="" style={{ width: '24px', height: '24px', objectFit: 'cover', borderRadius: '4px' }} />
+                                  ) : (
+                                    <DatabaseZap size={18} color="var(--color-text-muted)" />
+                                  )}
+                                  <a href={file.url} target="_blank" rel="noreferrer" style={{ color: 'var(--color-text)', textDecoration: 'none', maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                                    {file.key.replace(currentFolder, '')}
+                                  </a>
+                                </div>
+                              </td>
+                              <td style={{ padding: '0.75rem 1rem', fontSize: '0.85rem' }}>{(file.size / 1024).toFixed(1)} KB</td>
+                              <td style={{ padding: '0.75rem 1rem', fontSize: '0.85rem' }}>{new Date(file.lastModified).toLocaleDateString()} {new Date(file.lastModified).toLocaleTimeString()}</td>
+                              <td style={{ padding: '0.75rem 1rem' }}>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                  <button onClick={() => renameCloudFile(file.key)} style={{ color: 'var(--color-accent)', padding: '0.35rem 0.5rem', background: 'rgba(74,222,128,0.1)', borderRadius: '4px', border: '1px solid rgba(74,222,128,0.2)' }}>
+                                    <Edit2 size={14} />
+                                  </button>
+                                  <button onClick={() => deleteCloudFiles([file.key])} style={{ color: '#ef4444', padding: '0.35rem 0.5rem', background: 'rgba(239,68,68,0.1)', borderRadius: '4px', border: '1px solid rgba(239,68,68,0.2)' }}>
+                                    <Trash2 size={14} />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        });
+                      })()}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+              
+              {/* Pagination Controls */}
+              {cloudFiles.length > 20 && (
+                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1.5rem', borderTop: '1px solid var(--glass-border)', paddingTop: '1rem' }}>
+                  <button onClick={() => setFileCurrentPage(Math.max(1, fileCurrentPage - 1))} disabled={fileCurrentPage === 1} style={{ padding: '0.5rem 1rem', borderRadius: '4px', background: 'rgba(255,255,255,0.05)', color: fileCurrentPage === 1 ? 'var(--color-text-muted)' : 'var(--color-text)', border: '1px solid var(--glass-border)', cursor: fileCurrentPage === 1 ? 'not-allowed' : 'pointer' }}>
+                    Trang trước
+                  </button>
+                  <span style={{ fontSize: '0.875rem' }}>
+                    Trang {fileCurrentPage} / {Math.ceil(cloudFiles.length / 20)}
+                  </span>
+                  <button onClick={() => setFileCurrentPage(Math.min(Math.ceil(cloudFiles.length / 20), fileCurrentPage + 1))} disabled={fileCurrentPage === Math.ceil(cloudFiles.length / 20)} style={{ padding: '0.5rem 1rem', borderRadius: '4px', background: 'rgba(255,255,255,0.05)', color: fileCurrentPage === Math.ceil(cloudFiles.length / 20) ? 'var(--color-text-muted)' : 'var(--color-text)', border: '1px solid var(--glass-border)', cursor: fileCurrentPage === Math.ceil(cloudFiles.length / 20) ? 'not-allowed' : 'pointer' }}>
+                    Trang sau
+                  </button>
+                </div>
+              )}
               
               {!isFetchingFiles && cloudFiles.length === 0 && cloudFolders.length === 0 && (
                 <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--color-text-muted)' }}>
