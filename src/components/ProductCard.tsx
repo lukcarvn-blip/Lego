@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { getAverageColor } from '../utils/colorUtils';
 import { Heart, Clock, Zap, Sparkles, ShoppingCart, Shield, Rocket, Crown, Tag, X, ChevronLeft, ChevronRight, Ruler, Palette, Package } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { AnimatePresence } from 'framer-motion';
@@ -20,14 +19,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
   const [showGallery, setShowGallery] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState(1);
-  const [dominantColor, setDominantColor] = useState('#3b82f6');
-
-  useEffect(() => {
-    const imgSrc = product.images?.[0] || product.image;
-    if (imgSrc) {
-      getAverageColor(imgSrc).then(color => setDominantColor(color));
-    }
-  }, [product.images, product.image]);
+  
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -166,7 +158,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                   style={{
                     position: 'absolute',
                     top: '-50%', left: '-50%', right: '-50%', bottom: '-50%',
-                    background: `conic-gradient(from 0deg, transparent 50%, ${dominantColor} 85%, ${dominantColor} 100%)`,
+                    backgroundImage: `url(${product.images?.[0] || product.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  filter: 'blur(20px) saturate(2) brightness(1.2)',
+                  WebkitMaskImage: 'conic-gradient(from 0deg, transparent 50%, black 85%, black 100%)',
+                  maskImage: 'conic-gradient(from 0deg, transparent 50%, black 85%, black 100%)'
                   }}
                 />
               </motion.div>
@@ -328,7 +325,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 style={{
                   position: 'absolute',
                   top: '-50%', left: '-50%', right: '-50%', bottom: '-50%',
-                  background: `conic-gradient(from 0deg, transparent 50%, ${dominantColor} 85%, ${dominantColor} 100%)`,
+                  backgroundImage: `url(${product.images?.[0] || product.image})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  filter: 'blur(20px) saturate(2) brightness(1.2)',
+                  WebkitMaskImage: 'conic-gradient(from 0deg, transparent 50%, black 85%, black 100%)',
+                  maskImage: 'conic-gradient(from 0deg, transparent 50%, black 85%, black 100%)'
                 }}
               />
             </motion.div>
