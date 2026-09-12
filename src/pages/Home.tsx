@@ -80,7 +80,6 @@ export const Home = () => {
       {/* Hero Section */}
       <section className="hero-section" style={{
         position: 'relative',
-        height: '90vh',
         width: '100%',
         overflow: 'hidden',
         marginTop: '-80px', // Pull up behind navbar
@@ -121,18 +120,46 @@ export const Home = () => {
           .hero-section {
             display: flex;
             align-items: flex-end;
-            padding-bottom: 120px;
+            padding-bottom: 40px;
+            aspect-ratio: 1/1;
+            height: auto;
           }
           .hero-content {
-            padding-top: 50px;
+            padding-top: 0;
+          }
+          .hero-title {
+            font-size: clamp(2.5rem, 10vw, 3.5rem) !important;
+            margin-bottom: 1rem !important;
+          }
+          .hero-subtitle {
+            font-size: clamp(0.85rem, 4vw, 1.1rem) !important;
+            margin: 0 auto 1.5rem auto !important;
+          }
+          @media (min-width: 768px) {
+            .hero-section {
+              aspect-ratio: 4/3;
+              padding-bottom: 60px;
+            }
+            .hero-title {
+              font-size: clamp(3.5rem, 8vw, 4.5rem) !important;
+              margin-bottom: 1.5rem !important;
+            }
+            .hero-subtitle {
+              margin: 0 auto 2.5rem auto !important;
+            }
           }
           @media (min-width: 1024px) {
             .hero-section {
               align-items: center;
               padding-bottom: 0;
+              aspect-ratio: auto;
+              height: 90vh;
             }
             .hero-content {
               padding-top: 100px;
+            }
+            .hero-subtitle {
+              margin: 0 auto 3rem auto !important;
             }
           }
         `}</style>
@@ -147,11 +174,12 @@ export const Home = () => {
             {t('hero_title_1')} <br/>
             <span className="text-gradient">{t('hero_title_2')}</span>
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            style={{ fontSize: '1.1rem', color: '#ffffff', marginBottom: '3rem', maxWidth: '600px', margin: '0 auto 3rem auto', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
+            className="hero-subtitle"
+            style={{ color: '#ffffff', maxWidth: '600px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
           >
             {t('hero_subtitle')}
           </motion.p>
