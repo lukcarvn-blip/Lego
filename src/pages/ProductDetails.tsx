@@ -164,6 +164,8 @@ export const ProductDetails = () => {
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'tags'>('desc');
   const [isCartExpanded, setIsCartExpanded] = useState(true);
   const [quantity, setQuantity] = useState(1);
+  const [wantsToCraft, setWantsToCraft] = useState(false);
+  const isEffectivelyCrafting = !product?.isReadyStock || wantsToCraft;
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
@@ -485,7 +487,24 @@ export const ProductDetails = () => {
                           <ShoppingBag size={20} />
                           <span>{language === 'vi' ? 'MUA NGAY' : 'BUY NOW'}</span>
                         </button>
-                        {!product.isReadyStock && (
+                        {product.isReadyStock && !wantsToCraft && (
+                          <button
+                            onClick={() => setWantsToCraft(true)}
+                            style={{
+                              display: 'flex', alignItems: 'center', justifyContent: 'center',
+                              background: '#3b82f6', color: '#fff', border: 'none',
+                              padding: '0 0.75rem', borderRadius: 'var(--radius-sm)',
+                              cursor: 'pointer', transition: 'all 0.2s',
+                              fontWeight: 700, fontSize: '0.85rem',
+                              whiteSpace: 'nowrap',
+                              boxShadow: '0 4px 10px rgba(59,130,246,0.3)'
+                            }}
+                          >
+                            <Hammer size={16} style={{ marginRight: '4px' }} />
+                            {language === 'vi' ? 'Bạn muốn chế tác?' : 'Craft it?'}
+                          </button>
+                        )}
+                        {isEffectivelyCrafting && (
                           <button
                             onClick={(e) => { e.stopPropagation(); setIsFastCrafting(!isFastCrafting); }}
                             style={{
@@ -518,7 +537,7 @@ export const ProductDetails = () => {
                     {/* Summary Note */}
                     <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
                       <p className="summary-note" style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.8)', margin: 0, lineHeight: 1.5, textAlign: 'left' }}>
-                        {product.isReadyStock ? (
+                        {!isEffectivelyCrafting ? (
                           language === 'vi' ? (
                             <>Bạn đang chọn: <strong>{product.name.vi}</strong> – <strong>{selectedSize}</strong> – <strong>{selectedMaterial}</strong>. Giao hàng ngay trong: <strong>1-2 ngày</strong>.</>
                           ) : (
@@ -659,17 +678,17 @@ export const ProductDetails = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', overflow: 'hidden' }}>
               {/* PLA Option */}
               <button 
-                onClick={() => { if(!product.isReadyStock) { setSelectedMaterial('PLA'); setIsCartExpanded(true); } }}
+                onClick={() => { if(isEffectivelyCrafting) { setSelectedMaterial('PLA'); setIsCartExpanded(true); } }}
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem',
                   borderRadius: 'var(--radius-md)',
                   border: `2px solid ${selectedMaterial === 'PLA' ? '#4ade80' : 'var(--glass-border)'}`,
                   background: selectedMaterial === 'PLA' ? 'rgba(74, 222, 128, 0.1)' : 'var(--color-surface)',
                   color: selectedMaterial === 'PLA' ? '#4ade80' : 'var(--color-text)',
-                  cursor: product.isReadyStock ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
+                  cursor: !isEffectivelyCrafting ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
                   position: 'relative', overflow: 'hidden', minWidth: 0,
-                  opacity: product.isReadyStock && selectedMaterial !== 'PLA' ? 0.3 : 1,
-                  pointerEvents: product.isReadyStock && selectedMaterial !== 'PLA' ? 'none' : 'auto'
+                  opacity: !isEffectivelyCrafting && selectedMaterial !== 'PLA' ? 0.3 : 1,
+                  pointerEvents: !isEffectivelyCrafting && selectedMaterial !== 'PLA' ? 'none' : 'auto'
                 }}
               >
                 <FilamentSpool color={selectedMaterial === 'PLA' ? '#4ade80' : 'var(--color-text-muted)'} isActive={selectedMaterial === 'PLA'} />
@@ -679,17 +698,17 @@ export const ProductDetails = () => {
 
               {/* PETG Option */}
               <button 
-                onClick={() => { if(!product.isReadyStock) { setSelectedMaterial('PETG'); setIsCartExpanded(true); } }}
+                onClick={() => { if(isEffectivelyCrafting) { setSelectedMaterial('PETG'); setIsCartExpanded(true); } }}
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '1rem',
                   borderRadius: 'var(--radius-md)',
                   border: `2px solid ${selectedMaterial === 'PETG' ? '#fbbf24' : 'var(--glass-border)'}`,
                   background: selectedMaterial === 'PETG' ? 'rgba(251, 191, 36, 0.1)' : 'var(--color-surface)',
                   color: selectedMaterial === 'PETG' ? '#fbbf24' : 'var(--color-text)',
-                  cursor: product.isReadyStock ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
+                  cursor: !isEffectivelyCrafting ? 'not-allowed' : 'pointer', transition: 'all 0.2s',
                   position: 'relative', overflow: 'hidden', minWidth: 0,
-                  opacity: product.isReadyStock && selectedMaterial !== 'PETG' ? 0.3 : 1,
-                  pointerEvents: product.isReadyStock && selectedMaterial !== 'PETG' ? 'none' : 'auto'
+                  opacity: !isEffectivelyCrafting && selectedMaterial !== 'PETG' ? 0.3 : 1,
+                  pointerEvents: !isEffectivelyCrafting && selectedMaterial !== 'PETG' ? 'none' : 'auto'
                 }}
               >
                 <FilamentSpool color={selectedMaterial === 'PETG' ? '#fbbf24' : 'var(--color-text-muted)'} isActive={selectedMaterial === 'PETG'} />
@@ -818,7 +837,7 @@ export const ProductDetails = () => {
                     return (
                       <button 
                         key={size}
-                        onClick={() => { if(!product.isReadyStock) { setSelectedSize(size); setIsCartExpanded(true); } }}
+                        onClick={() => { if(isEffectivelyCrafting) { setSelectedSize(size); setIsCartExpanded(true); } }}
                         style={{
                           display: 'flex',
                           justifyContent: 'center',
@@ -829,8 +848,8 @@ export const ProductDetails = () => {
                           background: isSelected ? 'rgba(74, 222, 128, 0.1)' : 'transparent',
                           color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)',
                           transition: 'all 0.2s',
-                          cursor: product.isReadyStock ? 'not-allowed' : 'pointer',
-                          opacity: product.isReadyStock && !isSelected ? 0.3 : 1
+                          cursor: !isEffectivelyCrafting ? 'not-allowed' : 'pointer',
+                          opacity: !isEffectivelyCrafting && !isSelected ? 0.3 : 1
                         }}
                       >
                         <span style={{ fontWeight: 700, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{sizeDetails.label}</span>
@@ -844,8 +863,7 @@ export const ProductDetails = () => {
           </div>
 
           {/* Crafting Progress Bar UI */}
-          {/* Alternative UI for Ready Stock vs Crafting */}
-          {!product.isReadyStock ? (
+          {isEffectivelyCrafting && (
             <motion.div 
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
@@ -919,20 +937,22 @@ export const ProductDetails = () => {
                 </div>
               </div>
             </motion.div>
-          ) : (
-            <motion.div 
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.3 }}
-              style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}
-            >
-              <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Gift size={20} color="var(--color-accent)" /> 
-                {language === 'vi' ? 'TÙY CHỌN DÀNH CHO HÀNG SẴN' : 'READY STOCK OPTIONS'}
-              </h3>
-              
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                {/* Engraving */}
+          )}
+          
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.3 }}
+            style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}
+          >
+            <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Gift size={20} color="var(--color-accent)" /> 
+              {language === 'vi' ? 'TÙY CHỌN BỔ SUNG' : 'ADDITIONAL OPTIONS'}
+            </h3>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              {/* Engraving */}
+              {isEffectivelyCrafting && (
                 <div>
                   <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem' }}>
                     {language === 'vi' ? 'Khắc tên / Lời nhắn (Miễn phí)' : 'Custom Engraving (Free)'}
@@ -945,35 +965,35 @@ export const ProductDetails = () => {
                     style={{ width: '100%', padding: '0.75rem 1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', color: '#fff', outline: 'none' }}
                   />
                 </div>
+              )}
 
-                {/* Mica Box */}
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem' }}>
-                    {language === 'vi' ? 'Hộp Mica Bảo Vệ' : 'Protective Mica Box'}
-                  </label>
-                  <div style={{ position: 'relative' }}>
-                    <select 
-                      value={selectedMicaBox}
-                      onChange={(e) => setSelectedMicaBox(e.target.value)}
-                      style={{ background: 'rgba(0,0,0,0.2)', color: '#fff', border: '1px solid var(--glass-border)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)', width: '100%', appearance: 'none', cursor: 'pointer', outline: 'none' }}
-                    >
-                      <option style={{ background: '#111' }} value="">{language === 'vi' ? 'Không mua kèm hộp' : 'No Box'}</option>
-                      <option style={{ background: '#111' }} value="standard">{language === 'vi' ? 'Hộp Mica Thường' : 'Standard Mica Box'}</option>
-                      <option style={{ background: '#111' }} value="led">{language === 'vi' ? 'Hộp Mica + Đèn LED' : 'Mica Box with LED'}</option>
-                    </select>
-                    <div style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
-                      <ChevronDown size={16} color="var(--color-text-muted)" />
-                    </div>
-                  </div>
-                  <div style={{ marginTop: '0.5rem', textAlign: 'right' }}>
-                    <a href="/products/accessories" target="_blank" style={{ fontSize: '0.8rem', color: 'var(--color-accent)', textDecoration: 'underline' }}>
-                      {language === 'vi' ? 'Xem chi tiết các loại hộp Mica' : 'View Mica Box details'}
-                    </a>
+              {/* Mica Box */}
+              <div>
+                <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem' }}>
+                  {language === 'vi' ? 'Hộp Mica Bảo Vệ' : 'Protective Mica Box'}
+                </label>
+                <div style={{ position: 'relative' }}>
+                  <select 
+                    value={selectedMicaBox}
+                    onChange={(e) => setSelectedMicaBox(e.target.value)}
+                    style={{ background: 'rgba(0,0,0,0.2)', color: '#fff', border: '1px solid var(--glass-border)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)', width: '100%', appearance: 'none', cursor: 'pointer', outline: 'none' }}
+                  >
+                    <option style={{ background: '#111' }} value="">{language === 'vi' ? 'Không mua kèm hộp' : 'No Box'}</option>
+                    <option style={{ background: '#111' }} value="standard">{language === 'vi' ? 'Hộp Mica Thường' : 'Standard Mica Box'}</option>
+                    <option style={{ background: '#111' }} value="led">{language === 'vi' ? 'Hộp Mica + Đèn LED' : 'Mica Box with LED'}</option>
+                  </select>
+                  <div style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
+                    <ChevronDown size={16} color="var(--color-text-muted)" />
                   </div>
                 </div>
+                <div style={{ marginTop: '0.5rem', textAlign: 'right' }}>
+                  <a href="/products/accessories" target="_blank" style={{ fontSize: '0.8rem', color: 'var(--color-accent)', textDecoration: 'underline' }}>
+                    {language === 'vi' ? 'Xem chi tiết các loại hộp Mica' : 'View Mica Box details'}
+                  </a>
+                </div>
               </div>
-            </motion.div>
-          )}
+            </div>
+          </motion.div>
 
           {/* Buy button moved to left column */}
 
