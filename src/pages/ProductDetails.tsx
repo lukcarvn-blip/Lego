@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift } from 'lucide-react';
+import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift, Plus, Minus } from 'lucide-react';
 import { mockProducts, type ProductSize } from '../data/mockProducts';
 import { useStore, type ProductMaterial } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
@@ -190,10 +190,12 @@ export const ProductDetails = () => {
   };
   const qtyDiscount = getQuantityDiscount(quantity);
 
-  const finalPriceMultiplier = parseSizePercentage(selectedSize) * (selectedMaterial === 'PETG' ? 1.2 : 1) * (isFastCrafting ? 1.1 : 1) * quantity * (1 - qtyDiscount);
+  const baseUnitCost = product ? product.price * parseSizePercentage(selectedSize) * (selectedMaterial === 'PETG' ? 1.2 : 1) * (isFastCrafting ? 1.1 : 1) : 0;
+  const boxUnitCost = selectedMicaBox === 'standard' ? 150000 / 25400 : selectedMicaBox === 'led' ? 250000 / 25400 : 0;
+  const totalPriceUSD = (baseUnitCost + boxUnitCost) * quantity * (1 - qtyDiscount);
 
   const currentPriceString = product 
-    ? formatPrice(product.price * finalPriceMultiplier, product.discountPercentage).current 
+    ? formatPrice(totalPriceUSD, product.discountPercentage).current 
     : '';
 
   if (!product) {
@@ -655,12 +657,12 @@ export const ProductDetails = () => {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'baseline', gap: '1rem' }}>
-              <div style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 700, color: formatPrice(product.price * finalPriceMultiplier, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
-                <AnimatedPrice priceString={formatPrice(product.price * finalPriceMultiplier, product.discountPercentage).current} />
+              <div style={{ fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', fontWeight: 700, color: formatPrice(totalPriceUSD, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
+                <AnimatedPrice priceString={formatPrice(totalPriceUSD, product.discountPercentage).current} />
               </div>
-              {formatPrice(product.price * finalPriceMultiplier, product.discountPercentage).isOnSale && (
+              {formatPrice(totalPriceUSD, product.discountPercentage).isOnSale && (
                 <div style={{ fontSize: '1.25rem', color: 'var(--color-text-muted)', textDecoration: 'line-through' }}>
-                  {formatPrice(product.price * finalPriceMultiplier, product.discountPercentage).original}
+                  {formatPrice(totalPriceUSD, product.discountPercentage).original}
                 </div>
               )}
             </div>
@@ -972,18 +974,29 @@ export const ProductDetails = () => {
                 <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem' }}>
                   {language === 'vi' ? 'Hộp Mica Bảo Vệ' : 'Protective Mica Box'}
                 </label>
-                <div style={{ position: 'relative' }}>
-                  <select 
-                    value={selectedMicaBox}
-                    onChange={(e) => setSelectedMicaBox(e.target.value)}
-                    style={{ background: 'rgba(0,0,0,0.2)', color: '#fff', border: '1px solid var(--glass-border)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)', width: '100%', appearance: 'none', cursor: 'pointer', outline: 'none' }}
-                  >
-                    <option style={{ background: '#111' }} value="">{language === 'vi' ? 'Không mua kèm hộp' : 'No Box'}</option>
-                    <option style={{ background: '#111' }} value="standard">{language === 'vi' ? 'Hộp Mica Thường' : 'Standard Mica Box'}</option>
-                    <option style={{ background: '#111' }} value="led">{language === 'vi' ? 'Hộp Mica + Đèn LED' : 'Mica Box with LED'}</option>
-                  </select>
-                  <div style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
-                    <ChevronDown size={16} color="var(--color-text-muted)" />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {/* Standard Box */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: selectedMicaBox === 'standard' ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer' }} onClick={() => setSelectedMicaBox(selectedMicaBox === 'standard' ? '' : 'standard')}>
+                    <img src="https://s3.vn-hcm-1.vietnix.cloud/benchydrop/images/mica-standard.jpg" alt="Mica Standard" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px', background: 'rgba(255,255,255,0.1)' }} onError={e => e.currentTarget.src = 'https://placehold.co/100x100?text=Mica+Box'} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600, fontSize: '0.95rem', color: selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Hộp Mica Thường' : 'Standard Mica Box'}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>+150.000 ₫</div>
+                    </div>
+                    <button style={{ width: '32px', height: '32px', borderRadius: '50%', border: `1px solid ${selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--glass-border)'}`, background: selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'transparent', color: selectedMicaBox === 'standard' ? '#000' : 'var(--color-text)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                      {selectedMicaBox === 'standard' ? <Minus size={16} /> : <Plus size={16} />}
+                    </button>
+                  </div>
+
+                  {/* LED Box */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${selectedMicaBox === 'led' ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: selectedMicaBox === 'led' ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer' }} onClick={() => setSelectedMicaBox(selectedMicaBox === 'led' ? '' : 'led')}>
+                    <img src="https://s3.vn-hcm-1.vietnix.cloud/benchydrop/images/mica-led.jpg" alt="Mica LED" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px', background: 'rgba(255,255,255,0.1)' }} onError={e => e.currentTarget.src = 'https://placehold.co/100x100?text=LED+Box'} />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 600, fontSize: '0.95rem', color: selectedMicaBox === 'led' ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Hộp Mica + Đèn LED' : 'Mica Box with LED'}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>+250.000 ₫</div>
+                    </div>
+                    <button style={{ width: '32px', height: '32px', borderRadius: '50%', border: `1px solid ${selectedMicaBox === 'led' ? 'var(--color-accent)' : 'var(--glass-border)'}`, background: selectedMicaBox === 'led' ? 'var(--color-accent)' : 'transparent', color: selectedMicaBox === 'led' ? '#000' : 'var(--color-text)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                      {selectedMicaBox === 'led' ? <Minus size={16} /> : <Plus size={16} />}
+                    </button>
                   </div>
                 </div>
                 <div style={{ marginTop: '0.5rem', textAlign: 'right' }}>

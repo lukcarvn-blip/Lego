@@ -107,7 +107,11 @@ export const Cart = () => {
     return isNaN(num) ? 1 : num / 400;
   };
 
-  const subtotal = cart.reduce((sum, item) => sum + (item.product.price * parseSizePercentage(item.size) * (item.material === 'PETG' ? 1.2 : 1) * (item.isFastCrafting ? 1.1 : 1)) * item.quantity, 0);
+  const getBoxUnitCost = (boxType?: string) => {
+    return boxType === 'standard' ? 150000 / 25400 : boxType === 'led' ? 250000 / 25400 : 0;
+  };
+
+  const subtotal = cart.reduce((sum, item) => sum + (item.product.price * parseSizePercentage(item.size) * (item.material === 'PETG' ? 1.2 : 1) * (item.isFastCrafting ? 1.1 : 1) + getBoxUnitCost(item.micaBox)) * item.quantity, 0);
   const shippingFee = paymentType === 'FULL' ? 0 : 5; // Free shipping if paid in full, else $5
   const total = subtotal + shippingFee;
   const amountToPayNow = paymentType === 'FULL' ? total : total / 2;

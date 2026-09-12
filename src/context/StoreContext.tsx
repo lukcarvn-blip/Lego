@@ -345,7 +345,15 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const clearCart = () => setCart([]);
 
   const createOrder = async (customerName: string, paymentMethod: string = 'COD', additionalInfo: any = {}) => {
-    const total = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    const parseSizePercentage = (sizeStr: string | null) => {
+      if (!sizeStr) return 1;
+      const num = parseInt(sizeStr.replace('Size ', ''), 10);
+      return isNaN(num) ? 1 : num / 400;
+    };
+    const getBoxUnitCost = (boxType?: string) => {
+      return boxType === 'standard' ? 150000 / 25400 : boxType === 'led' ? 250000 / 25400 : 0;
+    };
+    const total = cart.reduce((sum, item) => sum + (item.product.price * parseSizePercentage(item.size) * (item.material === 'PETG' ? 1.2 : 1) * (item.isFastCrafting ? 1.1 : 1) + getBoxUnitCost(item.micaBox)) * item.quantity, 0);
     const newOrder = {
       items: [...cart],
       total,
