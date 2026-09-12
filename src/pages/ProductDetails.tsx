@@ -494,7 +494,7 @@ export const ProductDetails = () => {
                           }}
                         >
                           <ShoppingBag size={20} />
-                          {!isMobile && <span>{language === 'vi' ? 'MUA NGAY' : 'BUY NOW'}</span>}
+                          <span>{language === 'vi' ? 'MUA NGAY' : 'BUY NOW'}</span>
                         </button>
                         {product.isReadyStock && !wantsToCraft && (
                           <button
@@ -503,15 +503,15 @@ export const ProductDetails = () => {
                             style={{
                               display: 'flex', alignItems: 'center', justifyContent: 'center',
                               background: '#3b82f6', color: '#fff', border: 'none',
-                              padding: isMobile ? '0 1rem' : '0 0.75rem', borderRadius: 'var(--radius-sm)',
+                              padding: '0 0.75rem', borderRadius: 'var(--radius-sm)',
                               cursor: 'pointer', transition: 'all 0.2s',
                               fontWeight: 700, fontSize: '0.85rem',
                               whiteSpace: 'nowrap',
                               boxShadow: '0 4px 10px rgba(59,130,246,0.3)'
                             }}
                           >
-                            <Hammer size={16} style={{ marginRight: isMobile ? '0' : '4px' }} />
-                            {!isMobile && (language === 'vi' ? 'Bạn muốn chế tác?' : 'Craft it?')}
+                            <Hammer size={16} style={{ marginRight: '4px' }} />
+                            {language === 'vi' ? 'Bạn muốn chế tác?' : 'Craft it?'}
                           </button>
                         )}
                         {isEffectivelyCrafting && (
