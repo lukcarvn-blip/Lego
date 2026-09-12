@@ -896,21 +896,21 @@ export const Admin = () => {
                         onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.02)')}
                         onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                       >
-                        <td style={{ padding: '0.875rem 1rem', fontFamily: 'monospace', fontSize: '0.8rem', color: 'var(--color-accent)' }}>
+                        <td data-label="Mã đơn" style={{ padding: '0.875rem 1rem', fontFamily: 'monospace', fontSize: '0.8rem', color: 'var(--color-accent)' }}>
                           #{order.id.substring(0, 8).toUpperCase()}
                         </td>
-                        <td style={{ padding: '0.875rem 1rem', fontWeight: 600, fontSize: '0.9rem' }}>{order.customerName}</td>
-                        <td style={{ padding: '0.875rem 1rem', color: 'var(--color-text-muted)', fontSize: '0.8rem', maxWidth: '200px' }}>
+                        <td data-label="Khách hàng" style={{ padding: '0.875rem 1rem', fontWeight: 600, fontSize: '0.9rem' }}>{order.customerName}</td>
+                        <td data-label="Sản phẩm" style={{ padding: '0.875rem 1rem', color: 'var(--color-text-muted)', fontSize: '0.8rem', maxWidth: '200px' }}>
                           {order.items.map(i => `${i.product.name.vi} x${i.quantity}`).join(', ').substring(0, 50)}
                           {order.items.length > 1 ? '...' : ''}
                         </td>
-                        <td style={{ padding: '0.875rem 1rem', fontWeight: 700, color: 'var(--color-accent)', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>
+                        <td data-label="Tổng tiền" style={{ padding: '0.875rem 1rem', fontWeight: 700, color: 'var(--color-accent)', fontSize: '0.9rem', whiteSpace: 'nowrap' }}>
                           {formatVND(order.total)}
                         </td>
-                        <td style={{ padding: '0.875rem 1rem', color: 'var(--color-text-muted)', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
+                        <td data-label="Ngày đặt" style={{ padding: '0.875rem 1rem', color: 'var(--color-text-muted)', fontSize: '0.8rem', whiteSpace: 'nowrap' }}>
                           {new Date(order.date).toLocaleDateString('vi-VN')}
                         </td>
-                        <td style={{ padding: '0.875rem 1rem' }}>
+                        <td data-label="Trạng thái" style={{ padding: '0.875rem 1rem' }}>
                           <select value={order.status} onChange={e => updateOrderStatus(order.id, e.target.value as OrderStatus)}
                             style={{ padding: '0.4rem 0.6rem', borderRadius: 'var(--radius-sm)', background: `${statusColor[order.status]}20`, color: statusColor[order.status], border: `1px solid ${statusColor[order.status]}50`, outline: 'none', fontWeight: 700, fontSize: '0.8rem', cursor: 'pointer' }}
                           >
@@ -919,7 +919,7 @@ export const Admin = () => {
                             ))}
                           </select>
                         </td>
-                        <td style={{ padding: '0.875rem 1rem' }}>
+                        <td data-label="Thao tác" style={{ padding: '0.875rem 1rem' }}>
                           <button onClick={() => setSelectedOrder(order)} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--color-accent)', fontSize: '0.8rem', fontWeight: 600 }}>
                             <Eye size={14} /> Chi tiết
                           </button>

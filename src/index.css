@@ -1355,6 +1355,7 @@ input:focus, select:focus, textarea:focus {
     margin-right: 1rem;
     font-size: 0.75rem;
     text-transform: uppercase;
+    flex-shrink: 0;
   }
   
   /* Prevent image overflowing in cells */
@@ -1364,10 +1365,8 @@ input:focus, select:focus, textarea:focus {
   }
   
   /* Fix alignment for badges/status */
-  .admin-table-container td > div,
-  .admin-table-container td > span {
-    text-align: right;
-  }
+  .admin-table-container td > div, .admin-table-container td > span { text-align: right; justify-content: flex-end; } 
+  .admin-table-container td { gap: 1rem; }
 }
 
 /* Desktop default: hide bottom nav */
