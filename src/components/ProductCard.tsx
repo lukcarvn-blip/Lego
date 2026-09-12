@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { getAverageColor } from '../utils/colorUtils';
 import { Heart, Clock, Zap, Sparkles, ShoppingCart, Shield, Rocket, Crown, Tag, X, ChevronLeft, ChevronRight, Ruler, Palette, Package } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { AnimatePresence } from 'framer-motion';
@@ -19,6 +20,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
   const [showGallery, setShowGallery] = useState(false);
   const [galleryIndex, setGalleryIndex] = useState(0);
   const [slideDirection, setSlideDirection] = useState(1);
+  const [dominantColor, setDominantColor] = useState('#3b82f6');
+
+  useEffect(() => {
+    const imgSrc = product.images?.[0] || product.image;
+    if (imgSrc) {
+      getAverageColor(imgSrc).then(color => setDominantColor(color));
+    }
+  }, [product.images, product.image]);
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -153,11 +162,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               >
                 <motion.div
                   animate={{ rotate: 360 }}
-                  transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
+                  transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
                   style={{
                     position: 'absolute',
                     top: '-50%', left: '-50%', right: '-50%', bottom: '-50%',
-                    background: 'conic-gradient(from 0deg, transparent 70%, #3b82f6 85%, #93c5fd 100%)',
+                    background: `conic-gradient(from 0deg, transparent 50%, ${dominantColor} 85%, ${dominantColor} 100%)`,
                   }}
                 />
               </motion.div>
@@ -315,11 +324,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             >
               <motion.div
                 animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 2.5, ease: "linear" }}
+                transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
                 style={{
                   position: 'absolute',
                   top: '-50%', left: '-50%', right: '-50%', bottom: '-50%',
-                  background: 'conic-gradient(from 0deg, transparent 70%, #3b82f6 85%, #93c5fd 100%)',
+                  background: `conic-gradient(from 0deg, transparent 50%, ${dominantColor} 85%, ${dominantColor} 100%)`,
                 }}
               />
             </motion.div>
