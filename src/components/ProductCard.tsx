@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+﻿import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, Clock, Zap, Sparkles, ShoppingCart, Shield, Rocket, Crown, Tag, X, ChevronLeft, ChevronRight, Ruler, Palette, Package } from 'lucide-react';
@@ -49,7 +49,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
     setGalleryIndex((prev) => (prev - 1 + (product.images?.length || 1)) % (product.images?.length || 1));
   };
 
-  // Parse the max day number from estimatedPrintTime e.g. "2-4 days" → 4
+  // Parse the max day number from estimatedPrintTime e.g. "2-4 days" â†’ 4
   const parseMaxDay = (time: string) => {
     const match = time.match(/(\d+)(?:\s*-\s*(\d+))?/);
     if (!match) return 4;
@@ -201,19 +201,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                   marginTop: 'auto' 
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Kích thước:' : 'Size:'}</span>
+                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'KÃ­ch thÆ°á»›c:' : 'Size:'}</span>
                     <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.dimensions?.split(' ')[0] || '300%'}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Vật liệu:' : 'Material:'}</span>
+                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Váº­t liá»‡u:' : 'Material:'}</span>
                     <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.availableMaterials?.[0] || 'PLA'}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(74, 222, 128, 0.1)', borderRadius: '4px', border: '1px solid rgba(74, 222, 128, 0.2)' }}>
-                    <span style={{ fontSize: '0.6rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Hàng sẵn:' : 'In stock:'}</span>
-                    <span style={{ fontSize: '0.6rem', fontWeight: 600, color: '#4ade80' }}>{product.stock || 1} hộp</span>
+                    <span style={{ fontSize: '0.6rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'HÃ ng sáºµn:' : 'In stock:'}</span>
+                    <span style={{ fontSize: '0.6rem', fontWeight: 600, color: '#4ade80' }}>{product.stock || 1} há»™p</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Lượt mua:' : 'Sold:'}</span>
+                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'LÆ°á»£t mua:' : 'Sold:'}</span>
                     <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--color-text)' }}>{(product as any).sales || (product.reviews || 0) * 3 + 12}</span>
                   </div>
                 </div>
@@ -224,7 +224,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                   style={{ cursor: 'default' }}
                 >
                   <span style={{ fontSize: '0.62rem', color: craftHovered ? '#f59e0b' : 'rgba(255,255,255,0.3)', fontWeight: 600, transition: 'color 0.3s', display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.3rem' }}>
-                    <Clock size={10} />{craftHovered ? `${displayDay} ngày` : product.estimatedPrintTime.replace('days', 'ngày')}
+                    <Clock size={10} />{craftHovered ? `${displayDay} ngÃ y` : product.estimatedPrintTime.replace('days', 'ngÃ y')}
                   </span>
                   <div style={{ width: '100%', height: '18px', background: 'rgba(255,255,255,0.08)', borderRadius: '9px', overflow: 'hidden' }}>
                     <div style={{ width: craftHovered ? '75%' : '0%', height: '100%', background: '#f59e0b', borderRadius: '9px', transition: 'width 0.85s cubic-bezier(0.4,0,0.2,1)', boxShadow: craftHovered ? '0 0 10px rgba(245,158,11,0.5)' : 'none' }} />
@@ -234,7 +234,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             </div>
           </div>
         ) : (
-          /* ── GRID CARD LAYOUT (original) ── */
+          /* â”€â”€ GRID CARD LAYOUT (original) â”€â”€ */
           <div className="glass-panel product-card" style={{
             display: 'flex', flexDirection: 'column',
             height: '100%', position: 'relative', overflow: 'hidden'
@@ -393,7 +393,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                     e.preventDefault(); // Prevent navigating to ProductDetails
                     const defaultSize = product.availableSizes?.[0] || 'Size 400';
                     addToCart(product, defaultSize, 'PLA', 1, e);
-                    showToast(language === 'vi' ? 'Đã thêm vào giỏ hàng!' : 'Added to cart!');
+                    showToast(language === 'vi' ? 'ÄÃ£ thÃªm vÃ o giá» hÃ ng!' : 'Added to cart!');
                   }}
                   style={{ 
                     width: '100%', 
@@ -418,7 +418,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                   onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
                   <ShoppingCart size={18} />
-                  {language === 'vi' ? 'Mua Hàng Ngay' : 'Buy Now'}
+                  {language === 'vi' ? 'Mua HÃ ng Ngay' : 'Buy Now'}
                 </button>
               </motion.div>
             )}
@@ -437,13 +437,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 
                 fontWeight: 600, 
                 marginBottom: '0.5rem',
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                lineHeight: '1.4',
-                height: '2.8em',
+                whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                 transition: 'color 0.2s'
               }}
               onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-accent)'}
@@ -474,19 +470,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 gap: '0.4rem' 
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Kích thước:' : 'Size:'}</span>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'KÃ­ch thÆ°á»›c:' : 'Size:'}</span>
                   <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.dimensions?.split(' ')[0] || '300%'}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Vật liệu:' : 'Material:'}</span>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Váº­t liá»‡u:' : 'Material:'}</span>
                   <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.availableMaterials?.[0] || 'PLA'}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(74, 222, 128, 0.1)', borderRadius: '4px', border: '1px solid rgba(74, 222, 128, 0.2)' }}>
-                  <span style={{ fontSize: '0.7rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Hàng sẵn:' : 'In stock:'}</span>
-                  <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#4ade80' }}>{product.stock || 1} hộp</span>
+                  <span style={{ fontSize: '0.7rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'HÃ ng sáºµn:' : 'In stock:'}</span>
+                  <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#4ade80' }}>{product.stock || 1} há»™p</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Lượt mua:' : 'Sold:'}</span>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'LÆ°á»£t mua:' : 'Sold:'}</span>
                   <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-text)' }}>{(product as any).sales || (product.reviews || 0) * 3 + 12}</span>
                 </div>
               </div>
@@ -505,7 +501,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                     <Clock size={12} />
-                    {language === 'vi' ? 'THỜI GIAN CHẾ TÁC' : 'CRAFT TIME'}
+                    {language === 'vi' ? 'THá»œI GIAN CHáº¾ TÃC' : 'CRAFT TIME'}
                   </span>
                   <span style={{ 
                     color: craftHovered ? '#f59e0b' : 'rgba(255,255,255,0.35)',
@@ -514,8 +510,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                     minWidth: '60px', textAlign: 'right'
                   }}>
                     {craftHovered
-                      ? `${displayDay} ${language === 'vi' ? 'ngày' : 'days'}`
-                      : product.estimatedPrintTime.replace('days', language === 'vi' ? 'ngày' : 'days')
+                      ? `${displayDay} ${language === 'vi' ? 'ngÃ y' : 'days'}`
+                      : product.estimatedPrintTime.replace('days', language === 'vi' ? 'ngÃ y' : 'days')
                     }
                   </span>
                 </div>
@@ -660,3 +656,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
     </motion.div>
   );
 };
+
+
+
