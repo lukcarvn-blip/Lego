@@ -1215,3 +1215,164 @@ input:focus, select:focus, textarea:focus {
 .admin-sidebar-backdrop {
   display: none;
 }
+
+/* -----------------------------------------------
+   TRUE MOBILE APP LAYOUT (NO HORIZONTAL SCROLL)
+------------------------------------------------ */
+
+@media (max-width: 768px) {
+  /* --- 1. Bottom Navigation Bar --- */
+  
+  /* Hide the old sidebar completely on mobile */
+  .admin-sidebar {
+    display: none !important;
+  }
+  
+  /* Hide the hamburger button since we have a bottom nav */
+  .admin-mobile-menu-btn {
+    display: none !important;
+  }
+
+  /* Make sure body has padding for the bottom nav */
+  .admin-content-wrapper {
+    padding-bottom: 90px !important;
+    padding-top: 1rem !important; 
+  }
+
+  /* The new bottom nav styling */
+  .admin-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background: rgba(10, 28, 10, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--glass-border);
+    z-index: 999;
+    padding-bottom: env(safe-area-inset-bottom);
+    justify-content: space-between;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+  }
+  
+  .admin-bottom-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .admin-bottom-nav-item {
+    scroll-snap-align: center;
+    flex: 1;
+    min-width: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    color: var(--color-text-muted);
+    font-size: 0.65rem;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    transition: all 0.2s;
+  }
+  
+  .admin-bottom-nav-item.active {
+    color: var(--color-accent);
+  }
+  
+  .admin-bottom-nav-item svg {
+    transition: transform 0.2s;
+  }
+  .admin-bottom-nav-item.active svg {
+    transform: scale(1.15) translateY(-2px);
+  }
+
+  /* --- 2. Responsive Tables (Cards Instead of Horizontal Scroll) --- */
+  
+  /* Remove horizontal scroll container */
+  .admin-table-container {
+    overflow-x: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Transform table to cards */
+  .admin-table-container table {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  /* Hide table headers */
+  .admin-table-container thead {
+    display: none;
+  }
+
+  .admin-table-container tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* Each row becomes a card */
+  .admin-table-container tr {
+    display: flex;
+    flex-direction: column;
+    background: var(--glass-bg) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  /* Each cell becomes a row in the card */
+  .admin-table-container td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem !important;
+    border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+    font-size: 0.85rem;
+  }
+  
+  .admin-table-container td:last-child {
+    border-bottom: none !important;
+    justify-content: center; /* Center actions */
+  }
+
+  /* Add labels before the content using ::before pseudo-element */
+  /* We will need data-label attributes on the TDs in Admin.tsx */
+  .admin-table-container td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    margin-right: 1rem;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+  }
+  
+  /* Prevent image overflowing in cells */
+  .admin-table-container td img {
+    max-width: 60px;
+    height: auto;
+  }
+  
+  /* Fix alignment for badges/status */
+  .admin-table-container td > div,
+  .admin-table-container td > span {
+    text-align: right;
+  }
+}
+
+/* Desktop default: hide bottom nav */
+@media (min-width: 769px) {
+  .admin-bottom-nav {
+    display: none !important;
+  }
+}

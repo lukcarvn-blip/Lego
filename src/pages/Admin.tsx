@@ -1032,8 +1032,8 @@ export const Admin = () => {
                       <td style={{ padding: '0.75rem 1rem', color: 'var(--color-accent)', fontWeight: 700, fontSize: '0.875rem', whiteSpace: 'nowrap' }}>
                         {formatPrice(product.price, product.discountPercentage).current}
                       </td>
-                      <td style={{ padding: '0.75rem 1rem' }}>
-                        <span style={{ padding: '2px 8px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 700, background: product.stock <= 3 ? 'rgba(239,68,68,0.15)' : 'rgba(74,222,128,0.1)', color: product.stock <= 3 ? '#ef4444' : 'var(--color-accent)' }}>
+                      <td data-label="Trạng thái" style={{ padding: '0.75rem 1rem' }}>
+                            <span style={{ padding: '2px 8px', borderRadius: '20px', fontSize: '0.8rem', fontWeight: 700, background: product.stock <= 3 ? 'rgba(239,68,68,0.15)' : 'rgba(74,222,128,0.1)', color: product.stock <= 3 ? '#ef4444' : 'var(--color-accent)' }}>
                           {product.stock <= 3 && <AlertTriangle size={14} style={{display:'inline-block', verticalAlign:'middle', marginRight: 4}}/>}{product.stock}
                         </span>
                       </td>
@@ -1043,14 +1043,14 @@ export const Admin = () => {
                       <td style={{ padding: '0.75rem 1rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
                         {(product.views || 0).toLocaleString()}
                       </td>
-                      <td style={{ padding: '0.75rem 1rem' }}>
-                        {product.saleType ? (
+                      <td data-label="Khuyến mãi" style={{ padding: '0.75rem 1rem' }}>
+                          {product.saleType ? (
                           <span style={{ fontSize: '0.7rem', padding: '2px 6px', borderRadius: '20px', background: product.saleType === 'FLASH_SALE' ? 'rgba(239,68,68,0.2)' : 'rgba(251,191,36,0.2)', color: product.saleType === 'FLASH_SALE' ? '#ef4444' : '#fbbf24', fontWeight: 700 }}>
                             {product.saleType === 'FLASH_SALE' ? `⚡ −${product.discountPercentage}%` : `SALE −${product.discountPercentage}%`}
                           </span>
                         ) : <span style={{ color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>—</span>}
                       </td>
-                      <td style={{ padding: '0.75rem 1rem' }}>
+                      <td data-label="Thao tác" style={{ padding: '0.75rem 1rem' }}>
                         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
                           <button onClick={() => { setEditingProduct(product); setIsEditingProduct(true); }} style={{ color: 'var(--color-accent)', display: 'flex', alignItems: 'center', gap: '0.2rem', fontSize: '0.8rem', padding: '0.35rem 0.6rem', border: '1px solid rgba(74,222,128,0.3)', borderRadius: 'var(--radius-sm)', background: 'rgba(74,222,128,0.05)' }}>
                             <Edit2 size={13} />
@@ -1728,8 +1728,8 @@ export const Admin = () => {
                               {folder.replace(currentFolder, '').replace(/\/$/, '')}
                             </div>
                           </td>
-                          <td style={{ padding: '0.75rem 1rem', color: 'var(--color-text-muted)' }}>—</td>
-                          <td style={{ padding: '0.75rem 1rem', color: 'var(--color-text-muted)' }}>—</td>
+                          <td data-label="Kích thước" style={{ padding: '0.75rem 1rem', color: 'var(--color-text-muted)' }}>—</td>
+                          <td data-label="Kích thước" style={{ padding: '0.75rem 1rem', color: 'var(--color-text-muted)' }}>—</td>
                           <td style={{ padding: '0.75rem 1rem' }}></td>
                         </tr>
                       ))}
@@ -1740,14 +1740,14 @@ export const Admin = () => {
                           const isSelected = selectedFiles.includes(file.key);
                           return (
                             <tr key={file.key} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', background: isSelected ? 'rgba(74,222,128,0.05)' : 'transparent' }}>
-                              <td style={{ padding: '0.75rem 1rem' }}>
+                              <td data-label="Chọn" style={{ padding: '0.75rem 1rem' }}>
                                 <input type="checkbox" checked={isSelected} onChange={e => {
                                   if (e.target.checked) setSelectedFiles([...selectedFiles, file.key]);
                                   else setSelectedFiles(selectedFiles.filter(k => k !== file.key));
                                 }} style={{ accentColor: 'var(--color-accent)' }} />
                               </td>
-                              <td style={{ padding: '0.75rem 1rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <td data-label="Tồn kho" style={{ padding: '0.75rem 1rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                   {file.url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
                                     <img src={file.url} alt="" style={{ width: '24px', height: '24px', objectFit: 'cover', borderRadius: '4px' }} />
                                   ) : (
@@ -1760,8 +1760,8 @@ export const Admin = () => {
                               </td>
                               <td style={{ padding: '0.75rem 1rem', fontSize: '0.85rem' }}>{(file.size / 1024).toFixed(1)} KB</td>
                               <td style={{ padding: '0.75rem 1rem', fontSize: '0.85rem' }}>{new Date(file.lastModified).toLocaleDateString()} {new Date(file.lastModified).toLocaleTimeString()}</td>
-                              <td style={{ padding: '0.75rem 1rem' }}>
-                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                              <td data-label="Thao tác" style={{ padding: '0.75rem 1rem' }}>
+                        <div style={{ display: 'flex', gap: '0.5rem' }}>
                                   <button onClick={() => renameCloudFile(file.key)} style={{ color: 'var(--color-accent)', padding: '0.35rem 0.5rem', background: 'rgba(74,222,128,0.1)', borderRadius: '4px', border: '1px solid rgba(74,222,128,0.2)' }}>
                                     <Edit2 size={14} />
                                   </button>
@@ -2059,6 +2059,28 @@ export const Admin = () => {
         </motion.div>
         </AnimatePresence>
       </main>
+
+      {/* ── Bottom Nav (Mobile Only) ── */}
+      <nav className="admin-bottom-nav">
+        {tabs.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id as any)}
+            className={`admin-bottom-nav-item ${activeTab === tab.id ? 'active' : ''}`}
+          >
+            <div style={{ position: 'relative' }}>
+              {tab.icon}
+              {tab.badge && (
+                <span style={{ position: 'absolute', top: -6, right: -10, background: '#ef4444', color: 'white', fontSize: '0.6rem', padding: '0 4px', borderRadius: '10px', fontWeight: 800 }}>
+                  {tab.badge}
+                </span>
+              )}
+            </div>
+            <span style={{ whiteSpace: 'nowrap' }}>{tab.label}</span>
+          </button>
+        ))}
+      </nav>
+
 
       {/* Order detail modal */}
       {selectedOrder && (
