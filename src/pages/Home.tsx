@@ -604,7 +604,19 @@ export const Home = () => {
             gap: 1rem;
           }
           .home-news-grid {
-            grid-template-columns: 1fr;
+            display: grid;
+            grid-template-columns: calc(100% - 2rem) calc(100% - 2rem);
+            grid-template-rows: 1fr 1fr;
+            grid-auto-flow: column;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            margin: 0 -1rem;
+            padding: 0 1rem 1rem 1rem;
+            gap: 1rem;
+          }
+          .home-news-grid::-webkit-scrollbar { display: none; }
+          .home-news-grid > div {
+            scroll-snap-align: center;
           }
           
           /* Compact mobile product cards */

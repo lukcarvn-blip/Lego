@@ -162,7 +162,7 @@ export const ProductDetails = () => {
   const [engravingText, setEngravingText] = useState('');
   const [selectedMicaBox, setSelectedMicaBox] = useState('');
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'tags'>('desc');
-  const [isCartExpanded, setIsCartExpanded] = useState(true);
+  const [isCartExpanded, setIsCartExpanded] = useState(window.innerWidth >= 1024);
   const [quantity, setQuantity] = useState(1);
   const [wantsToCraft, setWantsToCraft] = useState(false);
   const isEffectivelyCrafting = !product?.isReadyStock || wantsToCraft;
@@ -995,7 +995,7 @@ export const ProductDetails = () => {
               <div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.75rem' }}>
                   {/* Standard Box */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: selectedMicaBox === 'standard' ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer' }} onClick={() => setSelectedMicaBox(selectedMicaBox === 'standard' ? '' : 'standard')}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: selectedMicaBox === 'standard' ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer' }} onClick={() => { setSelectedMicaBox(selectedMicaBox === 'standard' ? '' : 'standard'); setIsCartExpanded(true); }}>
                     <img src="https://s3.vn-hcm-1.vietnix.cloud/benchydrop/images/mica-standard.jpg" alt="Mica Standard" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px', background: 'rgba(255,255,255,0.1)' }} onError={e => e.currentTarget.src = 'https://placehold.co/100x100?text=Mica+Box'} />
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 600, fontSize: '0.95rem', color: selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Hộp Mica Thường' : 'Standard Mica Box'}</div>
@@ -1013,7 +1013,7 @@ export const ProductDetails = () => {
                   </div>
 
                   {/* LED Box */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${selectedMicaBox === 'led' ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: selectedMicaBox === 'led' ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer' }} onClick={() => setSelectedMicaBox(selectedMicaBox === 'led' ? '' : 'led')}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${selectedMicaBox === 'led' ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: selectedMicaBox === 'led' ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer' }} onClick={() => { setSelectedMicaBox(selectedMicaBox === 'led' ? '' : 'led'); setIsCartExpanded(true); }}>
                     <img src="https://s3.vn-hcm-1.vietnix.cloud/benchydrop/images/mica-led.jpg" alt="Mica LED" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px', background: 'rgba(255,255,255,0.1)' }} onError={e => e.currentTarget.src = 'https://placehold.co/100x100?text=LED+Box'} />
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 600, fontSize: '0.95rem', color: selectedMicaBox === 'led' ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Hộp Mica + Đèn LED' : 'Mica Box with LED'}</div>
