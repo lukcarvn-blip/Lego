@@ -208,7 +208,7 @@ export const Admin = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const initialTab = (searchParams.get('tab') || 'dashboard') as 'dashboard' | 'orders' | 'products' | 'printers' | 'blog' | 'files' | 'members' | 'settings';
-  const [activeTab, setActiveTabState] = useSessionState<'dashboard' | 'orders' | 'products' | 'printers' | 'blog' | 'files' | 'members' | 'settings'>('admin_tab', initialTab);
+  const [activeTab, setActiveTabState] = useSessionState<'dashboard' | 'orders' | 'products' | 'printers' | 'blog' | 'files' | 'members' | 'settings' | 'more'>('admin_tab', initialTab);
   const setActiveTab = (tab: typeof activeTab) => {
     setActiveTabState(tab);
     setSearchParams({ tab });
@@ -2056,13 +2056,45 @@ export const Admin = () => {
           </form>
         )}
 
+        
+        {/* ── MORE TAB (Mobile Only) ── */}
+        {activeTab === 'more' && (
+          <div>
+            <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '1.5rem' }}>Menu</h1>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              {tabs.slice(3).map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id as any)}
+                  className="glass-panel"
+                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem 1rem', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-lg)', background: 'var(--glass-bg)', gap: '0.75rem', cursor: 'pointer', color: 'var(--color-text)' }}
+                >
+                  <div style={{ color: 'var(--color-accent)' }}>
+                    {tab.icon}
+                  </div>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{tab.label}</span>
+                </button>
+              ))}
+              
+              <button
+                onClick={logout}
+                className="glass-panel"
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1.5rem 1rem', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 'var(--radius-lg)', background: 'rgba(239,68,68,0.05)', gap: '0.75rem', cursor: 'pointer', color: '#ef4444' }}
+              >
+                <LogOut size={18} />
+                <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Đăng xuất</span>
+              </button>
+            </div>
+          </div>
+        )}
+
         </motion.div>
         </AnimatePresence>
       </main>
 
       {/* ── Bottom Nav (Mobile Only) ── */}
       <nav className="admin-bottom-nav">
-        {tabs.map(tab => (
+        {tabs.slice(0, 3).map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id as any)}
@@ -2079,6 +2111,15 @@ export const Admin = () => {
             <span style={{ whiteSpace: 'nowrap' }}>{tab.label}</span>
           </button>
         ))}
+        <button
+          onClick={() => setActiveTab('more' as any)}
+          className={`admin-bottom-nav-item ${activeTab === 'more' ? 'active' : ''}`}
+        >
+          <div style={{ position: 'relative' }}>
+            <Menu size={18} />
+          </div>
+          <span style={{ whiteSpace: 'nowrap' }}>Thêm</span>
+        </button>
       </nav>
 
 
