@@ -820,23 +820,6 @@ export const Admin = () => {
                 ))}
               </div>
             </div>
-
-            {/* Low stock alert */}
-            {products.filter(p => p.stock <= 3).length > 0 && (
-              <div style={{ ...panelStyle, border: '1px solid rgba(239,68,68,0.3)', background: 'rgba(239,68,68,0.05)', marginTop: '1.5rem' }}>
-                <h2 style={{ fontSize: '1rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#ef4444' }}>
-                  <AlertTriangle size={18} /> Cảnh báo tồn kho thấp
-                </h2>
-                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                  {products.filter(p => p.stock <= 3).map(p => (
-                    <div key={p.id} style={{ background: 'rgba(239,68,68,0.1)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(239,68,68,0.2)' }}>
-                      <p style={{ fontSize: '0.85rem', fontWeight: 600 }}>{p.name.vi}</p>
-                      <p style={{ fontSize: '0.75rem', color: '#ef4444' }}>Còn {p.stock} sản phẩm</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         )}
 
