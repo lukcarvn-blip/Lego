@@ -2085,6 +2085,27 @@ export const Admin = () => {
                 <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>Đăng xuất</span>
               </button>
             </div>
+
+            <h3 style={{ marginTop: '2rem', marginBottom: '1rem', color: 'var(--color-text-muted)' }}>Tiện ích</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <a href="/" target="_blank" rel="noreferrer" className="glass-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem', border: '1px solid rgba(74,222,128,0.2)', borderRadius: 'var(--radius-lg)', background: 'rgba(74,222,128,0.05)', gap: '0.5rem', cursor: 'pointer', color: 'var(--color-accent)', textDecoration: 'none' }}>
+                <Globe size={18} />
+                <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>Xem trang chủ</span>
+              </a>
+              <button onClick={() => { localStorage.removeItem('legato_cart'); showToast('Đã xoá cache giỏ hàng!'); }} className="glass-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem', border: '1px solid rgba(251,191,36,0.2)', borderRadius: 'var(--radius-lg)', background: 'rgba(251,191,36,0.05)', gap: '0.5rem', cursor: 'pointer', color: '#fbbf24' }}>
+                <DatabaseZap size={18} />
+                <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>Xoá Cache</span>
+              </button>
+              <button onClick={() => exportCSV(orders)} className="glass-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem', border: '1px solid rgba(59,130,246,0.2)', borderRadius: 'var(--radius-lg)', background: 'rgba(59,130,246,0.05)', gap: '0.5rem', cursor: 'pointer', color: '#60a5fa' }}>
+                <Download size={18} />
+                <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>Xuất CSV</span>
+              </button>
+              <button onClick={() => { products.forEach(p => updateProduct({ ...p, views: 0, likes: 0 })); showToast('Đã reset thống kê!'); }} className="glass-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 'var(--radius-lg)', background: 'rgba(239,68,68,0.05)', gap: '0.5rem', cursor: 'pointer', color: '#f87171' }}>
+                <RefreshCw size={18} />
+                <span style={{ fontSize: '0.8rem', fontWeight: 600 }}>Reset Data</span>
+              </button>
+            </div>
+
           </div>
         )}
 
