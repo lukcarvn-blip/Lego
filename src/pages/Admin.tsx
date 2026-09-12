@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useStore, type OrderStatus } from '../context/StoreContext';
-import { Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText, Sparkles, Store } from 'lucide-react';
+import { Sun, Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText, Sparkles, Store } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
@@ -1930,6 +1930,25 @@ export const Admin = () => {
                 </InputField>
               </div>
             </div>
+
+            <div style={panelStyle}>
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  🎨 Giao diện
+                </h3>
+                <label style={{ display: 'block', marginBottom: '0.75rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Chủ đề màu sắc (áp dụng toàn bộ website)</label>
+                <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', padding: '0.75rem 1.25rem', borderRadius: '10px', border: `2px solid ${tempSettings.siteTheme !== 'light' ? 'var(--color-accent)' : 'var(--glass-border)'}`, background: tempSettings.siteTheme !== 'light' ? 'rgba(74,222,128,0.1)' : 'transparent', transition: 'all 0.2s', flex: '1', minWidth: '140px' }}>
+                    <input type="radio" name="siteTheme" value="dark" checked={tempSettings.siteTheme !== 'light'} onChange={() => setTempSettings(f => ({ ...f, siteTheme: 'dark' }))} style={{ display: 'none' }} />
+                    <span style={{ fontSize: '1.2rem' }}>🌙</span> <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>Tối (Mặc định)</span>
+                    {tempSettings.siteTheme !== 'light' && <span style={{ marginLeft: 'auto', color: 'var(--color-accent)', fontWeight: 700 }}>✓</span>}
+                  </label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', cursor: 'pointer', padding: '0.75rem 1.25rem', borderRadius: '10px', border: `2px solid ${tempSettings.siteTheme === 'light' ? 'var(--color-accent)' : 'var(--glass-border)'}`, background: tempSettings.siteTheme === 'light' ? 'rgba(74,222,128,0.1)' : 'transparent', transition: 'all 0.2s', flex: '1', minWidth: '140px' }}>
+                    <input type="radio" name="siteTheme" value="light" checked={tempSettings.siteTheme === 'light'} onChange={() => setTempSettings(f => ({ ...f, siteTheme: 'light' }))} style={{ display: 'none' }} />
+                    <span style={{ fontSize: '1.2rem' }}>☀️</span> <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>Sáng</span>
+                    {tempSettings.siteTheme === 'light' && <span style={{ marginLeft: 'auto', color: 'var(--color-accent)', fontWeight: 700 }}>✓</span>}
+                  </label>
+                </div>
+              </div>
 
             <div style={panelStyle}>
               <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Thông tin Ngân hàng (Thanh toán)</h3>

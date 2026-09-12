@@ -89,6 +89,7 @@ export interface StoreSettings {
   bankName?: string;
   bankAccount?: string;
   bankOwner?: string;
+  siteTheme?: string;
 }
 
 export interface ToastMessage {
@@ -155,6 +156,12 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     bankAccount: '9931028868',
     bankOwner: 'LE NHAT HOANG'
   });
+  // Apply theme CSS class to document
+  useEffect(() => {
+    const theme = settings.siteTheme || 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [settings.siteTheme]);
+
   const [language, setLanguage] = useState<Language>('vi');
   const [user, setUser] = useState<any>(null);
   const [isDataLoading, setIsDataLoading] = useState(true);
