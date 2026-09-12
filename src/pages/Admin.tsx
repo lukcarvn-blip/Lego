@@ -865,7 +865,7 @@ export const Admin = () => {
               <div style={{ textAlign: 'center', padding: '4rem', color: 'var(--color-text-muted)' }}>Không tìm thấy đơn hàng nào.</div>
             ) : (
               <div className="admin-table-container" style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '700px' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '100%' }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       {['Mã đơn', 'Khách hàng', 'Sản phẩm', 'Tổng tiền', 'Ngày đặt', 'Trạng thái', ''].map(h => (
@@ -984,7 +984,7 @@ export const Admin = () => {
             </div>
 
             <div className="admin-table-container" style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '100%' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                     {['Ảnh', 'SKU', 'Tên sản phẩm', 'Danh mục', 'Giá', 'Tồn kho', <Heart size={14} />, <Eye size={14} />, 'Sale', 'Thao tác'].map((h, i) => (
@@ -1397,7 +1397,7 @@ export const Admin = () => {
             </div>
 
             <div className="admin-table-container" style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '100%' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>
                     {['Ảnh bìa', 'Tiêu đề', 'Lượt xem', 'Ngày đăng', 'Thao tác'].map(h => <th key={typeof h === 'string' ? h : String(h)} style={{ padding: '0.75rem 1rem' }}>{h}</th>)}
@@ -1674,7 +1674,7 @@ export const Admin = () => {
                 </div>
               ) : (
                 <div className="admin-table-container" style={{ overflowX: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '100%' }}>
                     <thead>
                       <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>
                         <th style={{ padding: '0.75rem 1rem', width: '40px' }}>
@@ -1803,7 +1803,7 @@ export const Admin = () => {
                 </div>
               </div>
             <div className="admin-table-container" style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '100%' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>
                     {['Avatar', 'Email / Tên', 'Ngày tham gia', 'Quyền hạn', 'Thao tác'].map(h => <th key={typeof h === 'string' ? h : String(h)} style={{ padding: '0.75rem 1rem' }}>{h}</th>)}
