@@ -1137,7 +1137,7 @@ export const ProductDetails = () => {
               paddingBottom: '1rem'
             }}
           >
-            {mockProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 10).map((p, idx) => (
+            {products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 10).map((p, idx) => (
               <div key={p.id} style={{ flex: '0 0 calc(50% - 0.5rem)', width: 'calc(50% - 0.5rem)', scrollSnapAlign: 'start' }}>
                 <ProductCard product={p} idx={idx} listMode={false} />
               </div>
@@ -1176,7 +1176,7 @@ export const ProductDetails = () => {
               paddingBottom: '1rem'
             }}
           >
-            {[...mockProducts].sort((a, b) => b.likes - a.likes).filter(p => (product.category === '3d-printer' ? p.category === '3d-printer' : p.category !== '3d-printer') && p.id !== product.id).slice(0, 10).map((p, idx) => (
+            {[...products].sort((a, b) => b.likes - a.likes).filter(p => (product.category === '3d-printer' ? p.category === '3d-printer' : p.category !== '3d-printer') && p.id !== product.id).slice(0, 10).map((p, idx) => (
               <div key={p.id} style={{ flex: '0 0 calc(50% - 0.5rem)', width: 'calc(50% - 0.5rem)', scrollSnapAlign: 'start' }}>
                 <ProductCard product={p} idx={idx} listMode={false} />
               </div>
