@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift, Plus, Minus } from 'lucide-react';
+import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift, Plus, Minus, Info } from 'lucide-react';
 import { mockProducts, type ProductSize } from '../data/mockProducts';
 import { useStore, type ProductMaterial } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
@@ -974,7 +974,7 @@ export const ProductDetails = () => {
                 <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem' }}>
                   {language === 'vi' ? 'Hộp Mica Bảo Vệ' : 'Protective Mica Box'}
                 </label>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.75rem' }}>
                   {/* Standard Box */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: selectedMicaBox === 'standard' ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer' }} onClick={() => setSelectedMicaBox(selectedMicaBox === 'standard' ? '' : 'standard')}>
                     <img src="https://s3.vn-hcm-1.vietnix.cloud/benchydrop/images/mica-standard.jpg" alt="Mica Standard" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px', background: 'rgba(255,255,255,0.1)' }} onError={e => e.currentTarget.src = 'https://placehold.co/100x100?text=Mica+Box'} />
@@ -982,9 +982,14 @@ export const ProductDetails = () => {
                       <div style={{ fontWeight: 600, fontSize: '0.95rem', color: selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Hộp Mica Thường' : 'Standard Mica Box'}</div>
                       <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>+150.000 ₫</div>
                     </div>
-                    <button style={{ width: '32px', height: '32px', borderRadius: '50%', border: `1px solid ${selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--glass-border)'}`, background: selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'transparent', color: selectedMicaBox === 'standard' ? '#000' : 'var(--color-text)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                      {selectedMicaBox === 'standard' ? <Minus size={16} /> : <Plus size={16} />}
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <a href="/products/accessories" target="_blank" title="Chi tiết hộp" onClick={e => e.stopPropagation()} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', padding: '0.25rem' }}>
+                        <Info size={16} />
+                      </a>
+                      <button style={{ width: '32px', height: '32px', borderRadius: '50%', border: `1px solid ${selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--glass-border)'}`, background: selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'transparent', color: selectedMicaBox === 'standard' ? '#000' : 'var(--color-text)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                        {selectedMicaBox === 'standard' ? <Minus size={16} /> : <Plus size={16} />}
+                      </button>
+                    </div>
                   </div>
 
                   {/* LED Box */}
@@ -994,15 +999,15 @@ export const ProductDetails = () => {
                       <div style={{ fontWeight: 600, fontSize: '0.95rem', color: selectedMicaBox === 'led' ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Hộp Mica + Đèn LED' : 'Mica Box with LED'}</div>
                       <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>+250.000 ₫</div>
                     </div>
-                    <button style={{ width: '32px', height: '32px', borderRadius: '50%', border: `1px solid ${selectedMicaBox === 'led' ? 'var(--color-accent)' : 'var(--glass-border)'}`, background: selectedMicaBox === 'led' ? 'var(--color-accent)' : 'transparent', color: selectedMicaBox === 'led' ? '#000' : 'var(--color-text)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                      {selectedMicaBox === 'led' ? <Minus size={16} /> : <Plus size={16} />}
-                    </button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <a href="/products/accessories" target="_blank" title="Chi tiết hộp" onClick={e => e.stopPropagation()} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', padding: '0.25rem' }}>
+                        <Info size={16} />
+                      </a>
+                      <button style={{ width: '32px', height: '32px', borderRadius: '50%', border: `1px solid ${selectedMicaBox === 'led' ? 'var(--color-accent)' : 'var(--glass-border)'}`, background: selectedMicaBox === 'led' ? 'var(--color-accent)' : 'transparent', color: selectedMicaBox === 'led' ? '#000' : 'var(--color-text)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                        {selectedMicaBox === 'led' ? <Minus size={16} /> : <Plus size={16} />}
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div style={{ marginTop: '0.5rem', textAlign: 'right' }}>
-                  <a href="/products/accessories" target="_blank" style={{ fontSize: '0.8rem', color: 'var(--color-accent)', textDecoration: 'underline' }}>
-                    {language === 'vi' ? 'Xem chi tiết các loại hộp Mica' : 'View Mica Box details'}
-                  </a>
                 </div>
               </div>
             </div>
