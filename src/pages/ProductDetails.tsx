@@ -957,7 +957,7 @@ export const ProductDetails = () => {
           >
             <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Gift size={20} color="var(--color-accent)" /> 
-              {language === 'vi' ? 'TÙY CHỌN BỔ SUNG' : 'ADDITIONAL OPTIONS'}
+              {language === 'vi' ? 'HỘP MICA BẢO VỆ' : 'PROTECTIVE MICA BOX'}
             </h3>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -979,9 +979,6 @@ export const ProductDetails = () => {
 
               {/* Mica Box */}
               <div>
-                <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem' }}>
-                  {language === 'vi' ? 'Hộp Mica Bảo Vệ' : 'Protective Mica Box'}
-                </label>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.75rem' }}>
                   {/* Standard Box */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: selectedMicaBox === 'standard' ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer' }} onClick={() => setSelectedMicaBox(selectedMicaBox === 'standard' ? '' : 'standard')}>
@@ -989,6 +986,7 @@ export const ProductDetails = () => {
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 600, fontSize: '0.95rem', color: selectedMicaBox === 'standard' ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Hộp Mica Thường' : 'Standard Mica Box'}</div>
                       <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>+150.000 ₫</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '2px' }}>{(selectedSize || '').includes('1000') ? '80x40x30 cm' : (selectedSize || '').includes('400') ? '50x20x20 cm' : '30x15x15 cm'}</div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <a href="/products/accessories" target="_blank" title="Chi tiết hộp" onClick={e => e.stopPropagation()} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', padding: '0.25rem' }}>
@@ -1006,6 +1004,7 @@ export const ProductDetails = () => {
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 600, fontSize: '0.95rem', color: selectedMicaBox === 'led' ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Hộp Mica + Đèn LED' : 'Mica Box with LED'}</div>
                       <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>+250.000 ₫</div>
+                      <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginTop: '2px' }}>{(selectedSize || '').includes('1000') ? '80x40x30 cm' : (selectedSize || '').includes('400') ? '50x20x20 cm' : '30x15x15 cm'}</div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                       <a href="/products/accessories" target="_blank" title="Chi tiết hộp" onClick={e => e.stopPropagation()} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', padding: '0.25rem' }}>
