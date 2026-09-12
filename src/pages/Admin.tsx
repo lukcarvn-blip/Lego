@@ -932,8 +932,8 @@ export const Admin = () => {
                     {['Classic', 'Superheroes', 'Sci-Fi', 'Fantasy', 'Anime'].map(c => <option key={c} value={c}>{c}</option>)}
                   </select>
                 </InputField>
-                <InputField label="Giá ($USD) *">
-                  <input type="number" required step="0.01" value={editingProduct.price || 0} onChange={e => setEditingProduct({...editingProduct, price: parseFloat(e.target.value)})} style={inputStyle} />
+                <InputField label="Giá (VNĐ) *">
+                  <input type="number" required step="1000" value={(editingProduct.price || 0) * 25400} onChange={e => setEditingProduct({...editingProduct, price: (parseFloat(e.target.value) || 0) / 25400})} style={inputStyle} />
                 </InputField>
                 
                 <InputField label="Loại khuyến mãi">
