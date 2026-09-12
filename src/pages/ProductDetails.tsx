@@ -250,18 +250,19 @@ export const ProductDetails = () => {
         {/* Left: Image Gallery */}
         <div style={{ height: '100%', position: 'relative' }}>
           <motion.div 
-            className="glass-panel pd-image-panel"
+            className="pd-image-panel"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             style={{ 
-              padding: '0.5rem', 
+              padding: '0', 
               aspectRatio: '1/1', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center', 
               overflow: 'hidden',
-              background: 'radial-gradient(circle at 50% 50%, rgba(74, 222, 128, 0.1) 0%, rgba(0,0,0,0.4) 100%)',
-              position: 'relative'
+              background: 'transparent',
+              position: 'relative',
+              border: 'none'
             }}
           >
             {/* Sale Badges */}
@@ -319,10 +320,9 @@ export const ProductDetails = () => {
                     src={displayImages[activeImageIndex]} 
                     alt={product.name[language as keyof typeof product.name]} 
                     style={{ 
-                      width: '80%', 
-                      height: '80%', 
+                      width: '100%', 
+                      height: '100%', 
                       objectFit: 'contain',
-                      filter: 'drop-shadow(0 20px 20px rgba(0,0,0,0.5))',
                       position: 'absolute',
                       zIndex: 10,
                       cursor: 'grab'
@@ -353,8 +353,6 @@ export const ProductDetails = () => {
                       width: '100%', 
                       height: '100%', 
                       objectFit: 'contain',
-                      filter: 'drop-shadow(0 30px 30px rgba(0,0,0,0.6))',
-                      transform: 'scale(1.15)', // slightly enlarge to fill space
                       position: 'absolute'
                     }} 
                   />
