@@ -980,7 +980,7 @@ export const Admin = () => {
 
         {/* ── PRODUCT FORM ──────────────────────────────────────────── */}
         {activeTab === 'products' && isEditingProduct && (
-          <form onSubmit={handleSaveProduct} style={{ maxWidth: '1200px' }}>
+          <form onSubmit={handleSaveProduct} className="admin-product-form-wrap">
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
               <h1 style={{ fontSize: '1.75rem' }}>{editingProduct.id ? <span><Edit2 size={24} style={{marginRight:8}}/> Sửa sản phẩm</span> : <span><Plus size={24} style={{marginRight:8}}/> Thêm sản phẩm mới</span>}</h1>
@@ -1012,7 +1012,7 @@ export const Admin = () => {
             )}
 
             {/* Two-column layout */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '1.5rem', alignItems: 'start' }}>
+            <div className="admin-product-form-grid">
 
               {/* ── LEFT: Main content ── */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
@@ -1020,7 +1020,7 @@ export const Admin = () => {
                 {/* Basic info */}
                 <div style={panelStyle}>
                   <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>📝 Thông tin cơ bản</h3>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div className="admin-form-2col">
                     <InputField label="Tên tiếng Việt *">
                       <input type="text" required value={editingProduct.name?.vi || ''} onChange={e => setEditingProduct({...editingProduct, name: { ...editingProduct.name!, vi: e.target.value }})} style={inputStyle} />
                     </InputField>
@@ -1071,7 +1071,7 @@ export const Admin = () => {
                       }>
                         <textarea placeholder="/images/phu-1.png&#10;/images/phu-2.png" rows={4} value={(editingProduct.images?.slice(1) || []).join('\n')} onChange={e => { const cover = editingProduct.images?.[0] || ''; const secondary = e.target.value.split('\n').map(s => s.trim()).filter(s => s).slice(0, 10); setEditingProduct({...editingProduct, images: [cover, ...secondary]}); }} style={{...inputStyle, resize: 'vertical'}} />
                       </InputField>
-                      <div className="hide-scrollbar" style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.5rem' }}>
+                      <div className="admin-image-grid" style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)' }}>
                         {Array.from({ length: 10 }).map((_, idx) => {
                           const img = editingProduct.images?.[idx + 1];
                           return (
@@ -1111,7 +1111,7 @@ export const Admin = () => {
               </div>
 
               {/* ── RIGHT SIDEBAR: Giá & Tồn kho ── */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', position: 'sticky', top: '1rem' }}>
+              <div className="admin-product-sidebar" style={{ display: 'flex', flexDirection: 'column', gap: '1rem', position: 'sticky', top: '1rem' }}>
 
                 {/* Pricing */}
                 <div style={{ ...panelStyle, padding: '1rem' }}>

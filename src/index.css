@@ -841,6 +841,60 @@ table {
   }
 }
 
+/* ── ADMIN PRODUCT FORM RESPONSIVE ───────────────────────────── */
+/* Two-column form: main content + right sidebar */
+.admin-product-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* On screens <= 1024px: stack to single column */
+@media (max-width: 1024px) {
+  .admin-product-form-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-product-sidebar {
+    position: static !important;
+  }
+}
+
+/* Basic info 2-col grid: collapse on small screens */
+.admin-form-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 600px) {
+  .admin-form-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Image grid: 5-col on desktop, 3-col on mobile */
+.admin-image-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+}
+@media (max-width: 600px) {
+  .admin-image-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Form max-width full on small screens */
+.admin-product-form-wrap {
+  max-width: 1200px;
+  width: 100%;
+}
+@media (max-width: 768px) {
+  .admin-product-form-wrap {
+    max-width: 100%;
+  }
+}
+
 .chamfer-btn { clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); border-radius: 0 !important; }
 
 /* Footer specific mobile styles */
