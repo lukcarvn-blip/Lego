@@ -711,7 +711,7 @@ export const Admin = () => {
 
             
             {/* 🔔 NOTIFICATION CENTER */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+            <div className="admin-notif-grid">
               
               {/* 1. Low Stock Warning */}
               {lowStockProducts.length > 0 && (
