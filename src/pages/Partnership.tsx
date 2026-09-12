@@ -49,16 +49,43 @@ export const Partnership = () => {
     setVideos(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const allFiles = [...images, ...videos];
+      
+      // Upload all files to S3
+      for (const file of allFiles) {
+        const response = await fetch('/api/get-upload-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: file.name, contentType: file.type })
+        });
+        
+        if (!response.ok) throw new Error('Failed to get signed URL');
+        const { signedUrl } = await response.json();
+        
+        const uploadRes = await fetch(signedUrl, {
+          method: 'PUT',
+          body: file,
+          headers: { 'Content-Type': file.type }
+        });
+        
+        if (!uploadRes.ok) throw new Error('Failed to upload file to S3');
+      }
+
+      // Here you would normally also send the formData and the array of public URLs to your backend database
+      
       setIsSuccess(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 1500);
+    } catch (error) {
+      console.error("Upload error", error);
+      showToast(language === 'vi' ? 'Lỗi tải file lên!' : 'Upload failed!');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputStyle = {

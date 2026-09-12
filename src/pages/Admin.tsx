@@ -12,8 +12,7 @@ import type { Order, BlogPost } from '../context/StoreContext';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../config/firebase';
+
 
 function useSessionState<T>(key: string, initialValue: T) {
   const [state, setState] = useState<T>(() => {
@@ -296,10 +295,27 @@ export const Admin = () => {
       
       let uploadedUrls: string[] = [];
       for (const file of files) {
-        const storageRef = ref(storage, `products/${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '')}`);
-        const uploadTask = await uploadBytes(storageRef, file);
-        const url = await getDownloadURL(uploadTask.ref);
-        uploadedUrls.push(url);
+        // Request signed URL from our Serverless Function
+        const response = await fetch('/api/get-upload-url', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ filename: file.name, contentType: file.type })
+        });
+        
+        if (!response.ok) throw new Error('Failed to get signed URL');
+        
+        const { signedUrl, publicUrl } = await response.json();
+        
+        // Upload directly to Vietnix S3 using the signed URL
+        const uploadRes = await fetch(signedUrl, {
+          method: 'PUT',
+          body: file,
+          headers: { 'Content-Type': file.type }
+        });
+        
+        if (!uploadRes.ok) throw new Error('Failed to upload file to S3');
+        
+        uploadedUrls.push(publicUrl);
       }
 
       if (type === 'cover') {
@@ -1108,18 +1124,40 @@ export const Admin = () => {
                         accept="image/*"
                         id="blog-cover-upload"
                         style={{ display: 'none' }}
+                        disabled={isUploadingImages}
                         onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (!file) return;
-                          const reader = new FileReader();
-                          reader.onload = (ev) => {
-                            setEditingBlogPost({...editingBlogPost, image: ev.target?.result as string});
-                          };
-                          reader.readAsDataURL(file);
+                          
+                          setIsUploadingImages(true);
+                          try {
+                            const response = await fetch('/api/get-upload-url', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ filename: file.name, contentType: file.type })
+                            });
+                            if (!response.ok) throw new Error('Failed to get signed URL');
+                            const { signedUrl, publicUrl } = await response.json();
+                            
+                            const uploadRes = await fetch(signedUrl, {
+                              method: 'PUT',
+                              body: file,
+                              headers: { 'Content-Type': file.type }
+                            });
+                            if (!uploadRes.ok) throw new Error('Failed to upload file to S3');
+                            
+                            setEditingBlogPost({...editingBlogPost, image: publicUrl});
+                            showToast(language === 'vi' ? 'Đã tải lên ảnh bìa!' : 'Uploaded cover image!');
+                          } catch (err) {
+                            console.error("Upload error", err);
+                            showToast(language === 'vi' ? 'Lỗi tải ảnh lên!' : 'Upload failed!');
+                          } finally {
+                            setIsUploadingImages(false);
+                          }
                         }}
                       />
-                      <label htmlFor="blog-cover-upload" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px dashed var(--glass-border)', cursor: 'pointer', color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 600, background: 'rgba(74,222,128,0.05)' }}>
-                        📁 Chọn ảnh từ máy tính
+                      <label htmlFor="blog-cover-upload" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px dashed var(--glass-border)', cursor: isUploadingImages ? 'wait' : 'pointer', color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 600, background: 'rgba(74,222,128,0.05)' }}>
+                        {isUploadingImages ? <RefreshCw size={14} className="spin" /> : '📁'} {isUploadingImages ? 'Đang tải lên...' : 'Chọn ảnh từ máy tính'}
                       </label>
                       {editingBlogPost.image && (
                         <div style={{ marginTop: '0.5rem', position: 'relative', display: 'inline-block' }}>
