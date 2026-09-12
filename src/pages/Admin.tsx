@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useStore, type OrderStatus } from '../context/StoreContext';
 import { Sun, Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText, Sparkles, Store } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
@@ -691,7 +692,15 @@ export const Admin = () => {
           </button>
         </div>
 
-        <div style={{ padding: '2rem' }}>
+        <AnimatePresence mode="wait">
+        <motion.div
+          key={activeTab}
+          initial={{ opacity: 0, y: 20, filter: 'blur(6px)' }}
+          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+          exit={{ opacity: 0, y: -12, filter: 'blur(4px)' }}
+          transition={{ type: 'spring', stiffness: 340, damping: 30 }}
+          style={{ padding: '2rem' }}
+        >
 
         {/* ── DASHBOARD TAB ─────────────────────────────────────────── */}
         {activeTab === 'dashboard' && (
@@ -705,7 +714,7 @@ export const Admin = () => {
               
               {/* 1. Low Stock Warning */}
               {lowStockProducts.length > 0 && (
-                <div style={{ background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 'var(--radius-md)', padding: '1.25rem' }}>
+                <div className="notif-card" style={{ background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: 'var(--radius-md)', padding: '1.25rem' }}>
                   <h3 style={{ fontSize: '0.95rem', color: '#ef4444', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <AlertTriangle size={18} /> Cảnh báo tồn kho thấp
                   </h3>
@@ -725,7 +734,7 @@ export const Admin = () => {
 
               {/* 2. Blog Reminder */}
               {needsBlogUpdate && (
-                <div style={{ background: 'rgba(234,179,8,0.05)', border: '1px solid rgba(234,179,8,0.3)', borderRadius: 'var(--radius-md)', padding: '1.25rem' }}>
+                <div className="notif-card" style={{ background: 'rgba(234,179,8,0.05)', border: '1px solid rgba(234,179,8,0.3)', borderRadius: 'var(--radius-md)', padding: '1.25rem' }}>
                   <h3 style={{ fontSize: '0.95rem', color: '#eab308', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <PenTool size={18} /> Nhắc nhở đăng bài
                   </h3>
@@ -740,7 +749,7 @@ export const Admin = () => {
 
               {/* 3. Order Notifications */}
               {needsOrderAttention && (
-                <div style={{ background: 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: 'var(--radius-md)', padding: '1.25rem' }}>
+                <div className="notif-card" style={{ background: 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: 'var(--radius-md)', padding: '1.25rem' }}>
                   <h3 style={{ fontSize: '0.95rem', color: '#3b82f6', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <Package size={18} /> Thông báo đơn hàng
                   </h3>
@@ -756,7 +765,7 @@ export const Admin = () => {
 
               {/* 4. Revenue Push */}
               {needsRevenuePush && (
-                <div style={{ background: 'rgba(168,85,247,0.05)', border: '1px solid rgba(168,85,247,0.3)', borderRadius: 'var(--radius-md)', padding: '1.25rem' }}>
+                <div className="notif-card" style={{ background: 'rgba(168,85,247,0.05)', border: '1px solid rgba(168,85,247,0.3)', borderRadius: 'var(--radius-md)', padding: '1.25rem' }}>
                   <h3 style={{ fontSize: '0.95rem', color: '#a855f7', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <TrendingUp size={18} /> Nhắc nhở doanh thu
                   </h3>
@@ -2046,7 +2055,8 @@ export const Admin = () => {
           </form>
         )}
 
-        </div>
+        </motion.div>
+        </AnimatePresence>
       </main>
 
       {/* Order detail modal */}
