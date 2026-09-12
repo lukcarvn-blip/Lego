@@ -156,7 +156,7 @@ const OrderModal = ({ order, onClose, onStatusChange }: { order: Order, onClose:
               <p style={{ fontWeight: 600, fontSize: '0.9rem' }}>{item.product.name.vi}</p>
               <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
                 {item.size} · {item.material} · x{item.quantity}
-                {item.isFastCrafting && <span style={{ color: '#ef4444', marginLeft: '0.5rem' }}>🚀 Tăng tốc</span>}
+                {item.isFastCrafting && <span style={{ color: '#ef4444', marginLeft: '0.5rem' }}>Tăng tốc</span>}
               </p>
             </div>
             <div style={{ fontWeight: 700, color: 'var(--color-accent)', fontSize: '0.9rem' }}>
@@ -527,7 +527,7 @@ export const Admin = () => {
   if (currentUserRole !== 'admin') {
     return (
       <div className="container" style={{ paddingTop: '120px', textAlign: 'center', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🔒</div>
+        <div style={{ marginBottom: '1rem' }}><AlertTriangle size={64} color="#ef4444" /></div>
         <h1 style={{ color: '#ef4444', marginBottom: '1rem' }}>Khu Vực Quản Trị</h1>
         <p style={{ color: 'var(--color-text-muted)', marginBottom: '2rem' }}>
           {user ? 'Tài khoản của bạn không có quyền truy cập trang này.' : 'Vui lòng đăng nhập bằng tài khoản Quản trị viên.'}
@@ -766,7 +766,7 @@ export const Admin = () => {
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>📦 Quản lý đơn hàng</h1>
+                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', display: 'flex', alignItems: 'center' }}><Package size={28} style={{marginRight:8}}/> Quản lý đơn hàng</h1>
                 <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{orders.length} tổng đơn</p>
               </div>
               <button onClick={() => exportCSV(filteredOrders)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem', background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.3)', color: 'var(--color-accent)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem' }}>
@@ -804,7 +804,7 @@ export const Admin = () => {
                   <thead>
                     <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       {['Mã đơn', 'Khách hàng', 'Sản phẩm', 'Tổng tiền', 'Ngày đặt', 'Trạng thái', ''].map(h => (
-                        <th key={h} style={{ padding: '0.75rem 1rem' }}>{h}</th>
+                        <th key={typeof h === 'string' ? h : String(h)} style={{ padding: '0.75rem 1rem' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -914,8 +914,8 @@ export const Admin = () => {
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    {['Ảnh', 'SKU', 'Tên sản phẩm', 'Danh mục', 'Giá', 'Tồn kho', '❤️', '👁', 'Sale', 'Thao tác'].map(h => (
-                      <th key={h} style={{ padding: '0.75rem 1rem' }}>{h}</th>
+                    {['Ảnh', 'SKU', 'Tên sản phẩm', 'Danh mục', 'Giá', 'Tồn kho', <Heart size={14} />, <Eye size={14} />, 'Sale', 'Thao tác'].map((h, i) => (
+                      <th key={typeof h === 'string' ? h : i} style={{ padding: '0.75rem 1rem' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -1022,7 +1022,7 @@ export const Admin = () => {
 
                 {/* Basic info */}
                 <div style={panelStyle}>
-                  <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>📝 Thông tin cơ bản</h3>
+                  <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}><Info size={18} style={{marginRight:6}}/> Thông tin cơ bản</h3>
                   <div className="admin-form-2col">
                     <InputField label="Tên tiếng Việt *">
                       <input type="text" required value={editingProduct.name?.vi || ''} onChange={e => setEditingProduct({...editingProduct, name: { ...editingProduct.name!, vi: e.target.value }})} style={inputStyle} />
@@ -1041,7 +1041,7 @@ export const Admin = () => {
 
                 {/* Images */}
                 <div style={panelStyle}>
-                  <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>🖼 Hình ảnh & Video</h3>
+                  <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}><ImageIcon size={18} style={{marginRight:6}}/> Hình ảnh & Video</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                     <div>
                       <InputField label={
@@ -1143,7 +1143,7 @@ export const Admin = () => {
                               }}
                             />
                             <label htmlFor="product-banner-upload" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px dashed var(--glass-border)', cursor: isUploadingImages ? 'wait' : 'pointer', color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 600, background: 'rgba(74,222,128,0.05)' }}>
-                              {isUploadingImages ? <RefreshCw size={14} className="spin" /> : '📁'} {isUploadingImages ? 'Đang tải lên...' : 'Chọn banner từ máy tính'}
+                              {isUploadingImages ? <RefreshCw size={14} className="spin" /> : <Folder size={14} />} {isUploadingImages ? 'Đang tải lên...' : 'Chọn banner từ máy tính'}
                             </label>
                             {editingProduct.bannerImage && (
                               <div style={{ marginTop: '0.5rem', position: 'relative', display: 'inline-block', maxWidth: '100%' }}>
@@ -1173,7 +1173,7 @@ export const Admin = () => {
                 {/* Pricing */}
                 <div style={{ ...panelStyle, padding: '1rem' }}>
                   <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    💰 Giá & Loại bán
+                    <DatabaseZap size={18} style={{marginRight:6}}/> Giá & Loại bán
                   </h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     <InputField label="Danh mục *">
@@ -1202,7 +1202,7 @@ export const Admin = () => {
                 {/* Stock & logistics */}
                 <div style={{ ...panelStyle, padding: '1rem' }}>
                   <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    📦 Tồn kho & Giao hàng
+                    <Box size={18} style={{marginRight:6}}/> Tồn kho & Giao hàng
                   </h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     <InputField label="Nguồn hàng *">
@@ -1228,7 +1228,7 @@ export const Admin = () => {
 
                 {/* Materials - add/edit/delete */}
                 <div style={{ ...panelStyle, padding: '1rem' }}>
-                  <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem' }}>🧪 Loại nhựa</h3>
+                  <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem' }}><Sparkles size={18} style={{marginRight:6}}/> Loại nhựa</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                     {(editingProduct.availableMaterials || []).map((mat, idx) => (
                       <div key={idx} style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
@@ -1260,7 +1260,7 @@ export const Admin = () => {
 
                 {/* Sizes - add/edit/delete */}
                 <div style={{ ...panelStyle, padding: '1rem' }}>
-                  <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem' }}>📐 Kích thước có sẵn</h3>
+                  <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem' }}><LayoutGrid size={18} style={{marginRight:6}}/> Kích thước có sẵn</h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
                     {(editingProduct.availableSizes || []).map((sz, idx) => (
                       <div key={idx} style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
@@ -1292,7 +1292,7 @@ export const Admin = () => {
 
                 {/* Dimensions display */}
                 <div style={{ ...panelStyle, padding: '1rem' }}>
-                  <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem' }}>📏 Kích thước sản phẩm</h3>
+                  <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem' }}><LayoutDashboard size={18} style={{marginRight:6}}/> Kích thước sản phẩm</h3>
                   <InputField label="Kích thước (LxWxH)">
                     <select value={editingProduct.dimensions || ''} onChange={e => setEditingProduct({...editingProduct, dimensions: e.target.value})} style={inputStyle}>
                       <option value="">Tùy chỉnh (Nhập tay)...</option>
@@ -1328,7 +1328,7 @@ export const Admin = () => {
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '800px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>
-                    {['Ảnh bìa', 'Tiêu đề', 'Lượt xem', 'Ngày đăng', 'Thao tác'].map(h => <th key={h} style={{ padding: '0.75rem 1rem' }}>{h}</th>)}
+                    {['Ảnh bìa', 'Tiêu đề', 'Lượt xem', 'Ngày đăng', 'Thao tác'].map(h => <th key={typeof h === 'string' ? h : String(h)} style={{ padding: '0.75rem 1rem' }}>{h}</th>)}
                   </tr>
                 </thead>
                 <tbody>
@@ -1367,7 +1367,7 @@ export const Admin = () => {
         {activeTab === 'blog' && isEditingBlog && (
           <div style={{ maxWidth: '900px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-              <h1 style={{ fontSize: '1.75rem' }}>{editingBlogPost.id ? <span><Edit2 size={24} style={{marginRight:8}}/> Chỉnh sửa bài viết</span> : '✍️ Viết bài mới'}</h1>
+              <h1 style={{ fontSize: '1.75rem' }}>{editingBlogPost.id ? <span><Edit2 size={24} style={{marginRight:8}}/> Chỉnh sửa bài viết</span> : <span><PenTool size={24} style={{marginRight:8}}/> Viết bài mới</span>}</h1>
               <button type="button" onClick={() => setIsEditingBlog(false)} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                 <X size={18} /> Hủy
               </button>
@@ -1424,7 +1424,7 @@ export const Admin = () => {
                         }}
                       />
                       <label htmlFor="blog-cover-upload" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px dashed var(--glass-border)', cursor: isUploadingImages ? 'wait' : 'pointer', color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 600, background: 'rgba(74,222,128,0.05)' }}>
-                        {isUploadingImages ? <RefreshCw size={14} className="spin" /> : '📁'} {isUploadingImages ? 'Đang tải lên...' : 'Chọn ảnh từ máy tính'}
+                        {isUploadingImages ? <RefreshCw size={14} className="spin" /> : <Folder size={14} />} {isUploadingImages ? 'Đang tải lên...' : 'Chọn ảnh từ máy tính'}
                       </label>
                       {editingBlogPost.image && (
                         <div style={{ marginTop: '0.5rem', position: 'relative', display: 'inline-block' }}>
@@ -1475,7 +1475,7 @@ export const Admin = () => {
                         }}
                       />
                       <label htmlFor="blog-banner-upload" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px dashed var(--glass-border)', cursor: isUploadingImages ? 'wait' : 'pointer', color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 600, background: 'rgba(74,222,128,0.05)' }}>
-                        {isUploadingImages ? <RefreshCw size={14} className="spin" /> : '📁'} {isUploadingImages ? 'Đang tải lên...' : 'Chọn banner từ máy tính'}
+                        {isUploadingImages ? <RefreshCw size={14} className="spin" /> : <Folder size={14} />} {isUploadingImages ? 'Đang tải lên...' : 'Chọn banner từ máy tính'}
                       </label>
                       {editingBlogPost.bannerImage && (
                         <div style={{ marginTop: '0.5rem', position: 'relative', display: 'inline-block', maxWidth: '100%' }}>
@@ -1509,7 +1509,7 @@ export const Admin = () => {
 
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2rem' }}>
-                  {editingBlogPost.id ? <span><Save size={16} style={{marginRight:6}}/> Cập nhật bài viết</span> : '🚀 Đăng bài viết'}
+                  {editingBlogPost.id ? <span><Save size={16} style={{marginRight:6}}/> Cập nhật bài viết</span> : '<span><Send size={16} style={{marginRight:6}}/> Đăng bài viết</span>'}
                 </button>
               </div>
             </form>
@@ -1721,14 +1721,14 @@ export const Admin = () => {
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--glass-border)', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>
-                    {['Avatar', 'Email / Tên', 'Ngày tham gia', 'Quyền hạn', 'Thao tác'].map(h => <th key={h} style={{ padding: '0.75rem 1rem' }}>{h}</th>)}
+                    {['Avatar', 'Email / Tên', 'Ngày tham gia', 'Quyền hạn', 'Thao tác'].map(h => <th key={typeof h === 'string' ? h : String(h)} style={{ padding: '0.75rem 1rem' }}>{h}</th>)}
                   </tr>
                 </thead>
                 <tbody>
                   {appUsers.map(u => (
                     <tr key={u.uid} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
                       <td style={{ padding: '0.875rem 1rem' }}>
-                        {u.photoURL ? <img src={u.photoURL} style={{ width: '36px', height: '36px', borderRadius: '50%', border: '2px solid var(--glass-border)' }} alt="" /> : <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(74,222,128,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}>👤</div>}
+                        {u.photoURL ? <img src={u.photoURL} style={{ width: '36px', height: '36px', borderRadius: '50%', border: '2px solid var(--glass-border)' }} alt="" /> : <div style={{ width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(74,222,128,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}><User size={20} /></div>}
                       </td>
                       <td style={{ padding: '0.875rem 1rem' }}>
                         <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{u.displayName || 'Unknown'}</div>
@@ -1917,7 +1917,7 @@ export const Admin = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2.5rem' }}>💾 Lưu cài đặt</button>
+            <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Save size={18} /> Lưu cài đặt</button>
           </form>
         )}
 
