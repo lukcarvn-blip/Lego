@@ -232,7 +232,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
           /* ── GRID CARD LAYOUT (original) ── */
           <div className="glass-panel product-card" style={{
             display: 'flex', flexDirection: 'column',
-            height: '100%', position: 'relative', overflow: 'hidden'
+            height: '100%', position: 'relative', overflow: 'hidden', minWidth: 0
           }}>
           <motion.div 
             initial="rest"
@@ -420,7 +420,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             )}
           </motion.div>
           
-          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '1rem' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '1rem', minWidth: 0 }}>
             <p style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--color-text-muted)', fontSize: '0.75rem', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
               {product.category.toLowerCase() === 'superheroes' && <Shield size={12} />}
               {product.category.toLowerCase() === 'sci-fi' && <Rocket size={12} />}
@@ -428,7 +428,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               {['superheroes', 'sci-fi', 'classic'].indexOf(product.category.toLowerCase()) === -1 && <Tag size={12} />}
               {product.category}
             </p>
-            <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+            <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block', minWidth: 0 }}>
               <h3 className="product-title" style={{ 
                 
                 fontWeight: 600, 
@@ -436,7 +436,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                transition: 'color 0.2s'
+                transition: 'color 0.2s',
+                width: '100%'
               }}
               onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-accent)'}
               onMouseLeave={(e) => e.currentTarget.style.color = 'inherit'}
