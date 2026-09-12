@@ -503,6 +503,7 @@ export const Admin = () => {
       excerpt: editingBlogPost.excerpt || excerpt, 
       date: editingBlogPost.date || new Date().toISOString().split('T')[0], 
       image: editingBlogPost.image || 'https://images.unsplash.com/photo-1580477667995-15120f1fb93e?q=80&w=600',
+      bannerImage: editingBlogPost.bannerImage || '',
       id: editingBlogPost.id || Date.now().toString()
     };
 
@@ -1097,6 +1098,60 @@ export const Admin = () => {
                       <InputField label="URL Video (tùy chọn)">
                         <input type="text" placeholder="https://..." value={editingProduct.video || ''} onChange={e => setEditingProduct({...editingProduct, video: e.target.value})} style={inputStyle} />
                       </InputField>
+                      
+                      <div style={{ marginTop: '1.5rem' }}>
+                        <InputField label="Banner Sản Phẩm (Tùy chọn, tỉ lệ 16:3)">
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <input type="text" placeholder="URL banner..." value={editingProduct.bannerImage || ''} onChange={e => setEditingProduct({...editingProduct, bannerImage: e.target.value})} style={inputStyle} />
+                            <input 
+                              type="file" 
+                              accept="image/*" 
+                              id="product-banner-upload"
+                              style={{ display: 'none' }}
+                              disabled={isUploadingImages}
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (!file) return;
+                                
+                                setIsUploadingImages(true);
+                                try {
+                                  const response = await fetch('/api/get-upload-url', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ filename: file.name, contentType: file.type })
+                                  });
+                                  if (!response.ok) throw new Error('Failed to get signed URL');
+                                  const { signedUrl, publicUrl } = await response.json();
+                                  
+                                  const uploadRes = await fetch(signedUrl, {
+                                    method: 'PUT',
+                                    body: file,
+                                    headers: { 'Content-Type': file.type }
+                                  });
+                                  if (!uploadRes.ok) throw new Error('Failed to upload file to S3');
+                                  
+                                  setEditingProduct({...editingProduct, bannerImage: publicUrl});
+                                  showToast(language === 'vi' ? 'Đã tải lên banner!' : 'Uploaded banner!');
+                                } catch (err) {
+                                  console.error("Upload error", err);
+                                  showToast(language === 'vi' ? 'Lỗi tải ảnh lên!' : 'Upload failed!');
+                                } finally {
+                                  setIsUploadingImages(false);
+                                }
+                              }}
+                            />
+                            <label htmlFor="product-banner-upload" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px dashed var(--glass-border)', cursor: isUploadingImages ? 'wait' : 'pointer', color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 600, background: 'rgba(74,222,128,0.05)' }}>
+                              {isUploadingImages ? <RefreshCw size={14} className="spin" /> : '📁'} {isUploadingImages ? 'Đang tải lên...' : 'Chọn banner từ máy tính'}
+                            </label>
+                            {editingProduct.bannerImage && (
+                              <div style={{ marginTop: '0.5rem', position: 'relative', display: 'inline-block', maxWidth: '100%' }}>
+                                <img src={editingProduct.bannerImage} alt="Banner Preview" style={{ height: '60px', borderRadius: '6px', objectFit: 'cover', border: '1px solid var(--glass-border)', aspectRatio: '16/3' }} />
+                                <button type="button" onClick={() => setEditingProduct({...editingProduct, bannerImage: ''})} style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '50%', width: '18px', height: '18px', fontSize: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+                              </div>
+                            )}
+                          </div>
+                        </InputField>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1373,6 +1428,57 @@ export const Admin = () => {
                         <div style={{ marginTop: '0.5rem', position: 'relative', display: 'inline-block' }}>
                           <img src={editingBlogPost.image} alt="Preview" style={{ height: '60px', borderRadius: '6px', objectFit: 'cover', border: '1px solid var(--glass-border)' }} />
                           <button type="button" onClick={() => setEditingBlogPost({...editingBlogPost, image: ''})} style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '50%', width: '18px', height: '18px', fontSize: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+                        </div>
+                      )}
+                    </div>
+                  </InputField>
+                  <InputField label="Banner Bài Viết (Tùy chọn, tỉ lệ 16:3)">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                      <input type="text" placeholder="URL banner..." value={editingBlogPost.bannerImage || ''} onChange={e => setEditingBlogPost({...editingBlogPost, bannerImage: e.target.value})} style={inputStyle} />
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        id="blog-banner-upload"
+                        style={{ display: 'none' }}
+                        disabled={isUploadingImages}
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          
+                          setIsUploadingImages(true);
+                          try {
+                            const response = await fetch('/api/get-upload-url', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ filename: file.name, contentType: file.type })
+                            });
+                            if (!response.ok) throw new Error('Failed to get signed URL');
+                            const { signedUrl, publicUrl } = await response.json();
+                            
+                            const uploadRes = await fetch(signedUrl, {
+                              method: 'PUT',
+                              body: file,
+                              headers: { 'Content-Type': file.type }
+                            });
+                            if (!uploadRes.ok) throw new Error('Failed to upload file to S3');
+                            
+                            setEditingBlogPost({...editingBlogPost, bannerImage: publicUrl});
+                            showToast(language === 'vi' ? 'Đã tải lên banner!' : 'Uploaded banner!');
+                          } catch (err) {
+                            console.error("Upload error", err);
+                            showToast(language === 'vi' ? 'Lỗi tải ảnh lên!' : 'Upload failed!');
+                          } finally {
+                            setIsUploadingImages(false);
+                          }
+                        }}
+                      />
+                      <label htmlFor="blog-banner-upload" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1rem', borderRadius: 'var(--radius-sm)', border: '1px dashed var(--glass-border)', cursor: isUploadingImages ? 'wait' : 'pointer', color: 'var(--color-accent)', fontSize: '0.85rem', fontWeight: 600, background: 'rgba(74,222,128,0.05)' }}>
+                        {isUploadingImages ? <RefreshCw size={14} className="spin" /> : '📁'} {isUploadingImages ? 'Đang tải lên...' : 'Chọn banner từ máy tính'}
+                      </label>
+                      {editingBlogPost.bannerImage && (
+                        <div style={{ marginTop: '0.5rem', position: 'relative', display: 'inline-block', maxWidth: '100%' }}>
+                          <img src={editingBlogPost.bannerImage} alt="Banner Preview" style={{ height: '60px', borderRadius: '6px', objectFit: 'cover', border: '1px solid var(--glass-border)', aspectRatio: '16/3' }} />
+                          <button type="button" onClick={() => setEditingBlogPost({...editingBlogPost, bannerImage: ''})} style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '50%', width: '18px', height: '18px', fontSize: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
                         </div>
                       )}
                     </div>

@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Calendar, ArrowLeft, ChevronRight, Clock } from 'lucide-react';
@@ -38,6 +38,18 @@ export const NewsDetail = () => {
           <ChevronRight size={14} />
           <span style={{ color: 'var(--color-text)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '240px' }}>{post.title}</span>
         </motion.div>
+
+        {/* Optional Middle Banner */}
+        {post.bannerImage && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            style={{ marginBottom: '2.5rem', borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--glass-border)', aspectRatio: '16/3' }}
+          >
+            <img src={post.bannerImage} alt="Banner" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </motion.div>
+        )}
 
         {/* Header */}
         <motion.div

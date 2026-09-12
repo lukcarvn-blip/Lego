@@ -57,6 +57,7 @@ export interface BlogPost {
   content: string;
   date: string;
   image: string;
+  bannerImage?: string; // Additional banner image (16:3) for the post details
 }
 
 export interface AppUser {

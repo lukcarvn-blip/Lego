@@ -28,6 +28,7 @@ export interface Product {
   dimensions?: string;
   weight?: string;
   isReadyStock?: boolean;
+  bannerImage?: string; // 16:3 banner for product details page
 }
 
 export const mockProducts: Product[] = [

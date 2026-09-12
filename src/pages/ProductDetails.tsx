@@ -234,6 +234,17 @@ export const ProductDetails = () => {
           <span style={{ color: 'var(--color-text)', fontWeight: 500 }}>{product.name[language as keyof typeof product.name]}</span>
         </div>
       </div>
+      
+      {product.bannerImage && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{ marginBottom: '2rem', borderRadius: 'var(--radius-md)', overflow: 'hidden', border: '1px solid var(--glass-border)', aspectRatio: '16/3' }}
+        >
+          <img src={product.bannerImage} alt="Banner" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+        </motion.div>
+      )}
+
       <div className="pd-main-grid">
         
         {/* Left: Image Gallery */}
