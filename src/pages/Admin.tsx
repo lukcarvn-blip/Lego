@@ -980,11 +980,11 @@ export const Admin = () => {
 
         {/* ── PRODUCT FORM ──────────────────────────────────────────── */}
         {activeTab === 'products' && isEditingProduct && (
-          <form onSubmit={handleSaveProduct} style={{ maxWidth: '900px' }}>
+          <form onSubmit={handleSaveProduct} style={{ maxWidth: '1200px' }}>
+            {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
               <h1 style={{ fontSize: '1.75rem' }}>{editingProduct.id ? <span><Edit2 size={24} style={{marginRight:8}}/> Sửa sản phẩm</span> : <span><Plus size={24} style={{marginRight:8}}/> Thêm sản phẩm mới</span>}</h1>
               <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
-                {/* AI Quick Fill Button */}
                 <label style={{
                   display: 'flex', alignItems: 'center', gap: '0.5rem',
                   padding: '0.6rem 1.1rem', borderRadius: 'var(--radius-sm)',
@@ -995,18 +995,8 @@ export const Admin = () => {
                   boxShadow: isAILoading ? 'none' : '0 0 12px rgba(139,92,246,0.2)',
                   transition: 'all 0.3s'
                 }}>
-                  {isAILoading ? (
-                    <><RefreshCw size={16} className="spin" /> Đang phân tích ảnh...</>
-                  ) : (
-                    <><Sparkles size={16} /> AI Đăng Nhanh</>
-                  )}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleAIFill}
-                    style={{ display: 'none' }}
-                    disabled={isAILoading}
-                  />
+                  {isAILoading ? (<><RefreshCw size={16} className="spin" /> Đang phân tích ảnh...</>) : (<><Sparkles size={16} /> AI Đăng Nhanh</>)}
+                  <input type="file" accept="image/*" onChange={handleAIFill} style={{ display: 'none' }} disabled={isAILoading} />
                 </label>
                 <button type="button" onClick={() => setIsEditingProduct(false)} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                   <X size={18} /> Hủy
@@ -1021,189 +1011,245 @@ export const Admin = () => {
               </div>
             )}
 
-            <div style={panelStyle}>
-              <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>📝 Thông tin cơ bản</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                <InputField label="Tên tiếng Việt *">
-                  <input type="text" required value={editingProduct.name?.vi || ''} onChange={e => setEditingProduct({...editingProduct, name: { ...editingProduct.name!, vi: e.target.value }})} style={inputStyle} />
-                </InputField>
-                <InputField label="Tên tiếng Anh *">
-                  <input type="text" required value={editingProduct.name?.en || ''} onChange={e => setEditingProduct({...editingProduct, name: { ...editingProduct.name!, en: e.target.value }})} style={inputStyle} />
-                </InputField>
-                <InputField label="Mô tả (VI)">
-                  <textarea rows={3} value={editingProduct.description?.vi || ''} onChange={e => setEditingProduct({...editingProduct, description: { ...editingProduct.description!, vi: e.target.value }})} style={{...inputStyle, resize: 'vertical'}} />
-                </InputField>
-                <InputField label="Mô tả (EN)">
-                  <textarea rows={3} value={editingProduct.description?.en || ''} onChange={e => setEditingProduct({...editingProduct, description: { ...editingProduct.description!, en: e.target.value }})} style={{...inputStyle, resize: 'vertical'}} />
-                </InputField>
-              </div>
-            </div>
+            {/* Two-column layout */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: '1.5rem', alignItems: 'start' }}>
 
-            <div style={panelStyle}>
-              <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>💰 Giá & Tồn kho</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1rem' }}>
-                <InputField label="Danh mục *">
-                  <select value={editingProduct.category || ''} onChange={e => setEditingProduct({...editingProduct, category: e.target.value})} style={inputStyle}>
-                    {['Classic', 'Superheroes', 'Sci-Fi', 'Fantasy', 'Anime'].map(c => <option key={c} value={c}>{c}</option>)}
-                  </select>
-                </InputField>
-                <InputField label="Giá (VNĐ) *">
-                  <input type="number" required step="1000" value={(editingProduct.price || 0) * 25400} onChange={e => setEditingProduct({...editingProduct, price: (parseFloat(e.target.value) || 0) / 25400})} style={inputStyle} />
-                </InputField>
-                
-                <InputField label="Loại khuyến mãi">
-                  <select value={editingProduct.saleType || ''} onChange={e => setEditingProduct({...editingProduct, saleType: e.target.value ? e.target.value as any : null})} style={inputStyle}>
-                    <option value="">Không có</option>
-                    <option value="SALE">Normal Sale</option>
-                    <option value="FLASH_SALE">Flash Sale</option>
-                  </select>
-                </InputField>
-                {editingProduct.saleType && (
-                  <InputField label="Giảm giá (%)">
-                    <input type="number" min="1" max="100" value={editingProduct.discountPercentage || 0} onChange={e => setEditingProduct({...editingProduct, discountPercentage: parseInt(e.target.value)})} style={inputStyle} />
-                  </InputField>
-                )}
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '1rem', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)' }}>
-                <InputField label="Nguồn hàng *">
-                  <select value={editingProduct.isReadyStock ? 'ready' : 'crafting'} onChange={e => setEditingProduct({...editingProduct, isReadyStock: e.target.value === 'ready'})} style={inputStyle}>
-                    <option value="crafting">Chế tác (In 3D)</option>
-                    <option value="ready">Hàng sẵn</option>
-                  </select>
-                </InputField>
-
-                {editingProduct.isReadyStock ? (
-                  <InputField label="Số lượng sẵn có *">
-                    <input type="number" required min="0" value={editingProduct.stock || 0} onChange={e => setEditingProduct({...editingProduct, stock: parseInt(e.target.value)})} style={inputStyle} />
-                  </InputField>
-                ) : (
-                  <InputField label="Thời gian chế tác *">
-                    <input type="text" required placeholder="vd: 2-4 days" value={editingProduct.estimatedPrintTime || ''} onChange={e => setEditingProduct({...editingProduct, estimatedPrintTime: e.target.value})} style={inputStyle} />
-                  </InputField>
-                )}
-
-                <InputField label="Loại nhựa (phân cách bằng dấu phẩy)">
-                  <input type="text" placeholder="vd: PLA, PETG, ABS" value={editingProduct.availableMaterials?.join(', ') || ''} onChange={e => setEditingProduct({...editingProduct, availableMaterials: e.target.value.split(',').map(s => s.trim()).filter(s => s)})} style={inputStyle} />
-                </InputField>
-
-                <InputField label="Kích thước (LxWxH)">
-                  <select 
-                    value={editingProduct.dimensions || ''} 
-                    onChange={e => setEditingProduct({...editingProduct, dimensions: e.target.value})} 
-                    style={inputStyle}
-                  >
-                    <option value="">Tùy chỉnh (Nhập tay)...</option>
-                    <option value="300% (21cm)">300% (21cm)</option>
-                    <option value="400% (28cm)">400% (28cm)</option>
-                    <option value="1000% (70cm)">1000% (70cm)</option>
-                  </select>
-                </InputField>
-
-                <InputField label="Cân nặng">
-                  <input type="text" placeholder="vd: 500g" value={editingProduct.weight || ''} onChange={e => setEditingProduct({...editingProduct, weight: e.target.value})} style={inputStyle} />
-                </InputField>
-              </div>
-            </div>
-
-            <div style={panelStyle}>
-              <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>🖼 Hình ảnh & Video</h3>
+              {/* ── LEFT: Main content ── */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                
-                {/* Ảnh Bìa */}
-                <div>
-                  <InputField label={
-                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                      <span>Ảnh bìa (1 hình đại diện) *</span>
-                      <label style={{ cursor: isUploadingImages ? 'wait' : 'pointer', background: 'var(--color-accent)', color: '#000', padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        {isUploadingImages ? <RefreshCw size={12} className="spin" /> : <Plus size={12} />}
-                        Tải ảnh bìa lên
-                        <input type="file" accept="image/*" onChange={(e) => handleUploadFiles(e, 'cover')} style={{ display: 'none' }} disabled={isUploadingImages} />
-                      </label>
-                    </div>
-                  }>
-                    <input 
-                      type="text"
-                      required 
-                      placeholder="URL Ảnh bìa..." 
-                      value={editingProduct.images?.[0] || ''} 
-                      onChange={e => {
-                        const newImages = [...(editingProduct.images || [])];
-                        newImages[0] = e.target.value;
-                        setEditingProduct({...editingProduct, images: newImages});
-                      }} 
-                      style={inputStyle} 
-                    />
-                  </InputField>
-                  <div style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)', display: 'inline-block' }}>
-                    <img src={editingProduct.images?.[0] || '/images/fallback-logo.jpg'} style={{ height: '80px', width: '80px', objectFit: 'contain', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', padding: '2px' }} alt="cover preview" />
+
+                {/* Basic info */}
+                <div style={panelStyle}>
+                  <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>📝 Thông tin cơ bản</h3>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <InputField label="Tên tiếng Việt *">
+                      <input type="text" required value={editingProduct.name?.vi || ''} onChange={e => setEditingProduct({...editingProduct, name: { ...editingProduct.name!, vi: e.target.value }})} style={inputStyle} />
+                    </InputField>
+                    <InputField label="Tên tiếng Anh *">
+                      <input type="text" required value={editingProduct.name?.en || ''} onChange={e => setEditingProduct({...editingProduct, name: { ...editingProduct.name!, en: e.target.value }})} style={inputStyle} />
+                    </InputField>
+                    <InputField label="Mô tả (VI)">
+                      <textarea rows={3} value={editingProduct.description?.vi || ''} onChange={e => setEditingProduct({...editingProduct, description: { ...editingProduct.description!, vi: e.target.value }})} style={{...inputStyle, resize: 'vertical'}} />
+                    </InputField>
+                    <InputField label="Mô tả (EN)">
+                      <textarea rows={3} value={editingProduct.description?.en || ''} onChange={e => setEditingProduct({...editingProduct, description: { ...editingProduct.description!, en: e.target.value }})} style={{...inputStyle, resize: 'vertical'}} />
+                    </InputField>
                   </div>
                 </div>
 
-                {/* Ảnh Phụ */}
-                <div style={{ paddingTop: '1.5rem', borderTop: '1px solid var(--glass-border)' }}>
-                  <InputField label={
-                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
-                      <span>Danh sách URL Ảnh phụ (tối đa 10 ảnh, mỗi dòng 1 link)</span>
-                      <label style={{ cursor: isUploadingImages ? 'wait' : 'pointer', background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)', border: '1px solid var(--glass-border)', padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        {isUploadingImages ? <RefreshCw size={12} className="spin" /> : <Plus size={12} />}
-                        Tải ảnh phụ
-                        <input type="file" multiple accept="image/*" onChange={(e) => handleUploadFiles(e, 'secondary')} style={{ display: 'none' }} disabled={isUploadingImages} />
-                      </label>
-                    </div>
-                  }>
-                    <textarea 
-                      placeholder="/images/phu-1.png&#10;/images/phu-2.png" 
-                      rows={4} 
-                      value={(editingProduct.images?.slice(1) || []).join('\n')} 
-                      onChange={e => {
-                        const cover = editingProduct.images?.[0] || '';
-                        const secondary = e.target.value.split('\n').map(s => s.trim()).filter(s => s).slice(0, 10);
-                        setEditingProduct({...editingProduct, images: [cover, ...secondary]});
-                      }} 
-                      style={{...inputStyle, resize: 'vertical'}} 
-                    />
-                  </InputField>
-                  
-                  <div className="hide-scrollbar" style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.5rem' }}>
-                    {Array.from({ length: 10 }).map((_, idx) => {
-                      const img = editingProduct.images?.[idx + 1];
-                      return (
-                        <div key={idx} style={{ aspectRatio: '1/1', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative', border: '1px solid rgba(255,255,255,0.1)' }}>
-                          {img ? (
-                            <>
-                              <img src={img} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '2px' }} alt={`secondary preview ${idx}`} />
-                              <button type="button" onClick={() => {
-                                const newSecondary = [...(editingProduct.images?.slice(1) || [])];
-                                newSecondary.splice(idx, 1);
-                                setEditingProduct({...editingProduct, images: [editingProduct.images?.[0] || '', ...newSecondary]});
-                              }} style={{ position: 'absolute', top: 2, right: 2, background: 'rgba(239, 68, 68, 0.9)', color: '#fff', border: 'none', borderRadius: '50%', width: '16px', height: '16px', fontSize: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
-                            </>
-                          ) : (
-                            <div style={{ opacity: 0.3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                              <img src="/images/fallback-logo.jpg" style={{ width: '24px', height: '24px', filter: 'grayscale(100%)' }} alt="placeholder" />
-                              <span style={{ fontSize: '0.6rem', marginTop: '4px' }}>{idx + 1}</span>
-                            </div>
-                          )}
+                {/* Images */}
+                <div style={panelStyle}>
+                  <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>🖼 Hình ảnh & Video</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    <div>
+                      <InputField label={
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                          <span>Ảnh bìa (1 hình đại diện) *</span>
+                          <label style={{ cursor: isUploadingImages ? 'wait' : 'pointer', background: 'var(--color-accent)', color: '#000', padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            {isUploadingImages ? <RefreshCw size={12} className="spin" /> : <Plus size={12} />}
+                            Tải ảnh bìa lên
+                            <input type="file" accept="image/*" onChange={(e) => handleUploadFiles(e, 'cover')} style={{ display: 'none' }} disabled={isUploadingImages} />
+                          </label>
                         </div>
-                      );
-                    })}
+                      }>
+                        <input type="text" required placeholder="URL Ảnh bìa..." value={editingProduct.images?.[0] || ''} onChange={e => { const newImages = [...(editingProduct.images || [])]; newImages[0] = e.target.value; setEditingProduct({...editingProduct, images: newImages}); }} style={inputStyle} />
+                      </InputField>
+                      <div style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)', display: 'inline-block' }}>
+                        <img src={editingProduct.images?.[0] || '/images/fallback-logo.jpg'} style={{ height: '80px', width: '80px', objectFit: 'contain', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', padding: '2px' }} alt="cover preview" />
+                      </div>
+                    </div>
+
+                    <div style={{ paddingTop: '1.5rem', borderTop: '1px solid var(--glass-border)' }}>
+                      <InputField label={
+                        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                          <span>Ảnh phụ (tối đa 10 ảnh, mỗi dòng 1 link)</span>
+                          <label style={{ cursor: isUploadingImages ? 'wait' : 'pointer', background: 'rgba(255,255,255,0.1)', color: 'var(--color-text)', border: '1px solid var(--glass-border)', padding: '0.25rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            {isUploadingImages ? <RefreshCw size={12} className="spin" /> : <Plus size={12} />}
+                            Tải ảnh phụ
+                            <input type="file" multiple accept="image/*" onChange={(e) => handleUploadFiles(e, 'secondary')} style={{ display: 'none' }} disabled={isUploadingImages} />
+                          </label>
+                        </div>
+                      }>
+                        <textarea placeholder="/images/phu-1.png&#10;/images/phu-2.png" rows={4} value={(editingProduct.images?.slice(1) || []).join('\n')} onChange={e => { const cover = editingProduct.images?.[0] || ''; const secondary = e.target.value.split('\n').map(s => s.trim()).filter(s => s).slice(0, 10); setEditingProduct({...editingProduct, images: [cover, ...secondary]}); }} style={{...inputStyle, resize: 'vertical'}} />
+                      </InputField>
+                      <div className="hide-scrollbar" style={{ marginTop: '0.75rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.5rem' }}>
+                        {Array.from({ length: 10 }).map((_, idx) => {
+                          const img = editingProduct.images?.[idx + 1];
+                          return (
+                            <div key={idx} style={{ aspectRatio: '1/1', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', position: 'relative', border: '1px solid rgba(255,255,255,0.1)' }}>
+                              {img ? (
+                                <>
+                                  <img src={img} style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '2px' }} alt={`secondary preview ${idx}`} />
+                                  <button type="button" onClick={() => { const newSecondary = [...(editingProduct.images?.slice(1) || [])]; newSecondary.splice(idx, 1); setEditingProduct({...editingProduct, images: [editingProduct.images?.[0] || '', ...newSecondary]}); }} style={{ position: 'absolute', top: 2, right: 2, background: 'rgba(239, 68, 68, 0.9)', color: '#fff', border: 'none', borderRadius: '50%', width: '16px', height: '16px', fontSize: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
+                                </>
+                              ) : (
+                                <div style={{ opacity: 0.3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                  <img src="/images/fallback-logo.jpg" style={{ width: '24px', height: '24px', filter: 'grayscale(100%)' }} alt="placeholder" />
+                                  <span style={{ fontSize: '0.6rem', marginTop: '4px' }}>{idx + 1}</span>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div style={{ paddingTop: '1.5rem', borderTop: '1px solid var(--glass-border)' }}>
+                      <InputField label="URL Video (tùy chọn)">
+                        <input type="text" placeholder="https://..." value={editingProduct.video || ''} onChange={e => setEditingProduct({...editingProduct, video: e.target.value})} style={inputStyle} />
+                      </InputField>
+                    </div>
                   </div>
                 </div>
 
-                <div style={{ paddingTop: '1.5rem', borderTop: '1px solid var(--glass-border)' }}>
-                  <InputField label="URL Video (tùy chọn)">
-                    <input type="text" placeholder="https://..." value={editingProduct.video || ''} onChange={e => setEditingProduct({...editingProduct, video: e.target.value})} style={inputStyle} />
-                  </InputField>
+                {/* Submit row */}
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                  <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2rem', fontSize: '1rem' }}>
+                    {editingProduct.id ? <span><Save size={16} style={{marginRight:6}}/> Lưu thay đổi</span> : <span><Plus size={16} style={{marginRight:6}}/> Thêm sản phẩm</span>}
+                  </button>
+                  <button type="button" onClick={() => setIsEditingProduct(false)} style={{ padding: '0.875rem 1.5rem', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', color: 'var(--color-text-muted)' }}>Hủy</button>
                 </div>
               </div>
-            </div>
 
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2rem', fontSize: '1rem' }}>
-                {editingProduct.id ? <span><Save size={16} style={{marginRight:6}}/> Lưu thay đổi</span> : '🚀 Thêm sản phẩm'}
-              </button>
-              <button type="button" onClick={() => setIsEditingProduct(false)} style={{ padding: '0.875rem 1.5rem', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', color: 'var(--color-text-muted)' }}>Hủy</button>
+              {/* ── RIGHT SIDEBAR: Giá & Tồn kho ── */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', position: 'sticky', top: '1rem' }}>
+
+                {/* Pricing */}
+                <div style={{ ...panelStyle, padding: '1rem' }}>
+                  <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    💰 Giá & Loại bán
+                  </h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <InputField label="Danh mục *">
+                      <select value={editingProduct.category || ''} onChange={e => setEditingProduct({...editingProduct, category: e.target.value})} style={inputStyle}>
+                        {['Classic', 'Superheroes', 'Sci-Fi', 'Fantasy', 'Anime'].map(c => <option key={c} value={c}>{c}</option>)}
+                      </select>
+                    </InputField>
+                    <InputField label="Giá (VNĐ) *">
+                      <input type="number" required step="1000" value={(editingProduct.price || 0) * 25400} onChange={e => setEditingProduct({...editingProduct, price: (parseFloat(e.target.value) || 0) / 25400})} style={inputStyle} />
+                    </InputField>
+                    <InputField label="Loại khuyến mãi">
+                      <select value={editingProduct.saleType || ''} onChange={e => setEditingProduct({...editingProduct, saleType: e.target.value ? e.target.value as any : null})} style={inputStyle}>
+                        <option value="">Không có</option>
+                        <option value="SALE">Normal Sale</option>
+                        <option value="FLASH_SALE">Flash Sale</option>
+                      </select>
+                    </InputField>
+                    {editingProduct.saleType && (
+                      <InputField label="Giảm giá (%)">
+                        <input type="number" min="1" max="100" value={editingProduct.discountPercentage || 0} onChange={e => setEditingProduct({...editingProduct, discountPercentage: parseInt(e.target.value)})} style={inputStyle} />
+                      </InputField>
+                    )}
+                  </div>
+                </div>
+
+                {/* Stock & logistics */}
+                <div style={{ ...panelStyle, padding: '1rem' }}>
+                  <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    📦 Tồn kho & Giao hàng
+                  </h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <InputField label="Nguồn hàng *">
+                      <select value={editingProduct.isReadyStock ? 'ready' : 'crafting'} onChange={e => setEditingProduct({...editingProduct, isReadyStock: e.target.value === 'ready'})} style={inputStyle}>
+                        <option value="crafting">Chế tác (In 3D)</option>
+                        <option value="ready">Hàng sẵn</option>
+                      </select>
+                    </InputField>
+                    {editingProduct.isReadyStock ? (
+                      <InputField label="Số lượng sẵn có *">
+                        <input type="number" required min="0" value={editingProduct.stock || 0} onChange={e => setEditingProduct({...editingProduct, stock: parseInt(e.target.value)})} style={inputStyle} />
+                      </InputField>
+                    ) : (
+                      <InputField label="Thời gian chế tác *">
+                        <input type="text" required placeholder="vd: 2-4 days" value={editingProduct.estimatedPrintTime || ''} onChange={e => setEditingProduct({...editingProduct, estimatedPrintTime: e.target.value})} style={inputStyle} />
+                      </InputField>
+                    )}
+                    <InputField label="Cân nặng">
+                      <input type="text" placeholder="vd: 500g" value={editingProduct.weight || ''} onChange={e => setEditingProduct({...editingProduct, weight: e.target.value})} style={inputStyle} />
+                    </InputField>
+                  </div>
+                </div>
+
+                {/* Materials - add/edit/delete */}
+                <div style={{ ...panelStyle, padding: '1rem' }}>
+                  <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem' }}>🧪 Loại nhựa</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    {(editingProduct.availableMaterials || []).map((mat, idx) => (
+                      <div key={idx} style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                        <input
+                          type="text"
+                          value={mat}
+                          onChange={e => {
+                            const arr = [...(editingProduct.availableMaterials || [])];
+                            arr[idx] = e.target.value;
+                            setEditingProduct({...editingProduct, availableMaterials: arr});
+                          }}
+                          style={{ ...inputStyle, flex: 1, padding: '0.4rem 0.6rem', fontSize: '0.8rem' }}
+                        />
+                        <button type="button" onClick={() => {
+                          const arr = [...(editingProduct.availableMaterials || [])];
+                          arr.splice(idx, 1);
+                          setEditingProduct({...editingProduct, availableMaterials: arr});
+                        }} style={{ padding: '0.35rem', background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '4px', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={() => setEditingProduct({...editingProduct, availableMaterials: [...(editingProduct.availableMaterials || []), '']})}
+                      style={{ marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.75rem', background: 'rgba(74,222,128,0.08)', border: '1px dashed rgba(74,222,128,0.3)', borderRadius: '4px', color: 'var(--color-accent)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>
+                      <Plus size={13} /> Thêm loại nhựa
+                    </button>
+                  </div>
+                </div>
+
+                {/* Sizes - add/edit/delete */}
+                <div style={{ ...panelStyle, padding: '1rem' }}>
+                  <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem' }}>📐 Kích thước có sẵn</h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                    {(editingProduct.availableSizes || []).map((sz, idx) => (
+                      <div key={idx} style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
+                        <input
+                          type="text"
+                          value={sz}
+                          onChange={e => {
+                            const arr = [...(editingProduct.availableSizes || [])] as string[];
+                            arr[idx] = e.target.value;
+                            setEditingProduct({...editingProduct, availableSizes: arr as any});
+                          }}
+                          style={{ ...inputStyle, flex: 1, padding: '0.4rem 0.6rem', fontSize: '0.8rem' }}
+                        />
+                        <button type="button" onClick={() => {
+                          const arr = [...(editingProduct.availableSizes || [])] as string[];
+                          arr.splice(idx, 1);
+                          setEditingProduct({...editingProduct, availableSizes: arr as any});
+                        }} style={{ padding: '0.35rem', background: 'rgba(239,68,68,0.15)', border: '1px solid rgba(239,68,68,0.3)', borderRadius: '4px', color: '#ef4444', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
+                          <Trash2 size={13} />
+                        </button>
+                      </div>
+                    ))}
+                    <button type="button" onClick={() => setEditingProduct({...editingProduct, availableSizes: [...(editingProduct.availableSizes || []), 'Size 300'] as any})}
+                      style={{ marginTop: '0.25rem', display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.75rem', background: 'rgba(74,222,128,0.08)', border: '1px dashed rgba(74,222,128,0.3)', borderRadius: '4px', color: 'var(--color-accent)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>
+                      <Plus size={13} /> Thêm kích thước
+                    </button>
+                  </div>
+                </div>
+
+                {/* Dimensions display */}
+                <div style={{ ...panelStyle, padding: '1rem' }}>
+                  <h3 style={{ marginBottom: '0.875rem', color: 'var(--color-accent)', fontSize: '0.95rem' }}>📏 Kích thước sản phẩm</h3>
+                  <InputField label="Kích thước (LxWxH)">
+                    <select value={editingProduct.dimensions || ''} onChange={e => setEditingProduct({...editingProduct, dimensions: e.target.value})} style={inputStyle}>
+                      <option value="">Tùy chỉnh (Nhập tay)...</option>
+                      <option value="300% (21cm)">300% (21cm)</option>
+                      <option value="400% (28cm)">400% (28cm)</option>
+                      <option value="1000% (70cm)">1000% (70cm)</option>
+                    </select>
+                  </InputField>
+                  {(!editingProduct.dimensions || editingProduct.dimensions === '') && (
+                    <input type="text" placeholder="vd: 15x10x25cm" value={''} onChange={e => setEditingProduct({...editingProduct, dimensions: e.target.value})} style={{ ...inputStyle, marginTop: '0.5rem' }} />
+                  )}
+                </div>
+
+              </div>
             </div>
           </form>
         )}
