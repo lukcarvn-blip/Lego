@@ -1,11 +1,11 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useStore, type OrderStatus } from '../context/StoreContext';
 import { 
   Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings,
   LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp,
   Search, Filter, Download, Eye, ExternalLink, Trash2, X,
   AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw,
-  Home, LogOut, DatabaseZap, Globe, Menu, Printer
+  Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder
 } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
@@ -212,8 +212,8 @@ export const Admin = () => {
   
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const initialTab = (searchParams.get('tab') || 'dashboard') as 'dashboard' | 'orders' | 'products' | 'printers' | 'blog' | 'members' | 'settings';
-  const [activeTab, setActiveTabState] = useSessionState<'dashboard' | 'orders' | 'products' | 'printers' | 'blog' | 'members' | 'settings'>('admin_tab', initialTab);
+  const initialTab = (searchParams.get('tab') || 'dashboard') as 'dashboard' | 'orders' | 'products' | 'printers' | 'blog' | 'files' | 'members' | 'settings';
+  const [activeTab, setActiveTabState] = useSessionState<'dashboard' | 'orders' | 'products' | 'printers' | 'blog' | 'files' | 'members' | 'settings'>('admin_tab', initialTab);
   const setActiveTab = (tab: typeof activeTab) => {
     setActiveTabState(tab);
     setSearchParams({ tab });
@@ -233,6 +233,54 @@ export const Admin = () => {
   
   const [tempSettings, setTempSettings] = useState(settings);
   const [sidebarOpen, setSidebarOpen] = useSessionState('admin_sidebarOpen', true);
+
+  // File Manager State
+  const [cloudFiles, setCloudFiles] = useState<{key: string, size: number, lastModified: string, url: string}[]>([]);
+  const [cloudFolders, setCloudFolders] = useState<string[]>([]);
+  const [currentFolder, setCurrentFolder] = useState<string>('');
+  const [isFetchingFiles, setIsFetchingFiles] = useState(false);
+  
+  const fetchCloudFiles = async (prefix: string = '') => {
+    setIsFetchingFiles(true);
+    try {
+      const res = await fetch(`/api/manage-files?prefix=${encodeURIComponent(prefix)}`);
+      if (res.ok) {
+        const data = await res.json();
+        setCloudFiles(data.files || []);
+        setCloudFolders(data.folders || []);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsFetchingFiles(false);
+    }
+  };
+
+  const deleteCloudFile = async (key: string) => {
+    if (!window.confirm(language === 'vi' ? `Xóa file ${key}?` : `Delete ${key}?`)) return;
+    try {
+      const res = await fetch(`/api/manage-files`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key })
+      });
+      if (res.ok) {
+        showToast(language === 'vi' ? 'Đã xóa file' : 'File deleted');
+        fetchCloudFiles(currentFolder);
+      } else {
+        showToast(language === 'vi' ? 'Lỗi khi xóa file' : 'Error deleting file');
+      }
+    } catch (e) {
+      console.error(e);
+      showToast(language === 'vi' ? 'Lỗi khi xóa file' : 'Error deleting file');
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'files') {
+      fetchCloudFiles(currentFolder);
+    }
+  }, [activeTab, currentFolder]);
 
   // ── Dashboard stats ────────────────────────────────────────────────────
   const todayStr = new Date().toISOString().split('T')[0];
@@ -417,6 +465,7 @@ export const Admin = () => {
     { id: 'products', label: 'Sản phẩm', icon: <Package size={18} /> },
     { id: 'printers', label: 'Máy in 3D', icon: <Printer size={18} /> },
     { id: 'blog', label: 'Bài viết', icon: <BookOpen size={18} /> },
+    { id: 'files', label: 'Quản lý File', icon: <Folder size={18} /> },
     { id: 'members', label: 'Thành viên', icon: <Users size={18} /> },
     { id: 'settings', label: 'Cài đặt', icon: <Settings size={18} /> },
   ] as const;
@@ -1196,7 +1245,77 @@ export const Admin = () => {
               </div>
             </form>
           </div>
-        )}        {/* ── MEMBERS TAB ───────────────────────────────────────────── */}
+        )}
+        
+        {/* ── FILES TAB ─────────────────────────────────────────────── */}
+        {activeTab === 'files' && (
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+              <div>
+                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>🗂 Quản lý File (Vietnix S3)</h1>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{cloudFiles.length} tệp trong thư mục hiện tại</p>
+              </div>
+              <button className="btn-primary" onClick={() => fetchCloudFiles(currentFolder)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem' }}>
+                <RefreshCw size={18} className={isFetchingFiles ? 'spin' : ''} /> Tải lại
+              </button>
+            </div>
+            
+            <div style={panelStyle}>
+              {currentFolder && (
+                <button onClick={() => {
+                  const parts = currentFolder.split('/').filter(Boolean);
+                  parts.pop();
+                  setCurrentFolder(parts.length > 0 ? parts.join('/') + '/' : '');
+                }} style={{ background: 'transparent', border: '1px solid var(--glass-border)', color: 'var(--color-text)', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <ChevronRight size={14} style={{ transform: 'rotate(180deg)' }} /> Quay lại (.. /)
+                </button>
+              )}
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem' }}>
+                {cloudFolders.map(folder => {
+                  // display name is the folder without the parent path
+                  const displayName = folder.replace(currentFolder, '').replace(/\/$/, '');
+                  return (
+                    <div key={folder} onClick={() => setCurrentFolder(folder)} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', padding: '1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', transition: 'all 0.2s' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.08)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.03)'}>
+                      <Folder size={24} color="var(--color-accent)" />
+                      <span style={{ fontWeight: 600, wordBreak: 'break-all' }}>{displayName}</span>
+                    </div>
+                  );
+                })}
+                
+                {cloudFiles.map(file => (
+                  <div key={file.key} style={{ background: 'rgba(0,0,0,0.3)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ height: '140px', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                      {file.url.match(/\.(jpeg|jpg|gif|png|webp)$/i) ? (
+                        <img src={file.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                      ) : (
+                        <DatabaseZap size={40} color="var(--color-text-muted)" />
+                      )}
+                      <button onClick={() => deleteCloudFile(file.key)} style={{ position: 'absolute', top: '8px', right: '8px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', boxShadow: '0 2px 5px rgba(0,0,0,0.5)' }}>
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                    <div style={{ padding: '0.75rem', fontSize: '0.75rem' }}>
+                      <div style={{ fontWeight: 600, marginBottom: '0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={file.key}>{file.key.replace(currentFolder, '')}</div>
+                      <div style={{ color: 'var(--color-text-muted)', display: 'flex', justifyContent: 'space-between' }}>
+                        <span>{(file.size / 1024).toFixed(1)} KB</span>
+                        <span>{new Date(file.lastModified).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              {!isFetchingFiles && cloudFiles.length === 0 && cloudFolders.length === 0 && (
+                <div style={{ textAlign: 'center', padding: '3rem', color: 'var(--color-text-muted)' }}>
+                  Thư mục trống
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+        
+        {/* ── MEMBERS TAB ───────────────────────────────────────────── */}
         {activeTab === 'members' && (
           <div>
             <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '1.5rem' }}>👥 Quản lý thành viên</h1>
