@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useStore, type OrderStatus } from '../context/StoreContext';
-import { Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText } from 'lucide-react';
+import { Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText, Sparkles } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
@@ -353,6 +353,72 @@ export const Admin = () => {
   };
 
   const [isUploadingImages, setIsUploadingImages] = useState(false);
+  const [isAILoading, setIsAILoading] = useState(false);
+
+  const handleAIFill = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsAILoading(true);
+
+    try {
+      // Convert image to base64
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          resolve(result.split(',')[1]); // strip data:image/xxx;base64, prefix
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      // 1. Upload the image to S3 to get a URL for the cover photo
+      const uploadUrlRes = await fetch('/api/get-upload-url', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filename: file.name, contentType: file.type })
+      });
+      let coverImageUrl = '';
+      if (uploadUrlRes.ok) {
+        const { signedUrl, publicUrl } = await uploadUrlRes.json();
+        await fetch(signedUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } });
+        coverImageUrl = publicUrl;
+      }
+
+      // 2. Call AI description API
+      const aiRes = await fetch('/api/ai-describe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageBase64: base64, mimeType: file.type })
+      });
+
+      if (!aiRes.ok) {
+        throw new Error('AI API failed');
+      }
+
+      const { result } = await aiRes.json();
+
+      // 3. Auto-fill the form
+      setEditingProduct(prev => ({
+        ...prev,
+        name: { vi: result.nameVi || '', en: result.nameEn || '' },
+        description: { vi: result.descriptionVi || '', en: result.descriptionEn || '' },
+        category: result.category || 'Classic',
+        availableMaterials: result.materials ? result.materials.split(',').map((s: string) => s.trim()).filter(Boolean) : ['PLA'],
+        price: result.estimatedPrice ? result.estimatedPrice / 25400 : prev.price,
+        dimensions: result.dimensions || '',
+        images: coverImageUrl ? [coverImageUrl, ...(prev.images?.slice(1) || [])] : (prev.images || ['']),
+      }));
+
+      showToast('🤖 AI đã tự động điền thông tin sản phẩm!');
+    } catch (err) {
+      console.error('AI fill error:', err);
+      showToast('Lỗi AI: Không thể phân tích ảnh. Vui lòng thêm GEMINI_API_KEY vào Vercel.');
+    } finally {
+      setIsAILoading(false);
+      e.target.value = '';
+    }
+  };
 
   const handleUploadFiles = async (e: React.ChangeEvent<HTMLInputElement>, type: 'cover' | 'secondary') => {
     if (!e.target.files || e.target.files.length === 0) return;
@@ -915,11 +981,37 @@ export const Admin = () => {
         {/* ── PRODUCT FORM ──────────────────────────────────────────── */}
         {activeTab === 'products' && isEditingProduct && (
           <form onSubmit={handleSaveProduct} style={{ maxWidth: '900px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
               <h1 style={{ fontSize: '1.75rem' }}>{editingProduct.id ? <span><Edit2 size={24} style={{marginRight:8}}/> Sửa sản phẩm</span> : <span><Plus size={24} style={{marginRight:8}}/> Thêm sản phẩm mới</span>}</h1>
-              <button type="button" onClick={() => setIsEditingProduct(false)} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
-                <X size={18} /> Hủy
-              </button>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                {/* AI Quick Fill Button */}
+                <label style={{
+                  display: 'flex', alignItems: 'center', gap: '0.5rem',
+                  padding: '0.6rem 1.1rem', borderRadius: 'var(--radius-sm)',
+                  background: isAILoading ? 'rgba(139, 92, 246, 0.2)' : 'linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(59, 130, 246, 0.25))',
+                  border: '1px solid rgba(139, 92, 246, 0.5)',
+                  color: '#c4b5fd', fontWeight: 700, fontSize: '0.875rem',
+                  cursor: isAILoading ? 'wait' : 'pointer',
+                  boxShadow: isAILoading ? 'none' : '0 0 12px rgba(139,92,246,0.2)',
+                  transition: 'all 0.3s'
+                }}>
+                  {isAILoading ? (
+                    <><RefreshCw size={16} className="spin" /> Đang phân tích ảnh...</>
+                  ) : (
+                    <><Sparkles size={16} /> AI Đăng Nhanh</>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAIFill}
+                    style={{ display: 'none' }}
+                    disabled={isAILoading}
+                  />
+                </label>
+                <button type="button" onClick={() => setIsEditingProduct(false)} style={{ color: 'var(--color-text-muted)', display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <X size={18} /> Hủy
+                </button>
+              </div>
             </div>
 
             {editingProduct.id && (
