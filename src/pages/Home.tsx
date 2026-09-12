@@ -2,6 +2,11 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Clock, ChevronRight, ChevronLeft, ShieldCheck, Zap, Diamond, Sparkles, ShoppingCart, Loader2, LayoutGrid, LayoutList, ArrowRight, Shield, Moon, Star, Wand2, Swords, PawPrint, Rocket, Castle, Building2, Settings } from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Grid, Pagination, Autoplay } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/grid';
+import 'swiper/css/pagination';
 import { useStore } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
 import { LegoHeadIcon } from '../components/LegoHeadIcon';
@@ -467,52 +472,76 @@ export const Home = () => {
             </Link>
           </div>
         </div>
-        <div className="home-news-grid">
+        <Swiper
+          modules={[Grid, Pagination, Autoplay]}
+          spaceBetween={16}
+          pagination={{ clickable: true, dynamicBullets: true }}
+          autoplay={{ delay: 3500, disableOnInteraction: false }}
+          breakpoints={{
+            0: {
+              slidesPerView: 1.1,
+              grid: { rows: 2, fill: 'row' },
+              spaceBetween: 12
+            },
+            640: {
+              slidesPerView: 2,
+              grid: { rows: 1 },
+              spaceBetween: 16
+            },
+            1024: {
+              slidesPerView: 4,
+              grid: { rows: 1 },
+              spaceBetween: 24
+            }
+          }}
+          className="home-news-swiper"
+          style={{ paddingBottom: '2.5rem' }}
+        >
           {blogPosts.slice(0, 4).map((post, i) => (
-            <motion.div
-              key={post.id}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.08 }}
-            >
-              <Link to={`/news/${post.id}`} style={{ textDecoration: 'none', display: 'block' }}>
-                <div
-                  className="glass-panel"
-                  style={{ display: 'flex', flexDirection: 'row', overflow: 'hidden', height: '110px', transition: 'border-color 0.3s, transform 0.25s' }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,222,128,0.35)'; (e.currentTarget as HTMLElement).style.transform = 'translateX(4px)'; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--glass-border)'; (e.currentTarget as HTMLElement).style.transform = 'translateX(0)'; }}
-                >
-                  {/* Thumbnail */}
-                  <div style={{ width: '110px', flexShrink: 0, overflow: 'hidden' }}>
-                    <img src={post.image} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={post.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
-                      onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.08)')}
-                      onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
-                    />
+            <SwiperSlide key={post.id} style={{ height: 'auto' }}>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+                style={{ height: '100%' }}
+              >
+                <Link to={`/news/${post.id}`} style={{ textDecoration: 'none', display: 'block', height: '100%' }}>
+                  <div
+                    className="glass-panel"
+                    style={{ display: 'flex', flexDirection: 'row', overflow: 'hidden', height: '110px', transition: 'border-color 0.3s, transform 0.25s', width: '100%' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,222,128,0.35)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--glass-border)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+                  >
+                    {/* Thumbnail */}
+                    <div style={{ width: '110px', flexShrink: 0, overflow: 'hidden' }}>
+                      <img src={post.image} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={post.title}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.4s' }}
+                      />
+                    </div>
+                    {/* Info */}
+                    <div style={{ flex: 1, padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden' }}>
+                      <p style={{ color: 'var(--color-accent)', fontSize: '0.7rem', fontWeight: 600, marginBottom: '0.3rem' }}>{post.date}</p>
+                      <h3 style={{
+                        fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+                        fontSize: '0.9rem', fontWeight: 700, lineHeight: 1.35, marginBottom: '0.3rem',
+                        display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden'
+                      }}>
+                        {post.title}
+                      </h3>
+                      <p style={{
+                        color: 'var(--color-text-muted)', fontSize: '0.75rem', lineHeight: 1.4,
+                        display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden'
+                      }}>
+                        {post.excerpt}
+                      </p>
+                    </div>
                   </div>
-                  {/* Info */}
-                  <div style={{ flex: 1, padding: '0.75rem 1rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', overflow: 'hidden' }}>
-                    <p style={{ color: 'var(--color-accent)', fontSize: '0.7rem', fontWeight: 600, marginBottom: '0.3rem' }}>{post.date}</p>
-                    <h3 style={{
-                      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-                      fontSize: '0.9rem', fontWeight: 700, lineHeight: 1.35, marginBottom: '0.3rem',
-                      display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden'
-                    }}>{post.title}</h3>
-                    <p style={{
-                      fontSize: '0.75rem', color: 'var(--color-text-muted)', lineHeight: 1.4,
-                      display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical' as const, overflow: 'hidden'
-                    }}>{post.excerpt}</p>
-                  </div>
-                  {/* Arrow */}
-                  <div style={{ display: 'flex', alignItems: 'center', paddingRight: '1rem', color: 'var(--color-accent)', flexShrink: 0 }}>
-                    <ChevronRight size={20} />
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
+                </Link>
+              </motion.div>
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       </motion.section>
 
       <style>{`
@@ -559,11 +588,7 @@ export const Home = () => {
           gap: 2rem;
           grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
         }
-        .home-news-grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 1.5rem;
-        }
+        
 
         .product-card { padding: 0; gap: 0; }
         .product-title { font-size: 1.25rem; line-height: 1.3; }
@@ -582,9 +607,7 @@ export const Home = () => {
           .blog-grid {
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
           }
-          .home-news-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
+          
         }
 
         @media (max-width: 639px) {
@@ -606,21 +629,9 @@ export const Home = () => {
             grid-template-columns: repeat(2, 1fr);
             gap: 1rem;
           }
-          .home-news-grid {
-            display: grid;
-            grid-template-columns: calc(100% - 2rem) calc(100% - 2rem);
-            grid-template-rows: 1fr 1fr;
-            grid-auto-flow: column;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            margin: 0 -1rem;
-            padding: 0 1rem 1rem 1rem;
-            gap: 1rem;
-          }
-          .home-news-grid::-webkit-scrollbar { display: none; }
-          .home-news-grid > div {
-            scroll-snap-align: center;
-          }
+          
+          
+          
           
           /* Compact mobile product cards */
           .product-card { padding: 0; gap: 0; border-radius: var(--radius-md); overflow: hidden; }
