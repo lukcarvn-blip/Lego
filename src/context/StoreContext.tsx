@@ -455,8 +455,14 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     const finalUSD = isOnSale ? priceUSD * (1 - discountPercentage / 100) : priceUSD;
 
     if (language === 'vi') {
-      const origVND = Math.round(priceUSD * rate).toLocaleString('vi-VN');
-      const finalVND = Math.round(finalUSD * rate).toLocaleString('vi-VN');
+      let v1 = Math.round(priceUSD * rate);
+      let v2 = Math.round(finalUSD * rate);
+      // Auto-append .000 (multiply by 1000) if the value is abnormally small (e.g. user typed 4572 instead of 4572000)
+      if (v1 > 0 && v1 < 100000) v1 *= 1000;
+      if (v2 > 0 && v2 < 100000) v2 *= 1000;
+
+      const origVND = v1.toLocaleString('vi-VN');
+      const finalVND = v2.toLocaleString('vi-VN');
       return {
         original: `${origVND} ₫`,
         current: `${finalVND} ₫`,
