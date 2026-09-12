@@ -51,7 +51,7 @@ const QUILL_MODULES = {
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 const formatVND = (usd: number) =>
-  new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(usd * 25000);
+  new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(usd * 25400);
 
 const statusColor: Record<OrderStatus, string> = {
   Pending: '#9ca3af',
@@ -84,7 +84,7 @@ const exportCSV = (orders: Order[]) => {
     `#${o.id.substring(0, 8).toUpperCase()}`,
     o.customerName,
     new Date(o.date).toLocaleDateString('vi-VN'),
-    (o.total * 25000).toFixed(0),
+    (o.total * 25400).toFixed(0),
     o.status,
     o.items.map(i => `${i.product.name.vi} x${i.quantity}`).join(' | ')
   ]);
