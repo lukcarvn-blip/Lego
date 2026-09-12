@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useStore, type OrderStatus } from '../context/StoreContext';
-import { Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText, Sparkles } from 'lucide-react';
+import { Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText, Sparkles, Store } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
@@ -856,7 +856,9 @@ export const Admin = () => {
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)' }}>{activeTab === 'printers' ? '<Printer size={28} style={{marginRight:8}}/> Quản lý máy in' : '🏪 Quản lý sản phẩm'}</h1>
+                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', display: 'flex', alignItems: 'center' }}>
+                  {activeTab === 'printers' ? <><Printer size={28} style={{marginRight:8}}/> Quản lý máy in</> : <><Store size={28} style={{marginRight:8}}/> Quản lý sản phẩm</>}
+                </h1>
                 <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{currentDisplayProducts.length} sản phẩm</p>
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
@@ -1847,35 +1849,72 @@ export const Admin = () => {
 
             <div style={panelStyle}>
               <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Banner Giữa (Thay thế Video Thực Tế)</h3>
-              <InputField label="Upload Ảnh Banner Giữa">
-                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                  {tempSettings.middleBannerImage && (
-                    <img src={tempSettings.middleBannerImage} alt="Middle Banner" style={{ height: '60px', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
-                  )}
-                  <input type="text" value={tempSettings.middleBannerImage || ''} onChange={e => setTempSettings({...tempSettings, middleBannerImage: e.target.value})} placeholder="URL ảnh banner hoặc tải lên" style={{ ...inputStyle, flex: 1 }} />
-                  <label style={{ cursor: isUploadingImages ? 'wait' : 'pointer', background: 'rgba(255,255,255,0.1)', border: '1px solid var(--glass-border)', padding: '0.6rem 1rem', borderRadius: '4px', whiteSpace: 'nowrap' }}>
-                    {isUploadingImages ? 'Đang tải...' : 'Tải ảnh lên'}
-                    <input type="file" accept="image/*" onChange={async (e) => {
-                      if (!e.target.files?.length) return;
-                      // using the same upload logic as other images but setting directly
-                      // wait, handleUploadFiles is for products. Let's write a small inline uploader using the api.
-                      setIsUploadingImages(true);
-                      try {
-                        const file = e.target.files[0];
-                        const res = await fetch(`/api/get-upload-url?filename=${encodeURIComponent(file.name)}&contentType=${encodeURIComponent(file.type)}`);
-                        const { uploadUrl, fileUrl } = await res.json();
-                        await fetch(uploadUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } });
-                        setTempSettings({...tempSettings, middleBannerImage: fileUrl});
-                      } catch(err) {
-                        console.error('Upload failed', err);
-                        alert('Upload failed');
-                      } finally {
-                        setIsUploadingImages(false);
-                      }
-                    }} style={{ display: 'none' }} disabled={isUploadingImages} />
-                  </label>
-                </div>
-              </InputField>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+                <InputField label="Upload Ảnh Banner Giữa (Desktop)">
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    {tempSettings.middleBannerImage && (
+                      <img src={tempSettings.middleBannerImage} alt="Middle Banner Desktop" style={{ height: '60px', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
+                    )}
+                    <input type="text" value={tempSettings.middleBannerImage || ''} onChange={e => setTempSettings({...tempSettings, middleBannerImage: e.target.value})} placeholder="URL ảnh banner hoặc tải lên" style={{ ...inputStyle, flex: 1 }} />
+                    <label style={{ cursor: isUploadingImages ? 'wait' : 'pointer', background: 'rgba(255,255,255,0.1)', border: '1px solid var(--glass-border)', padding: '0.6rem 1rem', borderRadius: '4px', whiteSpace: 'nowrap' }}>
+                      {isUploadingImages ? 'Đang tải...' : 'Tải ảnh lên'}
+                      <input type="file" accept="image/*" onChange={async (e) => {
+                        if (!e.target.files?.length) return;
+                        setIsUploadingImages(true);
+                        try {
+                          const file = e.target.files[0];
+                          const res = await fetch(`/api/get-upload-url`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ filename: file.name, contentType: file.type })
+                          });
+                          const { signedUrl, publicUrl } = await res.json();
+                          await fetch(signedUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } });
+                          setTempSettings({...tempSettings, middleBannerImage: publicUrl});
+                        } catch(err) {
+                          console.error('Upload failed', err);
+                          alert('Upload failed');
+                        } finally {
+                          setIsUploadingImages(false);
+                        }
+                      }} style={{ display: 'none' }} disabled={isUploadingImages} />
+                    </label>
+                  </div>
+                </InputField>
+
+                <InputField label="Upload Ảnh Banner Giữa (Mobile)">
+                  <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    {tempSettings.middleBannerImageMobile && (
+                      <img src={tempSettings.middleBannerImageMobile} alt="Middle Banner Mobile" style={{ height: '60px', borderRadius: '4px', border: '1px solid var(--glass-border)' }} />
+                    )}
+                    <input type="text" value={tempSettings.middleBannerImageMobile || ''} onChange={e => setTempSettings({...tempSettings, middleBannerImageMobile: e.target.value})} placeholder="URL ảnh banner mobile hoặc tải lên" style={{ ...inputStyle, flex: 1 }} />
+                    <label style={{ cursor: isUploadingImages ? 'wait' : 'pointer', background: 'rgba(255,255,255,0.1)', border: '1px solid var(--glass-border)', padding: '0.6rem 1rem', borderRadius: '4px', whiteSpace: 'nowrap' }}>
+                      {isUploadingImages ? 'Đang tải...' : 'Tải ảnh lên'}
+                      <input type="file" accept="image/*" onChange={async (e) => {
+                        if (!e.target.files?.length) return;
+                        setIsUploadingImages(true);
+                        try {
+                          const file = e.target.files[0];
+                          const res = await fetch(`/api/get-upload-url`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ filename: file.name, contentType: file.type })
+                          });
+                          const { signedUrl, publicUrl } = await res.json();
+                          await fetch(signedUrl, { method: 'PUT', body: file, headers: { 'Content-Type': file.type } });
+                          setTempSettings({...tempSettings, middleBannerImageMobile: publicUrl});
+                        } catch(err) {
+                          console.error('Upload failed', err);
+                          alert('Upload failed');
+                        } finally {
+                          setIsUploadingImages(false);
+                        }
+                      }} style={{ display: 'none' }} disabled={isUploadingImages} />
+                    </label>
+                  </div>
+                </InputField>
+              </div>
             </div>
 
             <button type="submit" className="btn-primary" style={{ padding: '0.875rem 2.5rem' }}>💾 Lưu cài đặt</button>

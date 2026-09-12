@@ -85,6 +85,7 @@ export interface StoreSettings {
   favicon?: string;
   bannerText?: string;
   middleBannerImage?: string; // Banner replacing video shorts
+  middleBannerImageMobile?: string; // Banner for mobile
   bankName?: string;
   bankAccount?: string;
   bankOwner?: string;

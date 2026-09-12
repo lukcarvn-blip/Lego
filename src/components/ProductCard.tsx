@@ -196,19 +196,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               {product.isReadyStock ? (
                 <div className="card-stats-grid">
                   <div className="stat-item" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span className="stat-label">{language === 'vi' ? 'Size:' : 'Size:'}</span>
+                    {isMobile ? <Ruler size={12} style={{ color: 'var(--color-text-muted)', marginRight: 4 }} /> : <span className="stat-label">{language === 'vi' ? 'Size:' : 'Size:'}</span>}
                     <span className="stat-value">{product.dimensions?.split(' ')[0] || '300%'}</span>
                   </div>
                   <div className="stat-item" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span className="stat-label">{language === 'vi' ? 'Nhựa:' : 'Mat:'}</span>
+                    {isMobile ? <Palette size={12} style={{ color: 'var(--color-text-muted)', marginRight: 4 }} /> : <span className="stat-label">{language === 'vi' ? 'Nhựa:' : 'Mat:'}</span>}
                     <span className="stat-value">{product.availableMaterials?.[0] || 'PLA'}</span>
                   </div>
                   <div className="stat-item" style={{ background: 'rgba(74, 222, 128, 0.1)', border: '1px solid rgba(74, 222, 128, 0.2)' }}>
-                    <span className="stat-label" style={{ color: 'rgba(74, 222, 128, 0.8)' }}>{language === 'vi' ? 'Sẵn:' : 'Stock:'}</span>
+                    {isMobile ? <Package size={12} style={{ color: 'rgba(74, 222, 128, 0.8)', marginRight: 4 }} /> : <span className="stat-label" style={{ color: 'rgba(74, 222, 128, 0.8)' }}>{language === 'vi' ? 'Sẵn:' : 'Stock:'}</span>}
                     <span className="stat-value" style={{ color: '#4ade80' }}>{product.stock || 1}</span>
                   </div>
                   <div className="stat-item" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span className="stat-label">{language === 'vi' ? 'Mua:' : 'Sold:'}</span>
+                    {isMobile ? <ShoppingCart size={12} style={{ color: 'var(--color-text-muted)', marginRight: 4 }} /> : <span className="stat-label">{language === 'vi' ? 'Mua:' : 'Sold:'}</span>}
                     <span className="stat-value">{(product as any).sales || 0}</span>
                   </div>
                 </div>

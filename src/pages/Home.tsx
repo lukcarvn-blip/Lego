@@ -173,7 +173,7 @@ export const Home = () => {
       </section>
 
       {/* Middle Banner replacing Video Shorts Slider */}
-      {settings.middleBannerImage && (
+      {(settings.middleBannerImage || settings.middleBannerImageMobile) && (
         <section className="container" style={{ paddingTop: '5rem' }}>
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -188,11 +188,14 @@ export const Home = () => {
               border: '1px solid rgba(255,255,255,0.05)'
             }}
           >
-            <img 
-              src={settings.middleBannerImage} 
-              alt="Middle Banner" 
-              style={{ width: '100%', height: 'auto', display: 'block' }} 
-            />
+            <picture>
+              {settings.middleBannerImageMobile && <source media="(max-width: 768px)" srcSet={settings.middleBannerImageMobile} />}
+              <img 
+                src={settings.middleBannerImage || settings.middleBannerImageMobile} 
+                alt="Middle Banner" 
+                style={{ width: '100%', height: 'auto', display: 'block' }} 
+              />
+            </picture>
           </motion.div>
         </section>
       )}
