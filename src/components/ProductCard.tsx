@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Heart, Clock, Zap, Sparkles, ShoppingCart, Shield, Rocket, Crown, Tag, X, ChevronLeft, ChevronRight, Ruler, Palette, Package } from 'lucide-react';
@@ -201,19 +201,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                   marginTop: 'auto' 
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'KÃ­ch thÆ°á»›c:' : 'Size:'}</span>
+                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Kích thước:' : 'Size:'}</span>
                     <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.dimensions?.split(' ')[0] || '300%'}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Váº­t liá»‡u:' : 'Material:'}</span>
+                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Vật liệu:' : 'Material:'}</span>
                     <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.availableMaterials?.[0] || 'PLA'}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(74, 222, 128, 0.1)', borderRadius: '4px', border: '1px solid rgba(74, 222, 128, 0.2)' }}>
-                    <span style={{ fontSize: '0.6rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'HÃ ng sáºµn:' : 'In stock:'}</span>
+                    <span style={{ fontSize: '0.6rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Hàng sẵn:' : 'In stock:'}</span>
                     <span style={{ fontSize: '0.6rem', fontWeight: 600, color: '#4ade80' }}>{product.stock || 1}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'LÆ°á»£t mua:' : 'Sold:'}</span>
+                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Lượt mua:' : 'Sold:'}</span>
                     <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--color-text)' }}>{(product as any).sales || 0}</span>
                   </div>
                 </div>
@@ -470,19 +470,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 gap: '0.4rem' 
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'KÃ­ch thÆ°á»›c:' : 'Size:'}</span>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Kích thước:' : 'Size:'}</span>
                   <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.dimensions?.split(' ')[0] || '300%'}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Váº­t liá»‡u:' : 'Material:'}</span>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Vật liệu:' : 'Material:'}</span>
                   <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.availableMaterials?.[0] || 'PLA'}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(74, 222, 128, 0.1)', borderRadius: '4px', border: '1px solid rgba(74, 222, 128, 0.2)' }}>
-                  <span style={{ fontSize: '0.7rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'HÃ ng sáºµn:' : 'In stock:'}</span>
+                  <span style={{ fontSize: '0.7rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Hàng sẵn:' : 'In stock:'}</span>
                   <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#4ade80' }}>{product.stock || 1}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'LÆ°á»£t mua:' : 'Sold:'}</span>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Lượt mua:' : 'Sold:'}</span>
                   <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-text)' }}>{(product as any).sales || 0}</span>
                 </div>
               </div>
