@@ -244,7 +244,7 @@ export const ProductDetails = () => {
             animate={{ opacity: 1, x: 0 }}
             style={{ 
               padding: '0.5rem', 
-              aspectRatio: '4/5', 
+              aspectRatio: '1/1', 
               display: 'flex', 
               alignItems: 'center', 
               justifyContent: 'center', 
