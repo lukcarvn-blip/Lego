@@ -765,9 +765,19 @@ export const Admin = () => {
         {activeTab === 'orders' && (
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-              <div>
-                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', display: 'flex', alignItems: 'center' }}><Package size={28} style={{marginRight:8}}/> Quản lý đơn hàng</h1>
-                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{orders.length} tổng đơn</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '3.5rem', height: '3.5rem', background: 'rgba(74,222,128,0.1)', borderRadius: '12px', border: '1px solid rgba(74,222,128,0.2)', color: 'var(--color-accent)' }}>
+                  <Package size={28} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                  <h1 style={{ fontSize: 'clamp(1.25rem,2vw,1.5rem)', margin: 0, lineHeight: 1.2, fontWeight: 700 }}>
+                    Quản lý đơn hàng
+                  </h1>
+                  <div style={{ height: '1px', background: 'rgba(255,255,255,0.15)', width: '100%' }}></div>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', margin: 0, fontWeight: 500 }}>
+                    {orders.length} tổng đơn
+                  </p>
+                </div>
               </div>
               <button onClick={() => exportCSV(filteredOrders)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.65rem 1.25rem', background: 'rgba(74,222,128,0.1)', border: '1px solid rgba(74,222,128,0.3)', color: 'var(--color-accent)', borderRadius: 'var(--radius-sm)', cursor: 'pointer', fontWeight: 600, fontSize: '0.875rem' }}>
                 <Download size={16} /> Xuất CSV
@@ -855,11 +865,19 @@ export const Admin = () => {
         {(activeTab === 'products' || activeTab === 'printers') && !isEditingProduct && (
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-              <div>
-                <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', display: 'flex', alignItems: 'center' }}>
-                  {activeTab === 'printers' ? <><Printer size={28} style={{marginRight:8}}/> Quản lý máy in</> : <><Store size={28} style={{marginRight:8}}/> Quản lý sản phẩm</>}
-                </h1>
-                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>{currentDisplayProducts.length} sản phẩm</p>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '3.5rem', height: '3.5rem', background: 'rgba(74,222,128,0.1)', borderRadius: '12px', border: '1px solid rgba(74,222,128,0.2)', color: 'var(--color-accent)' }}>
+                  {activeTab === 'printers' ? <Printer size={28} /> : <Store size={28} />}
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                  <h1 style={{ fontSize: 'clamp(1.25rem,2vw,1.5rem)', margin: 0, lineHeight: 1.2, fontWeight: 700 }}>
+                    {activeTab === 'printers' ? 'Quản lý máy in' : 'Quản lý sản phẩm'}
+                  </h1>
+                  <div style={{ height: '1px', background: 'rgba(255,255,255,0.15)', width: '100%' }}></div>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', margin: 0, fontWeight: 500 }}>
+                    {currentDisplayProducts.length} sản phẩm
+                  </p>
+                </div>
               </div>
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <button 
@@ -1716,7 +1734,20 @@ export const Admin = () => {
         {/* ── MEMBERS TAB ───────────────────────────────────────────── */}
         {activeTab === 'members' && (
           <div>
-            <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '1.5rem' }}><Users size={28} style={{marginRight:8}}/> Quản lý thành viên</h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '3.5rem', height: '3.5rem', background: 'rgba(74,222,128,0.1)', borderRadius: '12px', border: '1px solid rgba(74,222,128,0.2)', color: 'var(--color-accent)' }}>
+                  <Users size={28} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                  <h1 style={{ fontSize: 'clamp(1.25rem,2vw,1.5rem)', margin: 0, lineHeight: 1.2, fontWeight: 700 }}>
+                    Quản lý thành viên
+                  </h1>
+                  <div style={{ height: '1px', background: 'rgba(255,255,255,0.15)', width: '100%' }}></div>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', margin: 0, fontWeight: 500 }}>
+                    {appUsers.length} thành viên
+                  </p>
+                </div>
+              </div>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '600px' }}>
                 <thead>
@@ -1755,8 +1786,21 @@ export const Admin = () => {
 
         {/* ── SETTINGS TAB ──────────────────────────────────────────── */}
         {activeTab === 'settings' && (
-          <form onSubmit={handleSaveSettings} style={{ maxWidth: '800px' }}>
-            <h1 style={{ fontSize: 'clamp(1.5rem,3vw,2rem)', marginBottom: '1.5rem' }}><Settings size={28} style={{marginRight:8}}/> Cài đặt Website</h1>
+          <form onSubmit={handleSaveSettings} style={{ width: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '3.5rem', height: '3.5rem', background: 'rgba(74,222,128,0.1)', borderRadius: '12px', border: '1px solid rgba(74,222,128,0.2)', color: 'var(--color-accent)' }}>
+                  <Settings size={28} />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                  <h1 style={{ fontSize: 'clamp(1.25rem,2vw,1.5rem)', margin: 0, lineHeight: 1.2, fontWeight: 700 }}>
+                    Cài đặt Website
+                  </h1>
+                  <div style={{ height: '1px', background: 'rgba(255,255,255,0.15)', width: '100%' }}></div>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '0.85rem', margin: 0, fontWeight: 500 }}>
+                    Cấu hình chung hệ thống
+                  </p>
+                </div>
+              </div>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
               <div style={panelStyle}>
