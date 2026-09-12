@@ -219,7 +219,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                   style={{ cursor: 'default' }}
                 >
                   <span style={{ fontSize: '0.62rem', color: craftHovered ? '#f59e0b' : 'rgba(255,255,255,0.3)', fontWeight: 600, transition: 'color 0.3s', display: 'flex', alignItems: 'center', gap: '0.25rem', marginBottom: '0.3rem' }}>
-                    <Clock size={10} />{craftHovered ? `${displayDay} ngÃ y` : product.estimatedPrintTime.replace('days', 'ngÃ y')}
+                    <Clock size={10} />{craftHovered ? `${displayDay} ngày` : product.estimatedPrintTime.replace('days', 'ngÃ y')}
                   </span>
                   <div style={{ width: '100%', height: '18px', background: 'rgba(255,255,255,0.08)', borderRadius: '9px', overflow: 'hidden' }}>
                     <div style={{ width: craftHovered ? '75%' : '0%', height: '100%', background: '#f59e0b', borderRadius: '9px', transition: 'width 0.85s cubic-bezier(0.4,0,0.2,1)', boxShadow: craftHovered ? '0 0 10px rgba(245,158,11,0.5)' : 'none' }} />
@@ -413,7 +413,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                   onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
                 >
                   <ShoppingCart size={18} />
-                  {language === 'vi' ? 'Mua HÃ ng Ngay' : 'Buy Now'}
+                  {language === 'vi' ? 'Mua Hàng Ngay' : 'Buy Now'}
                 </button>
               </motion.div>
             )}
