@@ -73,6 +73,8 @@ export const Home = () => {
     }, 800);
   };
 
+  const flashSaleItems = products.filter(p => p.saleType === 'FLASH_SALE').slice(0, 4);
+
   return (
     <div style={{ paddingBottom: '4rem' }}>
       {/* Hero Section */}
@@ -217,42 +219,70 @@ export const Home = () => {
         <div className="cat-collections-row">
 
           {/* LEFT: Khám phá danh mục */}
-          <div className="cat-collections-left">
+          <div className="cat-collections-left" style={{ display: 'flex', flexDirection: 'column' }}>
             <motion.h2 {...headerAnimProps} style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-              <LegoHeadIcon size={32} />
-              {t('explore_categories')}
+              <Zap size={32} color="var(--color-accent)" className="flash-shake" />
+              FLASH SALE
             </motion.h2>
-            <div className="category-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(0.5rem, 1.5vw, 1.5rem)', justifyItems: 'center' }}>
-              {[
-                { title: t('cat_superheroes'), img: '/images/tube-superhero.png', path: '/category/Superheroes' },
-                { title: t('cat_scifi'), img: '/images/tube-scifi.png', path: '/category/Sci-Fi' },
-                { title: t('cat_classic'), img: '/images/tube-classic.png', path: '/category/Classic' },
-              ].map((cat, idx) => (
-                <Link to={cat.path} key={idx} style={{ textDecoration: 'none', width: '100%', display: 'block' }}>
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', width: '100%' }}>
-                    <motion.div
-                      whileHover={{
-                        scale: 1.03,
-                        borderColor: 'var(--color-accent)',
-                        boxShadow: '0 0 30px rgba(74, 222, 128, 0.5), inset 0 0 20px rgba(74, 222, 128, 0.3)'
-                      }}
-                      transition={{ duration: 0.3 }}
-                      style={{
-                        width: '100%',
-                        aspectRatio: '1/1',
-                        borderRadius: 'var(--radius-lg)',
-                        overflow: 'hidden',
-                        cursor: 'pointer',
-                        border: '1px solid rgba(255, 255, 255, 0.05)',
-                        background: 'transparent'
-                      }}
-                    >
-                      <img src={cat.img} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={cat.title} style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'screen' }} />
-                    </motion.div>
-                    <h3 className="" style={{ fontWeight: 500, textAlign: 'center', textTransform: 'uppercase', letterSpacing: '1px', color: 'var(--color-text)', fontSize: 'clamp(0.6rem, 1.2vw, 0.9rem)' }}>{cat.title}</h3>
-                  </div>
-                </Link>
-              ))}
+            
+            <div style={{ width: '100%', flex: 1, display: 'flex', flexDirection: 'column' }}>
+              {flashSaleItems.length > 0 ? (
+                <Swiper
+                  modules={[Pagination, Autoplay]}
+                  spaceBetween={20}
+                  slidesPerView={1}
+                  pagination={{ clickable: true }}
+                  autoplay={{ delay: 3000, disableOnInteraction: false }}
+                  style={{ width: '100%', borderRadius: 'var(--radius-lg)', overflow: 'hidden', minHeight: '150px' }}
+                  className="flash-sale-swiper"
+                >
+                  {flashSaleItems.map((product: any) => (
+                    <SwiperSlide key={product.id}>
+                      <Link to={`/product/${product.id}`} style={{ display: 'block', width: '100%', height: '100%', textDecoration: 'none' }}>
+                        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/7', background: 'rgba(0,0,0,0.5)', overflow: 'hidden', borderRadius: 'var(--radius-md)' }}>
+                          <img 
+                            src={product.bannerImage || product.images?.[0]} 
+                            alt={product.name[language as keyof typeof product.name]}
+                            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                          />
+                          <div style={{
+                            position: 'absolute', bottom: 0, left: 0, right: 0,
+                            background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)',
+                            padding: '2rem 1.5rem 1.5rem',
+                            display: 'flex', flexDirection: 'column', gap: '0.5rem', zIndex: 1
+                          }}>
+                            <h3 style={{ color: 'white', margin: 0, fontSize: 'clamp(1rem, 2vw, 1.2rem)', fontWeight: 'bold', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {product.name[language as keyof typeof product.name]}
+                            </h3>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                              <span style={{ color: 'var(--color-accent)', fontWeight: 'bold', fontSize: '1.1rem' }}>
+                                {formatPrice(product.price, product.discountPercentage).current}
+                              </span>
+                              <span style={{ color: 'rgba(255,255,255,0.5)', textDecoration: 'line-through', fontSize: '0.9rem' }}>
+                                {formatPrice(product.price).original}
+                              </span>
+                            </div>
+                          </div>
+                          <div style={{
+                            position: 'absolute', top: '10px', left: '10px',
+                            background: 'linear-gradient(45deg, #ef4444, #f97316)', color: 'white',
+                            borderRadius: '20px', fontWeight: 'bold', padding: '4px 10px', fontSize: '0.8rem',
+                            display: 'flex', alignItems: 'center', gap: '4px',
+                            boxShadow: '0 0 15px rgba(239,68,68,0.5)', zIndex: 2
+                          }}>
+                            <Zap size={14} fill="currentColor" />
+                            -{product.discountPercentage}%
+                          </div>
+                        </div>
+                      </Link>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              ) : (
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', background: 'rgba(255,255,255,0.03)', borderRadius: 'var(--radius-lg)', minHeight: '200px' }}>
+                  <p style={{ color: 'var(--color-text-muted)' }}>Đang cập nhật Flash Sale</p>
+                </div>
+              )}
             </div>
           </div>
 
