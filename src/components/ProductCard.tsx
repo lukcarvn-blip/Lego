@@ -196,21 +196,25 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               {product.isReadyStock ? (
                 <div style={{ 
                   display: 'grid', 
-                  gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', 
+                  gridTemplateColumns: '1fr 1fr', 
                   gap: '0.25rem', 
                   marginTop: 'auto' 
                 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.25rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '2px', fontWeight: 400 }}>{language === 'vi' ? 'KT:' : 'Size:'}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Kích thước:' : 'Size:'}</span>
                     <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.dimensions?.split(' ')[0] || '300%'}</span>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.25rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '2px', fontWeight: 400 }}>{language === 'vi' ? 'Loại:' : 'Mat:'}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Vật liệu:' : 'Material:'}</span>
                     <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.availableMaterials?.[0] || 'PLA'}</span>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.25rem', background: 'rgba(74, 222, 128, 0.1)', borderRadius: '4px', border: '1px solid rgba(74, 222, 128, 0.2)', gridColumn: isMobile ? '1 / -1' : 'auto' }}>
-                    <span style={{ fontSize: '0.6rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '2px', fontWeight: 400 }}>{language === 'vi' ? 'SL:' : 'Qty:'}</span>
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(74, 222, 128, 0.1)', borderRadius: '4px', border: '1px solid rgba(74, 222, 128, 0.2)' }}>
+                    <span style={{ fontSize: '0.6rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Hàng sẵn:' : 'In stock:'}</span>
                     <span style={{ fontSize: '0.6rem', fontWeight: 600, color: '#4ade80' }}>{product.stock || 1} hộp</span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', padding: '0.25rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <span style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Lượt mua:' : 'Sold:'}</span>
+                    <span style={{ fontSize: '0.6rem', fontWeight: 600, color: 'var(--color-text)' }}>{(product as any).sales || (product.reviews || 0) * 3 + 12}</span>
                   </div>
                 </div>
               ) : (
@@ -466,20 +470,24 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               <div style={{ 
                 marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)', 
                 display: 'grid', 
-                gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', 
+                gridTemplateColumns: '1fr 1fr', 
                 gap: '0.4rem' 
               }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.3rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '3px', fontWeight: 400 }}>{language === 'vi' ? 'KT:' : 'Size:'}</span>
+                <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Kích thước:' : 'Size:'}</span>
                   <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.dimensions?.split(' ')[0] || '300%'}</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.3rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '3px', fontWeight: 400 }}>{language === 'vi' ? 'Loại:' : 'Mat:'}</span>
+                <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Vật liệu:' : 'Material:'}</span>
                   <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.availableMaterials?.[0] || 'PLA'}</span>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.3rem', background: 'rgba(74, 222, 128, 0.1)', borderRadius: '4px', border: '1px solid rgba(74, 222, 128, 0.2)', gridColumn: isMobile ? '1 / -1' : 'auto' }}>
-                  <span style={{ fontSize: '0.7rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '3px', fontWeight: 400 }}>{language === 'vi' ? 'SL:' : 'Qty:'}</span>
+                <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(74, 222, 128, 0.1)', borderRadius: '4px', border: '1px solid rgba(74, 222, 128, 0.2)' }}>
+                  <span style={{ fontSize: '0.7rem', color: 'rgba(74, 222, 128, 0.8)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Hàng sẵn:' : 'In stock:'}</span>
                   <span style={{ fontSize: '0.7rem', fontWeight: 600, color: '#4ade80' }}>{product.stock || 1} hộp</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', padding: '0.3rem 0.5rem', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <span style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginRight: '4px', fontWeight: 400 }}>{language === 'vi' ? 'Lượt mua:' : 'Sold:'}</span>
+                  <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--color-text)' }}>{(product as any).sales || (product.reviews || 0) * 3 + 12}</span>
                 </div>
               </div>
             ) : (
