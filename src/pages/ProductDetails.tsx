@@ -1243,7 +1243,7 @@ export const ProductDetails = () => {
         }
         .sticky-cart-wrapper {
           position: sticky;
-          top: 100px;
+          top: 160px;
           z-index: 50;
           margin-top: 2rem;
         }
