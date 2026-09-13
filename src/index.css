@@ -260,18 +260,19 @@ button {
 /* Product List CSS (view toggle) */
 .product-list {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.875rem;
 }
 
 .product-list .product-card-wrapper {
   width: 100%;
+  min-width: 0;
 }
 
 /* 2 items per row in list view on PC */
 @media (min-width: 1280px) {
   .product-list {
-    grid-template-columns: repeat(, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -407,7 +408,7 @@ button {
   }
   .bottom-section-grid {
     display: grid;
-    grid-template-columns: repeat(, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.5rem;
   }
   /* Hide the 3rd item on desktop so it's 1 row of 2 */
@@ -426,7 +427,7 @@ button {
   }
   .bottom-section-grid {
     display: grid;
-    grid-template-columns: repeat(, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.5rem;
   }
 }
@@ -441,7 +442,7 @@ button {
   }
   .bottom-section-grid {
     display: grid;
-    grid-template-columns: repeat(, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1rem;
   }
   /* Hide the 3rd item on mobile so it's 1 row of 2 */
@@ -877,12 +878,12 @@ table {
 /* Image grid: 5-col on desktop, 3-col on mobile */
 .admin-image-grid {
   display: grid;
-  grid-template-columns: repeat(, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.5rem;
 }
 @media (max-width: 600px) {
   .admin-image-grid {
-    grid-template-columns: repeat(, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -977,9 +978,10 @@ table {
 /* Responsive Product Card Stats */
 .card-stats-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 0.25rem;
   margin-top: auto;
+  min-width: 0;
 }
 .stat-item {
   display: flex;

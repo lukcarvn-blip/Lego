@@ -91,15 +91,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
       transition={{ duration: 0.5, delay: idx * 0.1 }}
     >
       {/* Remove whole card Link, only link the title */}
-      <div style={{ display: 'block', height: '100%', cursor: 'default' }}>
+      <div style={{ display: 'block', height: '100%', cursor: 'default', minWidth: 0 }}>
         {listMode ? (
           <div className="glass-panel" style={{
             display: 'flex', flexDirection: 'row', overflow: 'hidden',
             height: 'clamp(120px, 30vw, 160px)', position: 'relative', gap: 0,
             border: '1px solid var(--glass-border)', transition: 'border-color 0.3s',
-            width: '100%'
-          }}
-            onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,222,128,0.35)'}
+            width: '100%', minWidth: 0
+        }}
+        onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(74,222,128,0.35)'}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--glass-border)'}
           >
             {/* Thumbnail */}
