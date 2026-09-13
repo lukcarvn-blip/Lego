@@ -1055,7 +1055,7 @@ export const Admin = () => {
         )}
 
         {/* ── PRODUCT FORM ──────────────────────────────────────────── */}
-        {activeTab === 'products' && isEditingProduct && (
+        {(activeTab === 'products' || activeTab === 'printers') && isEditingProduct && (
           <form onSubmit={handleSaveProduct} className="admin-product-form-wrap">
             {/* Header */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
