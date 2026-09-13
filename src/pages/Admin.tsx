@@ -999,9 +999,10 @@ export const Admin = () => {
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                     >
                       <td style={{ padding: '0.75rem 1rem' }}>
-                        <div style={{ width: '44px', height: '44px', background: 'rgba(74,222,128,0.05)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', border: '1px solid var(--glass-border)' }}>
+                        <div className="admin-thumbnail-wrapper" style={{ width: '44px', height: '44px', background: 'rgba(74,222,128,0.05)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', border: '1px solid var(--glass-border)' }}>
                           <img src={product.images[0]} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" />
-                        </div>
+                          <div className="admin-thumbnail-tooltip"><img src={product.images[0]} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" /></div>
+</div>
                       </td>
                       <td style={{ padding: '0.75rem 1rem', fontFamily: 'monospace', fontSize: '0.8rem', color: '#86efac', fontWeight: 700 }}>
                         {product.sku || <span style={{ color: 'var(--color-text-muted)' }}>—</span>}
