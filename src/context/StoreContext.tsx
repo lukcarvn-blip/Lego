@@ -22,6 +22,7 @@ export interface CartItem {
   isFastCrafting?: boolean;
   engravingText?: string;
   micaBox?: string;
+  isSelfAssembly?: boolean;
 }
 
 export interface Order {
@@ -127,8 +128,8 @@ interface StoreContextType {
   dataError: string | null;
   updateProduct: (updated: Product) => void;
   cart: CartItem[];
-  addToCart: (product: Product, size: ProductSize, material: ProductMaterial, quantity: number, e?: React.MouseEvent, isFastCrafting?: boolean, engravingText?: string, micaBox?: string) => void;
-  removeFromCart: (productId: string, size: ProductSize, material: ProductMaterial, isFastCrafting?: boolean) => void;
+  addToCart: (product: Product, size: ProductSize, material: ProductMaterial, quantity: number, e?: React.MouseEvent, isFastCrafting?: boolean, engravingText?: string, micaBox?: string, isSelfAssembly?: boolean) => void;
+  removeFromCart: (productId: string, size: ProductSize, material: ProductMaterial, isFastCrafting?: boolean, engravingText?: string, micaBox?: string, isSelfAssembly?: boolean) => void;
   clearCart: () => void;
   orders: Order[];
   savedCarts: SavedCart[];
@@ -403,7 +404,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     } catch (e) { console.error(e); }
   };
 
-  const addToCart = (product: Product, size: ProductSize, material: ProductMaterial, quantity: number, e?: React.MouseEvent, isFastCrafting: boolean = false, engravingText?: string, micaBox?: string) => {
+  const addToCart = (product: Product, size: ProductSize, material: ProductMaterial, quantity: number, e?: React.MouseEvent, isFastCrafting: boolean = false, engravingText?: string, micaBox?: string, isSelfAssembly: boolean = false) => {
     if (e) {
       e.stopPropagation();
       e.preventDefault();
@@ -417,15 +418,15 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     }
     
     setCart(prev => {
-      const existing = prev.find(item => item.product.id === product.id && item.size === size && item.material === material && item.isFastCrafting === isFastCrafting && item.engravingText === engravingText && item.micaBox === micaBox);
+      const existing = prev.find(item => item.product.id === product.id && item.size === size && item.material === material && item.isFastCrafting === isFastCrafting && item.engravingText === engravingText && item.micaBox === micaBox && item.isSelfAssembly === isSelfAssembly);
       if (existing) {
         return prev.map(item => item === existing ? { ...item, quantity: item.quantity + quantity } : item);
       }
-      return [...prev, { product, size, material, quantity, isFastCrafting, engravingText, micaBox }];
+      return [...prev, { product, size, material, quantity, isFastCrafting, engravingText, micaBox, isSelfAssembly }];
     });
   };
 
-  const removeFromCart = (productId: string, size: ProductSize, material: ProductMaterial, isFastCrafting: boolean = false) => {
+  const removeFromCart = (productId: string, size: ProductSize, material: ProductMaterial, isFastCrafting: boolean = false, engravingText?: string, micaBox?: string, isSelfAssembly: boolean = false) => {
     setCart(prev => prev.filter(item => !(item.product.id === productId && item.size === size && item.material === material && !!item.isFastCrafting === isFastCrafting)));
   };
 

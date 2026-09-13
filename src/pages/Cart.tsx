@@ -319,7 +319,7 @@ export const Cart = () => {
                       <span style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--color-text)' }}>{language === 'vi' ? 'Số lượng' : 'Qty'}: {item.quantity}</span>
                       <button 
                         onClick={() => {
-                          removeFromCart(item.product.id, item.size, item.material, item.isFastCrafting);
+                          removeFromCart(item.product.id, item.size, item.material, item.isFastCrafting, item.engravingText, item.micaBox, item.isSelfAssembly);
                           showToast(language === 'vi' ? 'Đã xóa sản phẩm khỏi giỏ hàng' : 'Removed item from cart');
                         }}
                         style={{ color: '#ef4444', display: 'flex', alignItems: 'center', gap: '0.35rem', background: 'rgba(239,68,68,0.1)', padding: '0.4rem 0.75rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(239,68,68,0.25)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600, transition: 'all 0.2s' }}

@@ -160,6 +160,8 @@ export const ProductDetails = () => {
   const [selectedMaterial, setSelectedMaterial] = useState<ProductMaterial>('PLA');
   const [isFastCrafting, setIsFastCrafting] = useState(false);
   const [engravingText, setEngravingText] = useState('');
+  const [isEngravingSelected, setIsEngravingSelected] = useState(false);
+  const [isSelfAssembly, setIsSelfAssembly] = useState(false);
   const [selectedMicaBox, setSelectedMicaBox] = useState('');
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'tags'>('desc');
   const [isCartExpanded, setIsCartExpanded] = useState(window.innerWidth >= 1024);
@@ -993,21 +995,57 @@ export const ProductDetails = () => {
             </h3>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {/* Engraving */}
-              {isEffectivelyCrafting && (
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem' }}>
-                    {language === 'vi' ? 'Khắc tên / Lời nhắn (Miễn phí)' : 'Custom Engraving (Free)'}
-                  </label>
-                  <input 
-                    type="text" 
-                    value={engravingText}
-                    onChange={(e) => setEngravingText(e.target.value)}
-                    placeholder={language === 'vi' ? 'Nhập nội dung cần khắc...' : 'Enter text to engrave...'} 
-                    style={{ width: '100%', padding: '0.75rem 1rem', background: 'rgba(0,0,0,0.2)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', color: '#fff', outline: 'none' }}
-                  />
+              
+        {/* Engraving & Self-assembly */}
+        {isEffectivelyCrafting && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.75rem' }}>
+            {/* Engraving Box */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${isEngravingSelected ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: isEngravingSelected ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer' }} onClick={() => { setIsEngravingSelected(!isEngravingSelected); if (isEngravingSelected) setEngravingText(''); }}>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 600, fontSize: '0.95rem', color: isEngravingSelected ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Khắc tên / Lời nhắn' : 'Custom Engraving'}</div>
+                  <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{language === 'vi' ? '(Miễn phí)' : '(Free)'}</div>
                 </div>
-              )}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <button style={{ width: '32px', height: '32px', borderRadius: '50%', border: `1px solid ${isEngravingSelected ? 'var(--color-accent)' : 'var(--glass-border)'}`, background: isEngravingSelected ? 'var(--color-accent)' : 'transparent', color: isEngravingSelected ? '#000' : 'var(--color-text)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                    {isEngravingSelected ? <Minus size={16} /> : <Plus size={16} />}
+                  </button>
+                </div>
+              </div>
+              
+              {/* Text Input (conditionally rendered) */}
+              <AnimatePresence>
+                {isEngravingSelected && (
+                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
+                    <input
+                      type="text"
+                      value={engravingText}
+                      onChange={(e) => setEngravingText(e.target.value)}
+                      placeholder={language === 'vi' ? 'Nhập nội dung cần khắc...' : 'Enter text to engrave...'}
+                      style={{ width: '100%', padding: '0.75rem 1rem', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--color-accent)', borderRadius: 'var(--radius-sm)', color: '#fff', outline: 'none' }}
+                      autoFocus
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* Self Assembly Box */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${isSelfAssembly ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: isSelfAssembly ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer', height: 'fit-content' }} onClick={() => setIsSelfAssembly(!isSelfAssembly)}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: 600, fontSize: '0.95rem', color: isSelfAssembly ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Tự lắp ráp' : 'Self Assembly'}</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{language === 'vi' ? '(Nhận chi tiết rời)' : '(Unassembled kit)'}</div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <button style={{ width: '32px', height: '32px', borderRadius: '50%', border: `1px solid ${isSelfAssembly ? 'var(--color-accent)' : 'var(--glass-border)'}`, background: isSelfAssembly ? 'var(--color-accent)' : 'transparent', color: isSelfAssembly ? '#000' : 'var(--color-text)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                  {isSelfAssembly ? <Minus size={16} /> : <Plus size={16} />}
+                </button>
+              </div>
+            </div>
+
+          </div>
+        )}
+
 
               {/* Mica Box */}
               <div>
