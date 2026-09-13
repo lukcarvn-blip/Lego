@@ -500,7 +500,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 }}>
                   <span style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
                     <Clock size={12} />
-                    {language === 'vi' ? 'THỜI GIAN CHẾ TÁC' : 'CRAFT TIME'}
+                    {language === 'vi' ? 'ĐẶT CHẾ TÁC' : 'PRE-ORDER'}
                   </span>
                   <span style={{ 
                     color: craftHovered ? '#f59e0b' : 'rgba(255,255,255,0.35)',

@@ -598,7 +598,7 @@ export const ProductDetails = () => {
                             <li>{language === 'vi' ? 'Giao hàng: ' : 'Delivery: '}<strong>{language === 'vi' ? 'Trong 1-2 ngày' : '1-2 days'}</strong></li>
                           ) : (
                             <li>
-                              {language === 'vi' ? 'Thời gian chế tác: ' : 'Crafting time: '}<strong>{craftTimeDays} {language === 'vi' ? 'ngày' : 'days'}</strong>
+                              {language === 'vi' ? 'Đặt chế tác: ' : 'Pre-order: '}<strong>{craftTimeDays} {language === 'vi' ? 'ngày' : 'days'}</strong>
                               {isFastCrafting ? <span style={{ color: '#b91c1c', marginLeft: '6px', fontWeight: 'bold' }}>({language === 'vi' ? 'Đã bật tăng tốc 🚀' : 'Fast mode ON 🚀'})</span> : <span style={{ color: 'rgba(0,0,0,0.5)', marginLeft: '6px', fontSize: '0.8rem' }}>({language === 'vi' ? 'Nhấn 🚀 để rút ngắn' : 'Tap 🚀 to speed up'})</span>}
                             </li>
                           )}
