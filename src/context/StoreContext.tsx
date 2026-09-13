@@ -571,7 +571,9 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   ] : [];
 
   return (
-    <StoreContext.Provider value={{ 
+    <StoreContext.Provider value={{
+        previewSettings,
+        setPreviewSettings,
         products, isDataLoading, dataError, updateProduct, addProduct, deleteProduct,
         cart, addToCart, removeFromCart, clearCart, 
         orders, savedCarts, notifications, createOrder, updateOrder, updateOrderStatus,
