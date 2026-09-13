@@ -629,62 +629,30 @@ export const Admin = () => {
       {/* Main content */}
       <main style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', minWidth: 0, height: '100%', WebkitOverflowScrolling: 'touch' }}>
 
-        {/* ── ADMIN TOP UTILITY NAVBAR ──────────────────────────── */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '0.5rem',
-          padding: '0.65rem 1.5rem',
-          background: 'rgba(5,15,5,0.95)',
-          borderBottom: '1px solid var(--glass-border)',
-          flexWrap: 'wrap',
-          position: 'sticky', top: 0, zIndex: 9
-        }}>
-          {/* Left: quick nav */}
-          <div style={{ display: 'flex', gap: '0.4rem', flex: 1, flexWrap: 'wrap' }}>
-            <button 
-              className="admin-mobile-menu-btn"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0.4rem 0.6rem', borderRadius: 'var(--radius-sm)', background: 'rgba(255,255,255,0.1)', border: 'none', color: '#fff', cursor: 'pointer' }}
-            >
-              <Menu size={16} />
-            </button>
-            <a href="/" target="_blank" rel="noreferrer"
-              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(74,222,128,0.08)', border: '1px solid rgba(74,222,128,0.25)', color: 'var(--color-accent)', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none', cursor: 'pointer' }}
-            >
-              <Globe size={14} /> Xem trang chủ
-            </a>
-            <button
-              onClick={() => { localStorage.removeItem('legato_cart'); showToast('Đã xoá cache giỏ hàng!'); }}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(251,191,36,0.08)', border: '1px solid rgba(251,191,36,0.25)', color: '#fbbf24', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
-            >
-              <DatabaseZap size={14} /> Xoá cache giỏ hàng
-            </button>
-            <button
-              onClick={() => exportCSV(orders)}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(59,130,246,0.08)', border: '1px solid rgba(59,130,246,0.25)', color: '#60a5fa', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
-            >
-              <Download size={14} /> Xuất CSV đơn hàng
-            </button>
-            <button
-              onClick={() => { setActiveTab('settings' as any); }}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.25)', color: '#c084fc', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
-            >
-              <Settings size={14} /> Cài đặt trang
-            </button>
-            <button
-              onClick={() => { products.forEach(p => updateProduct({ ...p, views: 0, likes: 0 })); showToast('Đã reset thống kê!'); }}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.25)', color: '#f87171', fontSize: '0.8rem', fontWeight: 600, cursor: 'pointer' }}
-            >
-              <RefreshCw size={14} /> Reset thống kê
-            </button>
-          </div>
-          {/* Right: logout */}
-          <button
-            onClick={logout}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', padding: '0.4rem 0.85rem', borderRadius: 'var(--radius-sm)', background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.4)', color: '#ef4444', fontSize: '0.8rem', fontWeight: 700, cursor: 'pointer', marginLeft: 'auto', flexShrink: 0 }}
-          >
-            <LogOut size={14} /> Đăng xuất Admin
-          </button>
-        </div>
+
+        {/* Mobile Menu Button (Floating) */}
+        <button
+          className="admin-mobile-menu-btn"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          style={{ 
+            position: 'absolute', 
+            top: '1rem', 
+            right: '1.5rem', 
+            zIndex: 50,
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            padding: '0.5rem', 
+            borderRadius: 'var(--radius-sm)', 
+            background: 'var(--color-accent)', 
+            border: 'none', 
+            color: '#000', 
+            cursor: 'pointer',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+          }}
+        >
+          <Menu size={20} />
+        </button>
 
         <AnimatePresence mode="wait">
         <motion.div
