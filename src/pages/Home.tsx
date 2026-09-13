@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Clock, ChevronRight, ChevronLeft, ShieldCheck, Zap, Diamond, Sparkles, ShoppingCart, Loader2, LayoutGrid, LayoutList, ArrowRight, Shield, Moon, Star, Wand2, Swords, PawPrint, Rocket, Castle, Building2, Settings } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Grid, Pagination, Autoplay } from 'swiper/modules';
+import { Grid, Pagination, Autoplay, Navigation } from 'swiper/modules';
+import 'swiper/css/navigation';
 import 'swiper/css';
 import 'swiper/css/grid';
 import 'swiper/css/pagination';
@@ -75,6 +76,9 @@ export const Home = () => {
   };
 
   const flashSaleItems = products.filter(p => p.saleType === 'FLASH_SALE').slice(0, 4);
+  const [flashActiveIdx, setFlashActiveIdx] = React.useState(0);
+  const [flashNoising, setFlashNoising] = React.useState(false);
+  const flashSwiperRef = useRef<any>(null);
 
   return (
     <div style={{ paddingBottom: '4rem' }}>
