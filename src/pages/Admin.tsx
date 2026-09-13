@@ -227,6 +227,16 @@ export const Admin = () => {
   const [editingBlogPost, setEditingBlogPost] = useSessionState<Partial<BlogPost>>('admin_editingBlogPost', {});
   
   const [tempSettings, setTempSettings] = useState(settings);
+
+  useEffect(() => {
+    if (activeTab === 'settings') {
+      setPreviewSettings(tempSettings);
+    } else {
+      setPreviewSettings(null);
+    }
+    return () => setPreviewSettings(null);
+  }, [tempSettings, activeTab, setPreviewSettings]);
+
   const [sidebarOpen, setSidebarOpen] = useSessionState('admin_sidebarOpen', true);
 
   // File Manager State
@@ -1858,8 +1868,121 @@ export const Admin = () => {
               </div>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '1.5rem' }}>
-              <div style={panelStyle}>
-                <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Nhận diện thương hiệu</h3>
+              
+<div style={{ ...panelStyle, gridColumn: '1 / -1', border: '1px solid var(--color-accent)' }}>
+  <h3 style={{ marginBottom: '1.5rem', color: 'var(--color-accent)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+    <Palette size={20} /> Theme Customizer (Live Preview)
+  </h3>
+  
+  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+    {/* Scope & Themes */}
+    <div>
+      <h4 style={{ marginBottom: '1rem' }}>Cài đặt Theme</h4>
+      <InputField label="Phạm vi áp dụng Theme">
+        <select value={tempSettings.applyThemeScope || 'global'} onChange={e => setTempSettings({...tempSettings, applyThemeScope: e.target.value as any})} style={inputStyle}>
+          <option value="global">Cả Website (Trang chủ & Admin)</option>
+          <option value="storefront">Chỉ Trang chủ (Admin giữ mặc định)</option>
+          <option value="admin">Tách biệt Admin và Trang chủ</option>
+        </select>
+      </InputField>
+      
+      <InputField label="Theme Trang Chủ">
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+          <button type="button" onClick={() => setTempSettings({...tempSettings, siteTheme: 'dark'})} className="chamfer-btn" style={{ ...inputStyle, background: tempSettings.siteTheme !== 'light' ? 'rgba(74,222,128,0.1)' : 'rgba(255,255,255,0.05)', color: tempSettings.siteTheme !== 'light' ? 'var(--color-accent)' : '#fff', borderColor: tempSettings.siteTheme !== 'light' ? 'var(--color-accent)' : 'var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+            <Moon size={16} /> Tối
+          </button>
+          <button type="button" onClick={() => setTempSettings({...tempSettings, siteTheme: 'light'})} className="chamfer-btn" style={{ ...inputStyle, background: tempSettings.siteTheme === 'light' ? 'rgba(74,222,128,0.1)' : 'rgba(255,255,255,0.05)', color: tempSettings.siteTheme === 'light' ? 'var(--color-accent)' : '#fff', borderColor: tempSettings.siteTheme === 'light' ? 'var(--color-accent)' : 'var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+            <Sun size={16} /> Sáng
+          </button>
+        </div>
+      </InputField>
+      
+      {tempSettings.applyThemeScope === 'admin' && (
+        <InputField label="Theme Admin">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+            <button type="button" onClick={() => setTempSettings({...tempSettings, adminTheme: 'dark'})} className="chamfer-btn" style={{ ...inputStyle, background: tempSettings.adminTheme !== 'light' ? 'rgba(74,222,128,0.1)' : 'rgba(255,255,255,0.05)', color: tempSettings.adminTheme !== 'light' ? 'var(--color-accent)' : '#fff', borderColor: tempSettings.adminTheme !== 'light' ? 'var(--color-accent)' : 'var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+              <Moon size={16} /> Tối
+            </button>
+            <button type="button" onClick={() => setTempSettings({...tempSettings, adminTheme: 'light'})} className="chamfer-btn" style={{ ...inputStyle, background: tempSettings.adminTheme === 'light' ? 'rgba(74,222,128,0.1)' : 'rgba(255,255,255,0.05)', color: tempSettings.adminTheme === 'light' ? 'var(--color-accent)' : '#fff', borderColor: tempSettings.adminTheme === 'light' ? 'var(--color-accent)' : 'var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+              <Sun size={16} /> Sáng
+            </button>
+          </div>
+        </InputField>
+      )}
+    </div>
+
+    {/* Colors */}
+    <div>
+      <h4 style={{ marginBottom: '1rem' }}>Màu sắc (Ghi đè mặc định)</h4>
+      <InputField label="Màu nền chính (Background)">
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <input type="color" value={tempSettings.customColors?.bg || '#050d05'} onChange={e => setTempSettings({...tempSettings, customColors: {...(tempSettings.customColors || {}), bg: e.target.value}})} style={{ width: '40px', height: '40px', padding: 0, border: 'none', borderRadius: '4px', cursor: 'pointer' }} />
+          <input type="text" value={tempSettings.customColors?.bg || ''} placeholder="Mặc định" onChange={e => setTempSettings({...tempSettings, customColors: {...(tempSettings.customColors || {}), bg: e.target.value}})} style={{ ...inputStyle, flex: 1 }} />
+        </div>
+      </InputField>
+      <InputField label="Màu Nổi/Form (Surface)">
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <input type="color" value={tempSettings.customColors?.bgLight || '#0a1c0a'} onChange={e => setTempSettings({...tempSettings, customColors: {...(tempSettings.customColors || {}), bgLight: e.target.value}})} style={{ width: '40px', height: '40px', padding: 0, border: 'none', borderRadius: '4px', cursor: 'pointer' }} />
+          <input type="text" value={tempSettings.customColors?.bgLight || ''} placeholder="Mặc định" onChange={e => setTempSettings({...tempSettings, customColors: {...(tempSettings.customColors || {}), bgLight: e.target.value}})} style={{ ...inputStyle, flex: 1 }} />
+        </div>
+      </InputField>
+      <InputField label="Màu Nhấn (Accent / Buttons)">
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <input type="color" value={tempSettings.customColors?.accent || '#4ade80'} onChange={e => setTempSettings({...tempSettings, customColors: {...(tempSettings.customColors || {}), accent: e.target.value}})} style={{ width: '40px', height: '40px', padding: 0, border: 'none', borderRadius: '4px', cursor: 'pointer' }} />
+          <input type="text" value={tempSettings.customColors?.accent || ''} placeholder="Mặc định" onChange={e => setTempSettings({...tempSettings, customColors: {...(tempSettings.customColors || {}), accent: e.target.value}})} style={{ ...inputStyle, flex: 1 }} />
+        </div>
+      </InputField>
+      <InputField label="Màu Chữ (Text)">
+        <div style={{ display: 'flex', gap: '0.5rem' }}>
+          <input type="color" value={tempSettings.customColors?.text || '#ffffff'} onChange={e => setTempSettings({...tempSettings, customColors: {...(tempSettings.customColors || {}), text: e.target.value}})} style={{ width: '40px', height: '40px', padding: 0, border: 'none', borderRadius: '4px', cursor: 'pointer' }} />
+          <input type="text" value={tempSettings.customColors?.text || ''} placeholder="Mặc định" onChange={e => setTempSettings({...tempSettings, customColors: {...(tempSettings.customColors || {}), text: e.target.value}})} style={{ ...inputStyle, flex: 1 }} />
+        </div>
+      </InputField>
+    </div>
+
+    {/* Fonts */}
+    <div>
+      <h4 style={{ marginBottom: '1rem' }}>Font chữ (Google Fonts)</h4>
+      <InputField label="Font Tiêu Đề (H1-H6)">
+        <select value={tempSettings.customFonts?.heading || ''} onChange={e => setTempSettings({...tempSettings, customFonts: {...(tempSettings.customFonts || {}), heading: e.target.value}})} style={inputStyle}>
+          
+  <option value="">(Mặc định iOS)</option>
+  <option value="Inter">Inter</option>
+  <option value="Roboto">Roboto</option>
+  <option value="Montserrat">Montserrat</option>
+  <option value="Playfair Display">Playfair Display</option>
+  <option value="Nunito">Nunito</option>
+  <option value="Oswald">Oswald</option>
+  <option value="Merriweather">Merriweather</option>
+
+        </select>
+      </InputField>
+      <InputField label="Font Nội Dung (Body)">
+        <select value={tempSettings.customFonts?.body || ''} onChange={e => setTempSettings({...tempSettings, customFonts: {...(tempSettings.customFonts || {}), body: e.target.value}})} style={inputStyle}>
+          
+  <option value="">(Mặc định iOS)</option>
+  <option value="Inter">Inter</option>
+  <option value="Roboto">Roboto</option>
+  <option value="Montserrat">Montserrat</option>
+  <option value="Playfair Display">Playfair Display</option>
+  <option value="Nunito">Nunito</option>
+  <option value="Oswald">Oswald</option>
+  <option value="Merriweather">Merriweather</option>
+
+        </select>
+      </InputField>
+      
+      <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'rgba(255,255,255,0.05)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}>
+        <h3 style={{ marginBottom: '0.5rem', color: 'var(--color-accent)' }}>Xem thử Tiêu đề</h3>
+        <p style={{ color: 'var(--color-text-muted)' }}>Đây là đoạn văn bản nội dung bình thường để xem trước font chữ body của bạn có dễ đọc hay không.</p>
+        <button type="button" className="chamfer-btn" style={{ background: 'var(--color-accent)', color: '#000', border: 'none', padding: '0.5rem 1rem', marginTop: '1rem', fontWeight: 600 }}>Nút Mua Ngay</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style={panelStyle}>
+<h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Nhận diện thương hiệu</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   <InputField label="Tên thương hiệu (khi không có logo)">
                     <input type="text" required value={tempSettings.logoText} onChange={e => setTempSettings({...tempSettings, logoText: e.target.value})} style={inputStyle} />

@@ -101,6 +101,18 @@ export interface StoreSettings {
   bankAccount?: string;
   bankOwner?: string;
   siteTheme?: string;
+  adminTheme?: string;
+  applyThemeScope?: 'global' | 'storefront' | 'admin';
+  customColors?: {
+    bg?: string;
+    bgLight?: string;
+    accent?: string;
+    text?: string;
+  };
+  customFonts?: {
+    heading?: string;
+    body?: string;
+  };
   collections?: CollectionItem[];
 }
 
@@ -133,6 +145,8 @@ interface StoreContextType {
   t: (key: keyof typeof translations['vi']) => string;
   settings: StoreSettings;
   updateSettings: (newSettings: Partial<StoreSettings>) => void;
+  previewSettings: StoreSettings | null;
+  setPreviewSettings: (settings: StoreSettings | null) => void;
   addProduct: (product: Omit<Product, 'id'>) => void;
   deleteProduct: (id: string) => void;
   formatPrice: (priceUSD: number, discountPercentage?: number) => { original: string, current: string, isOnSale: boolean };
@@ -151,6 +165,7 @@ interface StoreContextType {
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
 
 export const StoreProvider = ({ children }: { children: ReactNode }) => {
+  const [previewSettings, setPreviewSettings] = useState<StoreSettings | null>(null);
   const [settings, setSettings] = useState<StoreSettings>({
     logoText: 'LEGATO',
     logoImage: '/images/custom-logo.png',
@@ -182,11 +197,29 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     { name: 'Technic', iconName: 'Settings', color: '#95a5a6', bg: 'rgba(149,165,166,0.1)', border: 'rgba(149,165,166,0.3)', path: '/category/classic?q=technic' },
   ]
   });
+  // activeSettings prioritizes previewSettings if it exists
+  const activeSettings = previewSettings || settings;
+
   // Apply theme CSS class to document
   useEffect(() => {
-    const theme = settings.siteTheme || 'dark';
+    const isAdminPath = window.location.pathname.startsWith('/admin');
+    let theme = 'dark'; // default
+    
+    if (activeSettings.applyThemeScope === 'admin' && isAdminPath) {
+      theme = activeSettings.adminTheme || 'dark';
+    } else if (activeSettings.applyThemeScope === 'admin' && !isAdminPath) {
+      theme = activeSettings.siteTheme || 'dark';
+    } else if (activeSettings.applyThemeScope === 'storefront' && isAdminPath) {
+      theme = activeSettings.adminTheme || 'dark'; // Assuming they fallback to separate admin if scope is storefront
+    } else if (activeSettings.applyThemeScope === 'storefront' && !isAdminPath) {
+      theme = activeSettings.siteTheme || 'dark';
+    } else {
+      // 'global' or default
+      theme = activeSettings.siteTheme || 'dark';
+    }
+    
     document.documentElement.setAttribute('data-theme', theme);
-  }, [settings.siteTheme]);
+  }, [activeSettings.siteTheme, activeSettings.adminTheme, activeSettings.applyThemeScope, window.location.pathname]);
 
   const [language, setLanguage] = useState<Language>('vi');
   const [user, setUser] = useState<any>(null);
