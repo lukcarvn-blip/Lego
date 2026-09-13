@@ -284,7 +284,22 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     const unsubProducts = onSnapshot(
       collection(db, 'products'),
       (snapshot) => {
-        const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as Product[];
+        let data = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as Product[];
+      
+      // MOCK FIX: assign dummy createdAt to mock products if missing, based on their ID (e.g. p-01, p-02)
+      data = data.map(p => {
+        if (!p.createdAt) {
+          if (p.id.startsWith('p-')) {
+            const num = parseInt(p.id.replace('p-', ''), 10);
+            return { ...p, createdAt: 1700000000000 - num * 1000 };
+          }
+          return { ...p, createdAt: 0 };
+        }
+        return p;
+      });
+
+      // Sort newest first (descending by createdAt)
+      data.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
         if (data.length === 0) {
           mockProducts.forEach(async (p) => { await setDoc(doc(db, 'products', p.id), p); });
         } else {
@@ -298,7 +313,8 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     const unsubBlogs = onSnapshot(
       collection(db, 'blogs'),
       (snapshot) => {
-        const data = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as BlogPost[];
+        let data = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as BlogPost[];
+      data.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
         if (data.length === 0) {
           mockBlogPosts.forEach(async (p) => { await setDoc(doc(db, 'blogs', p.id), p); });
         } else { setBlogPosts(data); }
@@ -310,7 +326,9 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     const unsubOrders = onSnapshot(
       collection(db, 'orders'),
       (snapshot) => {
-        setOrders(snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as Order[]);
+        let ords = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as Order[];
+      ords.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      setOrders(ords);
         markLoaded();
       },
       (err) => { console.error('orders:', err); markLoaded(); }
@@ -469,7 +487,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   const addProduct = async (product: Omit<Product, 'id'>) => {
     try {
-      await addDoc(collection(db, 'products'), product);
+      await addDoc(collection(db, 'products'), { ...product, createdAt: Date.now() });
     } catch (e) { console.error(e); }
   };
 

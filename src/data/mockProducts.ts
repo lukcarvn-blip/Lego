@@ -6,6 +6,7 @@ export interface LocalizedString {
 }
 
 export interface Product {
+  createdAt?: number;
   id: string;
   sku?: string;
   name: LocalizedString;
