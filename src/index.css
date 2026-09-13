@@ -1444,12 +1444,12 @@ input:focus, select:focus, textarea:focus {
   }
 
   /* Reduce all text sizes */
-  h1 { font-size: 1.2rem !important; }
-  h2 { font-size: 1.1rem !important; }
-  h3 { font-size: 1rem !important; }
-  p, span, div, input, textarea, button, select {
-    font-size: 0.85rem;
-  }
+  .admin-layout h1 { font-size: 1.2rem !important; }
+  .admin-layout h2 { font-size: 1.1rem !important; }
+  .admin-layout h3 { font-size: 1rem !important; }
+  .admin-layout p, .admin-layout span, .admin-layout div, .admin-layout input, .admin-layout textarea, .admin-layout button, .admin-layout select {
+  font-size: 0.85rem;
+}
   
   /* Compact Inputs */
   input, textarea, select {
