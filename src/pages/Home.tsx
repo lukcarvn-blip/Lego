@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, Clock, ChevronRight, ChevronLeft, ShieldCheck, Zap, Diamond, Sparkles, ShoppingCart, Loader2, LayoutGrid, LayoutList, ArrowRight, Shield, Moon, Star, Wand2, Swords, PawPrint, Rocket, Castle, Building2, Settings } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Grid, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -357,20 +358,9 @@ export const Home = () => {
               </span>
             </motion.h2>
             <div className="collections-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: '0.5rem' }}>
-              {[
-                { name: 'Marvel', icon: <Shield size={24} />, color: '#e23636', bg: 'rgba(226,54,54,0.1)', border: 'rgba(226,54,54,0.3)', path: '/category/superheroes?q=marvel' },
-                { name: 'DC Comics', icon: <Moon size={24} />, color: '#0074e4', bg: 'rgba(0,116,228,0.1)', border: 'rgba(0,116,228,0.3)', path: '/category/superheroes?q=dc' },
-                { name: 'Star Wars', icon: <Star size={24} />, color: '#ffe81f', bg: 'rgba(255,232,31,0.1)', border: 'rgba(255,232,31,0.3)', path: '/category/sci-fi?q=starwars' },
-                { name: 'Harry Potter', icon: <Wand2 size={24} />, color: '#9c59b6', bg: 'rgba(156,89,182,0.1)', border: 'rgba(156,89,182,0.3)', path: '/category/fantasy?q=harrypotter' },
-                { name: 'Avengers', icon: <Zap size={24} />, color: '#c0392b', bg: 'rgba(192,57,43,0.1)', border: 'rgba(192,57,43,0.3)', path: '/category/superheroes?q=avengers' },
-                { name: 'Anime', icon: <Swords size={24} />, color: '#e91e8c', bg: 'rgba(233,30,140,0.1)', border: 'rgba(233,30,140,0.3)', path: '/category/anime' },
-                { name: 'Jurassic', icon: <PawPrint size={24} />, color: '#2ecc71', bg: 'rgba(46,204,113,0.1)', border: 'rgba(46,204,113,0.3)', path: '/category/sci-fi?q=jurassic' },
-                { name: 'Ninjago', icon: <Swords size={24} />, color: '#e67e22', bg: 'rgba(230,126,34,0.1)', border: 'rgba(230,126,34,0.3)', path: '/category/classic?q=ninjago' },
-                { name: 'Space', icon: <Rocket size={24} />, color: '#3498db', bg: 'rgba(52,152,219,0.1)', border: 'rgba(52,152,219,0.3)', path: '/category/sci-fi?q=space' },
-                { name: 'Castle', icon: <Castle size={24} />, color: '#f39c12', bg: 'rgba(243,156,18,0.1)', border: 'rgba(243,156,18,0.3)', path: '/category/fantasy?q=castle' },
-                { name: 'City', icon: <Building2 size={24} />, color: '#1abc9c', bg: 'rgba(26,188,156,0.1)', border: 'rgba(26,188,156,0.3)', path: '/category/classic?q=city' },
-                { name: 'Technic', icon: <Settings size={24} />, color: '#95a5a6', bg: 'rgba(149,165,166,0.1)', border: 'rgba(149,165,166,0.3)', path: '/category/classic?q=technic' },
-              ].map((col, i) => (
+              {((settings.collections && settings.collections.length > 0) ? settings.collections : []).map((col, i) => {
+                const IconComponent = (Icons as any)[col.iconName] || Icons.HelpCircle;
+                return (
                 <Link to={col.path} key={i} style={{ textDecoration: 'none' }}>
                   <motion.div
                     className="col-card"
@@ -394,7 +384,7 @@ export const Home = () => {
                       transition: 'all 0.2s',
                     }}
                   >
-                    <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>{col.icon}</span>
+                    {col.image ? <img src={col.image} alt={col.name} style={{ width: '32px', height: '32px', objectFit: 'contain' }} /> : <span style={{ fontSize: '1.6rem', lineHeight: 1, display: 'flex', justifyContent: 'center' }}><IconComponent size={24} /></span>}
                     <span style={{
                       fontSize: '0.65rem',
                       fontWeight: 700,
@@ -408,9 +398,10 @@ export const Home = () => {
                       textOverflow: 'ellipsis',
                       width: '100%',
                     }}>{col.name}</span>
-                  </motion.div>
-                </Link>
-              ))}
+                </motion.div>
+              </Link>
+            );
+          })}
             </div>
           </div>
 

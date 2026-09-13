@@ -69,6 +69,17 @@ export interface AppUser {
   joinDate: string;
 }
 
+
+export interface CollectionItem {
+  name: string;
+  iconName: string;
+  color: string;
+  bg: string;
+  border: string;
+  path: string;
+  image?: string;
+}
+
 export interface StoreSettings {
   logoText: string;
   logoImage?: string; // Optional image URL
@@ -90,6 +101,7 @@ export interface StoreSettings {
   bankAccount?: string;
   bankOwner?: string;
   siteTheme?: string;
+  collections?: CollectionItem[];
 }
 
 export interface ToastMessage {
@@ -154,7 +166,21 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     seoDescription: 'Cửa hàng đồ chơi thông minh và mô hình xếp khối sáng tạo hàng đầu.',
     bankName: 'vietcombank',
     bankAccount: '9931028868',
-    bankOwner: 'LE NHAT HOANG'
+    bankOwner: 'LE NHAT HOANG',
+    collections: [
+    { name: 'Marvel', iconName: 'Shield', color: '#e23636', bg: 'rgba(226,54,54,0.1)', border: 'rgba(226,54,54,0.3)', path: '/category/superheroes?q=marvel' },
+    { name: 'DC Comics', iconName: 'Moon', color: '#0074e4', bg: 'rgba(0,116,228,0.1)', border: 'rgba(0,116,228,0.3)', path: '/category/superheroes?q=dc' },
+    { name: 'Star Wars', iconName: 'Star', color: '#ffe81f', bg: 'rgba(255,232,31,0.1)', border: 'rgba(255,232,31,0.3)', path: '/category/sci-fi?q=starwars' },
+    { name: 'Harry Potter', iconName: 'Wand2', color: '#9c59b6', bg: 'rgba(156,89,182,0.1)', border: 'rgba(156,89,182,0.3)', path: '/category/fantasy?q=harrypotter' },
+    { name: 'Avengers', iconName: 'Zap', color: '#c0392b', bg: 'rgba(192,57,43,0.1)', border: 'rgba(192,57,43,0.3)', path: '/category/superheroes?q=avengers' },
+    { name: 'Anime', iconName: 'Swords', color: '#e91e8c', bg: 'rgba(233,30,140,0.1)', border: 'rgba(233,30,140,0.3)', path: '/category/anime' },
+    { name: 'Jurassic', iconName: 'PawPrint', color: '#2ecc71', bg: 'rgba(46,204,113,0.1)', border: 'rgba(46,204,113,0.3)', path: '/category/sci-fi?q=jurassic' },
+    { name: 'Ninjago', iconName: 'Swords', color: '#e67e22', bg: 'rgba(230,126,34,0.1)', border: 'rgba(230,126,34,0.3)', path: '/category/classic?q=ninjago' },
+    { name: 'Space', iconName: 'Rocket', color: '#3498db', bg: 'rgba(52,152,219,0.1)', border: 'rgba(52,152,219,0.3)', path: '/category/sci-fi?q=space' },
+    { name: 'Castle', iconName: 'Castle', color: '#f39c12', bg: 'rgba(243,156,18,0.1)', border: 'rgba(243,156,18,0.3)', path: '/category/fantasy?q=castle' },
+    { name: 'City', iconName: 'Building2', color: '#1abc9c', bg: 'rgba(26,188,156,0.1)', border: 'rgba(26,188,156,0.3)', path: '/category/classic?q=city' },
+    { name: 'Technic', iconName: 'Settings', color: '#95a5a6', bg: 'rgba(149,165,166,0.1)', border: 'rgba(149,165,166,0.3)', path: '/category/classic?q=technic' },
+  ]
   });
   // Apply theme CSS class to document
   useEffect(() => {
