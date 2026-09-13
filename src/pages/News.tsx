@@ -107,7 +107,7 @@ export const News = () => {
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--color-accent)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-4px)'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'var(--glass-border)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
                 >
-                  <div style={{ overflow: 'hidden', height: '200px' }}>
+                  <div style={{ overflow: 'hidden', height: 'clamp(120px, 30vw, 200px)' }}>
                     <img
                       src={post.image}
                       alt={post.title}
@@ -116,7 +116,7 @@ export const News = () => {
                       onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
                     />
                   </div>
-                  <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <div style={{ padding: 'clamp(0.75rem, 3vw, 1.5rem)', display: 'flex', flexDirection: 'column', flex: 1 }}>
                     <p style={{ color: 'var(--color-accent)', fontSize: '0.8rem', fontWeight: 600, marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
                       <Calendar size={12} /> {post.date}
                     </p>
@@ -148,8 +148,8 @@ export const News = () => {
         }
         .news-articles-grid {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 2rem;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 1.5rem;
         }
         @media (max-width: 1023px) {
           .news-featured-grid {
@@ -159,12 +159,14 @@ export const News = () => {
             min-height: 260px !important;
           }
           .news-articles-grid {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1.25rem;
           }
         }
         @media (max-width: 639px) {
           .news-articles-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 1rem;
           }
         }
       `}</style>
