@@ -219,6 +219,7 @@ export const Admin = () => {
   const [isEditingProduct, setIsEditingProduct] = useSessionState('admin_isEditingProduct', false);
   const [editingProduct, setEditingProduct] = useSessionState<Partial<Product>>('admin_editingProduct', {});
   const [productSearch, setProductSearch] = useSessionState('admin_productSearch', '');
+  const [productSubTab, setProductSubTab] = useSessionState<'list' | 'collections'>('admin_productSubTab', 'list');
   const [newTitle, setNewTitle] = useSessionState('admin_newTitle', '');
   const [newContent, setNewContent] = useSessionState('admin_newContent', '');
   
@@ -897,6 +898,120 @@ export const Admin = () => {
         {/* ── PRODUCTS & PRINTERS TAB ──────────────────────────────────────────── */}
         {(activeTab === 'products' || activeTab === 'printers') && !isEditingProduct && (
           <div>
+      {activeTab === 'products' && (
+        <div style={{ display: 'flex', gap: '1rem', borderBottom: '1px solid var(--glass-border)', marginBottom: '1.5rem', overflowX: 'auto', paddingBottom: '0.5rem' }}>
+          <button 
+            onClick={() => setProductSubTab('list')} 
+            style={{ 
+              background: 'transparent', 
+              border: 'none', 
+              borderBottom: productSubTab === 'list' ? '2px solid var(--color-accent)' : '2px solid transparent', 
+              color: productSubTab === 'list' ? 'var(--color-accent)' : 'var(--color-text-muted)', 
+              fontWeight: 600, 
+              padding: '0.5rem 1rem', 
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.2s'
+            }}
+          >
+            <Store size={16} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'text-bottom' }} />
+            Danh sách Sản phẩm
+          </button>
+          <button 
+            onClick={() => setProductSubTab('collections')} 
+            style={{ 
+              background: 'transparent', 
+              border: 'none', 
+              borderBottom: productSubTab === 'collections' ? '2px solid var(--color-accent)' : '2px solid transparent', 
+              color: productSubTab === 'collections' ? 'var(--color-accent)' : 'var(--color-text-muted)', 
+              fontWeight: 600, 
+              padding: '0.5rem 1rem', 
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              transition: 'all 0.2s'
+            }}
+          >
+            <LayoutGrid size={16} style={{ display: 'inline', marginRight: '6px', verticalAlign: 'text-bottom' }} />
+            Quản lý Bộ sưu tập
+          </button>
+        </div>
+      )}
+      
+      {activeTab === 'products' && productSubTab === 'collections' ? (
+        <div className="fade-in">
+          {/* Collections Management */}
+          <div style={{ ...panelStyle, gridColumn: '1 / -1' }}>
+            <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Quản lý Bộ sưu tập (Trang chủ)</h3>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', marginBottom: '1rem' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'var(--color-text-muted)' }}>
+                    <th style={{ padding: '0.5rem' }}>Tên</th>
+                    <th style={{ padding: '0.5rem' }}>Đường dẫn</th>
+                    <th style={{ padding: '0.5rem' }}>Icon (Lucide)</th>
+                    <th style={{ padding: '0.5rem' }}>Màu viền/Icon</th>
+                    <th style={{ padding: '0.5rem' }}>Màu nền</th>
+                    <th style={{ padding: '0.5rem' }}>URL Ảnh (Tùy chọn)</th>
+                    <th style={{ padding: '0.5rem', width: '50px' }}></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(tempSettings.collections || []).map((col: any, idx: number) => (
+                    <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.name} onChange={e => {
+                        const newCols = [...(tempSettings.collections || [])];
+                        newCols[idx].name = e.target.value;
+                        setTempSettings({...tempSettings, collections: newCols});
+                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
+                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.path} onChange={e => {
+                        const newCols = [...(tempSettings.collections || [])];
+                        newCols[idx].path = e.target.value;
+                        setTempSettings({...tempSettings, collections: newCols});
+                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
+                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.iconName} placeholder="e.g. Shield" onChange={e => {
+                        const newCols = [...(tempSettings.collections || [])];
+                        newCols[idx].iconName = e.target.value;
+                        setTempSettings({...tempSettings, collections: newCols});
+                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
+                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.color} onChange={e => {
+                        const newCols = [...(tempSettings.collections || [])];
+                        newCols[idx].color = e.target.value;
+                        setTempSettings({...tempSettings, collections: newCols});
+                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
+                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.bg} onChange={e => {
+                        const newCols = [...(tempSettings.collections || [])];
+                        newCols[idx].bg = e.target.value;
+                        setTempSettings({...tempSettings, collections: newCols});
+                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
+                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.image || ''} placeholder="https://..." onChange={e => {
+                        const newCols = [...(tempSettings.collections || [])];
+                        newCols[idx].image = e.target.value;
+                        setTempSettings({...tempSettings, collections: newCols});
+                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
+                      <td style={{ padding: '0.5rem' }}>
+                        <button type="button" onClick={() => {
+                          const newCols = [...(tempSettings.collections || [])];
+                          newCols.splice(idx, 1);
+                          setTempSettings({...tempSettings, collections: newCols});
+                        }} style={{ color: '#ef4444', background: 'transparent', border: 'none', cursor: 'pointer' }}><Trash2 size={16} /></button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <button type="button" onClick={() => {
+                const newCols = [...(tempSettings.collections || [])];
+                newCols.push({ name: 'New Collection', path: '/category/new', iconName: 'Star', color: '#ffffff', bg: 'rgba(255,255,255,0.1)', border: 'rgba(255,255,255,0.3)' });
+                setTempSettings({...tempSettings, collections: newCols});
+              }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', background: 'rgba(255,255,255,0.1)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', color: '#fff', cursor: 'pointer', fontSize: '0.85rem' }}>
+                <Plus size={16} /> Thêm Bộ sưu tập
+              </button>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="fade-in">
+  
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '3.5rem', height: '3.5rem', background: 'rgba(74,222,128,0.1)', borderRadius: '12px', border: '1px solid rgba(74,222,128,0.2)', color: 'var(--color-accent)' }}>
@@ -1033,7 +1148,9 @@ export const Admin = () => {
           </div>
         )}
 
-        {/* ── PRODUCT FORM ──────────────────────────────────────────── */}
+                </div>
+      )}
+      {/* ── PRODUCT FORM ──────────────────────────────────────────── */}
         {(activeTab === 'products' || activeTab === 'printers') && isEditingProduct && (
           <form onSubmit={handleSaveProduct} className="admin-product-form-wrap">
             {/* Header */}
@@ -1964,75 +2081,7 @@ export const Admin = () => {
                 </div>
               </div>
 
-          {/* Collections Management */}
-          <div style={{ ...panelStyle, gridColumn: '1 / -1' }}>
-            <h3 style={{ marginBottom: '1rem', color: 'var(--color-accent)' }}>Quản lý Bộ sưu tập (Trang chủ)</h3>
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', marginBottom: '1rem' }}>
-                <thead>
-                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', color: 'var(--color-text-muted)' }}>
-                    <th style={{ padding: '0.5rem' }}>Tên</th>
-                    <th style={{ padding: '0.5rem' }}>Đường dẫn</th>
-                    <th style={{ padding: '0.5rem' }}>Icon (Lucide)</th>
-                    <th style={{ padding: '0.5rem' }}>Màu viền/Icon</th>
-                    <th style={{ padding: '0.5rem' }}>Màu nền</th>
-                    <th style={{ padding: '0.5rem' }}>URL Ảnh (Tùy chọn)</th>
-                    <th style={{ padding: '0.5rem', width: '50px' }}></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(tempSettings.collections || []).map((col: any, idx: number) => (
-                    <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.name} onChange={e => {
-                        const newCols = [...(tempSettings.collections || [])];
-                        newCols[idx].name = e.target.value;
-                        setTempSettings({...tempSettings, collections: newCols});
-                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
-                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.path} onChange={e => {
-                        const newCols = [...(tempSettings.collections || [])];
-                        newCols[idx].path = e.target.value;
-                        setTempSettings({...tempSettings, collections: newCols});
-                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
-                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.iconName} placeholder="e.g. Shield" onChange={e => {
-                        const newCols = [...(tempSettings.collections || [])];
-                        newCols[idx].iconName = e.target.value;
-                        setTempSettings({...tempSettings, collections: newCols});
-                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
-                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.color} onChange={e => {
-                        const newCols = [...(tempSettings.collections || [])];
-                        newCols[idx].color = e.target.value;
-                        setTempSettings({...tempSettings, collections: newCols});
-                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
-                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.bg} onChange={e => {
-                        const newCols = [...(tempSettings.collections || [])];
-                        newCols[idx].bg = e.target.value;
-                        setTempSettings({...tempSettings, collections: newCols});
-                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
-                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.image || ''} placeholder="https://..." onChange={e => {
-                        const newCols = [...(tempSettings.collections || [])];
-                        newCols[idx].image = e.target.value;
-                        setTempSettings({...tempSettings, collections: newCols});
-                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
-                      <td style={{ padding: '0.5rem' }}>
-                        <button type="button" onClick={() => {
-                          const newCols = [...(tempSettings.collections || [])];
-                          newCols.splice(idx, 1);
-                          setTempSettings({...tempSettings, collections: newCols});
-                        }} style={{ color: '#ef4444', background: 'transparent', border: 'none', cursor: 'pointer' }}><Trash2 size={16} /></button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <button type="button" onClick={() => {
-                const newCols = [...(tempSettings.collections || [])];
-                newCols.push({ name: 'New Collection', path: '/category/new', iconName: 'Star', color: '#ffffff', bg: 'rgba(255,255,255,0.1)', border: 'rgba(255,255,255,0.3)' });
-                setTempSettings({...tempSettings, collections: newCols});
-              }} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', background: 'rgba(255,255,255,0.1)', border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)', color: '#fff', cursor: 'pointer', fontSize: '0.85rem' }}>
-                <Plus size={16} /> Thêm Bộ sưu tập
-              </button>
-            </div>
-          </div>
+          
 
 
               <div style={panelStyle}>
