@@ -223,18 +223,7 @@ export const ProductDetails = () => {
   return (
     <div className="container" style={{ paddingTop: '120px' }}>
       {product.bannerImage ? (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{ 
-            marginBottom: '2rem', 
-            borderRadius: 'var(--radius-md)', 
-            overflow: 'hidden', 
-            border: '1px solid var(--glass-border)', 
-            aspectRatio: '16/7',
-            position: 'relative'
-          }}
-        >
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="product-detail-banner">
           {/* Inner dark vignette for breadcrumb visibility */}
           <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
@@ -245,29 +234,29 @@ export const ProductDetails = () => {
           
           <img src={product.bannerImage} alt="Banner" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', position: 'absolute', top: 0, left: 0, zIndex: 0 }} />
           
-          <div style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', zIndex: 10, display: 'flex', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', background: 'rgba(0,0,0,0.5)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', whiteSpace: 'nowrap', overflowX: 'auto' }}>
-              <span className="hover-text-primary" style={{ cursor: 'pointer', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '0.35rem' }} onClick={() => navigate('/')}>
+          <div style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', right: '1.5rem', zIndex: 10, display: 'flex', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
+<div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', background: 'rgba(0,0,0,0.5)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', whiteSpace: 'nowrap', maxWidth: '100%', overflow: 'hidden' }}>
+              <span className="hover-text-primary" style={{ cursor: 'pointer', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0 }} onClick={() => navigate('/')}>
                 <Home size={14} />
                 {language === 'vi' ? 'Trang chủ' : 'Home'}
               </span>
-              <ChevronRight size={14} style={{ opacity: 0.5 }} />
-              <span className="hover-text-primary" style={{ cursor: 'pointer', transition: 'color 0.2s' }} onClick={() => navigate(`/products/${product.category}`)}>{product.category}</span>
-              <ChevronRight size={14} style={{ opacity: 0.5 }} />
-              <span style={{ color: 'var(--color-accent)', fontWeight: 600 }}>{product.name[language as keyof typeof product.name]}</span>
+              <ChevronRight size={14} style={{ opacity: 0.5, flexShrink: 0 }} />
+              <span className="hover-text-primary" style={{ cursor: 'pointer', transition: 'color 0.2s', flexShrink: 0 }} onClick={() => navigate(`/products/${product.category}`)}>{product.category}</span>
+              <ChevronRight size={14} style={{ opacity: 0.5, flexShrink: 0 }} />
+              <span style={{ color: 'var(--color-accent)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.name[language as keyof typeof product.name]}</span>
             </div>
           </div>
         </motion.div>
       ) : (
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text-muted)', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--glass-border)', backdropFilter: 'blur(10px)', whiteSpace: 'nowrap', overflowX: 'auto' }}>
-            <span className="hover-text-primary" style={{ cursor: 'pointer', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '0.35rem' }} onClick={() => navigate('/')}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem', flexWrap: 'wrap', width: '100%' }}>
+<div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-text-muted)', background: 'rgba(255,255,255,0.03)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', border: '1px solid var(--glass-border)', backdropFilter: 'blur(10px)', whiteSpace: 'nowrap', maxWidth: '100%', overflow: 'hidden' }}>
+            <span className="hover-text-primary" style={{ cursor: 'pointer', transition: 'color 0.2s', display: 'flex', alignItems: 'center', gap: '0.35rem', flexShrink: 0 }} onClick={() => navigate('/')}>
               <Home size={14} />
               {language === 'vi' ? 'Trang chủ' : 'Home'}
             </span>
-            <ChevronRight size={14} style={{ opacity: 0.5 }} />
-            <span className="hover-text-primary" style={{ cursor: 'pointer', transition: 'color 0.2s' }} onClick={() => navigate(`/products/${product.category}`)}>{product.category}</span>
-            <ChevronRight size={14} style={{ opacity: 0.5 }} />
+            <ChevronRight size={14} style={{ opacity: 0.5, flexShrink: 0 }} />
+            <span className="hover-text-primary" style={{ cursor: 'pointer', transition: 'color 0.2s', flexShrink: 0 }} onClick={() => navigate(`/products/${product.category}`)}>{product.category}</span>
+            <ChevronRight size={14} style={{ opacity: 0.5, flexShrink: 0 }} />
             <span style={{ color: 'var(--color-text)', fontWeight: 500 }}>{product.name[language as keyof typeof product.name]}</span>
           </div>
         </div>
