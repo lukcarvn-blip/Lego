@@ -327,7 +327,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       collection(db, 'orders'),
       (snapshot) => {
         let ords = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as Order[];
-      ords.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      ords.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
       setOrders(ords);
         markLoaded();
       },
