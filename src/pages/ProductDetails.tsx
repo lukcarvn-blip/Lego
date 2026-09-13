@@ -669,7 +669,7 @@ export const ProductDetails = () => {
               )}
               {product.dimensions && (
                 <span style={{ 
-                  color: 'var(--color-text)', fontSize: '0.85rem', fontWeight: 600,
+                  display: 'inline-flex', alignItems: 'center', color: 'var(--color-text)', fontSize: '0.85rem', fontWeight: 600,
                   background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px',
                   border: '1px solid rgba(255,255,255,0.1)'
                 }}>
@@ -678,7 +678,7 @@ export const ProductDetails = () => {
               )}
               {product.weight && (
                 <span style={{ 
-                  color: 'var(--color-text)', fontSize: '0.85rem', fontWeight: 600,
+                  display: 'inline-flex', alignItems: 'center', color: 'var(--color-text)', fontSize: '0.85rem', fontWeight: 600,
                   background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px',
                   border: '1px solid rgba(255,255,255,0.1)'
                 }}>
@@ -687,7 +687,7 @@ export const ProductDetails = () => {
               )}
               {product.sku && (
                 <span style={{ 
-                  color: 'var(--color-text)', fontSize: '0.85rem', fontWeight: 600,
+                  display: 'inline-flex', alignItems: 'center', color: 'var(--color-text)', fontSize: '0.85rem', fontWeight: 600,
                   background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px',
                   border: '1px solid rgba(255,255,255,0.1)'
                 }}>
