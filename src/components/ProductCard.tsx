@@ -185,7 +185,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                     {product.name[language as keyof typeof product.name]}
                   </h3>
                 </Link>
-                <div className="mobile-only" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.1rem', marginBottom: '0.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
                   <span style={{ fontWeight: 700, fontSize: 'clamp(0.75rem, 2.5vw, 0.9rem)', color: formatPrice(product.price, product.discountPercentage).isOnSale ? '#ef4444' : 'var(--color-accent)' }}>
                     {formatPrice(product.price, product.discountPercentage).current}
                   </span>
