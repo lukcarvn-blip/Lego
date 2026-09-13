@@ -1550,3 +1550,16 @@ input:focus, select:focus, textarea:focus {
   visibility: visible;
   transform: translateY(-50%) translateX(20px) scale(1);
 }
+
+/* Animated dark gradient for sticky cart box */
+@keyframes slowGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animated-cart-box {
+  background: linear-gradient(270deg, #10b981, #047857, #065f46);
+  background-size: 200% 200%;
+  animation: slowGradient 6s ease infinite;
+  color: #ffffff !important;
+}

@@ -471,21 +471,21 @@ export const ProductDetails = () => {
                   exit={{ y: 150, opacity: 0 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 15, delay: 0.2 }}
                 >
-                  <div 
+                  <div className="animated-cart-box" 
                     style={{ 
                       padding: '0.75rem 1rem', width: '100%', 
                       display: 'flex', flexDirection: 'column', gap: '0.75rem',
                       boxShadow: '0 10px 30px rgba(74, 222, 128, 0.3)',
                       borderRadius: 'var(--radius-lg)',
-                      background: 'var(--color-accent)'
+                      
                     }}
                   >
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', width: '100%' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         {/* Quantity */}
-                        <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(0,0,0,0.15)', borderRadius: 'var(--radius-sm)' }}>
-                          <button onClick={(e) => { e.stopPropagation(); setQuantity(q => Math.max(1, q - 1)); }} style={{ background: 'transparent', border: 'none', color: '#000', cursor: 'pointer', padding: '0.25rem 0.75rem', fontWeight: 'bold', fontSize: '1.2rem' }}>-</button>
-                          <span style={{ color: '#000', fontWeight: 'bold', width: '30px', textAlign: 'center' }}>{quantity}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', background: 'rgba(0,0,0,0.3)', borderRadius: 'var(--radius-sm)' }}>
+                          <button onClick={(e) => { e.stopPropagation(); setQuantity(q => Math.max(1, q - 1)); }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '0.25rem 0.75rem', fontWeight: 'bold', fontSize: '1.2rem' }}>-</button>
+                          <span style={{ color: '#fff', fontWeight: 'bold', width: '30px', textAlign: 'center' }}>{quantity}</span>
                           <button onClick={(e) => { 
                             e.stopPropagation(); 
                             if (!isEffectivelyCrafting && product.stock && quantity >= product.stock) {
@@ -493,17 +493,17 @@ export const ProductDetails = () => {
                               return;
                             }
                             setQuantity(q => q + 1); 
-                          }} style={{ background: 'transparent', border: 'none', color: '#000', cursor: 'pointer', padding: '0.25rem 0.75rem', fontWeight: 'bold', fontSize: '1.2rem' }}>+</button>
+                          }} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer', padding: '0.25rem 0.75rem', fontWeight: 'bold', fontSize: '1.2rem' }}>+</button>
                         </div>
                         
                         {/* Price */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                           {qtyDiscount > 0 && (
-                            <span style={{ color: '#ef4444', fontWeight: 'bold', fontSize: '0.9rem', background: '#fff', padding: '0.2rem 0.5rem', borderRadius: '12px' }}>
+                            <span style={{ color: '#fff', fontWeight: 'bold', fontSize: '0.9rem', background: 'rgba(255,255,255,0.2)', padding: '0.2rem 0.5rem', borderRadius: '12px' }}>
                               -{qtyDiscount * 100}%
                             </span>
                           )}
-                          <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#ef4444' }}>
+                          <div style={{ fontWeight: 'bold', fontSize: '1.2rem', color: '#fff' }}>
                             <AnimatedPrice priceString={currentPriceString} />
                           </div>
                         </div>
@@ -516,7 +516,7 @@ export const ProductDetails = () => {
                           style={{ 
                             flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
                             fontSize: '1rem', fontWeight: 800,
-                            background: 'rgba(0,0,0,0.2)', border: 'none', color: '#000', cursor: 'pointer',
+                            background: '#ef4444', border: 'none', color: '#fff', cursor: 'pointer',
                             padding: '0.75rem 0.5rem', borderRadius: 'var(--radius-sm)',
                           }}
                         >
@@ -559,10 +559,10 @@ export const ProductDetails = () => {
                         )}
                         <button
                           className="hide-on-desktop"
-                          onClick={() => setIsCartExpanded(false)}
-                          style={{
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            background: 'rgba(0,0,0,0.1)', color: '#000', border: 'none',
+                        onClick={() => setIsCartExpanded(false)}
+                        style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          background: 'rgba(255,255,255,0.2)', color: '#fff', border: 'none',
                             padding: '0 0.5rem', borderRadius: 'var(--radius-sm)',
                             cursor: 'pointer', transition: 'all 0.2s',
                           }}
