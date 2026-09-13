@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore, type OrderStatus } from '../context/StoreContext';
-import { Sun, Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText, Sparkles, Store } from 'lucide-react';
+import { Sun, Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText, Sparkles, Store , Palette, Moon, Sun } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
@@ -200,7 +200,7 @@ export const Admin = () => {
     orders, updateOrderStatus, 
     products, updateProduct, addProduct, deleteProduct,
     blogPosts, addBlogPost, updateBlogPost, deleteBlogPost,
-    settings, updateSettings,
+    settings, updateSettings, previewSettings, setPreviewSettings,
     t, language, showToast, formatPrice,
     appUsers, currentUserRole, updateUserRole, deleteUser, user, logout, loginWithGoogle
   } = useStore();
