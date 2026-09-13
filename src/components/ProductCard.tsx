@@ -201,7 +201,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 <div className="card-stats-grid">
                   <div className="stat-item" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
                     {isMobile ? <Ruler size={12} style={{ color: 'var(--color-text-muted)', marginRight: 4 }} /> : <span className="stat-label">{language === 'vi' ? 'Size:' : 'Size:'}</span>}
-                    <span className="stat-value">{product.dimensions?.split(' ')[0] || '300%'}</span>
+                    <span className="stat-value">{product.availableSizes?.[0] ? product.availableSizes[0].replace('Size ', '') + '%' : (product.dimensions?.split(' ')[0] || '300%')}</span>
                   </div>
                   <div className="stat-item" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
                     {isMobile ? <Palette size={12} style={{ color: 'var(--color-text-muted)', marginRight: 4 }} /> : <span className="stat-label">{language === 'vi' ? 'Nhựa:' : 'Mat:'}</span>}
@@ -470,7 +470,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               <div className="card-stats-grid" style={{ marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
                 <div className="stat-item" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
                   {isMobile ? <Ruler size={12} style={{ color: 'var(--color-text-muted)', marginRight: 4 }} /> : <span className="stat-label">{language === 'vi' ? 'Size:' : 'Size:'}</span>}
-                  <span className="stat-value">{product.dimensions?.split(' ')[0] || '300%'}</span>
+                  <span className="stat-value">{product.availableSizes?.[0] ? product.availableSizes[0].replace('Size ', '') + '%' : (product.dimensions?.split(' ')[0] || '300%')}</span>
                 </div>
                 <div className="stat-item" style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.05)' }}>
                   {isMobile ? <Palette size={12} style={{ color: 'var(--color-text-muted)', marginRight: 4 }} /> : <span className="stat-label">{language === 'vi' ? 'Nhựa:' : 'Mat:'}</span>}
