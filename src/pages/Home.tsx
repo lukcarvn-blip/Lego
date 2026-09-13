@@ -121,7 +121,7 @@ export const Home = () => {
             display: flex;
             align-items: flex-end;
             padding-bottom: 40px;
-            aspect-ratio: 3/4;
+            aspect-ratio: 3/5;
             height: auto;
           }
           .hero-content {
@@ -135,6 +135,10 @@ export const Home = () => {
             font-size: clamp(0.85rem, 4vw, 1.1rem) !important;
             margin: 0 auto 1.5rem auto !important;
           }
+          .hero-btn {
+            padding: 0.5rem 1.25rem !important;
+            font-size: 0.85rem !important;
+          }
           @media (min-width: 768px) {
             .hero-section {
               aspect-ratio: 4/3;
@@ -146,6 +150,10 @@ export const Home = () => {
             }
             .hero-subtitle {
               margin: 0 auto 2.5rem auto !important;
+            }
+            .hero-btn {
+              padding: 1rem 2.5rem !important;
+              font-size: 1.125rem !important;
             }
           }
           @media (min-width: 1024px) {
@@ -189,7 +197,7 @@ export const Home = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
           >
             <Link to="/technology">
-              <button className="btn-primary" style={{ padding: '1rem 2.5rem', fontSize: '1.125rem' }}>
+              <button className="btn-primary hero-btn">
                 {t('shop_now')}
               </button>
             </Link>
