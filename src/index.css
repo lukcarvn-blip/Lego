@@ -324,14 +324,14 @@ button {
 @media (min-width: 1024px) {
   .pd-main-grid {
     grid-template-columns: 420px 1fr;
-    align-items: start;
-    gap: 2.5rem;
+    align-items: stretch; /* was start */
+  gap: 2.5rem;
   }
 }
 @media (min-width: 1280px) {
   .pd-main-grid {
     grid-template-columns: 500px 1fr;
-    align-items: start;
+    align-items: stretch; /* was start */
   }
 }
 
