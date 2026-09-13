@@ -878,12 +878,12 @@ table {
 /* Image grid: 5-col on desktop, 3-col on mobile */
 .admin-image-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 0.5rem;
 }
 @media (max-width: 600px) {
   .admin-image-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
