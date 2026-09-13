@@ -558,13 +558,13 @@ export const Admin = () => {
   };
 
   return (
-    <div style={{ paddingTop: 0, minHeight: '100vh', display: 'flex', background: 'var(--bg-dark, #050f05)', color: 'var(--color-text)', position: 'relative' }}>
+    <div style={{ paddingTop: 0, height: '100vh', display: 'flex', background: 'var(--bg-dark, #050f05)', color: 'var(--color-text)', position: 'relative', overflow: 'hidden' }}>
       {/* Sidebar */}
       {sidebarOpen && <div className="admin-sidebar-backdrop" onClick={() => setSidebarOpen(false)} />}
       <aside className={`admin-sidebar ${sidebarOpen ? 'open' : ''}`} style={{
         width: sidebarOpen ? '220px' : '60px', flexShrink: 0,
         background: 'rgba(10,28,10,0.95)', borderRight: '1px solid var(--glass-border)',
-        height: '100vh', position: 'sticky', top: 0,
+        height: '100%', position: 'relative',
         display: 'flex', flexDirection: 'column', transition: 'width 0.3s ease, transform 0.3s ease',
         overflow: 'hidden', zIndex: 50
       }}>
@@ -617,7 +617,7 @@ export const Admin = () => {
       </aside>
 
       {/* Main content */}
-      <main style={{ flex: 1, overflowX: 'auto', minWidth: 0 }}>
+      <main style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden', minWidth: 0, height: '100%', WebkitOverflowScrolling: 'touch' }}>
 
         {/* ── ADMIN TOP UTILITY NAVBAR ──────────────────────────── */}
         <div style={{
