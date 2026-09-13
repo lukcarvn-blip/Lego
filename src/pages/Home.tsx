@@ -121,7 +121,7 @@ export const Home = () => {
             display: flex;
             align-items: flex-end;
             padding-bottom: 40px;
-            aspect-ratio: 3/5;
+            aspect-ratio: 3/4;
             height: auto;
           }
           .hero-content {
