@@ -11,6 +11,7 @@ export interface Product {
   sku?: string;
   name: LocalizedString;
   category: string;
+  collection?: string;
   price: number; // in USD
   rating: number;
   reviews: number;
