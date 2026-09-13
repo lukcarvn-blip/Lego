@@ -363,13 +363,22 @@ export const Home = () => {
                 return (
                 <Link to={col.path} key={i} style={{ textDecoration: 'none' }}>
                   <motion.div
-                    className="col-card"
-                    whileHover={{
-                      scale: 1.06,
-                      boxShadow: `0 0 16px ${col.color}50`,
-                      borderColor: col.color,
-                    }}
-                    transition={{ duration: 0.2 }}
+                      className="col-card"
+                      initial={{ opacity: 0, y: -60, scale: 0.8 }}
+                      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                      viewport={{ once: true, margin: '-20px' }}
+                      whileHover={{
+                        scale: 1.06,
+                        boxShadow: `0 0 16px ${col.color}50`,
+                        borderColor: col.color,
+                        transition: { duration: 0.2 }
+                      }}
+                      transition={{ 
+                        type: 'spring', 
+                        stiffness: 300, 
+                        damping: 18, 
+                        delay: i * 0.06 
+                      }}
                     style={{
                       display: 'flex',
                       flexDirection: 'column',
