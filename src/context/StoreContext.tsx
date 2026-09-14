@@ -290,9 +290,9 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       // MOCK FIX: assign dummy createdAt to mock products if missing, based on their ID (e.g. p-01, p-02)
       data = data.map(p => {
         if (!p.createdAt) {
-          if (p.id.startsWith('p-')) {
-            const num = parseInt(p.id.replace('p-', ''), 10);
-            return { ...p, createdAt: 1700000000000 - num * 1000 };
+          const mockIndex = mockProducts.findIndex(mp => mp.id === p.id);
+          if (mockIndex !== -1) {
+            return { ...p, createdAt: mockIndex }; // higher index = newer = appears first
           }
           return { ...p, createdAt: 0 };
         }

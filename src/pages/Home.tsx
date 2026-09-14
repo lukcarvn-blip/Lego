@@ -1,228 +1,414 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { useStore } from '../context/StoreContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Clock, ChevronRight, ChevronLeft, ShieldCheck, Zap, Diamond, Sparkles, ShoppingCart, Loader2, LayoutGrid, LayoutList, ArrowRight, Shield, Moon, Star, Wand2, Swords, PawPrint, Rocket, Castle, Building2, Settings } from 'lucide-react';
-import * as Icons from 'lucide-react';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Grid, Pagination, Autoplay, Navigation } from 'swiper/modules';
-import 'swiper/css/navigation';
+import { Grid, Pagination, Autoplay, Navigation, EffectFade } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/grid';
 import 'swiper/css/pagination';
-import { useStore } from '../context/StoreContext';
-import { ProductCard } from '../components/ProductCard';
+import 'swiper/css/navigation';
+import 'swiper/css/effect-fade';
+import { Link, useNavigate } from 'react-router-dom';
+import * as Icons from 'lucide-react';
 import { LegoHeadIcon } from '../components/LegoHeadIcon';
+import { ProductCard } from '../components/ProductCard';
+import { Heart, Clock, ChevronRight, ChevronLeft, ShieldCheck, Zap, Diamond, Sparkles, ShoppingCart, Loader2, LayoutGrid, LayoutList, ArrowRight, Shield, Moon, Star, Wand2, Swords, PawPrint, Rocket, Castle, Building2, Settings } from 'lucide-react';
+
+const showcaseCharacters = [
+  { name: 'Batman', quote: 'Ta là sự báo thù, ta là bóng đêm... Ta là Batman!' },
+  { name: 'Doctor Doom', quote: 'Doom là đấng tối cao! Không thế lực nào sánh kịp ta!' },
+  { name: 'Iron Man', quote: 'Thiên tài, tỷ phú, dân chơi, nhà từ thiện.' },
+  { name: 'Spider-Man', quote: 'Sức mạnh càng lớn, trách nhiệm càng cao.' },
+  { name: 'Supergirl', quote: 'Hy vọng, sự trợ giúp và lòng trắc ẩn dành cho tất cả.' },
+  { name: 'Buzz Lightyear', quote: 'Vươn tới vô cực, và xa hơn thế nữa!' },
+  { name: 'Wolverine', quote: 'Ta là kẻ giỏi nhất, nhưng việc ta làm lại chẳng tốt đẹp gì.' },
+  { name: 'Doctor Strange', quote: 'Vũ trụ bao la chứa đựng vô vàn những phép màu bí ẩn.' },
+  { name: 'Loki', quote: 'Ta là Loki xứ Asgard. Và ta mang trên vai một sứ mệnh vinh quang.' },
+  { name: 'Goku', quote: 'Sức mạnh của ta đến từ khao khát bảo vệ những người ta yêu thương!' }
+];
+
+
+const TypewriterText = ({ text, isActive }: { text: string, isActive: boolean }) => {
+  const [displayedText, setDisplayedText] = useState('');
+  useEffect(() => {
+    if (isActive) {
+      setDisplayedText('');
+      let i = 0;
+      const interval = setInterval(() => {
+        setDisplayedText(text.slice(0, i));
+        i++;
+        if (i > text.length) clearInterval(interval);
+      }, 30);
+      return () => clearInterval(interval);
+    } else {
+      setDisplayedText('');
+    }
+  }, [text, isActive]);
+  return <span>{displayedText}<span className="blink-cursor">_</span></span>;
+};
 
 export const Home = () => {
-  const { products, blogPosts, t, language, settings, formatPrice } = useStore();
+  const { products, blogPosts, t, language, settings, formatPrice, addToCart, showToast } = useStore();
+
+  const progressCircle = useRef<SVGCircleElement>(null);
+  const progressText = useRef<HTMLSpanElement>(null);
+
+  const onAutoplayTimeLeft = (s: any, time: number, progress: number) => {
+    if (progressCircle.current) {
+      const radius = 14;
+      const circumference = 2 * Math.PI * radius;
+      const offset = circumference * progress;
+      progressCircle.current.style.strokeDashoffset = String(offset);
+    }
+    if (progressText.current) {
+      progressText.current.textContent = `${Math.ceil(time / 1000)}s`;
+    }
+    
+    // Handle synced animations
+    const swiperEl = document.querySelector('.hero-blog-swiper');
+    if (swiperEl) {
+      if (time <= 1200 && time > 0) {
+        if (!swiperEl.classList.contains('is-flicker-out')) {
+          swiperEl.classList.add('is-flicker-out');
+          swiperEl.classList.remove('is-flicker-in');
+          swiperEl.classList.remove('is-glitching');
+        }
+      } else if ((time <= 10000 && time > 9800) || (time <= 5000 && time > 4800)) {
+        if (!swiperEl.classList.contains('is-glitching')) {
+          swiperEl.classList.add('is-glitching');
+          swiperEl.classList.remove('is-flicker-in');
+          swiperEl.classList.remove('is-flicker-out');
+        }
+      } else if (time > 14200) {
+        if (!swiperEl.classList.contains('is-flicker-in')) {
+          swiperEl.classList.add('is-flicker-in');
+          swiperEl.classList.remove('is-flicker-out');
+          swiperEl.classList.remove('is-glitching');
+        }
+      } else if (time > 1200 && time <= 14200 && (time > 10000 || time <= 9800) && (time > 5000 || time <= 4800)) {
+        swiperEl.classList.remove('is-glitching');
+        swiperEl.classList.remove('is-flicker-in');
+        swiperEl.classList.remove('is-flicker-out');
+      }
+    }
+  };
+
+  const sliderCandidates = [...products].sort((a, b) => (b.views || 0) - (a.views || 0));
+  const heroSliderItems = sliderCandidates.slice(0, 6);
   
   const headerAnimProps = {
     initial: { opacity: 0, y: 30, filter: 'blur(10px)' },
     whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
     viewport: { once: true, margin: "-50px" },
-    transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const }
+    transition: { duration: 0.6, ease: "easeOut" }
   };
 
-  const getInitialCols = () => {
-    if (typeof window !== 'undefined') {
-      if (window.innerWidth >= 1280) return 4;
-      if (window.innerWidth >= 640) return 3;
-      return 2;
-    }
-    return 3;
-  };
-  
-  const [cols, setCols] = useState(getInitialCols());
-  const initialCount = cols * 2 - 1;
-  const loadStep = cols * 2;
-  const [visibleCount, setVisibleCount] = useState(initialCount);
-  const [isLoading, setIsLoading] = useState(false);
+  const flashSaleItems = useMemo(() => {
+    return products.filter((p: any) => p.saleType === 'FLASH_SALE').slice(0, 5);
+  }, [products]);
+
+  const [displayCount, setDisplayCount] = useState(7);
+  const [hoveredChar, setHoveredChar] = useState<number | null>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-
+  const [cols, setCols] = useState(4);
   useEffect(() => {
-    const updateLayout = () => {
-      if (typeof window !== 'undefined') {
-        const newCols = window.innerWidth >= 1280 ? 4 : (window.innerWidth >= 640 ? 3 : 2);
-        if (newCols !== cols) setCols(newCols);
-      }
-    };
-    window.addEventListener('resize', updateLayout);
-    return () => window.removeEventListener('resize', updateLayout);
-  }, [cols]);
-
-  useEffect(() => {
-    // Tự động cuộn sang video thứ 2 trên mobile để slider trông cân đối
-    const timer = setTimeout(() => {
-      if (window.innerWidth <= 768) {
-        const slider = document.getElementById('video-slider');
-        if (slider) {
-          // Cuộn một khoảng để snap vào video thứ 2
-          slider.scrollBy({ left: 300, behavior: 'smooth' });
-        }
-      }
-    }, 800);
-    return () => clearTimeout(timer);
+    const updateCols = () => setCols(window.innerWidth < 768 ? 2 : window.innerWidth < 1024 ? 3 : 4);
+    updateCols();
+    window.addEventListener('resize', updateCols);
+    return () => window.removeEventListener('resize', updateCols);
   }, []);
-  const allFeaturedProducts = useMemo(() => products.filter(p => p.category !== '3d-printer'), [products]);
-  const featuredProducts = allFeaturedProducts.slice(0, visibleCount);
-  const hasMore = visibleCount < allFeaturedProducts.length;
-
   const handleLoadMore = () => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setVisibleCount(prev => prev + loadStep);
-      setIsLoading(false);
-    }, 800);
+    setDisplayCount(prev => prev + 8);
   };
-
-  const flashSaleItems = products.filter(p => p.saleType === 'FLASH_SALE').slice(0, 4);
-  const [flashActiveIdx, setFlashActiveIdx] = React.useState(0);
-  const [flashNoising, setFlashNoising] = React.useState(false);
-  const flashSwiperRef = useRef<any>(null);
+  const allFeaturedProducts = products.filter(p => p.category !== '3d-printer').sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+  const featuredProducts = allFeaturedProducts.slice(0, displayCount);
+  const hasMore = displayCount < allFeaturedProducts.length;
+  const isLoading = false;
 
   return (
-    <div style={{ paddingBottom: '4rem' }}>
-      {/* Hero Section */}
-      <section className="hero-section" style={{
-        position: 'relative',
-        width: '100%',
-        overflow: 'hidden',
-        marginTop: '-80px', // Pull up behind navbar
-      }}>
-        {/*
-          Hướng dẫn thay đổi Video: 
-          Bạn chỉ cần thay đổi đường link trong thuộc tính `src` của thẻ <source> bên dưới 
-          thành link video MP4 của bạn.
-        */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          zIndex: -1,
-          backgroundColor: '#050d05'
-        }}>
-          <video 
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            poster="/images/slider-banner.jpg"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              opacity: 0.4,
-              transform: 'translateZ(0)',
-              willChange: 'transform, opacity',
-              pointerEvents: 'none'
-            }}
-          >
-            <source src={settings.heroVideoUrl} type="video/mp4" />
-            Trình duyệt của bạn không hỗ trợ thẻ video.
-          </video>
-        </div>
-
+    <div className="home-page pb-20">
+      <section className="hero-section" style={{ position: 'relative' }}>
         <style>{`
-          .hero-section {
+          .hero-pagination {
             display: flex;
-            align-items: flex-end;
-            padding-bottom: 40px;
-            aspect-ratio: 3/4;
-            height: auto;
+            justify-content: center;
+            gap: 12px;
           }
-          .hero-content {
-            padding-top: 0;
+          .hero-pagination .swiper-pagination-bullet {
+            background: rgba(255,255,255,0.4);
+            opacity: 1;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            transition: all 0.3s;
+            margin: 0 !important;
           }
-          .hero-title {
-            font-size: clamp(2.5rem, 10vw, 3.5rem) !important;
-            margin-bottom: 1rem !important;
+          .hero-pagination .swiper-pagination-bullet-active {
+            background: var(--color-accent);
+            width: 24px;
+            border-radius: 4px;
           }
-          .hero-subtitle {
-            font-size: clamp(0.85rem, 4vw, 1.1rem) !important;
-            margin: 0 auto 1.5rem auto !important;
-          }
-          .hero-btn {
-            padding: 0.5rem 1.25rem !important;
-            font-size: 0.85rem !important;
-          }
-          @media (min-width: 768px) {
-            .hero-section {
-              aspect-ratio: 4/3;
-              padding-bottom: 60px;
-            }
-            .hero-title {
-              font-size: clamp(3.5rem, 8vw, 4.5rem) !important;
-              margin-bottom: 1.5rem !important;
-            }
-            .hero-subtitle {
-              margin: 0 auto 2.5rem auto !important;
-            }
-            .hero-btn {
-              padding: 1rem 2.5rem !important;
-              font-size: 1.125rem !important;
-            }
-          }
-          @media (min-width: 1024px) {
-            .hero-section {
-              align-items: center;
-              padding-bottom: 0;
-              aspect-ratio: auto;
-              height: 90vh;
-            }
-            .hero-content {
-              padding-top: 100px;
-            }
-            .hero-subtitle {
-              margin: 0 auto 3rem auto !important;
+          @media (max-width: 768px) {
+            .hero-blog-swiper {
+              aspect-ratio: 16/10;
             }
           }
         `}</style>
-        <div className="container hero-content" style={{ position: 'relative', zIndex: 10, textAlign: 'center' }}>
-          <motion.h1 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className=" hero-title"
-            style={{ lineHeight: 1.1, marginBottom: '1.5rem', fontWeight: 900 }}
-          >
-            {t('hero_title_1')} <br/>
-            <span className="text-gradient">{t('hero_title_2')}</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="hero-subtitle"
-            style={{ color: '#ffffff', maxWidth: '600px', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
-          >
-            {t('hero_subtitle')}
-          </motion.p>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-          >
-            <Link to="/technology">
-              <button className="btn-primary hero-btn">
-                {t('shop_now')}
+        <Swiper
+          modules={[Autoplay, Navigation, EffectFade]}
+          effect="fade"
+          spaceBetween={0}
+          slidesPerView={1}
+          navigation={{ nextEl: '.hero-next', prevEl: '.hero-prev' }}
+          autoplay={{ delay: 15000, disableOnInteraction: false }}
+          loop={true}
+          className="hero-blog-swiper"
+          onAutoplayTimeLeft={onAutoplayTimeLeft}
+          style={{ width: '100%', height: '70vh', minHeight: '600px', backgroundColor: 'var(--color-bg)' }}
+        >
+          {/* Nav & Loading Cluster */}
+          
+
+          
+          {/* Nav & Loading Cluster (GLOBAL, OUTSIDE SWIPER SLIDE TO PREVENT REF DUPLICATION) */}
+          <div className="container" style={{ position: 'absolute', inset: 0, zIndex: 20, pointerEvents: 'none' }}>
+            <div className="global-nav-cluster" style={{ position: 'absolute', bottom: '10%', right: '5%', pointerEvents: 'none' }}>
+            <div style={{ pointerEvents: 'auto' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button className="hero-prev tech-box-wrapper" style={{ position: 'relative', width: '45px', height: '45px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: 'none', padding: 0, marginTop: 0, left: 'auto', right: 'auto' }}>
+                <div className="tech-box" style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)' }}>
+                  <Icons.ChevronLeft color="var(--color-accent)" size={24} />
+                </div>
               </button>
-            </Link>
-          </motion.div>
-        </div>
-        
-        <div style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '150px',
-          background: 'linear-gradient(to bottom, transparent, var(--color-bg))',
-          pointerEvents: 'none'
-        }}></div>
+              <button className="hero-next tech-box-wrapper" style={{ position: 'relative', width: '45px', height: '45px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: 'none', padding: 0, marginTop: 0, left: 'auto', right: 'auto' }}>
+                <div className="tech-box" style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)' }}>
+                  <Icons.ChevronRight color="var(--color-accent)" size={24} />
+                </div>
+              </button>
+            </div>
+            
+            <div className="tech-box-wrapper box-tr-loading" style={{ position: 'relative', width: 'auto', left: 'auto', right: 'auto', top: 'auto', bottom: 'auto' }}>
+              <div className="tech-box" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.5rem 1rem' }}>
+                <div style={{ position: 'relative', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="32" height="32" viewBox="0 0 32 32" style={{ transform: 'rotate(-90deg)' }}>
+                    <circle cx="16" cy="16" r="14" fill="none" stroke="rgba(36, 214, 115, 0.2)" strokeWidth="3" />
+                    <circle 
+                      ref={progressCircle}
+                      cx="16" cy="16" r="14" fill="none" 
+                      stroke="var(--color-accent)" strokeWidth="3" 
+                      strokeDasharray={2 * Math.PI * 14}
+                      strokeDashoffset="0"
+                      style={{ transition: 'stroke-dashoffset 0.1s linear' }}
+                    />
+                  </svg>
+                  <span ref={progressText} style={{ position: 'absolute', fontSize: '0.65rem', fontWeight: 800, color: 'var(--color-accent)' }}>15s</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.6)', letterSpacing: '2px', textTransform: 'uppercase' }}>SYS_LOAD</span>
+                  <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#fff', textTransform: 'uppercase', letterSpacing: '1px' }}>INITIALIZING</span>
+                </div>
+              </div>
+            </div>
+          </div>
+              </div>
+            </div>
+          </div>
+          {heroSliderItems.map((prod) => (
+            <SwiperSlide key={prod.id}>
+              <Link to={`/product/${prod.id}`} style={{ display: 'block', width: '100%', height: '100%', position: 'relative', textDecoration: 'none' }}>
+                <img 
+                  src={prod.bannerImage || prod.images?.[0] || '/images/slider-banner.jpg'} 
+                  alt={prod.name[language as keyof typeof prod.name]} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                />
+                
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, var(--color-bg) 0%, transparent 60%)' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, var(--color-bg) 0%, transparent 30%)' }} />
+                <div style={{ position: 'absolute', inset: 0, boxShadow: 'inset 0 0 120px 60px var(--color-bg)', pointerEvents: 'none' }} />
+                
+                <div className="container" style={{ position: 'absolute', inset: 0, zIndex: 10 }}>
+                                    
+                  <div className="hero-columns-container" style={{ position: 'absolute', bottom: '10%', left: '5%', right: '5%', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', zIndex: 20, pointerEvents: 'none' }}>
+                    
+                    {/* LEFT COLUMN */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', pointerEvents: 'auto' }}>
+                      
+                      {/* Row 1: Title */}
+                      <div className="tech-box-wrapper hud-title" style={{ position: 'relative' }}>
+                        <div className="tech-box" style={{ display: 'flex', alignItems: 'center' }}>
+                          <h1 style={{ fontSize: '1.2rem', color: '#fff', fontWeight: 900, textTransform: 'uppercase', lineHeight: 1.3, margin: 0, textShadow: 'none' }}>
+                            {prod.name[language as keyof typeof prod.name]}
+                          </h1>
+                          <span style={{ position: 'absolute', bottom: '6px', right: '16px', fontSize: '0.6rem', color: 'rgba(255,255,255,0.6)', letterSpacing: '2px', textTransform: 'uppercase' }}>
+                            TITLE_DATA
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Row 2: Description */}
+                      {prod.description && prod.description[language as keyof typeof prod.description] && prod.description[language as keyof typeof prod.description].trim() !== '' && (
+                        <div className="tech-box-wrapper hud-desc" style={{ position: 'relative' }}>
+                          <div className="tech-box">
+                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                              <p style={{ color: 'rgba(255,255,255,0.9)', fontSize: '0.8rem', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical', overflow: 'hidden', margin: 0, lineHeight: 1.5 }}>
+                                {prod.description[language as keyof typeof prod.description]}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* RIGHT COLUMN */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'flex-end', pointerEvents: 'auto', paddingBottom: '4.5rem' }}>
+                      
+                      {/* Row 1: Badges */}
+                      <div className="tech-box-wrapper hud-badges" style={{ position: 'relative' }}>
+                        <div className="tech-box" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                            <span style={{ background: 'var(--color-accent)', color: '#000', padding: '3px 8px', borderRadius: '4px', fontSize: '0.65rem', fontWeight: 700 }}>
+                              {prod.isHeroSlider ? (language === 'vi' ? 'SẢN PHẨM NỔI BẬT' : 'FEATURED PRODUCT') : (language === 'vi' ? 'SẴN HÀNG GIAO NGAY' : 'IN STOCK')}
+                            </span>
+                            {prod.collection && settings.collections?.find((c: any) => c.name === prod.collection) && (() => {
+                              const col = settings.collections!.find((c: any) => c.name === prod.collection); if (!col) return null;
+                              const IconComponent = Icons[col.iconName as keyof typeof Icons] as any || Icons.Folder;
+                              return (
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: '#fff', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', opacity: 0.8 }}>
+                                  <IconComponent size={12} />
+                                  {col.name}
+                                </span>
+                              );
+                            })()}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Row 2: Price & Buy Button */}
+                      <div className="tech-box-wrapper hud-price" style={{ position: 'relative' }}>
+                        <div className="tech-box" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
+                          <div style={{ fontSize: '0.6rem', color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '0.2rem' }}>DATA-FIELD</div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', width: '100%', justifyContent: 'center', marginBottom: '0.75rem' }}>
+                            <span style={{ fontSize: '1.75rem', fontWeight: 900, color: 'var(--color-accent)', textShadow: 'none', lineHeight: 1 }}>
+                              {formatPrice(prod.price, prod.discountPercentage).current}
+                            </span>
+                          </div>
+                          <div
+                            onClick={(e) => {
+                              e.preventDefault();
+                              const pr = formatPrice(prod.price, prod.discountPercentage);
+                              const currentPriceStr = typeof pr.current === 'string' ? pr.current : pr.current.props.children.join('');
+                              const currentPrice = parseInt(currentPriceStr.replace(/[^0-9]/g, ''));
+                              addToCart({ id: prod.id, name: prod.name, price: currentPrice, image: prod.images[0], quantity: 1 });
+                              showToast(language === 'vi' ? 'Đã thêm vào giỏ hàng!' : 'Added to cart!', 'success');
+                            }}
+                            style={{ 
+                              padding: '1.5px',
+                              background: 'transparent',
+                              clipPath: 'polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px)',
+                              width: '100%',
+                              cursor: 'pointer',
+                              boxShadow: '0 4px 15px rgba(36, 214, 115, 0.15)',
+                              marginTop: '0.5rem'
+                            }}
+                          >
+                            <div style={{
+                              background: '#061a0645',
+                              border: '1px solid rgba(36, 214, 115, 0.4)',
+                              clipPath: 'polygon(11px 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%, 0 11px)',
+                              padding: '10px 24px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              color: '#fff',
+                              fontSize: '0.9rem',
+                              fontWeight: 800,
+                              textTransform: 'uppercase',
+                              textShadow: 'none',
+                              transition: 'all 0.3s ease'
+                            }}
+                            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(36, 214, 115, 0.4)'; }}
+                            onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(11, 25, 18, 0.6)'; }}
+                            >
+                              {language === 'vi' ? 'XÁC NHẬN MUA' : 'CONFIRM ORDER'}
+                            </div>
+                          </div>
+                          <div style={{ fontSize: '0.55rem', color: 'var(--color-text-muted)', marginTop: '0.5rem', opacity: 0.7, textTransform: 'uppercase', letterSpacing: '1px' }}>
+                            GIAO DỊCH AN TOÀN [MÃ {prod.id.slice(0, 5).toUpperCase()}]
+                          </div>
+                        </div>
+                      </div>
+
+                      
+
+                    </div>
+                  </div>
+
+                </div>
+              </Link>
+            </SwiperSlide>
+          ))}
+</Swiper>
       </section>
+
 
       {/* Middle Banner replacing Video Shorts Slider */}
       {(settings.middleBannerImage || settings.middleBannerImageMobile) && (
         <section className="container" style={{ paddingTop: '2.5rem', marginBottom: '-2.5rem' }}>
+          <style>{`
+            .blink-cursor {
+              animation: blink 1s step-end infinite;
+              color: var(--color-accent);
+            }
+            @keyframes blink { 50% { opacity: 0; } }
+            
+            .showcase-hitbox:hover .tech-tooltip-wrapper {
+              opacity: 1;
+              transform: translate(-50%, -10px);
+            }
+            .tech-tooltip-wrapper {
+              position: absolute;
+              bottom: 80%;
+              left: 50%;
+              transform: translate(-50%, 0);
+              width: 250px;
+              padding: 2px;
+              background: rgba(36, 214, 115, 0.4);
+              clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+              opacity: 0;
+              transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+              pointer-events: none;
+              z-index: 20;
+            }
+            .tech-tooltip-inner {
+              background: #061a06f0;
+              padding: 12px;
+              clip-path: polygon(11px 0, 100% 0, 100% calc(100% - 11px), calc(100% - 11px) 100%, 0 100%, 0 11px);
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+            }
+            .tech-tooltip-title {
+              color: #fff;
+              font-size: 0.9rem;
+              font-weight: 900;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              border-bottom: 1px solid rgba(36, 214, 115, 0.3);
+              padding-bottom: 4px;
+            }
+            .tech-tooltip-quote {
+              color: var(--color-accent);
+              font-size: 0.75rem;
+              line-height: 1.4;
+              font-family: 'Courier New', Courier, monospace;
+              min-height: 40px;
+            }
+            @media (max-width: 768px) {
+              .tech-tooltip-wrapper { display: none !important; }
+            }
+            }
+          `}</style>
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -244,6 +430,27 @@ export const Home = () => {
                 style={{ width: '100%', height: 'auto', display: 'block' }} 
               />
             </picture>
+            
+            <div style={{ position: 'absolute', inset: '15% 10% 15% 10%', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', zIndex: 10 }}>
+              {showcaseCharacters.map((char, idx) => (
+                <div 
+                  key={idx} 
+                  className="showcase-hitbox" 
+                  style={{ position: 'relative', width: '100%', height: '100%', cursor: 'pointer' }}
+                  onMouseEnter={() => setHoveredChar(idx)}
+                  onMouseLeave={() => setHoveredChar(null)}
+                >
+                  <div className="tech-tooltip-wrapper">
+                    <div className="tech-tooltip-inner">
+                      <div className="tech-tooltip-title">{char.name}</div>
+                      <div className="tech-tooltip-quote">
+                        <TypewriterText text={char.quote} isActive={hoveredChar === idx} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(10,10,10,0.9) 0%, transparent 15%, transparent 85%, rgba(10,10,10,0.9) 100%)', pointerEvents: 'none' }} />
           </motion.div>
         </section>
@@ -262,19 +469,34 @@ export const Home = () => {
 
           {/* LEFT: Khám phá danh mục */}
           <div className="cat-collections-left" style={{ display: 'flex', flexDirection: 'column' }}>
-            <motion.h2 {...headerAnimProps} style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <motion.h2 {...headerAnimProps} style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
               <Zap size={32} color="var(--color-accent)" className="flash-shake" />
               FLASH SALE
+              </div>
+              <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <button className="flash-prev" style={{ position: 'relative', background: 'rgba(255,255,255,0.15)', padding: '1px', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: 'none', clipPath: 'polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)' }}>
+                  <div style={{ width: '100%', height: '100%', background: '#0e100e', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(7.5px 0, 100% 0, 100% calc(100% - 7.5px), calc(100% - 7.5px) 100%, 0 100%, 0 7.5px)' }}>
+                    <Icons.ChevronLeft size={20} color="#8892b0" />
+                  </div>
+                </button>
+                <button className="flash-next" style={{ position: 'relative', background: 'rgba(255,255,255,0.15)', padding: '1px', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: 'none', clipPath: 'polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)' }}>
+                  <div style={{ width: '100%', height: '100%', background: '#0e100e', display: 'flex', alignItems: 'center', justifyContent: 'center', clipPath: 'polygon(7.5px 0, 100% 0, 100% calc(100% - 7.5px), calc(100% - 7.5px) 100%, 0 100%, 0 7.5px)' }}>
+                    <Icons.ChevronRight size={20} color="#8892b0" />
+                  </div>
+                </button>
+              </div>
             </motion.h2>
             
             <div style={{ width: '100%', flex: 1, display: 'flex', flexDirection: 'column' }}>
               {flashSaleItems.length > 0 ? (
                 <Swiper
-                  modules={[Pagination, Autoplay]}
+                  modules={[Pagination, Autoplay, Navigation]}
                   spaceBetween={20}
                   slidesPerView={1}
                   pagination={{ clickable: true }}
                   autoplay={{ delay: 3000, disableOnInteraction: false }}
+                  navigation={{ nextEl: '.flash-next', prevEl: '.flash-prev' }}
                   style={{ width: '100%', borderRadius: 'var(--radius-lg)', overflow: 'hidden', minHeight: '150px' }}
                   className="flash-sale-swiper"
                 >
@@ -368,7 +590,7 @@ export const Home = () => {
                 <Link to={col.path} key={i} style={{ textDecoration: 'none' }}>
                   <motion.div
                       className="col-card"
-                      initial={{ opacity: 0, y: -60, scale: 0.8 }}
+                      initial={{ opacity: 0, y: 20, scale: 0.8 }}
                       whileInView={{ opacity: 1, y: 0, scale: 1 }}
                       viewport={{ once: true, margin: '-20px' }}
                       whileHover={{
@@ -496,28 +718,37 @@ export const Home = () => {
           </motion.div>
         </AnimatePresence>
 
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '3rem' }}>
-          <button 
-            className="btn-primary" 
+        <div style={{ marginTop: '3rem', width: '100%', position: 'relative' }}>
+          <button
             onClick={hasMore ? handleLoadMore : undefined}
             disabled={isLoading || !hasMore}
-            style={{ 
-              padding: '1rem 3rem', 
-              fontSize: '1.1rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              opacity: isLoading ? 0.7 : (!hasMore ? 0.5 : 1),
-              cursor: (isLoading || !hasMore) ? 'not-allowed' : 'pointer',
-              background: !hasMore ? 'rgba(255,255,255,0.1)' : undefined,
-              color: !hasMore ? 'var(--color-text-muted)' : undefined,
-              border: !hasMore ? '1px solid var(--glass-border)' : undefined,
+            style={{
+              width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              background: 'rgba(0, 0, 0, 0.4)', backdropFilter: 'blur(10px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)', padding: '1rem 1.5rem',
+              borderRadius: '8px', cursor: (isLoading || !hasMore) ? 'not-allowed' : 'pointer',
+              opacity: (isLoading || !hasMore) ? 0.7 : 1, transition: 'all 0.3s ease',
+              position: 'relative', overflow: 'hidden'
             }}
+            onMouseEnter={(e) => { if (hasMore && !isLoading) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.4)'; }}
+            onMouseLeave={(e) => { if (hasMore && !isLoading) e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'; }}
           >
-            {isLoading && <Loader2 size={20} className="animate-spin" />}
-            {isLoading ? (language === 'vi' ? 'Đang tải...' : 'Loading...') : 
-             (!hasMore ? (language === 'vi' ? 'Đã hết sản phẩm' : 'No More Products') : 
-             (language === 'vi' ? 'Xem Thêm Sản Phẩm' : 'Load More'))}
+            {/* Progress Background */}
+            <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${(Math.min(featuredProducts.length, allFeaturedProducts.length) / allFeaturedProducts.length) * 100}%`, background: 'rgba(36, 214, 115, 0.15)', zIndex: 0, transition: 'width 0.5s ease' }} />
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', zIndex: 1, color: '#fff', fontWeight: 700, fontSize: '1.1rem', textTransform: 'uppercase' }}>
+              {isLoading ? <Icons.Loader2 size={20} className="animate-spin" color="var(--color-accent)" /> : <Icons.ChevronRight size={20} color="var(--color-accent)" />}
+              {isLoading ? (language === 'vi' ? 'Đang tải...' : 'Loading...') : (hasMore ? (language === 'vi' ? 'XEM THÊM SẢN PHẨM' : 'LOAD MORE PRODUCTS') : (language === 'vi' ? 'ĐÃ HIỂN THỊ HẾT' : 'NO MORE PRODUCTS'))}
+            </div>
+
+            <div style={{ zIndex: 1, display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', fontWeight: 600 }}>
+                {language === 'vi' ? `Hiển thị ${featuredProducts.length} / ${allFeaturedProducts.length}` : `Showing ${featuredProducts.length} / ${allFeaturedProducts.length}`}
+              </div>
+              <div style={{ width: '100px', height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
+                <div style={{ width: `${(Math.min(featuredProducts.length, allFeaturedProducts.length) / allFeaturedProducts.length) * 100}%`, height: '100%', background: 'var(--color-accent)', boxShadow: '0 0 10px var(--color-accent)', transition: 'width 0.5s ease' }} />
+              </div>
+            </div>
           </button>
         </div>
       </section>

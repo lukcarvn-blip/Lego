@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Heart, Clock, Zap, Sparkles, ShoppingCart, Shield, Rocket, Crown, Tag, X, ChevronLeft, ChevronRight, Ruler, Palette, Package } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { AnimatePresence } from 'framer-motion';
+import * as Icons from 'lucide-react';
 
 interface ProductCardProps {
   product: any;
@@ -12,7 +13,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, listMode = false }) => {
-  const { language, formatPrice, addToCart, showToast } = useStore();
+  const { language, formatPrice, addToCart, showToast, settings } = useStore();
   const [craftHovered, setCraftHovered] = useState(false);
   const [displayDay, setDisplayDay] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -428,13 +429,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
           </motion.div>
           
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '1rem', minWidth: 0 }}>
-            <p style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--color-text-muted)', fontSize: '0.75rem', marginBottom: '0.25rem', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              {product.category.toLowerCase() === 'superheroes' && <Shield size={12} />}
-              {product.category.toLowerCase() === 'sci-fi' && <Rocket size={12} />}
-              {product.category.toLowerCase() === 'classic' && <Crown size={12} />}
-              {['superheroes', 'sci-fi', 'classic'].indexOf(product.category.toLowerCase()) === -1 && <Tag size={12} />}
-              {product.category}
-            </p>
+            <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.4rem' }}>
+              <p style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>
+                {product.category.toLowerCase() === 'superheroes' && <Shield size={12} />}
+                {product.category.toLowerCase() === 'sci-fi' && <Rocket size={12} />}
+                {product.category.toLowerCase() === 'classic' && <Crown size={12} />}
+                {['superheroes', 'sci-fi', 'classic'].indexOf(product.category.toLowerCase()) === -1 && <Tag size={12} />}
+                {product.category}
+              </p>
+              
+              {product.collection && settings.collections?.find((c: any) => c.name === product.collection) && (() => {
+                const col = settings.collections!.find((c: any) => c.name === product.collection); if (!col) return null;
+                const IconComponent = Icons[col.iconName as keyof typeof Icons] as any || Icons.Folder;
+                return (
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', background: col.bg || 'rgba(255,255,255,0.1)', border: `1px solid ${col.border || 'rgba(255,255,255,0.2)'}`, color: col.color || '#fff', padding: '2px 8px', borderRadius: '12px', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase' }}>
+                    <IconComponent size={10} />
+                    {col.name}
+                  </span>
+                );
+              })()}
+            </div>
             <Link to={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'block', minWidth: 0 }}>
               <h3 className="product-title" style={{ 
                 
@@ -549,16 +563,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             }}
             onClick={() => setShowGallery(false)}
           >
-            <button 
-              onClick={() => setShowGallery(false)}
-              style={{ position: 'absolute', top: '20px', right: '20px', background: 'rgba(255,255,255,0.1)', border: 'none', color: 'white', borderRadius: '50%', padding: '10px', cursor: 'pointer', zIndex: 10001, transition: 'background 0.3s' }}
-              onMouseOver={(e) => e.currentTarget.style.background = 'rgba(239,68,68,0.8)'}
-              onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-            >
-              <X size={24} />
-            </button>
-
             <div style={{ position: 'relative', width: '100%', height: isMobile ? '80vh' : '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }} onClick={(e) => e.stopPropagation()}>
+
               
               {/* Prev / Next blurred images for mobile */}
               {isMobile && product.images?.length > 1 && (
@@ -595,22 +601,34 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 />
               </AnimatePresence>
 
-              {!isMobile && product.images?.length > 1 && (
-                <>
-                  <button onClick={handlePrevImage} style={{ position: 'absolute', left: '50px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '50%', padding: '15px', cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.3s', zIndex: 20 }}
-                    onMouseOver={(e) => { e.currentTarget.style.background = 'var(--color-accent)'; e.currentTarget.style.color = 'black'; }}
-                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'white'; }}
-                  ><ChevronLeft size={32} /></button>
-                  <button onClick={handleNextImage} style={{ position: 'absolute', right: '50px', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '50%', padding: '15px', cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.3s', zIndex: 20 }}
-                    onMouseOver={(e) => { e.currentTarget.style.background = 'var(--color-accent)'; e.currentTarget.style.color = 'black'; }}
-                    onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'white'; }}
-                  ><ChevronRight size={32} /></button>
-                </>
-              )}
+              <div style={{ position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: '8px', zIndex: 20, alignItems: 'stretch' }}>
+                {/* Prev/Next only if multiple images */}
+                {!isMobile && product.images?.length > 1 && (
+                  <>
+                    <button onClick={handlePrevImage} style={{ background: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '4px', padding: '0 12px', cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.2s', display: 'flex', alignItems: 'center' }}
+                      onMouseOver={(e: any) => { e.currentTarget.style.background = 'var(--color-accent)'; e.currentTarget.style.color = '#000'; e.currentTarget.style.borderColor = 'var(--color-accent)'; }}
+                      onMouseOut={(e: any) => { e.currentTarget.style.background = 'rgba(0,0,0,0.7)'; e.currentTarget.style.color = 'white'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}
+                    ><ChevronLeft size={20} /></button>
+                    <button onClick={handleNextImage} style={{ background: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', borderRadius: '4px', padding: '0 12px', cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.2s', display: 'flex', alignItems: 'center' }}
+                      onMouseOver={(e: any) => { e.currentTarget.style.background = 'var(--color-accent)'; e.currentTarget.style.color = '#000'; e.currentTarget.style.borderColor = 'var(--color-accent)'; }}
+                      onMouseOut={(e: any) => { e.currentTarget.style.background = 'rgba(0,0,0,0.7)'; e.currentTarget.style.color = 'white'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; }}
+                    ><ChevronRight size={20} /></button>
+                  </>
+                )}
+                <Link to={`/product/${product.id}`} onClick={() => setShowGallery(false)}
+                  style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '8px 16px', background: 'var(--color-accent)', color: '#000', borderRadius: '4px', fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none', transition: 'all 0.2s' }}>
+                  <ShoppingCart size={16} />Mua ngay
+                </Link>
+                <button onClick={() => setShowGallery(false)}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 12px', background: 'rgba(0,0,0,0.7)', border: '1px solid rgba(255,255,255,0.15)', color: 'white', borderRadius: '4px', cursor: 'pointer', transition: 'all 0.2s' }}
+                  onMouseOver={(e: any) => (e.currentTarget.style.background = 'rgba(239,68,68,0.8)')}
+                  onMouseOut={(e: any) => (e.currentTarget.style.background = 'rgba(0,0,0,0.7)')}
+                ><X size={20} /></button>
+              </div>
 
               {/* Mobile indicators (Dots) */}
               {isMobile && product.images?.length > 1 && (
-                <div style={{ position: 'absolute', bottom: '2rem', display: 'flex', gap: '8px', zIndex: 20 }}>
+                <div style={{ position: 'absolute', bottom: '5rem', display: 'flex', gap: '8px', zIndex: 20 }}>
                   {product.images.map((_: any, idx: number) => (
                     <div key={idx} style={{ 
                       width: idx === galleryIndex ? '20px' : '8px', 

@@ -13,8 +13,8 @@ export default function apiPlugin() {
               region: "vn-hcm-1",
               endpoint: "https://s3.vn-hcm-1.vietnix.cloud",
               credentials: {
-                accessKeyId: process.env.S3_ACCESS_KEY,
-                secretAccessKey: process.env.S3_SECRET_KEY,
+                accessKeyId: process.env.S3_ACCESS_KEY || 'c50868ad876ffd5555Z3',
+                secretAccessKey: process.env.S3_SECRET_KEY || 'HsbseY1srG6hj8cgVDvwpVtEPb6HZ3WkDMWbIJHE',
               }
             });
 

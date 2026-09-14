@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import * as Icons from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift, Plus, Minus, Info, Weight } from 'lucide-react';
 import { mockProducts, type ProductSize } from '../data/mockProducts';
@@ -73,6 +74,18 @@ const AnimatedPrice = ({ priceString }: { priceString: string }) => {
 
 
 
+
+const blockGlitch = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: [0, 1, 0, 1, 0.5, 1],
+    x: [-15, 15, -10, 10, -5, 0],
+    skewX: [30, -30, 15, -15, 5, 0],
+    filter: ['hue-rotate(90deg)', 'hue-rotate(-90deg)', 'hue-rotate(45deg)', 'hue-rotate(-45deg)', 'hue-rotate(0deg)', 'hue-rotate(0deg)'],
+    transition: { duration: 0.4, ease: 'linear' }
+  }
+};
+
 export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -89,6 +102,16 @@ export const ProductDetails = () => {
   };
 
   let product = products.find(p => p.id === id) || mockProducts.find(p => p.id === id);
+  
+  // Randomly select a banner image if multiple exist
+  const selectedBanner = useMemo(() => {
+    if (!product) return null;
+    const allBanners = product.bannerImages && product.bannerImages.length > 0 
+      ? product.bannerImages 
+      : (product.bannerImage ? [product.bannerImage] : []);
+    if (allBanners.length === 0) return null;
+    return allBanners[Math.floor(Math.random() * allBanners.length)];
+  }, [product?.id, product?.bannerImages, product?.bannerImage]);
   
   // Create padded images for display only
   const defaultLogo = settings?.logoImage || '/images/fallback-logo.jpg';
@@ -161,6 +184,7 @@ export const ProductDetails = () => {
   const [isFastCrafting, setIsFastCrafting] = useState(false);
   const [engravingText, setEngravingText] = useState('');
   const [isEngravingSelected, setIsEngravingSelected] = useState(false);
+  const [isEngravingInputVisible, setIsEngravingInputVisible] = useState(false);
   const [isSelfAssembly, setIsSelfAssembly] = useState(false);
   const [selectedMicaBox, setSelectedMicaBox] = useState('');
   const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'tags'>('desc');
@@ -206,7 +230,7 @@ export const ProductDetails = () => {
 
   const handleAddToCart = (e?: React.MouseEvent) => {
     if (product && selectedSize) {
-      addToCart(product, selectedSize, selectedMaterial, quantity, e, isFastCrafting, engravingText, selectedMicaBox);
+      addToCart(product, selectedSize, selectedMaterial, quantity, e, isFastCrafting, engravingText, selectedMicaBox, isSelfAssembly);
       showToast(language === 'vi' ? 'Đã thêm vào giỏ hàng!' : 'Added to cart!');
     }
   };
@@ -224,7 +248,7 @@ export const ProductDetails = () => {
 
   return (
     <div className="container" style={{ paddingTop: '120px' }}>
-      {product.bannerImage ? (
+      {selectedBanner ? (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="product-detail-banner">
           {/* Inner dark vignette for breadcrumb visibility */}
           <div style={{
@@ -234,7 +258,31 @@ export const ProductDetails = () => {
             zIndex: 1, pointerEvents: 'none'
           }}></div>
           
-          <img src={product.bannerImage} alt="Banner" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', position: 'absolute', top: 0, left: 0, zIndex: 0 }} />
+          {/* Badges Container */}
+          <div className="product-detail-badges">
+            {/* Collection Badge */}
+            {product.collection && settings.collections?.find((c: any) => c.name === product.collection) && (() => {
+              const col = settings.collections!.find((c: any) => c.name === product.collection); if (!col) return null;
+              const IconComponent = Icons[col.iconName as keyof typeof Icons] as any || Icons.Folder;
+              return (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: col.bg || 'rgba(255,255,255,0.1)', border: `1px solid ${col.border || 'rgba(255,255,255,0.2)'}`, color: col.color || '#fff', padding: '6px 16px', borderRadius: '4px', fontSize: '0.9rem', fontWeight: 800, backdropFilter: 'blur(12px)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)', textTransform: 'uppercase', pointerEvents: 'none' }}>
+                  <IconComponent size={16} />
+                  {col.name}
+                </div>
+              );
+            })()}
+
+            {/* Category Badge */}
+            {product.category && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '4px 12px', borderRadius: '4px', fontSize: '0.8rem', fontWeight: 600, backdropFilter: 'blur(4px)', pointerEvents: 'none' }}>
+                <Icons.Tag size={12} />
+                {product.category.toUpperCase()}
+              </div>
+            )}
+          </div>
+
+          
+          <img src={selectedBanner} alt="Banner" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', position: 'absolute', top: 0, left: 0, zIndex: 0 }} />
           
           <div style={{ position: 'absolute', top: '1.5rem', left: '1.5rem', right: '1.5rem', zIndex: 10, display: 'flex', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#fff', background: 'rgba(0,0,0,0.5)', padding: '0.5rem 1rem', borderRadius: 'var(--radius-full)', border: '1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)', whiteSpace: 'nowrap', maxWidth: '100%', overflow: 'hidden' }}>
@@ -585,6 +633,12 @@ export const ProductDetails = () => {
                           {selectedMicaBox && (
                             <li>{language === 'vi' ? 'Hộp Mica Bảo Vệ: ' : 'Protective Mica Box: '}<strong>{selectedMicaBox === 'standard' ? (language === 'vi' ? 'Thường' : 'Standard') : 'LED'}</strong></li>
                           )}
+                          {isEngravingSelected && (
+                            <li>{language === 'vi' ? 'Khắc tên: ' : 'Engraving: '}<strong>{engravingText || (language === 'vi' ? '(Có)' : '(Yes)')}</strong></li>
+                          )}
+                          {isSelfAssembly && (
+                            <li><strong>{language === 'vi' ? 'Tự lắp ráp (Nhận chi tiết rời)' : 'Self-assembly (Separated parts)'}</strong></li>
+                          )}
                           {!isEffectivelyCrafting ? (
                             <li>{language === 'vi' ? 'Giao hàng: ' : 'Delivery: '}<strong>{language === 'vi' ? 'Trong 1-2 ngày' : '1-2 days'}</strong></li>
                           ) : (
@@ -718,7 +772,7 @@ export const ProductDetails = () => {
               style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', height: '100%' }}
               className="pd-section-panel"
             >
-            <h3 style={{ marginBottom: '1rem' }}>{language === 'vi' ? 'Chất liệu' : 'Material'}</h3>
+            <h2 style={{ marginBottom: '1rem' }}>{language === 'vi' ? 'Chất liệu' : 'Material'}</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', overflow: 'hidden' }}>
               {/* PLA Option */}
               <button 
@@ -791,7 +845,7 @@ export const ProductDetails = () => {
                 transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.2 }}
                 style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', height: '100%' }}
               >
-              <h3 style={{ marginBottom: '1.5rem' }}>{t('size')}</h3>
+              <h2 style={{ marginBottom: '1.5rem' }}>{t('size')}</h2>
               
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'stretch', flexWrap: 'nowrap' }}>
                 {/* Single Animated Icon Container */}
@@ -914,10 +968,10 @@ export const ProductDetails = () => {
               transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.3 }}
               style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}
             >
-              <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <h2 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Clock size={20} color="#f59e0b" /> 
                 {language === 'vi' ? 'QUY TRÌNH CHẾ TÁC DỰ KIẾN' : 'Estimated Crafting Process'}
-              </h3>
+              </h2>
               <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
                 {language === 'vi' ? `Tổng thời gian: khoảng ${craftTimeDays} ngày` : `Total time: approx ${craftTimeDays} days`}
               </p>
@@ -989,10 +1043,10 @@ export const ProductDetails = () => {
             transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.3 }}
             style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}
           >
-            <h3 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <h2 style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <Gift size={20} color="var(--color-accent)" /> 
               {language === 'vi' ? 'HỘP MICA BẢO VỆ' : 'PROTECTIVE MICA BOX'}
-            </h3>
+            </h2>
             
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               
@@ -1001,7 +1055,17 @@ export const ProductDetails = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '0.75rem' }}>
             {/* Engraving Box */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${isEngravingSelected ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: isEngravingSelected ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer' }} onClick={() => { setIsEngravingSelected(!isEngravingSelected); if (isEngravingSelected) setEngravingText(''); }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${isEngravingSelected ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: isEngravingSelected ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer' }} onClick={() => { 
+                  if (!isEngravingSelected) {
+                    setIsEngravingSelected(true);
+                    setIsEngravingInputVisible(true);
+                    setIsCartExpanded(true);
+                  } else {
+                    setIsEngravingSelected(false);
+                    setIsEngravingInputVisible(false);
+                    setEngravingText('');
+                  }
+                }}>
                 <div style={{ flex: 1 }}>
                   <div style={{ fontWeight: 600, fontSize: '0.95rem', color: isEngravingSelected ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Khắc tên / Lời nhắn' : 'Custom Engraving'}</div>
                   <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{language === 'vi' ? '(Miễn phí)' : '(Free)'}</div>
@@ -1015,23 +1079,31 @@ export const ProductDetails = () => {
               
               {/* Text Input (conditionally rendered) */}
               <AnimatePresence>
-                {isEngravingSelected && (
+                {isEngravingInputVisible && (
                   <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
-                    <input
-                      type="text"
-                      value={engravingText}
-                      onChange={(e) => setEngravingText(e.target.value)}
-                      placeholder={language === 'vi' ? 'Nhập nội dung cần khắc...' : 'Enter text to engrave...'}
-                      style={{ width: '100%', padding: '0.75rem 1rem', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--color-accent)', borderRadius: 'var(--radius-sm)', color: '#fff', outline: 'none' }}
-                      autoFocus
-                    />
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <input
+                        type="text"
+                        value={engravingText}
+                        onChange={(e) => setEngravingText(e.target.value)}
+                        placeholder={language === 'vi' ? 'Nhập nội dung cần khắc...' : 'Enter text to engrave...'}
+                        style={{ flex: 1, width: '100%', padding: '0.75rem 1rem', background: 'rgba(0,0,0,0.3)', border: '1px solid var(--color-accent)', borderRadius: 'var(--radius-sm)', color: '#fff', outline: 'none' }}
+                        autoFocus
+                      />
+                      <button 
+                        onClick={(e) => { e.preventDefault(); setIsEngravingInputVisible(false); setIsCartExpanded(true); }}
+                        style={{ padding: '0 1rem', background: 'var(--color-accent)', color: '#000', border: 'none', borderRadius: 'var(--radius-sm)', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}
+                      >
+                        {language === 'vi' ? 'Xong' : 'Done'}
+                      </button>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
             {/* Self Assembly Box */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${isSelfAssembly ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: isSelfAssembly ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer', height: 'fit-content' }} onClick={() => setIsSelfAssembly(!isSelfAssembly)}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', padding: '0.75rem', border: `1px solid ${isSelfAssembly ? 'var(--color-accent)' : 'var(--glass-border)'}`, borderRadius: 'var(--radius-sm)', background: isSelfAssembly ? 'rgba(74,222,128,0.05)' : 'rgba(0,0,0,0.2)', transition: 'all 0.2s', cursor: 'pointer', height: 'fit-content' }} onClick={() => { setIsSelfAssembly(!isSelfAssembly); if(!isSelfAssembly) setIsCartExpanded(true); }}>
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: 600, fontSize: '0.95rem', color: isSelfAssembly ? 'var(--color-accent)' : 'var(--color-text)' }}>{language === 'vi' ? 'Tự lắp ráp' : 'Self Assembly'}</div>
                 <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{language === 'vi' ? '(Nhận chi tiết rời)' : '(Unassembled kit)'}</div>
@@ -1172,11 +1244,11 @@ export const ProductDetails = () => {
       <div className="bottom-split-container">
         {/* Related Products */}
         <div style={{ position: 'relative', overflow: 'hidden' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
-            <h3 style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <LegoHeadIcon size={24} />
+          <h2 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', width: '100%', fontWeight: 700 }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <LegoHeadIcon size={32} />
               {language === 'vi' ? 'Sản Phẩm Liên Quan' : 'Related Products'}
-            </h3>
+            </span>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button onClick={() => scrollSlider(relatedRef, 'left')}
                 className="chamfer-btn"
@@ -1189,7 +1261,7 @@ export const ProductDetails = () => {
                 <ChevronRight size={20} />
               </button>
             </div>
-          </div>
+          </h2>
           <div 
             ref={relatedRef}
             className="hide-scrollbar"
@@ -1211,11 +1283,11 @@ export const ProductDetails = () => {
         </div>
         {/* Best Sellers */}
         <div style={{ position: 'relative', overflow: 'hidden' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--glass-border)', paddingBottom: '0.5rem' }}>
-            <h3 style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <LegoHeadIcon size={24} />
+          <h2 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', width: '100%', fontWeight: 700 }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <LegoHeadIcon size={32} />
               {language === 'vi' ? 'Sản Phẩm Bán Chạy' : 'Best Sellers'}
-            </h3>
+            </span>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button onClick={() => scrollSlider(bestSellersRef, 'left')}
                 className="chamfer-btn"
@@ -1228,7 +1300,7 @@ export const ProductDetails = () => {
                 <ChevronRight size={20} />
               </button>
             </div>
-          </div>
+          </h2>
           <div 
             ref={bestSellersRef}
             className="hide-scrollbar"
