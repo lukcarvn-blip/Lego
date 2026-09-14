@@ -449,11 +449,13 @@ export const ProductDetails = () => {
                     transition={{ duration: 0.3 }}
                     src={displayImages[activeImageIndex] || displayImages[0]} 
                     alt={product.name[language as keyof typeof product.name]} 
+                    onClick={() => setIsLightboxOpen(true)}
                     style={{ 
                       width: '100%', 
                       height: '100%', 
                       objectFit: 'contain',
-                      position: 'absolute'
+                      position: 'absolute',
+                      cursor: 'pointer'
                     }} 
                   />
                 </AnimatePresence>
@@ -482,21 +484,22 @@ export const ProductDetails = () => {
                   </div>
                 )}
                 
-                {/* Maximize Button */}
-                <button 
-                  onClick={() => setIsLightboxOpen(true)}
+                {/* Heart Button */}
+                <motion.button 
+                  whileTap={{ scale: 0.9 }}
+                  onClick={handleLike}
                   style={{
                     position: 'absolute', top: '1.5rem', right: '1.5rem', zIndex: 30,
-                    background: 'rgba(0,0,0,0.4)', color: '#fff', border: '1px solid var(--glass-border)',
+                    background: isLiked ? 'rgba(239, 68, 68, 0.1)' : 'rgba(0,0,0,0.4)', border: '1px solid var(--glass-border)',
                     borderRadius: '50%', width: '44px', height: '44px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.2s'
                   }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'var(--color-accent)'; e.currentTarget.style.color = '#000'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.4)'; e.currentTarget.style.color = '#fff'; }}
+                  onMouseEnter={e => { if (!isLiked) { e.currentTarget.style.background = 'rgba(0,0,0,0.6)'; } }}
+                  onMouseLeave={e => { if (!isLiked) { e.currentTarget.style.background = 'rgba(0,0,0,0.4)'; } }}
                 >
-                  <Maximize size={20} />
-                </button>
+                  <Heart size={20} color={isLiked ? '#ef4444' : '#fff'} fill={isLiked ? '#ef4444' : 'none'} />
+                </motion.button>
               </>
             )}
           </motion.div>
@@ -744,13 +747,6 @@ export const ProductDetails = () => {
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <h1 style={{ marginBottom: '0.5rem', lineHeight: 1.2 }}>{product.name[language]}</h1>
-              <motion.button 
-                whileTap={{ scale: 0.9 }}
-                onClick={handleLike}
-                style={{ padding: '0.5rem', background: isLiked ? 'rgba(239, 68, 68, 0.1)' : 'var(--glass-bg)', borderRadius: '50%', border: '1px solid var(--glass-border)', cursor: 'pointer', transition: 'all 0.2s' }}
-              >
-                <Heart size={24} color={isLiked ? '#ef4444' : 'currentColor'} fill={isLiked ? '#ef4444' : 'none'} />
-              </motion.button>
             </div>
             
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--color-text-muted)', marginBottom: '1rem', flexWrap: 'wrap' }}>
