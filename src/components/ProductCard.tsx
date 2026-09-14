@@ -583,7 +583,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                     </div>
                   </>
                 )}
-
+              </div>
             )}
             
             {/* Mobile Add to Cart Button */}
