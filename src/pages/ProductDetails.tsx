@@ -196,6 +196,13 @@ export const ProductDetails = () => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
 
+  // Auto-switch to specs tab if no description
+  useEffect(() => {
+    if (product && !product.description?.[language]) {
+      setActiveTab('specs');
+    }
+  }, [product?.id, language]);
+
   useEffect(() => {
     const handleResize = () => {
       const mobile = window.innerWidth < 1024;
@@ -1220,12 +1227,14 @@ export const ProductDetails = () => {
           <div style={{ marginTop: '2.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', overflow: 'hidden' }}>
             {/* Tab Headers */}
             <div style={{ display: 'flex', borderBottom: '1px solid var(--glass-border)', overflowX: 'auto' }} className="hide-scrollbar">
+              {product.description?.[language] && (
               <button 
                 onClick={() => setActiveTab('desc')}
                 style={{ flex: 1, padding: '1rem', background: activeTab === 'desc' ? 'rgba(74, 222, 128, 0.1)' : 'transparent', borderBottom: activeTab === 'desc' ? '2px solid var(--color-accent)' : '2px solid transparent', color: activeTab === 'desc' ? 'var(--color-accent)' : 'var(--color-text-muted)', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', borderTop: 'none', borderLeft: 'none', borderRight: 'none', outline: 'none', whiteSpace: 'nowrap' }}
               >
                 {t('description')}
               </button>
+              )}
               <button 
                 onClick={() => setActiveTab('specs')}
                 style={{ flex: 1, padding: '1rem', background: activeTab === 'specs' ? 'rgba(74, 222, 128, 0.1)' : 'transparent', borderBottom: activeTab === 'specs' ? '2px solid var(--color-accent)' : '2px solid transparent', color: activeTab === 'specs' ? 'var(--color-accent)' : 'var(--color-text-muted)', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s', borderTop: 'none', borderLeft: 'none', borderRight: 'none', outline: 'none', whiteSpace: 'nowrap' }}
