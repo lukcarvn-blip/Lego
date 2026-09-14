@@ -1308,7 +1308,12 @@ export const ProductDetails = () => {
           <h2 style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', width: '100%', fontWeight: 700 }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <LegoHeadIcon size={32} />
-              {language === 'vi' ? 'Sản Phẩm Liên Quan' : 'Related Products'}
+              {(() => {
+                const sameCategory = products.filter(p => p.category === product.category && p.id !== product.id);
+                return sameCategory.length > 0
+                  ? (language === 'vi' ? 'Sản Phẩm Liên Quan' : 'Related Products')
+                  : (language === 'vi' ? 'Sản Phẩm Hàng Sẵn' : 'In Stock Products');
+              })()}
             </span>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button onClick={() => scrollSlider(relatedRef, 'left')}
