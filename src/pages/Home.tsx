@@ -515,9 +515,9 @@ export const Home = () => {
           {/* LEFT: Khám phá danh mục */}
           <div className="cat-collections-left" style={{ display: 'flex', flexDirection: 'column' }}>
             <motion.h2 {...headerAnimProps} style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              <div className="lightning-wrapper" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.5rem 1.5rem', borderRadius: '8px', position: 'relative', marginLeft: '-1.5rem' }}>
               <Zap size={32} color="var(--color-accent)" className="flash-shake" />
-              FLASH SALE
+              <span className="lightning-text">FLASH SALE</span>
               </div>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 <button className="flash-prev" style={{ position: 'relative', background: 'rgba(255,255,255,0.15)', padding: '1px', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: 'none', clipPath: 'polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)' }}>
