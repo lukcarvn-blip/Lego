@@ -646,6 +646,25 @@ export const ProductDetails = () => {
                         </button>
                       </div>
                     </div>                    
+                    
+                    {/* Mini Crafting Time Bar – shown in sticky cart when crafting */}
+                    {isEffectivelyCrafting && (
+                      <div style={{ width: '100%' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.35rem' }}>
+                          <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase' }}>
+                            <Clock size={12} color="#f59e0b" />
+                            {language === 'vi' ? 'Đặt chế tác' : 'Crafting'}
+                          </span>
+                          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: isFastCrafting ? '#ef4444' : '#4ade80' }}>
+                            {craftTimeDays} {language === 'vi' ? 'ngày' : 'days'} {isFastCrafting ? '🚀' : ''}
+                          </span>
+                        </div>
+                        <div style={{ width: '100%', height: '6px', background: 'rgba(255,255,255,0.15)', borderRadius: '99px', overflow: 'hidden' }}>
+                          <div className="crafting-progress-fill" style={{ height: '100%', borderRadius: '99px', background: isFastCrafting ? 'linear-gradient(90deg,#ef4444,#f97316)' : 'linear-gradient(90deg,#4ade80,#22d3ee)' }} />
+                        </div>
+                      </div>
+                    )}
+
                     {/* Summary Note */}
                     <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
                       {/* Toggle header */}

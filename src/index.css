@@ -1715,6 +1715,16 @@ h2 {
 }
 
 
+/* Crafting progress fill animation */
+@keyframes crafting-fill {
+  from { width: 0%; }
+  to   { width: 70%; }
+}
+.crafting-progress-fill {
+  animation: crafting-fill 1.2s ease-out forwards;
+  width: 0%;
+}
+
 .product-detail-badges {
   position: absolute;
   top: 1.5rem;
