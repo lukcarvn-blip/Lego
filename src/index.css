@@ -1739,12 +1739,13 @@ h2 {
   .product-detail-badges {
     top: auto;
     bottom: 0.5rem;
-    left: 0.5rem;
+    left: 50%;
     right: auto;
     flex-direction: row;
-    align-items: flex-start;
-    transform: scale(0.7);
-    transform-origin: bottom left;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(-50%) scale(0.7);
+    transform-origin: bottom center;
     pointer-events: none;
   }
 }
