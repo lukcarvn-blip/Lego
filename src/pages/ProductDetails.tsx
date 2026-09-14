@@ -265,16 +265,18 @@ export const ProductDetails = () => {
               const col = settings.collections!.find((c: any) => c.name === product.collection); if (!col) return null;
               const IconComponent = Icons[col.iconName as keyof typeof Icons] as any || Icons.Folder;
               return (
-                <div title={col.name} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '42px', height: '42px', background: col.bg || 'rgba(255,255,255,0.1)', border: `1px solid ${col.border || 'rgba(255,255,255,0.2)'}`, color: col.color || '#fff', borderRadius: '12px', backdropFilter: 'blur(12px)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)', pointerEvents: 'auto', cursor: 'help' }}>
-                  <IconComponent size={20} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: col.bg || 'rgba(255,255,255,0.1)', border: `1px solid ${col.border || 'rgba(255,255,255,0.2)'}`, borderLeft: `3px solid ${col.color || '#fff'}`, color: col.color || '#fff', padding: '6px 14px', clipPath: 'polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)', fontSize: '0.75rem', fontWeight: 900, letterSpacing: '1px', backdropFilter: 'blur(12px)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)', textTransform: 'uppercase', pointerEvents: 'none' }}>
+                  <IconComponent size={14} />
+                  {col.name}
                 </div>
               );
             })()}
 
             {/* Category Badge */}
             {product.category && (
-              <div title={product.category.toUpperCase()} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '42px', height: '42px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', borderRadius: '12px', backdropFilter: 'blur(4px)', pointerEvents: 'auto', cursor: 'help' }}>
-                <Icons.Tag size={20} />
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', borderLeft: '3px solid rgba(255,255,255,0.7)', color: 'rgba(255,255,255,0.9)', padding: '6px 14px', clipPath: 'polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px)', fontSize: '0.75rem', fontWeight: 800, letterSpacing: '1px', backdropFilter: 'blur(12px)', pointerEvents: 'none' }}>
+                <Icons.Tag size={14} />
+                {product.category.toUpperCase()}
               </div>
             )}
           </div>
