@@ -580,7 +580,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
             {/* Mobile Add to Cart Button */}
             <button 
               className="mobile-add-cart-btn"
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', overflow: 'hidden' }}
+              style={{ alignItems: 'center', justifyContent: 'center', gap: '0.35rem', overflow: 'hidden' }}
               onClick={(e) => {
                 e.preventDefault();
                 const defaultSize = product.availableSizes?.[0] || 'Size 400';
