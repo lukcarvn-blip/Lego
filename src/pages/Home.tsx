@@ -507,6 +507,16 @@ export const Home = () => {
                 style={{ width: '100%', height: 'auto', display: 'block' }} 
               />
             </picture>
+            <div 
+              style={{
+                position: 'absolute', inset: 0, 
+                backgroundColor: 'rgba(0,0,0,0.7)', 
+                opacity: hoveredChar !== null ? 1 : 0, 
+                transition: 'opacity 0.4s ease', 
+                pointerEvents: 'none', 
+                zIndex: 5 
+              }} 
+            />
             
             <div style={{ position: 'absolute', inset: '15% 10% 15% 10%', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', zIndex: 10 }}>
               {showcaseCharacters.map((char, idx) => (
@@ -517,7 +527,24 @@ export const Home = () => {
                   onMouseEnter={() => setHoveredChar(idx)}
                   onMouseLeave={() => setHoveredChar(null)}
                 >
-                  <div className="tech-tooltip-wrapper">
+                  
+                  <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', borderRadius: '4px', zIndex: 1 }}>
+                     <div 
+                        className="char-zoom-layer" 
+                        style={{
+                          position: 'absolute', 
+                          inset: '-2px', // Slight overlap to prevent seams
+                          backgroundImage: `url(${settings.middleBannerImage || settings.middleBannerImageMobile || ''})`,
+                          backgroundSize: '625% 285.71428%',
+                          backgroundPosition: `${((10 + (idx % 5) * 16) / 84) * 100}% ${((15 + Math.floor(idx / 5) * 35) / 65) * 100}%`,
+                          opacity: hoveredChar === idx ? 1 : 0,
+                          transform: hoveredChar === idx ? 'scale(1.15)' : 'scale(1)',
+                          transition: 'all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                          pointerEvents: 'none'
+                        }} 
+                      />
+                  </div>
+                  <div className="tech-tooltip-wrapper" style={{ zIndex: 10 }}>
                     <div className="tech-tooltip-inner">
                       <div className="tech-tooltip-title">{char.name}</div>
                       <div className="tech-tooltip-quote">
