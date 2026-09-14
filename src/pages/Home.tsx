@@ -627,14 +627,17 @@ export const Home = () => {
             <div style={{ width: '100%', flex: 1, display: 'flex', flexDirection: 'column' }}>
               {flashSaleItems.length > 0 ? (
                 <Swiper
-                  modules={[Pagination, Autoplay, Navigation]}
-                  spaceBetween={20}
+                  modules={[Pagination, Autoplay, Navigation, EffectFade]}
+                  effect="fade"
+                  spaceBetween={0}
                   slidesPerView={1}
                   pagination={{ clickable: true }}
-                  autoplay={{ delay: 3000, disableOnInteraction: false }}
+                  autoplay={{ delay: 4000, disableOnInteraction: false }}
                   navigation={{ nextEl: '.flash-next', prevEl: '.flash-prev' }}
                   style={{ width: '100%', borderRadius: 'var(--radius-lg)', overflow: 'hidden', minHeight: '150px' }}
-                  className="flash-sale-swiper"
+                  className={`flash-sale-swiper ${flashScanDir === 'reverse' ? 'is-reverse' : ''}`}
+                  onSlideNextTransitionStart={() => setFlashScanDir('forward')}
+                  onSlidePrevTransitionStart={() => setFlashScanDir('reverse')}
                 >
                   {flashSaleItems.map((product: any) => (
                     <SwiperSlide key={product.id}>
