@@ -111,7 +111,7 @@ export const LoadingScreen = ({ isVisible }: { isVisible: boolean }) => {
               gap: '0.5rem'
             }}
           >
-            <h2 style={{ 
+            <div style={{ 
               margin: 0, 
               fontSize: '1.5rem', 
               fontWeight: 800, 
@@ -122,7 +122,7 @@ export const LoadingScreen = ({ isVisible }: { isVisible: boolean }) => {
               textTransform: 'uppercase'
             }}>
               {language === 'vi' ? 'CHỜ XÍU' : 'LOADING'}
-            </h2>
+            </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               {[0, 1, 2].map((i) => (
                 <motion.div
