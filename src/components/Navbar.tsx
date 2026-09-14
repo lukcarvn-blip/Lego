@@ -82,7 +82,7 @@ export const Navbar = () => {
             {/* Left Nav / Action */}
             <div style={{ flex: 1, display: 'flex', gap: '2rem', justifyContent: 'flex-start', alignItems: 'center' }}>
               <div className="desktop-nav" style={{ display: 'flex', gap: '2rem' }}>
-                <Link to="/partnership" style={{ fontWeight: 800, textTransform: 'uppercase' }}>
+                <Link className="hover-jump" to="/partnership" style={{ fontWeight: 800, textTransform: 'uppercase' }}>
                   {language === 'vi' ? 'Trở Thành Đối Tác' : 'Partnership'}
                 </Link>
               </div>
@@ -101,7 +101,7 @@ export const Navbar = () => {
                 >
                   {showBackToTop ? <ArrowUp size={24} /> : (location.pathname !== '/' ? <ArrowLeft size={24} /> : <div style={{width: 24, height: 24}}></div>)}
                 </button>
-                <Link to="/partnership" style={{ display: 'flex', alignItems: 'center', color: 'var(--color-text)' }}>
+                <Link className="hover-jump" to="/partnership" style={{ display: 'flex', alignItems: 'center', color: 'var(--color-text)' }}>
                   <Handshake size={22} />
                 </Link>
               </div>
@@ -132,17 +132,17 @@ export const Navbar = () => {
             {/* Right Nav & Actions */}
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '1.5rem' }}>
               <div className="desktop-nav" style={{ display: 'flex', gap: '2rem', marginRight: '1rem' }}>
-                <Link to="/products" style={{ fontWeight: 600 }}>{language === 'vi' ? 'Cửa hàng' : 'Shop'}</Link>
+                <Link className="hover-jump" to="/products" style={{ fontWeight: 600 }}>{language === 'vi' ? 'Cửa hàng' : 'Shop'}</Link>
               </div>
 
               {/* Actions */}
-              <button onClick={toggleLanguage} style={{ 
+              <button className="hover-jump" onClick={toggleLanguage} style={{ 
                 display: 'flex', alignItems: 'center', fontWeight: 'bold', fontSize: '1rem', color: 'var(--color-accent)' 
               }}>
                 {language.toUpperCase()}
               </button>
               
-              <Link id="nav-cart-icon" to="/cart" style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
+              <Link id="nav-cart-icon" className="hover-jump" to="/cart" style={{ display: 'flex', alignItems: 'center', position: 'relative' }}>
                 <ShoppingBag size={22} />
                 {cartItemCount > 0 && (
                   <span style={{
@@ -158,7 +158,7 @@ export const Navbar = () => {
               </Link>
 
               <div className="desktop-action" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                <button onClick={() => setIsSearchOpen(!isSearchOpen)} style={{ display: 'flex', alignItems: 'center', background: 'transparent', border: 'none', color: 'var(--color-text)', cursor: 'pointer' }}>
+                <button className="hover-jump" onClick={() => setIsSearchOpen(!isSearchOpen)} style={{ display: 'flex', alignItems: 'center', background: 'transparent', border: 'none', color: 'var(--color-text)', cursor: 'pointer' }}>
                   <Search size={22} />
                 </button>
                 {isSearchOpen && (
@@ -175,7 +175,7 @@ export const Navbar = () => {
                 )}
               </div>
               {user ? (
-                <Link to="/profile" className="desktop-action" style={{ display: 'flex', alignItems: 'center' }} title={language === 'vi' ? 'Hồ sơ' : 'Profile'}>
+                <Link to="/profile" className="desktop-action hover-jump" style={{ display: 'flex', alignItems: 'center' }} title={language === 'vi' ? 'Hồ sơ' : 'Profile'}>
                   {user.photoURL ? (
                     <img src={user.photoURL} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={user.displayName || 'User'} style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--color-accent)' }} />
                   ) : (

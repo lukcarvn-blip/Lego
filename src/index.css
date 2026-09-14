@@ -2056,3 +2056,11 @@ h2 {
   8% { color: #fff; text-shadow: 0 0 10px rgba(74,222,128,0.5); }
   100% { color: #fff; text-shadow: 0 0 10px rgba(74,222,128,0.5); }
 }
+
+/* Hover Jump Effect */
+.hover-jump {
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+}
+.hover-jump:hover {
+  translate: 0 -4px !important;
+}
