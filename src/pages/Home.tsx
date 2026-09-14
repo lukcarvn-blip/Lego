@@ -650,6 +650,7 @@ export const Home = () => {
                               alt={product.name[language as keyof typeof product.name]}
                               style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                             />
+                            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.85) 0%, transparent 25%, transparent 75%, rgba(0,0,0,0.85) 100%)', pointerEvents: 'none', zIndex: 1 }} />
                           </div>
                           <div className="flash-badge-container flash-hud-delayed">
                             {/* Collection Badge */}
