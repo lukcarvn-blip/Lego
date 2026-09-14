@@ -554,8 +554,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 showToast(language === 'vi' ? 'Đã thêm vào giỏ hàng!' : 'Added to cart!');
               }}
             >
-              <ShoppingCart size={16} />
-              {language === 'vi' ? 'THÊM VÀO GIỎ' : 'ADD TO CART'}
+              <ShoppingCart size={16} style={{ flexShrink: 0 }} />
+              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {language === 'vi' ? 'THÊM VÀO GIỎ' : 'ADD TO CART'}
+              </span>
             </button>
           </div>
           </div>

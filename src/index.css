@@ -1733,8 +1733,9 @@ h2 {
     right: auto;
     flex-direction: row;
     align-items: flex-start;
-    transform: scale(0.5);
+    transform: scale(0.7);
     transform-origin: bottom left;
+    pointer-events: none;
   }
 }
 
@@ -2003,6 +2004,10 @@ h2 {
   gap: 0.5rem;
   cursor: pointer;
   text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 @media (max-width: 1024px) {
