@@ -526,7 +526,7 @@ export const Home = () => {
                             const col = settings.collections.find(c => c.name === product.collection)!;
                             const IconComponent = (Icons as any)[col.iconName] || Icons.Folder;
                             return (
-                              <div style={{ position: 'absolute', bottom: '15px', left: '15px', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', width: '60px', height: '60px', background: col.bg || 'rgba(255,255,255,0.1)', border: `1px solid ${col.border || 'rgba(255,255,255,0.2)'}`, color: col.color || '#fff', borderRadius: '10px', fontSize: '0.45rem', fontWeight: 900, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', boxShadow: '0 4px 15px rgba(0,0,0,0.5)', textTransform: 'uppercase', pointerEvents: 'none', textAlign: 'center' }}>
+                              <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', width: '60px', height: '60px', background: col.bg || 'rgba(255,255,255,0.1)', border: `1px solid ${col.border || 'rgba(255,255,255,0.2)'}`, color: col.color || '#fff', borderRadius: '10px', fontSize: '0.45rem', fontWeight: 900, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', boxShadow: '0 4px 15px rgba(0,0,0,0.5)', textTransform: 'uppercase', pointerEvents: 'none', textAlign: 'center' }}>
                                 <IconComponent size={20} />
                                 <span style={{ lineHeight: 1.1 }}>{col.name}</span>
                               </div>
