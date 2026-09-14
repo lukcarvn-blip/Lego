@@ -89,7 +89,7 @@ const blockGlitch = {
 export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { products, updateProduct, addToCart, t, language, formatPrice, showToast, settings } = useStore();
+  const { products, updateProduct, addToCart, t, language, formatPrice, showToast, settings, user } = useStore();
   
   const relatedRef = useRef<HTMLDivElement>(null);
   const bestSellersRef = useRef<HTMLDivElement>(null);
@@ -195,6 +195,7 @@ export const ProductDetails = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
+  const [isReviewOverlayOpen, setIsReviewOverlayOpen] = useState(false);
 
   // Auto-switch to specs tab if no description
   useEffect(() => {
@@ -747,6 +748,21 @@ export const ProductDetails = () => {
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <h1 style={{ marginBottom: '0.5rem', lineHeight: 1.2 }}>{product.name[language]}</h1>
+              
+              <button 
+                onClick={() => setIsReviewOverlayOpen(true)}
+                style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
+                  padding: '0.25rem 0.5rem', background: 'transparent',
+                  border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)',
+                  cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              >
+                <div style={{ display: 'flex', color: '#fbbf24', fontSize: '1rem', letterSpacing: '1px' }}>★★★★★</div>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>12 Review</span>
+              </button>
             </div>
             
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--color-text-muted)', marginBottom: '1rem', flexWrap: 'wrap' }}>
@@ -804,7 +820,55 @@ export const ProductDetails = () => {
             </div>
           </div>
 
-          <div className="material-size-wrapper">
+          <div className="material-size-wrapper" style={{ position: 'relative' }}>
+            <AnimatePresence>
+              {isReviewOverlayOpen && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  style={{
+                    position: 'absolute', inset: 0, zIndex: 50,
+                    background: 'var(--color-bg)', 
+                    borderRadius: 'var(--radius-md)', border: '1px solid var(--color-accent)',
+                    padding: '1.5rem', display: 'flex', flexDirection: 'column',
+                    boxShadow: '0 10px 30px rgba(0,0,0,0.5)'
+                  }}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <h3 style={{ margin: 0, color: 'var(--color-accent)' }}>{language === 'vi' ? 'Đánh giá sản phẩm' : 'Product Reviews'}</h3>
+                    <button onClick={() => setIsReviewOverlayOpen(false)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}><X size={24} /></button>
+                  </div>
+                  
+                  <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+                      <div style={{ color: '#fbbf24', fontSize: '1rem', marginBottom: '4px' }}>★★★★★</div>
+                      <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.9rem', color: '#ddd' }}>"Sản phẩm cực kỳ chi tiết, in 3D không tì vết. Đáng từng đồng!"</p>
+                      <small style={{ color: 'var(--color-text-muted)' }}>- Nguyễn Văn A</small>
+                    </div>
+                    <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+                      <div style={{ color: '#fbbf24', fontSize: '1rem', marginBottom: '4px' }}>★★★★★</div>
+                      <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.9rem', color: '#ddd' }}>"Màu sắc giống hình 100%, đóng gói hộp mica xịn xò."</p>
+                      <small style={{ color: 'var(--color-text-muted)' }}>- Trần B</small>
+                    </div>
+                  </div>
+
+                  <div style={{ marginTop: '1.5rem' }}>
+                    {user ? (
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <input type="text" placeholder={language === 'vi' ? 'Viết đánh giá của bạn...' : 'Write your review...'} style={{ flex: 1, padding: '0.75rem', borderRadius: '4px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: '#fff' }} />
+                        <button style={{ padding: '0 1.5rem', background: 'var(--color-accent)', color: '#000', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>{language === 'vi' ? 'Gửi' : 'Submit'}</button>
+                      </div>
+                    ) : (
+                      <div style={{ textAlign: 'center', padding: '1rem', background: 'rgba(239, 68, 68, 0.1)', border: '1px dashed #ef4444', borderRadius: '8px' }}>
+                        <p style={{ margin: '0 0 0.5rem 0', color: '#ef4444', fontWeight: 600 }}>{language === 'vi' ? 'Vui lòng đăng nhập để đánh giá' : 'Please login to review'}</p>
+                        <button onClick={() => navigate('/auth')} style={{ padding: '0.5rem 1.5rem', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>{language === 'vi' ? 'ĐĂNG NHẬP' : 'LOGIN'}</button>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
             <motion.div 
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
