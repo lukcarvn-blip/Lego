@@ -231,7 +231,7 @@ export const Home = () => {
             <SwiperSlide key={prod.id}>
               <Link to={`/product/${prod.id}`} style={{ display: 'block', width: '100%', height: '100%', position: 'relative', textDecoration: 'none' }}>
                 <img 
-                  src={prod.bannerImage || prod.images?.[0] || '/images/slider-banner.jpg'} 
+                  src={prod.bannerImages?.[0] || prod.bannerImage || prod.images?.[0] || '/images/slider-banner.jpg'} 
                   alt={prod.name[language as keyof typeof prod.name]} 
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                 />
@@ -528,7 +528,7 @@ export const Home = () => {
                       <Link to={`/product/${product.id}`} style={{ display: 'block', width: '100%', height: '100%', textDecoration: 'none' }}>
                         <div style={{ position: 'relative', width: '100%', aspectRatio: '16/7', background: 'rgba(0,0,0,0.5)', overflow: 'hidden', borderRadius: 'var(--radius-md)' }}>
                           <img 
-                            src={product.bannerImage || product.images?.[0]} 
+                            src={product.bannerImages?.[0] || product.bannerImage || product.images?.[0]} 
                             alt={product.name[language as keyof typeof product.name]}
                             style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
                           />
