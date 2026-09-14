@@ -543,6 +543,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
                 </div>
               </div>
             )}
+            
+            {/* Mobile Add to Cart Button */}
+            <button 
+              className="mobile-add-cart-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                const defaultSize = product.availableSizes?.[0] || 'Size 400';
+                addToCart(product, defaultSize, 'PLA', 1, e);
+                showToast(language === 'vi' ? 'Đã thêm vào giỏ hàng!' : 'Added to cart!');
+              }}
+            >
+              <ShoppingCart size={16} />
+              {language === 'vi' ? 'THÊM VÀO GIỎ' : 'ADD TO CART'}
+            </button>
           </div>
           </div>
         )}
