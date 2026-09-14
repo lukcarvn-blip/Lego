@@ -654,37 +654,22 @@ export const ProductDetails = () => {
                       </div>
                     </div>                    
                     
-                    {/* Mini Crafting Time Bar – shown in sticky cart when crafting */}
-                    {isEffectivelyCrafting && (
-                      <div style={{ width: '100%', marginBottom: '0.5rem' }}>
-                        <div style={{ width: '100%', height: '24px', background: 'rgba(0,0,0,0.3)', borderRadius: '99px', overflow: 'hidden', position: 'relative' }}>
-                          <div className="crafting-progress-fill" style={{ position: 'absolute', top: 0, left: 0, bottom: 0, borderRadius: '99px', background: isFastCrafting ? 'linear-gradient(90deg,#ef4444,#f97316)' : 'linear-gradient(90deg, rgba(74,222,128,0.8), rgba(34,211,238,0.8))' }} />
-                          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 0.75rem', zIndex: 1 }}>
-                            <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', fontSize: '0.7rem', color: '#fff', fontWeight: 600, letterSpacing: '0.5px', textTransform: 'uppercase', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
-                              <Clock size={12} color="#fcd34d" />
-                              {language === 'vi' ? 'Đặt chế tác' : 'Crafting'}
-                            </span>
-                            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
-                              {craftTimeDays} {language === 'vi' ? 'ngày' : 'days'} {isFastCrafting ? '🚀' : ''}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
                     {/* Summary Note */}
                     <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
-                      {/* Toggle header */}
-                      <button
-                        onClick={() => setIsSummaryOpen(prev => !prev)}
-                        style={{ width: '100%', background: 'transparent', border: 'none', cursor: 'pointer', padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'rgba(0,0,0,0.85)' }}
-                      >
-                        <span style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{language === 'vi' ? '📋 Thông tin lựa chọn' : '📋 Selected options'}</span>
-                        <span style={{ fontSize: '1rem', transition: 'transform 0.25s', display: 'inline-block', transform: isSummaryOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▾</span>
-                      </button>
+                      {/* Toggle header - only on mobile */}
+                      {isMobile && (
+                        <button
+                          onClick={() => setIsSummaryOpen(prev => !prev)}
+                          style={{ width: '100%', background: 'transparent', border: 'none', cursor: 'pointer', padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'rgba(0,0,0,0.85)' }}
+                        >
+                          <span style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{language === 'vi' ? '📋 Thông tin lựa chọn' : '📋 Selected options'}</span>
+                          <span style={{ fontSize: '1rem', transition: 'transform 0.25s', display: 'inline-block', transform: isSummaryOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▾</span>
+                        </button>
+                      )}
+                      
                       {/* Collapsible body */}
-                      {isSummaryOpen && (
-                        <div className="summary-note" style={{ fontSize: '0.9rem', color: 'rgba(0,0,0,0.8)', lineHeight: 1.5, padding: '0 1rem 0.75rem' }}>
+                      {(!isMobile || isSummaryOpen) && (
+                        <div className="summary-note" style={{ fontSize: '0.9rem', color: 'rgba(0,0,0,0.8)', lineHeight: 1.5, padding: isMobile ? '0 1rem 0.75rem' : '0.75rem 1rem' }}>
                           <ul style={{ paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
                             <li><strong>{language === 'vi' ? product.name.vi : product.name.en}</strong></li>
                             <li>{language === 'vi' ? 'Size: ' : 'Size: '}<strong>{selectedSize}</strong>, {language === 'vi' ? 'Chất liệu: ' : 'Material: '}<strong>{selectedMaterial}</strong></li>
