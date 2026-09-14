@@ -113,7 +113,7 @@ export const Home = () => {
     initial: { opacity: 0, y: 30, filter: 'blur(10px)' },
     whileInView: { opacity: 1, y: 0, filter: 'blur(0px)' },
     viewport: { once: true, margin: "-50px" },
-    transition: { duration: 0.6, ease: "easeOut" }
+    transition: { duration: 0.6, ease: "easeOut" as const }
   };
 
   const flashSaleItems = useMemo(() => {
@@ -319,11 +319,10 @@ export const Home = () => {
                           <div
                             onClick={(e) => {
                               e.preventDefault();
-                              const pr = formatPrice(prod.price, prod.discountPercentage);
-                              const currentPriceStr = typeof pr.current === 'string' ? pr.current : pr.current.props.children.join('');
-                              const currentPrice = parseInt(currentPriceStr.replace(/[^0-9]/g, ''));
-                              addToCart({ id: prod.id, name: prod.name, price: currentPrice, image: prod.images[0], quantity: 1 });
-                              showToast(language === 'vi' ? 'Đã thêm vào giỏ hàng!' : 'Added to cart!', 'success');
+                              const defaultSize = prod.availableSizes?.[0] || 'Size 400%';
+                              const defaultMaterial = prod.availableMaterials?.[0] || 'PLA';
+                              addToCart(prod, defaultSize, defaultMaterial as any, 1, e);
+                              showToast(language === 'vi' ? 'Đã thêm vào giỏ hàng!' : 'Added to cart!');
                             }}
                             style={{ 
                               padding: '1.5px',
