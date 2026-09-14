@@ -429,22 +429,22 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
           </motion.div>
           
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '1rem', minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.4rem' }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--color-text-muted)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                {product.category.toLowerCase() === 'superheroes' && <Shield size={12} />}
-                {product.category.toLowerCase() === 'sci-fi' && <Rocket size={12} />}
-                {product.category.toLowerCase() === 'classic' && <Crown size={12} />}
-                {['superheroes', 'sci-fi', 'classic'].indexOf(product.category.toLowerCase()) === -1 && <Tag size={12} />}
-                {product.category}
+            <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap', gap: '0.5rem', marginBottom: '0.4rem', width: '100%', overflow: 'hidden' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--color-text-muted)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flexShrink: 1, minWidth: 0 }}>
+                {product.category.toLowerCase() === 'superheroes' && <Shield size={12} style={{ flexShrink: 0 }} />}
+                {product.category.toLowerCase() === 'sci-fi' && <Rocket size={12} style={{ flexShrink: 0 }} />}
+                {product.category.toLowerCase() === 'classic' && <Crown size={12} style={{ flexShrink: 0 }} />}
+                {['superheroes', 'sci-fi', 'classic'].indexOf(product.category.toLowerCase()) === -1 && <Tag size={12} style={{ flexShrink: 0 }} />}
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{product.category}</span>
               </span>
               
               {product.collection && settings.collections?.find((c: any) => c.name === product.collection) && (() => {
                 const col = settings.collections!.find((c: any) => c.name === product.collection); if (!col) return null;
                 const IconComponent = Icons[col.iconName as keyof typeof Icons] as any || Icons.Folder;
                 return (
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', background: col.bg || 'rgba(255,255,255,0.1)', border: `1px solid ${col.border || 'rgba(255,255,255,0.2)'}`, color: col.color || '#fff', padding: '2px 8px', borderRadius: '12px', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase' }}>
-                    <IconComponent size={10} />
-                    {col.name}
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', background: col.bg || 'rgba(255,255,255,0.1)', border: `1px solid ${col.border || 'rgba(255,255,255,0.2)'}`, color: col.color || '#fff', padding: '2px 8px', borderRadius: '12px', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', flexShrink: 1, minWidth: 0 }}>
+                    <IconComponent size={10} style={{ flexShrink: 0 }} />
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{col.name}</span>
                   </span>
                 );
               })()}
