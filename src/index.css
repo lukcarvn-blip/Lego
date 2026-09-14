@@ -2218,6 +2218,45 @@ h2 {
   background: rgba(0,0,0,0.4);
 }
 
+@media (max-width: 768px) {
+  .flash-badge-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3cqh;
+  }
+  .flash-badge {
+    width: 28cqh;
+    height: 28cqh;
+    border-radius: 4cqh;
+  }
+  .flash-badge svg {
+    width: 10cqh;
+    height: 10cqh;
+  }
+  .flash-badge-text {
+    font-size: 3.2cqh;
+  }
+  .flash-badge-subtext {
+    font-size: 2.2cqh;
+  }
+  .flash-badge-3d-wrapper {
+    width: 8cqh;
+    height: 8cqh;
+  }
+  .flash-badge-3d-front {
+    font-size: 2.6cqh;
+    transform: translateZ(4cqh);
+  }
+  .flash-badge-3d-side {
+    font-size: 1.8cqh;
+    transform: rotateY(90deg) translateZ(4cqh);
+  }
+  .flash-badge-3d-top {
+    transform: rotateX(90deg) translateZ(4cqh);
+  }
+}
+
+
 /* Flash Sale Horizontal Scan Effect */
 @keyframes flash-reveal-forward {
   0% { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
