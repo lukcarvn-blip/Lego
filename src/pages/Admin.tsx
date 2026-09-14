@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useStore, type OrderStatus } from '../context/StoreContext';
-import { Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText, Sparkles, Store , Palette, Moon, Sun } from 'lucide-react';
+import { Package, Clock, Truck, CheckCircle, Edit2, Plus, Settings, LayoutDashboard, ShoppingBag, Users, BookOpen, TrendingUp, Search, Filter, Download, Eye, ExternalLink, Trash2, X, AlertTriangle, Heart, BarChart2, ChevronRight, Award, RefreshCw, Home, LogOut, DatabaseZap, Globe, Menu, Printer, Folder, LayoutGrid, List, PenTool, Image as ImageIcon, Save, Send, Wrench, Zap, Key, Box, ShoppingCart, User, Info, FileText, Sparkles, Store , Palette, Moon, Sun , MessageSquare} from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { Order, BlogPost } from '../context/StoreContext';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
@@ -563,6 +563,7 @@ export const Admin = () => {
     { id: 'blog', label: 'Bài viết', icon: <BookOpen size={18} /> },
     { id: 'files', label: 'Quản lý File', icon: <Folder size={18} /> },
     { id: 'members', label: 'Thành viên', icon: <Users size={18} /> },
+    { id: 'reviews', label: 'Đánh giá', icon: <MessageSquare size={18} /> },
     { id: 'settings', label: 'Cài đặt', icon: <Settings size={18} /> },
   ] as const;
 

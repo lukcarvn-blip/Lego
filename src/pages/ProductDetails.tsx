@@ -94,7 +94,7 @@ export const ProductDetails = () => {
     return () => clearTimeout(timer);
   }, []);
   const navigate = useNavigate();
-  const { products, updateProduct, addToCart, t, language, formatPrice, showToast, settings, user } = useStore();
+  const { products, updateProduct, addToCart, t, language, formatPrice, showToast, settings, user, reviews, addReview } = useStore();
   
   const relatedRef = useRef<HTMLDivElement>(null);
   const bestSellersRef = useRef<HTMLDivElement>(null);
@@ -205,6 +205,9 @@ export const ProductDetails = () => {
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [isReviewOverlayOpen, setIsReviewOverlayOpen] = useState(false);
   const [reviewPage, setReviewPage] = useState(1);
+  const [reviewRating, setReviewRating] = useState(5);
+  const [reviewContent, setReviewContent] = useState('');
+  const [isSubmittingReview, setIsSubmittingReview] = useState(false);
   const reviewBoxRef = useRef<HTMLDivElement>(null);
   const [prevScrollY, setPrevScrollY] = useState(0);
 
@@ -264,6 +267,29 @@ export const ProductDetails = () => {
   if (!product) {
     return <div className="container" style={{ padding: '8rem 0', textAlign: 'center' }}>Product not found</div>;
   }
+
+  const productReviews = reviews ? reviews.filter(r => r.productId === product.id && r.status === 'APPROVED') : [];
+  const averageRating = productReviews.length > 0 ? (productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length).toFixed(1) : '5.0';
+
+  const handleSubmitReview = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewContent.trim()) return;
+    setIsSubmittingReview(true);
+    if (addReview) {
+      await addReview({
+        productId: product.id,
+        userId: user?.uid || '',
+        userName: user?.displayName || 'Ẩn danh',
+        userAvatar: user?.photoURL || undefined,
+        rating: reviewRating,
+        content: reviewContent
+      });
+    }
+    setReviewContent('');
+    setReviewRating(5);
+    setIsSubmittingReview(false);
+  };
+
 
   const handleAddToCart = (e?: React.MouseEvent) => {
     if (product && selectedSize) {
@@ -836,7 +862,7 @@ export const ProductDetails = () => {
                 onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
               >
                 <div style={{ display: 'flex', color: '#fbbf24', fontSize: '1rem', letterSpacing: '1px' }}>★★★★★</div>
-                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>12 Review</span>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>{productReviews.length} Review</span>
               </button>
             </div>
             
@@ -927,34 +953,72 @@ export const ProductDetails = () => {
                     </div>
                     
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                      {[
-                        { name: 'Nguyễn Văn A', cmt: 'Sản phẩm cực kỳ chi tiết, in 3D không tì vết. Đáng từng đồng!' },
-                        { name: 'Trần B', cmt: 'Màu sắc giống hình 100%, đóng gói hộp mica xịn xò.' },
-                        { name: 'Hoàng C', cmt: 'Shop đóng gói siêu cẩn thận, giao hàng cũng nhanh nữa. Perfect!' },
-                        { name: 'Lê D', cmt: 'Chất lượng in 3D rất tốt, nhựa cứng cáp, lên màu đẹp.' },
-                        { name: 'Phạm E', cmt: 'Hơi nhỏ so với mình nghĩ nhưng độ chi tiết thì khỏi bàn.' }
-                      ].slice((reviewPage - 1) * 3, reviewPage * 3).map((r, i) => (
-                        <div key={i} style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
-                          <div style={{ color: '#fbbf24', fontSize: '1rem', marginBottom: '4px' }}>★★★★★</div>
-                          <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.9rem', color: '#ddd' }}>"{r.cmt}"</p>
-                          <small style={{ color: 'var(--color-text-muted)' }}>- {r.name}</small>
+                        {productReviews.length === 0 ? (
+                          <p style={{ textAlign: 'center', color: 'var(--color-text-muted)' }}>{language === 'vi' ? 'Chưa có đánh giá nào.' : 'No reviews yet.'}</p>
+                        ) : (
+                          productReviews.slice((reviewPage - 1) * 3, reviewPage * 3).map((r) => (
+                            <div key={r.id} style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+                              <div style={{ color: '#fbbf24', fontSize: '1rem', marginBottom: '4px' }}>
+                                {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}
+                              </div>
+                              <p style={{ margin: '0 0 0.5rem 0', fontSize: '0.9rem', color: '#ddd' }}>"{r.content}"</p>
+                              <small style={{ color: 'var(--color-text-muted)' }}>- {r.userName} • {new Date(r.createdAt).toLocaleDateString()}</small>
+                            </div>
+                          ))
+                        )}
+                      </div>
+  
+                      {productReviews.length > 3 && (
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1rem' }}>
+                          <button 
+                            disabled={reviewPage === 1} 
+                            onClick={() => setReviewPage(p => p - 1)}
+                            style={{ padding: '4px 12px', background: reviewPage === 1 ? 'rgba(255,255,255,0.1)' : 'var(--color-accent)', color: reviewPage === 1 ? '#888' : '#000', borderRadius: '4px', border: 'none', cursor: reviewPage === 1 ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
+                          >&lt;</button>
+                          <span style={{ fontSize: '0.9rem' }}>{reviewPage} / {Math.ceil(productReviews.length / 3)}</span>
+                          <button 
+                            disabled={reviewPage === Math.ceil(productReviews.length / 3)} 
+                            onClick={() => setReviewPage(p => p + 1)}
+                            style={{ padding: '4px 12px', background: reviewPage === Math.ceil(productReviews.length / 3) ? 'rgba(255,255,255,0.1)' : 'var(--color-accent)', color: reviewPage === Math.ceil(productReviews.length / 3) ? '#888' : '#000', borderRadius: '4px', border: 'none', cursor: reviewPage === Math.ceil(productReviews.length / 3) ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
+                          >&gt;</button>
                         </div>
-                      ))}
-                    </div>
+                      )}
 
-                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1rem' }}>
-                      <button 
-                        disabled={reviewPage === 1} 
-                        onClick={() => setReviewPage(p => p - 1)}
-                        style={{ padding: '4px 12px', background: reviewPage === 1 ? 'rgba(255,255,255,0.1)' : 'var(--color-accent)', color: reviewPage === 1 ? '#888' : '#000', borderRadius: '4px', border: 'none', cursor: reviewPage === 1 ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
-                      >&lt;</button>
-                      <span style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>{reviewPage} / 2</span>
-                      <button 
-                        disabled={reviewPage === 2} 
-                        onClick={() => setReviewPage(p => p + 1)}
-                        style={{ padding: '4px 12px', background: reviewPage === 2 ? 'rgba(255,255,255,0.1)' : 'var(--color-accent)', color: reviewPage === 2 ? '#888' : '#000', borderRadius: '4px', border: 'none', cursor: reviewPage === 2 ? 'not-allowed' : 'pointer', fontWeight: 'bold' }}
-                      >&gt;</button>
-                    </div>
+                      <div style={{ marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                        <h4 style={{ margin: '0 0 1rem 0' }}>{language === 'vi' ? 'Viết đánh giá của bạn' : 'Write a review'}</h4>
+                        {!user ? (
+                          <div style={{ textAlign: 'center', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
+                            <p style={{ margin: '0 0 1rem 0', color: 'var(--color-text-muted)' }}>{language === 'vi' ? 'Vui lòng đăng nhập để đánh giá sản phẩm này.' : 'Please login to review this product.'}</p>
+                            <button onClick={() => { handleCloseReview(); document.getElementById('auth-btn')?.click(); }} className="btn-primary" style={{ padding: '0.5rem 1rem' }}>
+                              {language === 'vi' ? 'Đăng nhập' : 'Login'}
+                            </button>
+                          </div>
+                        ) : (
+                          <form onSubmit={handleSubmitReview} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                              <span style={{ fontSize: '0.9rem' }}>{language === 'vi' ? 'Điểm đánh giá:' : 'Rating:'}</span>
+                              {[1,2,3,4,5].map(star => (
+                                <span 
+                                  key={star} 
+                                  onClick={() => setReviewRating(star)}
+                                  style={{ cursor: 'pointer', color: star <= reviewRating ? '#fbbf24' : '#444', fontSize: '1.25rem' }}
+                                >★</span>
+                              ))}
+                            </div>
+                            <textarea
+                              value={reviewContent}
+                              onChange={(e) => setReviewContent(e.target.value)}
+                              placeholder={language === 'vi' ? 'Nhập nội dung đánh giá...' : 'Write your review here...'}
+                              rows={3}
+                              style={{ width: '100%', padding: '0.75rem', borderRadius: '8px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                              required
+                            />
+                            <button type="submit" disabled={isSubmittingReview || !reviewContent.trim()} className="btn-primary" style={{ alignSelf: 'flex-start', padding: '0.5rem 1.5rem', opacity: (isSubmittingReview || !reviewContent.trim()) ? 0.5 : 1 }}>
+                              {isSubmittingReview ? '...' : (language === 'vi' ? 'Gửi đánh giá' : 'Submit Review')}
+                            </button>
+                          </form>
+                        )}
+                      </div>
 
                     <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)' }}>
                       {user ? (
