@@ -151,23 +151,31 @@ export const Home = () => {
       <section className="hero-section" style={{ position: 'relative' }}>
         <style>{`
           
-          @keyframes sci-fi-scan {
-            0% { top: -10%; opacity: 0; }
-            15% { opacity: 1; box-shadow: 0 0 40px 10px var(--color-accent); }
-            50% { opacity: 1; box-shadow: 0 0 60px 15px var(--color-accent); background: #fff; }
-            85% { opacity: 1; box-shadow: 0 0 40px 10px var(--color-accent); }
-            100% { top: 110%; opacity: 0; }
+          @keyframes slide-reveal {
+            0% { clip-path: polygon(0 0, 100% 0, 100% 0%, 0 0%); }
+            100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
           }
-          .scanner-overlay {
+          @keyframes sci-fi-scan {
+            0% { top: 0%; opacity: 1; box-shadow: 0 0 20px 5px var(--color-accent); }
+            95% { top: 100%; opacity: 1; box-shadow: 0 0 20px 5px var(--color-accent); }
+            100% { top: 100%; opacity: 0; box-shadow: none; }
+          }
+          .hero-blog-swiper .swiper-slide {
+            background-color: #050505 !important;
+          }
+          .hero-blog-swiper .swiper-slide-active .hero-slide-content {
+            animation: slide-reveal 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          }
+          .hero-blog-swiper .swiper-slide-active .scanner-overlay {
             position: absolute;
             left: 0;
             right: 0;
             height: 3px;
-            background: var(--color-accent);
+            background: #fff;
             z-index: 25;
             pointer-events: none;
             opacity: 0;
-            animation: sci-fi-scan 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            animation: sci-fi-scan 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
           }
           .hero-pagination {
             display: flex;
@@ -195,6 +203,7 @@ export const Home = () => {
           }
         `}</style>
         <Swiper
+          className="hero-blog-swiper"
           modules={[Autoplay, Navigation, EffectFade]}
           effect="fade"
           spaceBetween={0}
@@ -202,7 +211,6 @@ export const Home = () => {
           navigation={{ nextEl: '.hero-next', prevEl: '.hero-prev' }}
           autoplay={{ delay: 15000, disableOnInteraction: false }}
           loop={true}
-          className="hero-blog-swiper"
           onAutoplayTimeLeft={onAutoplayTimeLeft}
           style={{ width: '100%', height: '70vh', minHeight: '600px', backgroundColor: 'var(--color-bg)' }}
         >
@@ -260,6 +268,8 @@ export const Home = () => {
           </div>
           {heroSliderItems.map((prod) => (
             <SwiperSlide key={prod.id}>
+              <div className="scanner-overlay"></div>
+              <div className="hero-slide-content" style={{ width: "100%", height: "100%", position: "relative", overflow: "hidden" }}>
               <Link to={`/product/${prod.id}`} style={{ display: 'block', width: '100%', height: '100%', position: 'relative', textDecoration: 'none' }}>
                 <img 
                   src={prod.bannerImages?.[0] || prod.bannerImage || prod.images?.[0] || '/images/slider-banner.jpg'} 
@@ -399,6 +409,7 @@ export const Home = () => {
 
                 </div>
               </Link>
+            </div>
             </SwiperSlide>
           ))}
 </Swiper>
