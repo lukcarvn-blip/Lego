@@ -93,7 +93,20 @@ export const Home = () => {
     }
   };
 
-  const sliderCandidates = [...products].sort((a, b) => (b.views || 0) - (a.views || 0));
+  const sliderCandidates = [...products].filter(p => {
+    // Hide ready-stock products if they are out of stock
+    if (p.isReadyStock && p.stock <= 0) return false;
+    
+    // Include if it is featured OR ready stock
+    return p.isHeroSlider || p.isReadyStock;
+  }).sort((a, b) => {
+    // Featured products prioritize over ready stock
+    if (a.isHeroSlider && !b.isHeroSlider) return -1;
+    if (!a.isHeroSlider && b.isHeroSlider) return 1;
+    // Fallback to sorting by views
+    return (b.views || 0) - (a.views || 0);
+  });
+  
   const heroSliderItems = sliderCandidates.slice(0, 6);
   
   const headerAnimProps = {
