@@ -152,7 +152,7 @@ export const ProductDetails = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
-  const handleLike = () => {
+  const handleLike = (e?: React.MouseEvent) => {
     if (!product) return;
     if (isLiked) {
       setIsLiked(false);
@@ -160,6 +160,9 @@ export const ProductDetails = () => {
       updateProduct({ ...product, likes: Math.max(0, (product.likes || 0) - 1) });
     } else {
       setIsLiked(true);
+      if (e && e.clientX) {
+        window.dispatchEvent(new CustomEvent('heart-burst', { detail: { x: e.clientX, y: e.clientY } }));
+      }
       localStorage.setItem('liked_' + product.id, 'true');
       updateProduct({ ...product, likes: (product.likes || 0) + 1 });
       showToast(language === 'vi' ? 'Đã yêu thích sản phẩm!' : 'Added to wishlist!');
