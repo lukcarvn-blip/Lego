@@ -56,11 +56,19 @@ const TypewriterText = ({ text, isActive }: { text: string, isActive: boolean })
 };
 
 export const Home = () => {
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setIsInitialLoad(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
+  
   const { products, blogPosts, t, language, settings, formatPrice, addToCart, showToast } = useStore();
 
   const progressCircle = useRef<SVGCircleElement>(null);
   const progressText = useRef<HTMLSpanElement>(null);
 
+  const [heroScanDir, setHeroScanDir] = useState<'forward' | 'reverse'>('forward');
+  const [flashScanDir, setFlashScanDir] = useState<'forward' | 'reverse'>('forward');
   const onAutoplayTimeLeft = (s: any, time: number, progress: number) => {
     if (progressCircle.current) {
       const radius = 14;
@@ -164,14 +172,36 @@ export const Home = () => {
           .hero-blog-swiper .swiper-slide-active .hero-columns-container {
             animation: hud-enter 0.6s cubic-bezier(0.4, 0, 0.2, 1) 1.5s forwards;
           }
-          @keyframes hud-enter {
-            0% { opacity: 0; transform: translateY(15px); }
-            100% { opacity: 1; transform: translateY(0); }
+          
+          
+          .hero-blog-swiper.is-initial-load .swiper-slide-active .hero-slide-content,
+          .hero-blog-swiper.is-initial-load .swiper-slide-active .scanner-overlay {
+            animation-delay: 2.5s !important;
+            animation-fill-mode: both !important;
+          }
+          .hero-blog-swiper.is-initial-load .swiper-slide-active .hero-columns-container {
+            animation-delay: 4s !important;
+            animation-fill-mode: both !important;
           }
           @keyframes sci-fi-scan {
             0% { top: 0%; opacity: 1; box-shadow: 0 0 20px 5px var(--color-accent); }
             95% { top: 100%; opacity: 1; box-shadow: 0 0 20px 5px var(--color-accent); }
             100% { top: 100%; opacity: 0; box-shadow: none; }
+          }
+          @keyframes slide-reveal-reverse {
+            0% { clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%); }
+            100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+          }
+          @keyframes sci-fi-scan-reverse {
+            0% { top: 100%; opacity: 1; box-shadow: 0 0 20px 5px var(--color-accent); }
+            95% { top: 0%; opacity: 1; box-shadow: 0 0 20px 5px var(--color-accent); }
+            100% { top: 0%; opacity: 0; box-shadow: none; }
+          }
+          .hero-blog-swiper.is-reverse .swiper-slide-active .hero-slide-content {
+            animation: slide-reveal-reverse 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+          }
+          .hero-blog-swiper.is-reverse .swiper-slide-active .scanner-overlay {
+            animation: sci-fi-scan-reverse 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
           }
           .hero-blog-swiper .swiper-slide {
             background-color: #050505 !important;
@@ -216,7 +246,9 @@ export const Home = () => {
           }
         `}</style>
         <Swiper
-          className="hero-blog-swiper"
+          className={`hero-blog-swiper ${heroScanDir === 'reverse' ? 'is-reverse' : ''} ${isInitialLoad ? 'is-initial-load' : ''}`}
+          onSlideNextTransitionStart={() => setHeroScanDir('forward')}
+          onSlidePrevTransitionStart={() => setHeroScanDir('reverse')}
           modules={[Autoplay, Navigation, EffectFade]}
           effect="fade"
           spaceBetween={0}
@@ -607,13 +639,16 @@ export const Home = () => {
                   {flashSaleItems.map((product: any) => (
                     <SwiperSlide key={product.id}>
                       <Link to={`/product/${product.id}`} style={{ display: 'block', width: '100%', height: '100%', textDecoration: 'none' }}>
-                        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/7', background: 'rgba(0,0,0,0.5)', overflow: 'hidden', borderRadius: 'var(--radius-md)' }}>
-                          <img 
-                            src={product.bannerImages?.[0] || product.bannerImage || product.images?.[0]} 
-                            alt={product.name[language as keyof typeof product.name]}
-                            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-                          />
-                          <div className="flash-badge-container">
+                        <div className="flash-container-wrapper" style={{ position: 'relative', width: '100%', aspectRatio: '16/7', backgroundColor: '#050505', overflow: 'hidden', borderRadius: 'var(--radius-md)' }}>
+                          <div className="flash-scanner-overlay"></div>
+                          <div className="flash-slide-content" style={{ position: 'absolute', inset: 0 }}>
+                            <img 
+                              src={product.bannerImages?.[0] || product.bannerImage || product.images?.[0]} 
+                              alt={product.name[language as keyof typeof product.name]}
+                              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                          </div>
+                          <div className="flash-badge-container flash-hud-delayed">
                             {/* Collection Badge */}
                             {product.collection && settings.collections?.find((c: any) => c.name === product.collection) && (() => {
                               const col = settings.collections!.find((c: any) => c.name === product.collection); if (!col) return null;

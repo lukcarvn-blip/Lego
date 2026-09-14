@@ -2111,22 +2111,38 @@ h2 {
 .flash-sale-swiper {
   container-type: inline-size;
 }
+
+.flash-container-wrapper {
+  container-type: size;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+
+
+.flash-container-wrapper {
+  container-type: size;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+}
+
 .flash-badge-container {
   position: absolute;
-  top: 2cqw;
-  right: 2cqw;
+  top: 5cqh;
+  right: 5cqh;
   z-index: 10;
   display: flex;
   flex-direction: column;
-  gap: 1cqw;
+  gap: 2.5cqh;
   align-items: flex-end;
 }
 .flash-badge {
-  width: 4.5cqw;
-  height: 4.5cqw;
-  min-width: 32px;
-  min-height: 32px;
-  border-radius: 0.8cqw;
+  width: 18cqh;
+  height: 18cqh;
+  border-radius: 3cqh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2135,36 +2151,32 @@ h2 {
   text-transform: uppercase;
   pointer-events: auto;
   text-align: center;
-  box-shadow: 0 0.5cqw 2cqw rgba(0,0,0,0.5);
+  box-shadow: 0 1cqh 3cqh rgba(0,0,0,0.5);
   font-weight: 800;
   border: 1px solid rgba(255,255,255,0.15);
   background: rgba(255,255,255,0.05);
   color: rgba(255,255,255,0.9);
 }
 .flash-badge svg {
-  width: 1.8cqw;
-  height: 1.8cqw;
-  min-width: 14px;
-  min-height: 14px;
+  width: 6.5cqh;
+  height: 6.5cqh;
   margin-bottom: 4%;
 }
 .flash-badge-text {
-  font-size: 0.65cqw;
+  font-size: 2.2cqh;
   line-height: 1.1;
-  letter-spacing: 0.05cqw;
+  letter-spacing: 0.1cqh;
 }
 .flash-badge-subtext {
-  font-size: 0.4cqw;
+  font-size: 1.5cqh;
   opacity: 0.7;
   line-height: 1;
 }
 
 /* 3D Print badge specialized CSS */
 .flash-badge-3d-wrapper {
-  width: 1.5cqw;
-  height: 1.5cqw;
-  min-width: 12px;
-  min-height: 12px;
+  width: 5cqh;
+  height: 5cqh;
   perspective: 200px;
   display: inline-block;
   flex-shrink: 0;
@@ -2189,30 +2201,76 @@ h2 {
   box-sizing: border-box;
 }
 .flash-badge-3d-front {
-  font-size: 0.5cqw;
-  transform: translateZ(0.75cqw);
+  font-size: 1.8cqh;
+  transform: translateZ(2.5cqh);
   color: #fff;
   background: rgba(0,0,0,0.4);
 }
 .flash-badge-3d-side {
-  font-size: 0.35cqw;
-  transform: rotateY(90deg) translateZ(0.75cqw);
+  font-size: 1.2cqh;
+  transform: rotateY(90deg) translateZ(2.5cqh);
   background: #fff;
   color: #000;
 }
 .flash-badge-3d-top {
-  transform: rotateX(90deg) translateZ(0.75cqw);
+  transform: rotateX(90deg) translateZ(2.5cqh);
   background: rgba(0,0,0,0.4);
 }
 
-@media (max-width: 768px) {
-  .flash-badge-container { top: 3cqw; right: 3cqw; gap: 2cqw; }
-  .flash-badge { width: 10cqw; height: 10cqw; border-radius: 1.5cqw; }
-  .flash-badge svg { width: 4cqw; height: 4cqw; }
-  .flash-badge-text { font-size: 1.5cqw; }
-  .flash-badge-subtext { font-size: 1cqw; }
-  .flash-badge-3d-wrapper { width: 3.2cqw; height: 3.2cqw; }
-  .flash-badge-3d-front { font-size: 1.1cqw; transform: translateZ(1.6cqw); }
-  .flash-badge-3d-side { font-size: 0.7cqw; transform: rotateY(90deg) translateZ(1.6cqw); }
-  .flash-badge-3d-top { transform: rotateX(90deg) translateZ(1.6cqw); }
+/* Flash Sale Horizontal Scan Effect */
+@keyframes flash-reveal-forward {
+  0% { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); }
+  100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+@keyframes flash-scan-forward {
+  0% { left: 0%; opacity: 1; box-shadow: 0 0 20px 5px var(--color-accent); }
+  95% { left: 100%; opacity: 1; box-shadow: 0 0 20px 5px var(--color-accent); }
+  100% { left: 100%; opacity: 0; box-shadow: none; }
+}
+
+@keyframes flash-reveal-reverse {
+  0% { clip-path: polygon(100% 0, 100% 0, 100% 100%, 100% 100%); }
+  100% { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+@keyframes flash-scan-reverse {
+  0% { left: 100%; opacity: 1; box-shadow: 0 0 20px 5px var(--color-accent); }
+  95% { left: 0%; opacity: 1; box-shadow: 0 0 20px 5px var(--color-accent); }
+  100% { left: 0%; opacity: 0; box-shadow: none; }
+}
+
+.flash-sale-swiper .swiper-slide {
+  background-color: #050505 !important;
+}
+
+.flash-sale-swiper .swiper-slide-active .flash-slide-content {
+  animation: flash-reveal-forward 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.flash-sale-swiper .swiper-slide-active .flash-scanner-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #fff;
+  z-index: 25;
+  pointer-events: none;
+  opacity: 0;
+  animation: flash-scan-forward 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.flash-sale-swiper.is-reverse .swiper-slide-active .flash-slide-content {
+  animation: flash-reveal-reverse 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.flash-sale-swiper.is-reverse .swiper-slide-active .flash-scanner-overlay {
+  animation: flash-scan-reverse 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.flash-sale-swiper .swiper-slide-active .flash-hud-delayed {
+  animation: hud-enter 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.8s forwards;
+  opacity: 0;
+}
+
+
+@keyframes hud-enter {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
