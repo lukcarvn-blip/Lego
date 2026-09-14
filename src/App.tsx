@@ -25,6 +25,7 @@ import { Profile } from './pages/Profile';
 import { NotFound } from './pages/NotFound';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { FloatingActions } from './components/FloatingActions';
+import { HeartBurst } from './components/HeartBurst';
 
 import { LoadingScreen } from './components/LoadingScreen';
 
@@ -127,6 +128,7 @@ function AppContent() {
       </main>
         {!isAdmin && <Footer />}
         {!isAdmin && <FloatingActions />}
+        <HeartBurst />
       </div>
     </>
   );
