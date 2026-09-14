@@ -460,11 +460,11 @@ button {
 @media (max-width: 1023px) {
   .sticky-cart-wrapper {
     position: fixed;
-    bottom: 65px; /* above mobile nav */
+    bottom: 0;
     left: 0;
     right: 0;
     z-index: 90;
-    padding: 0 0.75rem;
+    padding: 0 0.75rem calc(65px + 0.5rem);
   }
 }
 
@@ -2004,10 +2004,6 @@ h2 {
   gap: 0.5rem;
   cursor: pointer;
   text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100%;
 }
 
 @media (max-width: 1024px) {

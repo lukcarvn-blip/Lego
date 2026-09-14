@@ -194,6 +194,7 @@ export const ProductDetails = () => {
   const isEffectivelyCrafting = !product?.isReadyStock || wantsToCraft;
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -646,33 +647,41 @@ export const ProductDetails = () => {
                       </div>
                     </div>                    
                     {/* Summary Note */}
-                    <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', padding: '0.75rem 1rem', borderRadius: 'var(--radius-sm)' }}>
-                      <div className="summary-note" style={{ fontSize: '0.95rem', color: 'rgba(0,0,0,0.8)', margin: 0, lineHeight: 1.5, textAlign: 'left' }}>
-                        <div style={{ fontWeight: 'bold', marginBottom: '6px' }}>
-                          {language === 'vi' ? 'Thông tin lựa chọn:' : 'Selected options:'}
+                    <div className="summary-note-container" style={{ width: '100%', background: 'rgba(0,0,0,0.15)', borderRadius: 'var(--radius-sm)', overflow: 'hidden' }}>
+                      {/* Toggle header */}
+                      <button
+                        onClick={() => setIsSummaryOpen(prev => !prev)}
+                        style={{ width: '100%', background: 'transparent', border: 'none', cursor: 'pointer', padding: '0.5rem 1rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', color: 'rgba(0,0,0,0.85)' }}
+                      >
+                        <span style={{ fontWeight: 'bold', fontSize: '0.9rem' }}>{language === 'vi' ? '📋 Thông tin lựa chọn' : '📋 Selected options'}</span>
+                        <span style={{ fontSize: '1rem', transition: 'transform 0.25s', display: 'inline-block', transform: isSummaryOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▾</span>
+                      </button>
+                      {/* Collapsible body */}
+                      {isSummaryOpen && (
+                        <div className="summary-note" style={{ fontSize: '0.9rem', color: 'rgba(0,0,0,0.8)', lineHeight: 1.5, padding: '0 1rem 0.75rem' }}>
+                          <ul style={{ paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <li><strong>{language === 'vi' ? product.name.vi : product.name.en}</strong></li>
+                            <li>{language === 'vi' ? 'Size: ' : 'Size: '}<strong>{selectedSize}</strong>, {language === 'vi' ? 'Chất liệu: ' : 'Material: '}<strong>{selectedMaterial}</strong></li>
+                            {selectedMicaBox && (
+                              <li>{language === 'vi' ? 'Hộp Mica Bảo Vệ: ' : 'Protective Mica Box: '}<strong>{selectedMicaBox === 'standard' ? (language === 'vi' ? 'Thường' : 'Standard') : 'LED'}</strong></li>
+                            )}
+                            {isEngravingSelected && (
+                              <li>{language === 'vi' ? 'Khắc tên: ' : 'Engraving: '}<strong>{engravingText || (language === 'vi' ? '(Có)' : '(Yes)')}</strong></li>
+                            )}
+                            {isSelfAssembly && (
+                              <li><strong>{language === 'vi' ? 'Tự lắp ráp (Nhận chi tiết rời)' : 'Self-assembly (Separated parts)'}</strong></li>
+                            )}
+                            {!isEffectivelyCrafting ? (
+                              <li>{language === 'vi' ? 'Giao hàng: ' : 'Delivery: '}<strong>{language === 'vi' ? 'Trong 1-2 ngày' : '1-2 days'}</strong></li>
+                            ) : (
+                              <li>
+                                {language === 'vi' ? 'Đặt chế tác: ' : 'Pre-order: '}<strong>{craftTimeDays} {language === 'vi' ? 'ngày' : 'days'}</strong>
+                                {isFastCrafting ? <span style={{ color: '#b91c1c', marginLeft: '6px', fontWeight: 'bold' }}>({language === 'vi' ? 'Đã bật tăng tốc 🚀' : 'Fast mode ON 🚀'})</span> : <span style={{ color: 'rgba(0,0,0,0.5)', marginLeft: '6px', fontSize: '0.8rem' }}>({language === 'vi' ? 'Nhấn 🚀 để rút ngắn' : 'Tap 🚀 to speed up'})</span>}
+                              </li>
+                            )}
+                          </ul>
                         </div>
-                        <ul style={{ paddingLeft: '1.2rem', margin: 0, display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                          <li><strong>{language === 'vi' ? product.name.vi : product.name.en}</strong></li>
-                          <li>{language === 'vi' ? 'Size: ' : 'Size: '}<strong>{selectedSize}</strong>, {language === 'vi' ? 'Chất liệu: ' : 'Material: '}<strong>{selectedMaterial}</strong></li>
-                          {selectedMicaBox && (
-                            <li>{language === 'vi' ? 'Hộp Mica Bảo Vệ: ' : 'Protective Mica Box: '}<strong>{selectedMicaBox === 'standard' ? (language === 'vi' ? 'Thường' : 'Standard') : 'LED'}</strong></li>
-                          )}
-                          {isEngravingSelected && (
-                            <li>{language === 'vi' ? 'Khắc tên: ' : 'Engraving: '}<strong>{engravingText || (language === 'vi' ? '(Có)' : '(Yes)')}</strong></li>
-                          )}
-                          {isSelfAssembly && (
-                            <li><strong>{language === 'vi' ? 'Tự lắp ráp (Nhận chi tiết rời)' : 'Self-assembly (Separated parts)'}</strong></li>
-                          )}
-                          {!isEffectivelyCrafting ? (
-                            <li>{language === 'vi' ? 'Giao hàng: ' : 'Delivery: '}<strong>{language === 'vi' ? 'Trong 1-2 ngày' : '1-2 days'}</strong></li>
-                          ) : (
-                            <li>
-                              {language === 'vi' ? 'Đặt chế tác: ' : 'Pre-order: '}<strong>{craftTimeDays} {language === 'vi' ? 'ngày' : 'days'}</strong>
-                              {isFastCrafting ? <span style={{ color: '#b91c1c', marginLeft: '6px', fontWeight: 'bold' }}>({language === 'vi' ? 'Đã bật tăng tốc 🚀' : 'Fast mode ON 🚀'})</span> : <span style={{ color: 'rgba(0,0,0,0.5)', marginLeft: '6px', fontSize: '0.8rem' }}>({language === 'vi' ? 'Nhấn 🚀 để rút ngắn' : 'Tap 🚀 to speed up'})</span>}
-                            </li>
-                          )}
-                        </ul>
-                      </div>
+                      )}
                     </div>
                   </div>
                 </motion.div>
