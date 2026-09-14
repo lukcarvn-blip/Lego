@@ -430,13 +430,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
           
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1, padding: '1rem', minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '0.4rem' }}>
-              <p style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: 'var(--color-text-muted)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', margin: 0 }}>
+              <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--color-text-muted)', padding: '2px 8px', borderRadius: '12px', fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                 {product.category.toLowerCase() === 'superheroes' && <Shield size={12} />}
                 {product.category.toLowerCase() === 'sci-fi' && <Rocket size={12} />}
                 {product.category.toLowerCase() === 'classic' && <Crown size={12} />}
                 {['superheroes', 'sci-fi', 'classic'].indexOf(product.category.toLowerCase()) === -1 && <Tag size={12} />}
                 {product.category}
-              </p>
+              </span>
               
               {product.collection && settings.collections?.find((c: any) => c.name === product.collection) && (() => {
                 const col = settings.collections!.find((c: any) => c.name === product.collection); if (!col) return null;
