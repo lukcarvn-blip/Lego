@@ -2064,3 +2064,46 @@ h2 {
 .hover-jump:hover {
   translate: 0 -4px !important;
 }
+
+/* Responsive Badges */
+.badge-container {
+  container-type: inline-size;
+}
+
+.responsive-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: clamp(35px, 8cqi, 45px);
+  height: clamp(35px, 8cqi, 45px);
+  border-radius: clamp(6px, 1.5cqi, 10px);
+  font-size: clamp(0.35rem, 1.2cqi, 0.45rem) !important;
+  font-weight: 900;
+  letter-spacing: 0px;
+  backdrop-filter: blur(12px);
+  text-transform: uppercase;
+  pointer-events: auto;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.responsive-badge svg {
+  width: clamp(14px, 3cqi, 20px) !important;
+  height: clamp(14px, 3cqi, 20px) !important;
+}
+
+.responsive-badge .badge-3d {
+  width: clamp(16px, 3.5cqi, 22px) !important;
+  height: clamp(16px, 3.5cqi, 22px) !important;
+  perspective: 200px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.responsive-badge .badge-3d-text-1 {
+  font-size: clamp(7px, 1.5cqi, 10px) !important;
+}
+.responsive-badge .badge-3d-text-2 {
+  font-size: clamp(5px, 1cqi, 7px) !important;
+}
