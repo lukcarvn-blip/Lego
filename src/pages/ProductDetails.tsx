@@ -205,6 +205,25 @@ export const ProductDetails = () => {
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [isReviewOverlayOpen, setIsReviewOverlayOpen] = useState(false);
   const [reviewPage, setReviewPage] = useState(1);
+  const reviewBoxRef = useRef<HTMLDivElement>(null);
+  const [prevScrollY, setPrevScrollY] = useState(0);
+
+  const handleOpenReview = () => {
+    setPrevScrollY(window.scrollY);
+    setIsReviewOverlayOpen(true);
+    setTimeout(() => {
+      if (reviewBoxRef.current) {
+        reviewBoxRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 100);
+  };
+
+  const handleCloseReview = () => {
+    setIsReviewOverlayOpen(false);
+    setTimeout(() => {
+      window.scrollTo({ top: prevScrollY, behavior: 'smooth' });
+    }, 50);
+  };
 
   // Auto-switch to specs tab if no description
   useEffect(() => {
@@ -806,7 +825,7 @@ export const ProductDetails = () => {
               <h1 style={{ marginBottom: '0.5rem', lineHeight: 1.2 }}>{product.name[language]}</h1>
               
               <button 
-                onClick={() => setIsReviewOverlayOpen(true)}
+                onClick={handleOpenReview}
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
                   padding: '0.25rem 0.5rem', background: 'transparent',
@@ -876,7 +895,7 @@ export const ProductDetails = () => {
             </div>
           </div>
 
-          <div className="material-size-wrapper" style={{ position: 'relative' }}>
+          <div className="material-size-wrapper" ref={reviewBoxRef} style={{ position: 'relative' }}>
             <AnimatePresence>
               {isReviewOverlayOpen && (
                 <>
@@ -884,7 +903,7 @@ export const ProductDetails = () => {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    onClick={() => setIsReviewOverlayOpen(false)}
+                    onClick={handleCloseReview}
                     style={{
                       position: 'fixed', inset: 0, zIndex: 40,
                       background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)'
@@ -904,7 +923,7 @@ export const ProductDetails = () => {
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                       <h3 style={{ margin: 0, color: 'var(--color-accent)' }}>{language === 'vi' ? 'Đánh giá sản phẩm' : 'Product Reviews'}</h3>
-                      <button onClick={() => setIsReviewOverlayOpen(false)} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}><X size={24} /></button>
+                      <button onClick={handleCloseReview} style={{ background: 'transparent', border: 'none', color: '#fff', cursor: 'pointer' }}><X size={24} /></button>
                     </div>
                     
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
