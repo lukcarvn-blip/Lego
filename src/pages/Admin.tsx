@@ -958,11 +958,27 @@ export const Admin = () => {
                 <tbody>
                   {(tempSettings.collections || []).map((col: any, idx: number) => (
                     <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.name} onChange={e => {
-                        const newCols = [...(tempSettings.collections || [])];
-                        newCols[idx].name = e.target.value;
-                        setTempSettings({...tempSettings, collections: newCols});
-                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
+                      <td style={{ padding: '0.5rem' }}>
+                        <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+                          <input type="text" value={col.name} onChange={e => {
+                            const newCols = [...(tempSettings.collections || [])];
+                            newCols[idx].name = e.target.value;
+                            setTempSettings({...tempSettings, collections: newCols});
+                          }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem', flex: 1}} />
+                          <button type="button" title="Tự động tạo lại link từ tên" onClick={() => {
+                            const newCols = [...(tempSettings.collections || [])];
+                            const slug = newCols[idx].name.toLowerCase()
+                              .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                              .replace(/\u0111/gi, 'd')
+                              .replace(/[^a-z0-9]+/g, '-')
+                              .replace(/^-+|-+$/g, '');
+                            newCols[idx].path = '/category/' + slug;
+                            setTempSettings({...tempSettings, collections: newCols});
+                          }} style={{ background: 'rgba(74,222,128,0.15)', border: '1px solid rgba(74,222,128,0.4)', color: '#4ade80', borderRadius: '4px', cursor: 'pointer', padding: '0.3rem 0.4rem', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                            <RefreshCw size={12} />
+                          </button>
+                        </div>
+                      </td>
                       <td style={{ padding: '0.5rem' }}><input type="text" value={col.path} onChange={e => {
                         const newCols = [...(tempSettings.collections || [])];
                         newCols[idx].path = e.target.value;
@@ -983,11 +999,29 @@ export const Admin = () => {
                         newCols[idx].bg = e.target.value;
                         setTempSettings({...tempSettings, collections: newCols});
                       }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
-                      <td style={{ padding: '0.5rem' }}><input type="text" value={col.image || ''} placeholder="https://..." onChange={e => {
-                        const newCols = [...(tempSettings.collections || [])];
-                        newCols[idx].image = e.target.value;
-                        setTempSettings({...tempSettings, collections: newCols});
-                      }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem'}} /></td>
+                      <td style={{ padding: '0.5rem' }}>
+                        <div style={{ display: 'flex', gap: '0.25rem', alignItems: 'center' }}>
+                          <input type="text" value={col.image || ''} placeholder="https://..." onChange={e => {
+                            const newCols = [...(tempSettings.collections || [])];
+                            newCols[idx].image = e.target.value;
+                            setTempSettings({...tempSettings, collections: newCols});
+                          }} style={{...inputStyle, padding: '0.4rem', fontSize: '0.85rem', flex: 1}} />
+                          <label title="Tải ảnh từ máy tính" style={{ background: 'rgba(59,130,246,0.15)', border: '1px solid rgba(59,130,246,0.4)', color: '#60a5fa', borderRadius: '4px', cursor: 'pointer', padding: '0.3rem 0.4rem', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                            <ImageIcon size={12} />
+                            <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const reader = new FileReader();
+                              reader.onload = ev => {
+                                const newCols = [...(tempSettings.collections || [])];
+                                newCols[idx].image = ev.target?.result as string;
+                                setTempSettings({...tempSettings, collections: newCols});
+                              };
+                              reader.readAsDataURL(file);
+                            }} />
+                          </label>
+                        </div>
+                      </td>
                       <td style={{ padding: '0.5rem' }}>
                         <button type="button" onClick={() => {
                           const newCols = [...(tempSettings.collections || [])];
