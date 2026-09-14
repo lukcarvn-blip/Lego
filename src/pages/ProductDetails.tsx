@@ -1423,6 +1423,7 @@ export const ProductDetails = () => {
         @media (max-width: 1023px) {
           .sticky-cart-wrapper {
             position: fixed;
+            top: auto !important;
             bottom: 20px;
             left: 1rem;
             right: 1rem;
@@ -1436,6 +1437,7 @@ export const ProductDetails = () => {
         }
         @media (max-width: 768px) {
           .sticky-cart-wrapper {
+            top: auto !important;
             bottom: 80px;
           }
           .container {
