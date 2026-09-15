@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift, Plus, Minus, Info, Weight, Image as ImageIcon, Video, XCircle, Wrench, Package, Shield, Crosshair, HelpCircle, User } from 'lucide-react';
 import { mockProducts, type ProductSize } from '../data/mockProducts';
 import { useStore, type ProductMaterial } from '../context/StoreContext';
@@ -95,6 +96,32 @@ export const ProductDetails = () => {
   }, []);
   const navigate = useNavigate();
   const { products, updateProduct, addToCart, saveCharacter, unsaveCharacter, t, language, formatPrice, showToast, settings, user, reviews, orders, addReview, getSizeMultiplier, getSizeDetails: getStoreSizeDetails } = useStore();
+  const [isTopFan, setIsTopFan] = useState(false);
+  
+  const handleTopFanClick = (e: React.MouseEvent, colName: string) => {
+    e.stopPropagation();
+    if (isTopFan) {
+      navigate('/leaderboard');
+      return;
+    }
+    
+    setIsTopFan(true);
+    
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
+    
+    confetti({
+      particleCount: 80,
+      spread: 70,
+      origin: { x, y },
+      colors: ['#fbbf24', '#f59e0b', '#ffffff'],
+      shapes: ['star', 'circle']
+    });
+    
+    showToast(language === 'vi' ? 'Tuyệt vời! Bạn đã là Fan cứng của ' + colName : 'Awesome! You are now a Top Fan of ' + colName);
+  };
+
   
   const relatedRef = useRef<HTMLDivElement>(null);
   const bestSellersRef = useRef<HTMLDivElement>(null);
@@ -437,19 +464,38 @@ export const ProductDetails = () => {
               return (
                 <div 
                   className="hover-jump" 
-                  onClick={() => {
-                    showToast(language === 'vi' ? 'Đã tham gia xếp hạng Fan Cứng của ' + col.name : 'Joined Top Fan ranking for ' + col.name);
-                    navigate('/leaderboard');
-                  }}
+                  onClick={(e) => handleTopFanClick(e, col.name)}
                   title={language === 'vi' ? 'Nhấn để trở thành Fan cứng' : 'Click to become a Top Fan'}
-                  style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', width: '75px', height: 'auto', minHeight: '85px', padding: '8px 4px', background: col.bg || 'rgba(255,255,255,0.1)', border: `1px solid ${col.border || 'rgba(255,255,255,0.2)'}`, color: col.color || '#fff', borderRadius: '12px', fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', boxShadow: '0 8px 32px rgba(0,0,0,0.5)', textTransform: 'uppercase', pointerEvents: 'auto', textAlign: 'center', cursor: 'pointer' }}
+                  style={{ 
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', 
+                    width: '75px', height: '75px', 
+                    background: isTopFan ? 'linear-gradient(135deg, #fbbf24 0%, #d97706 100%)' : (col.bg || 'rgba(255,255,255,0.1)'), 
+                    border: isTopFan ? '1px solid #fef3c7' : `1px solid ${col.border || 'rgba(255,255,255,0.2)'}`, 
+                    color: isTopFan ? '#000' : (col.color || '#fff'), 
+                    borderRadius: '12px', fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', 
+                    boxShadow: isTopFan ? '0 0 20px rgba(251, 191, 36, 0.5)' : '0 8px 32px rgba(0,0,0,0.5)', 
+                    textTransform: 'uppercase', pointerEvents: 'auto', textAlign: 'center', cursor: 'pointer',
+                    transition: 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                  }}
                 >
-                  <IconComponent size={20} />
-                  <span style={{ lineHeight: 1.1 }}>{col.name}</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '3px', background: 'rgba(0,0,0,0.3)', padding: '3px 6px', borderRadius: '4px', marginTop: '4px', border: '1px solid rgba(255,255,255,0.1)' }}>
-                    <Icons.Crown size={10} color="#fbbf24" />
-                    <span style={{ fontSize: '0.45rem', color: '#fbbf24' }}>{language === 'vi' ? 'FAN CỨNG' : 'TOP FAN'}</span>
-                  </div>
+                  <IconComponent size={22} style={{ filter: isTopFan ? 'drop-shadow(0 0 8px rgba(255,255,255,0.6))' : 'none' }} />
+                  <span style={{ lineHeight: 1.1, marginTop: '2px' }}>{col.name}</span>
+                  
+                  {isTopFan ? (
+                    <span style={{ fontSize: '0.45rem', background: 'rgba(0,0,0,0.2)', color: '#fff', padding: '2px 6px', borderRadius: '10px', marginTop: '2px' }}>
+                      {language === 'vi' ? 'FAN CỨNG' : 'TOP FAN'}
+                    </span>
+                  ) : (
+                    <span style={{ fontSize: '0.45rem', opacity: 0.6, marginTop: '2px', borderBottom: '1px dotted rgba(255,255,255,0.4)' }}>
+                      {language === 'vi' ? 'THAM GIA?' : 'JOIN FAN?'}
+                    </span>
+                  )}
+                  
+                  {isTopFan && (
+                    <div style={{ position: 'absolute', top: '-5px', right: '-5px', background: '#fff', color: '#f59e0b', borderRadius: '50%', padding: '2px', boxShadow: '0 2px 5px rgba(0,0,0,0.3)' }}>
+                      <Icons.Crown size={12} fill="#f59e0b" />
+                    </div>
+                  )}
                 </div>
               )
             })()}
