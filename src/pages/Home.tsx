@@ -550,11 +550,11 @@ export const Home = () => {
               }} 
             />
             
-            <div style={{ position: 'absolute', inset: '15% 6% 15% 6%', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', zIndex: 10 }}>
+            <div style={{ position: 'absolute', inset: '15% 12% 15% 12%', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', zIndex: 10 }}>
               {showcaseCharacters.map((char, idx) => {
                 const c = idx % 5;
                 const r = Math.floor(idx / 5);
-                const bgPosX = ((6 + c * 17.6) / 82.4) * 100;
+                const bgPosX = ((12 + c * 15.2) / 84.8) * 100;
                 const bgPosY = ((15 + r * 35) / 65) * 100;
                 
                 return (
@@ -573,7 +573,7 @@ export const Home = () => {
                           position: 'absolute', 
                           inset: 0,
                           backgroundImage: `url(${settings.middleBannerImage || settings.middleBannerImageMobile || ''})`,
-                          backgroundSize: '568.1818% 285.71428%',
+                          backgroundSize: '657.8947% 285.71428%',
                           backgroundPosition: `${bgPosX}% ${bgPosY}%`,
                           opacity: hoveredChar === idx ? 1 : 0,
                           transform: hoveredChar === idx ? 'scale(1.12)' : 'scale(1)',
