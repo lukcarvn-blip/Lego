@@ -550,7 +550,7 @@ export const Home = () => {
               }} 
             />
             
-            <div style={{ position: 'absolute', inset: '15% 10% 15% 10%', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', zIndex: 10 }}>
+            <div style={{ position: 'absolute', inset: '15% 0 15% 0', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', zIndex: 10 }}>
               {showcaseCharacters.map((char, idx) => (
                 <div 
                   key={idx} 
@@ -567,8 +567,8 @@ export const Home = () => {
                           position: 'absolute', 
                           inset: 0,
                           backgroundImage: `url(${settings.middleBannerImage || settings.middleBannerImageMobile || ''})`,
-                          backgroundSize: '625% 285.71428%',
-                          backgroundPosition: `${((10 + (idx % 5) * 16) / 84) * 100}% ${((15 + Math.floor(idx / 5) * 35) / 65) * 100}%`,
+                          backgroundSize: '500% 285.71428%',
+                          backgroundPosition: `${(idx % 5) * 25}% ${((15 + Math.floor(idx / 5) * 35) / 65) * 100}%`,
                           opacity: hoveredChar === idx ? 1 : 0,
                           transform: hoveredChar === idx ? 'scale(1.12)' : 'scale(1)',
                           transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease',
