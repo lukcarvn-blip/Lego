@@ -3,7 +3,7 @@ import { Sparkles } from 'lucide-react';
 ﻿import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { motion, AnimatePresence } from 'framer-motion';
-import { User, ShoppingBag, ShoppingCart, Bell, Clock, ChevronRight, Package, Truck, CheckCircle, CreditCard, XCircle, LogOut, Calendar } from 'lucide-react';
+import { Gift, User, ShoppingBag, ShoppingCart, Bell, Clock, ChevronRight, Package, Truck, CheckCircle, CreditCard, XCircle, LogOut, Calendar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export const Profile = () => {
