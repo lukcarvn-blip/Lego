@@ -938,7 +938,7 @@ export const ProductDetails = () => {
               {product.isReadyStock ? (
                 <span style={{ color: 'var(--color-accent)', fontWeight: 600 }}><Package size={16} style={{ marginRight: '4px', verticalAlign: 'text-bottom' }} /> {product.stock} {language === 'vi' ? 'sẵn hàng' : 'in stock'}</span>
               ) : (
-                <span style={{ color: '#f59e0b', fontWeight: 600 }}><Wrench size={16} style={{ marginRight: '4px', verticalAlign: 'text-bottom' }} /> {language === 'vi' ? 'Chế tác theo yêu cầu' : 'Made to order'}</span>
+                <span style={{ color: '#f59e0b', fontWeight: 600 }}><Wrench size={16} style={{ marginRight: '4px', verticalAlign: 'text-bottom' }} /> {language === 'vi' ? 'Đặt chế tác' : 'Made to order'}</span>
               )}
               {product.dimensions && (
                 <span style={{ 
