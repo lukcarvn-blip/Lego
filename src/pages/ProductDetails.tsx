@@ -463,12 +463,21 @@ export const ProductDetails = () => {
             </div>
             
             {/* Size Badge */}
-            {selectedSize && (() => {
-              const details = getStoreSizeDetails(selectedSize);
+            {(selectedSize || (!isEffectivelyCrafting && product.dimensions)) && (() => {
+              let displaySize = '';
+              if (isEffectivelyCrafting && selectedSize) {
+                const details = getStoreSizeDetails(selectedSize);
+                displaySize = details?.heightCm ? `${details.heightCm}cm` : '';
+              } else if (!isEffectivelyCrafting && product.dimensions) {
+                displaySize = product.dimensions;
+              }
+              
+              if (!displaySize) return null;
+              
               return (
-                <div className="hover-jump" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', width: '75px', height: '75px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', pointerEvents: 'auto', textAlign: 'center' }}>
+                <div className="hover-jump" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', width: 'auto', minWidth: '75px', height: '75px', padding: '0 10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', pointerEvents: 'auto', textAlign: 'center' }}>
                   <Icons.Maximize size={22} style={{ marginBottom: '2px' }} />
-                  <span style={{ lineHeight: 1.1 }}>{details?.heightCm ? `${details.heightCm}cm` : ''}</span>
+                  <span style={{ lineHeight: 1.1, whiteSpace: 'nowrap' }}>{displaySize}</span>
                 </div>
               );
             })()}
@@ -965,15 +974,6 @@ export const ProductDetails = () => {
                 <span style={{ color: 'var(--color-accent)', fontWeight: 600 }}><Package size={16} style={{ marginRight: '4px', verticalAlign: 'text-bottom' }} /> {product.stock} {language === 'vi' ? 'sẵn hàng' : 'in stock'}</span>
               ) : (
                 <span style={{ color: '#f59e0b', fontWeight: 600 }}><Wrench size={16} style={{ marginRight: '4px', verticalAlign: 'text-bottom' }} /> {language === 'vi' ? 'Đặt chế tác' : 'Made to order'}</span>
-              )}
-              {product.dimensions && (
-                <span style={{ 
-                  display: 'inline-flex', alignItems: 'center', color: 'var(--color-text)', fontSize: '0.85rem', fontWeight: 600,
-                  background: 'rgba(255,255,255,0.1)', padding: '2px 8px', borderRadius: '4px',
-                  border: '1px solid rgba(255,255,255,0.1)'
-                }}>
-                  <Maximize size={16} style={{marginRight: '8px'}}/> {product.dimensions}
-                </span>
               )}
               {product.weight && (
                 <span style={{ 
