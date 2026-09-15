@@ -450,7 +450,7 @@ export const ProductDetails = () => {
             <div style={{
               position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
               boxShadow: 'inset 0 0 150px 40px rgba(0,0,0,0.9)',
-              background: 'linear-gradient(to bottom, rgba(0,0,0,0.6) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.6) 100%)',
+              background: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 20%, transparent 50%, #050505 100%)',
               zIndex: 1, pointerEvents: 'none'
             }}></div>
           </div>
@@ -588,7 +588,7 @@ export const ProductDetails = () => {
       )}
 
 
-      <div className="pd-main-grid">
+      <div className={`pd-main-grid ${selectedBanner ? "has-banner" : ""}`}>
         
         {/* Left: Image Gallery */}
         <div style={{ height: '100%', position: 'relative' }}>
