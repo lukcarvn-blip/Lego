@@ -384,7 +384,7 @@ export const ProductDetails = () => {
               100% { top: 100%; opacity: 0; box-shadow: none; }
             }
             .pd-slide-content {
-              animation: pd-slide-reveal 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+              animation: pd-slide-reveal 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             }
             .pd-scanner-overlay {
               position: absolute;
@@ -395,7 +395,7 @@ export const ProductDetails = () => {
               z-index: 25;
               pointer-events: none;
               opacity: 0;
-              animation: pd-sci-fi-scan 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+              animation: pd-sci-fi-scan 1.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             }
             
             .product-detail-banner.is-initial-load .pd-slide-content,
@@ -404,13 +404,13 @@ export const ProductDetails = () => {
               animation-fill-mode: both !important;
             }
             .product-detail-banner.is-initial-load .pd-hud-delayed {
-              animation-delay: 3.5s !important;
+              animation-delay: 3.2s !important;
               animation-fill-mode: both !important;
             }
             .pd-hud-delayed {
               opacity: 0;
               transform: translateY(15px);
-              animation: hud-enter 0.6s cubic-bezier(0.4, 0, 0.2, 1) 1.5s forwards;
+              animation: hud-enter 0.5s cubic-bezier(0.4, 0, 0.2, 1) 1.2s forwards;
             }
           `}</style>
           
