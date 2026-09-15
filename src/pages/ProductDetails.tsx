@@ -670,16 +670,16 @@ export const ProductDetails = () => {
                     position: 'absolute', top: '1.5rem', right: '1.5rem', zIndex: 30,
                     background: user?.savedCharacters?.includes(product.id) ? 'rgba(36, 214, 115, 0.9)' : 'rgba(0,0,0,0.6)', 
                     border: user?.savedCharacters?.includes(product.id) ? '1px solid var(--color-accent)' : '1px solid var(--glass-border)',
-                    borderRadius: '20px', padding: '8px 12px',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                    borderRadius: '50%', width: '40px', height: '40px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
                     cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.2s',
                     boxShadow: user?.savedCharacters?.includes(product.id) ? '0 0 15px rgba(36, 214, 115, 0.5)' : 'none'
                   }}
                   onMouseEnter={e => { if (!user?.savedCharacters?.includes(product.id)) { e.currentTarget.style.background = 'rgba(0,0,0,0.8)'; } }}
                   onMouseLeave={e => { if (!user?.savedCharacters?.includes(product.id)) { e.currentTarget.style.background = 'rgba(0,0,0,0.6)'; } }}
+                  title={language === 'vi' ? 'Lưu bộ sưu tập' : 'Save to Collection'}
                 >
-                  <Gift size={16} color="#fff" />
-                  <span style={{ color: '#fff', fontSize: '13px', fontWeight: 'bold' }}>{language === 'vi' ? (user?.savedCharacters?.includes(product.id) ? 'Đã lưu' : 'Lưu bộ sưu tập') : (user?.savedCharacters?.includes(product.id) ? 'Saved' : 'Add to Collection')}</span>
+                  {user?.savedCharacters?.includes(product.id) ? <Icons.Check size={20} color="#fff" /> : <Plus size={20} color="#fff" />}
                 </motion.button>
               </>
             )}
