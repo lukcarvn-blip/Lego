@@ -341,7 +341,15 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         let data = snapshot.docs.map(d => ({ id: d.id, ...d.data() })) as Product[];
       
       // MOCK FIX: assign dummy createdAt to mock products if missing, based on their ID (e.g. p-01, p-02)
-      data = data.map(p => {
+            data = data.map(p => {
+        if (p.availableSizes) {
+          const mappedSizes = p.availableSizes.map(s => {
+            if (typeof s === 'string' && (s.includes('300') || s.includes('400'))) return 'NORMAL';
+            if (typeof s === 'string' && s.includes('1000')) return 'PREMIUM';
+            return s;
+          });
+          p.availableSizes = Array.from(new Set(mappedSizes));
+        }
         if (!p.createdAt) {
           const mockIndex = mockProducts.findIndex(mp => mp.id === p.id);
           if (mockIndex !== -1) {
