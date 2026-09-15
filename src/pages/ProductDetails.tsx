@@ -468,8 +468,17 @@ export const ProductDetails = () => {
               return (
                 <div className="hover-jump" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', width: '75px', height: '75px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', borderRadius: '12px', fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', pointerEvents: 'auto', textAlign: 'center' }}>
                   <Icons.Maximize size={22} style={{ marginBottom: '2px' }} />
-                  <span style={{ lineHeight: 1.1 }}>{details?.name}</span>
-                  {details?.heightCm && <span style={{ fontSize: '0.45rem', opacity: 0.7, lineHeight: 1 }}>({details?.heightCm ? `${details.heightCm} cm` : ""})</span>}
+                  {(() => {
+                    const parts = (details?.name || '').split(':');
+                    const displayName = parts[0].trim();
+                    const sizeText = parts.length > 1 ? parts[1].trim() : (details?.heightCm ? `${details.heightCm} cm` : "");
+                    return (
+                      <>
+                        <span style={{ lineHeight: 1.1 }}>{displayName}</span>
+                        {sizeText && <span style={{ fontSize: '0.45rem', opacity: 0.7, lineHeight: 1 }}>({sizeText})</span>}
+                      </>
+                    );
+                  })()}
                 </div>
               );
             })()}
@@ -1292,7 +1301,13 @@ export const ProductDetails = () => {
                             transform: isSelected ? 'translateX(0)' : 'translateX(-5px)',
                             textTransform: 'uppercase'
                           }}>
-                            {sizeDetails?.heightCm ? `${sizeDetails.heightCm} cm` : ""}
+                            {(() => {
+                              const parts = (sizeDetails?.name || '').split(':');
+                              if (parts.length > 1) {
+                                return parts[1].trim();
+                              }
+                              return sizeDetails?.heightCm ? `${sizeDetails.heightCm} cm` : "";
+                            })()}
                           </span>
                         </React.Fragment>
                       );
@@ -1331,7 +1346,15 @@ export const ProductDetails = () => {
                           opacity: !isEffectivelyCrafting && !isSelected ? 0.3 : 1
                         }}
                       >
-                        <span style={{ fontWeight: 700, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{sizeDetails?.name}</span>
+                        
+                        {(() => {
+                          const parts = (sizeDetails?.name || '').split(':');
+                          const displayName = parts[0].trim();
+                          return (
+                            <span style={{ fontWeight: 700, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{displayName}</span>
+                          );
+                        })()}
+
                       </button>
                     )
                   })}
