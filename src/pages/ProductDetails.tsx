@@ -469,7 +469,7 @@ export const ProductDetails = () => {
                 const details = getStoreSizeDetails(selectedSize);
                 displaySize = details?.heightCm ? `${details.heightCm}cm` : '';
               } else if (!isEffectivelyCrafting && product.dimensions) {
-                displaySize = product.dimensions;
+                displaySize = product.dimensions?.match(/(\d+\s*cm)/i)?.[0] || product.dimensions;
               }
               
               if (!displaySize) return null;
@@ -1302,7 +1302,7 @@ export const ProductDetails = () => {
                         <span style={{
                           position: 'absolute', bottom: '74px', left: '22px',
                           fontSize: '0.9rem', fontWeight: 700, color: '#fbbf24', whiteSpace: 'nowrap'
-                        }}>{product.dimensions || '?'}</span>
+                        }}>{product.dimensions?.match(/(\d+\s*cm)/i)?.[0] || product.dimensions || '?'}</span>
                       </>
                     )}
                   </div>
@@ -1358,7 +1358,7 @@ export const ProductDetails = () => {
                         {language === 'vi' ? 'Kích thước thực' : 'Actual Size'}
                       </span>
                       <span style={{ fontWeight: 900, fontSize: 'clamp(1.2rem, 3vw, 1.6rem)', letterSpacing: '0.5px' }}>
-                        {product.dimensions || (language === 'vi' ? 'Liên hệ' : 'Contact us')}
+                        {product.dimensions?.match(/(\d+\s*cm)/i)?.[0] || product.dimensions || (language === 'vi' ? 'Liên hệ' : 'Contact us')}
                       </span>
                     </div>
                   )}
