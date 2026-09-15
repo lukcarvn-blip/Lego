@@ -153,7 +153,7 @@ const OrderModal = ({ order, onClose, onStatusChange }: { order: Order, onClose:
         <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.75rem', fontWeight: 600 }}>SẢN PHẨM</p>
         {order.items.map((item, i) => (
           <div key={i} style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', padding: '0.75rem', background: 'rgba(0,0,0,0.2)', borderRadius: 'var(--radius-sm)', marginBottom: '0.5rem' }}>
-            <img src={item.product.images[0]} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ width: '48px', height: '48px', objectFit: 'contain', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', padding: '4px' }} alt="" />
+            <img src={item.product.images?.[0] || '/images/fallback-logo.jpg'} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ width: '48px', height: '48px', objectFit: 'contain', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', padding: '4px' }} alt="" />
             <div style={{ flex: 1 }}>
               <p style={{ fontWeight: 600, fontSize: '0.9rem' }}>{item.product.name.vi}</p>
               <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
@@ -764,7 +764,7 @@ export const Admin = () => {
                 {topProducts.map((p, i) => (
                   <div key={p.id} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                     <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', width: '16px', textAlign: 'center' }}>#{i + 1}</span>
-                    <img src={p.images[0]} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ width: '36px', height: '36px', objectFit: 'contain', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', padding: '3px' }} alt="" />
+                    <img src={p.images?.[0] || '/images/fallback-logo.jpg'} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ width: '36px', height: '36px', objectFit: 'contain', background: 'rgba(255,255,255,0.05)', borderRadius: '4px', padding: '3px' }} alt="" />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontSize: '0.85rem', fontWeight: 600, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name.vi}</p>
                       <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)' }}>{p.sku || 'No SKU'}</p>
@@ -1203,8 +1203,8 @@ export const Admin = () => {
                     >
                       <td style={{ padding: '0.75rem 1rem' }}>
                         <div className="admin-thumbnail-wrapper" style={{ width: '44px', height: '44px', background: 'rgba(74,222,128,0.05)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', border: '1px solid var(--glass-border)' }}>
-                          <img src={product.images[0]} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" />
-                          <div className="admin-thumbnail-tooltip"><img src={product.images[0]} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" /></div>
+                          <img src={product.images?.[0] || '/images/fallback-logo.jpg'} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" />
+                          <div className="admin-thumbnail-tooltip"><img src={product.images?.[0] || '/images/fallback-logo.jpg'} onError={e => { e.currentTarget.src = '/images/fallback-logo.jpg' }} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="" /></div>
 </div>
                       </td>
                       <td style={{ padding: '0.75rem 1rem', fontFamily: 'monospace', fontSize: '0.8rem', color: '#86efac', fontWeight: 700 }}>

@@ -430,7 +430,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       const startX = e.clientX;
       const startY = e.clientY;
       const id = `fly-${Date.now()}-${Math.random()}`;
-      setFlyingIcons(prev => [...prev, { id, startX, startY, image: product.images[0] }]);
+      setFlyingIcons(prev => [...prev, { id, startX, startY, image: product.images?.[0] || '/images/fallback-logo.jpg' }]);
       setTimeout(() => {
         setFlyingIcons(prev => prev.filter(icon => icon.id !== id));
       }, 800);

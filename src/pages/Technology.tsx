@@ -81,7 +81,7 @@ export const Technology = () => {
                 return (
                   <Link to={`/printer/${printer.id}`} key={printer.id} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <div className="glass-panel" style={{ display: 'flex', gap: '1rem', padding: '1rem', alignItems: 'center', transition: 'all 0.3s ease', cursor: 'pointer' }} onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-5px)'} onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}>
-                      <img src={printer.images[0]} alt={printer.name[language]} style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }} />
+                      <img src={printer.images?.[0] || '/images/fallback-logo.jpg'} alt={printer.name[language]} style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: 'var(--radius-md)' }} />
                       <div style={{ flex: 1 }}>
                         <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: '0.25rem' }}>{printer.name[language]}</h3>
                         <div style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', marginBottom: '0.5rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>

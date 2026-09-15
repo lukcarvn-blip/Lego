@@ -136,7 +136,7 @@ export const Profile = () => {
                 {order.items.map((item, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <div style={{ width: '60px', height: '60px', borderRadius: 'var(--radius-sm)', background: 'rgba(0,0,0,0.3)', overflow: 'hidden' }}>
-                      <img src={item.product.images[0]} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={item.product.name.en} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={item.product.images?.[0] || '/images/fallback-logo.jpg'} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={item.product.name.en} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontWeight: 500 }}>{item.product.name[language as keyof typeof item.product.name]}</div>
@@ -191,7 +191,7 @@ export const Profile = () => {
                 {cart.items.map((item, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                     <div style={{ width: '40px', height: '40px', borderRadius: 'var(--radius-sm)', background: 'rgba(0,0,0,0.3)', overflow: 'hidden' }}>
-                      <img src={item.product.images[0]} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={item.product.name.en} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={item.product.images?.[0] || '/images/fallback-logo.jpg'} onError={(e) => { e.currentTarget.src = '/images/fallback-logo.jpg'; }} alt={item.product.name.en} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: '0.9rem', fontWeight: 500 }}>{item.product.name[language as keyof typeof item.product.name]}</div>
