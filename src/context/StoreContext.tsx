@@ -33,6 +33,8 @@ export interface Review {
   userAvatar?: string;
   rating: number;
   content: string;
+  images?: string[];
+  video?: string;
   createdAt: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
 }
