@@ -19,7 +19,7 @@ export const Leaderboard = () => {
   // Currently we use 'likes' for Top Fan and Likes as a proxy since savedCharacters count per product isn't aggregated globally in the mock data yet.
   // In a real app, 'topFan' would sort by the number of users who saved the character.
   const rankings = useMemo(() => {
-    const list = [...products];
+    const list = products.filter(p => p.category !== '3d-printer');
     switch (activeTab) {
       case 'topFan':
       case 'likes':

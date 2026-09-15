@@ -215,7 +215,7 @@ export const mockProducts: Product[] = [
     price: 1449.00,
     rating: 4.9,
     reviews: 320,
-    likes: 8500,
+    likes: 0,
     estimatedPrintTime: "Tốc độ in tối đa 500mm/s",
     images: [
       "/images/fdm_3d_printer_neon.png"
@@ -240,7 +240,7 @@ export const mockProducts: Product[] = [
     price: 899.00,
     rating: 4.8,
     reviews: 215,
-    likes: 6200,
+    likes: 0,
     estimatedPrintTime: "Tốc độ in tối đa 600mm/s",
     images: [
       "/images/fdm_3d_printer_neon.png"
@@ -263,7 +263,7 @@ export const mockProducts: Product[] = [
     price: 6950.00,
     rating: 4.7,
     reviews: 150,
-    likes: 4100,
+    likes: 0,
     estimatedPrintTime: "Chuyên dụng kỹ thuật cao",
     images: [
       "/images/fdm_3d_printer_neon.png"
