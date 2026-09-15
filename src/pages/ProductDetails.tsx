@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift, Plus, Minus, Info, Weight , Image as ImageIcon, Video, XCircle, Wrench, Package} from 'lucide-react';
+import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift, Plus, Minus, Info, Weight, Image as ImageIcon, Video, XCircle, Wrench, Package, Shield, Crosshair, HelpCircle, User } from 'lucide-react';
 import { mockProducts, type ProductSize } from '../data/mockProducts';
 import { useStore, type ProductMaterial } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
@@ -195,7 +195,7 @@ export const ProductDetails = () => {
   const [isEngravingInputVisible, setIsEngravingInputVisible] = useState(false);
   const [isSelfAssembly, setIsSelfAssembly] = useState(false);
   const [selectedMicaBox, setSelectedMicaBox] = useState('');
-  const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'tags'>('desc');
+  const [activeTab, setActiveTab] = useState<'desc' | 'specs' | 'tags' | 'bio'>('desc');
   const [isCartExpanded, setIsCartExpanded] = useState(window.innerWidth >= 1024);
   const [quantity, setQuantity] = useState(1);
   const [wantsToCraft, setWantsToCraft] = useState(false);
@@ -233,8 +233,8 @@ export const ProductDetails = () => {
 
   // Auto-switch to specs tab if no description
   useEffect(() => {
-    if (product && !product.description?.[language]) {
-      setActiveTab('specs');
+    if (product && !product.description?.[language] && !product.biography?.[language as keyof typeof product.biography]) {
+      setActiveTab(product?.biography?.[language as keyof typeof product.biography] ? 'bio' : 'specs');
     }
   }, [product?.id, language]);
 
@@ -928,7 +928,22 @@ export const ProductDetails = () => {
         >
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <h1 style={{ marginBottom: '0.5rem', lineHeight: 1.2 }}>{product.name[language]}</h1>
+              <h1 style={{ marginBottom: '0.5rem', lineHeight: 1.2 }}>
+                {product.alignment && (
+                  <span style={{ 
+                    display: 'inline-flex', alignItems: 'center', gap: '4px',
+                    fontSize: '0.8rem', fontWeight: 700, padding: '4px 8px', borderRadius: '4px',
+                    marginRight: '12px', verticalAlign: 'middle',
+                    background: product.alignment === 'Hero' ? 'rgba(59, 130, 246, 0.15)' : (product.alignment === 'Villain' ? 'rgba(239, 68, 68, 0.15)' : 'rgba(168, 162, 158, 0.15)'),
+                    color: product.alignment === 'Hero' ? '#3b82f6' : (product.alignment === 'Villain' ? '#ef4444' : '#a8a29e'),
+                    border: `1px solid ${product.alignment === 'Hero' ? 'rgba(59,130,246,0.3)' : (product.alignment === 'Villain' ? 'rgba(239,68,68,0.3)' : 'rgba(168,162,158,0.3)')}`
+                  }}>
+                    {product.alignment === 'Hero' ? <Shield size={14} /> : (product.alignment === 'Villain' ? <Crosshair size={14} /> : <HelpCircle size={14} />)}
+                    {product.alignment.toUpperCase()}
+                  </span>
+                )}
+                {product.name[language]}
+              </h1>
               
               <button 
                 onClick={handleOpenReview}

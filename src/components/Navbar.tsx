@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ShoppingBag, Search, User, Home, ArrowUp, ArrowLeft, Handshake } from 'lucide-react';
+import { Trophy } from 'lucide-react';
 import { useStore } from '../context/StoreContext';
 import { motion } from 'framer-motion';
 
@@ -133,6 +134,9 @@ export const Navbar = () => {
             <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '1.5rem' }}>
               <div className="desktop-nav" style={{ display: 'flex', gap: '2rem', marginRight: '1rem' }}>
                 <Link className="hover-jump" to="/products" style={{ fontWeight: 600 }}>{language === 'vi' ? 'Cửa hàng' : 'Shop'}</Link>
+                <Link className="hover-jump" to="/leaderboard" style={{ fontWeight: 600, color: '#f59e0b', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <Trophy size={16} /> {language === 'vi' ? 'Xếp hạng' : 'Ranking'}
+                </Link>
               </div>
 
               {/* Actions */}

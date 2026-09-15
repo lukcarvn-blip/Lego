@@ -22,6 +22,7 @@ import { NewsDetail } from './pages/NewsDetail';
 import { Technology } from './pages/Technology';
 import { Partnership } from './pages/Partnership';
 import { Profile } from './pages/Profile';
+import { Leaderboard } from './pages/Leaderboard';
 import { NotFound } from './pages/NotFound';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { FloatingActions } from './components/FloatingActions';
@@ -113,6 +114,7 @@ function AppContent() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/checkout/success/:orderId" element={<CheckoutSuccess />} />
           <Route path="/hoang" element={<Admin />} />
           <Route path="/faq" element={<FAQ />} />

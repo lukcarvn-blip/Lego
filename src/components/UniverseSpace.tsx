@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Zap, Star, Trophy, Crosshair, HelpCircle, LayoutGrid, List } from 'lucide-react';
+import { Shield, Zap, Star, Trophy, Crosshair, HelpCircle, LayoutGrid, List, X, ChevronRight } from 'lucide-react';
 import type { Product } from '../data/mockProducts';
 import type { AppUser } from '../context/StoreContext';
 import * as Icons from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useStore } from '../context/StoreContext';
 
 interface UniverseSpaceProps {
   user: AppUser;
@@ -14,6 +15,7 @@ interface UniverseSpaceProps {
 }
 
 export const UniverseSpace: React.FC<UniverseSpaceProps> = ({ user, products, settings, language }) => {
+  const { unsaveCharacter } = useStore();
   const navigate = useNavigate();
   const [activeCollection, setActiveCollection] = useState<string>('All');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -123,8 +125,16 @@ export const UniverseSpace: React.FC<UniverseSpaceProps> = ({ user, products, se
                 style={{ overflow: 'hidden', display: viewMode === 'list' ? 'flex' : 'block', cursor: 'pointer' }}
                 onClick={() => navigate(`/product/${p.id}`)}
               >
-                <div style={{ width: viewMode === 'list' ? '150px' : '100%', height: viewMode === 'list' ? '100%' : '250px', position: 'relative' }}>
+                <div style={{ width: viewMode === 'list' ? '150px' : '100%', height: viewMode === 'list' ? '100%' : '250px', position: 'relative' }} className="universe-card-img">
                   <img src={p.images[0]} alt={p.name.en} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); unsaveCharacter(p.id); }}
+                    className="unsave-btn"
+                    style={{ position: 'absolute', top: '0.5rem', right: '0.5rem', background: 'rgba(239, 68, 68, 0.8)', border: 'none', color: '#fff', borderRadius: '50%', width: '28px', height: '28px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', opacity: 0, transition: 'opacity 0.2s', zIndex: 10 }}
+                    title={language === 'vi' ? 'Xóa khỏi bộ sưu tập' : 'Remove from collection'}
+                  >
+                    <X size={16} />
+                  </button>
                   {p.alignment && (
                     <div style={{ position: 'absolute', top: '0.5rem', left: '0.5rem', background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '4px', color: p.alignment === 'Hero' ? '#3b82f6' : (p.alignment === 'Villain' ? '#ef4444' : '#a8a29e') }}>
                       {p.alignment === 'Hero' ? <Shield size={12} /> : (p.alignment === 'Villain' ? <Crosshair size={12} /> : <HelpCircle size={12} />)}
@@ -145,7 +155,7 @@ export const UniverseSpace: React.FC<UniverseSpaceProps> = ({ user, products, se
                       {p.biography[language as keyof typeof p.biography]}
                     </p>
                   )}
-                  {viewMode === 'list' && p.powerRanking && (
+                  {p.powerRanking && (
                     <div style={{ marginTop: 'auto', paddingTop: '1rem' }}>
                       <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '4px' }}>{language === 'vi' ? 'Sức mạnh' : 'Power'}</div>
                       <div style={{ height: '4px', background: 'rgba(255,255,255,0.1)', borderRadius: '2px', overflow: 'hidden' }}>
@@ -161,10 +171,18 @@ export const UniverseSpace: React.FC<UniverseSpaceProps> = ({ user, products, se
 
         {/* Sidebar: Leaderboard */}
         <div className="glass-panel" style={{ padding: '1.5rem' }}>
-          <h3 style={{ fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem', color: '#f59e0b' }}>
-            <Trophy size={18} />
-            {language === 'vi' ? `Top 5 ${activeCollection !== 'All' ? activeCollection : ''}` : `Top 5 ${activeCollection !== 'All' ? activeCollection : ''}`}
-          </h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+            <h3 style={{ fontSize: '1.1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, color: '#f59e0b' }}>
+              <Trophy size={18} />
+              {language === 'vi' ? `Top 5 ${activeCollection !== 'All' ? activeCollection : ''}` : `Top 5 ${activeCollection !== 'All' ? activeCollection : ''}`}
+            </h3>
+            <button 
+              onClick={() => navigate('/leaderboard')}
+              style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'transparent', border: 'none', color: 'var(--color-accent)', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}
+            >
+              {language === 'vi' ? 'Xem tất cả' : 'View All'} <ChevronRight size={14} />
+            </button>
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {leaderboard.map((char, i) => (
               <div key={char.id} style={{ display: 'flex', alignItems: 'center', gap: '1rem', cursor: 'pointer' }} onClick={() => navigate(`/product/${char.id}`)}>
@@ -185,6 +203,9 @@ export const UniverseSpace: React.FC<UniverseSpaceProps> = ({ user, products, se
       </div>
       
       <style>{`
+        .universe-card-img:hover .unsave-btn {
+          opacity: 1 !important;
+        }
         @media (max-width: 900px) {
           .universe-layout {
             grid-template-columns: 1fr !important;
