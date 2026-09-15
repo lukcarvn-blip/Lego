@@ -550,11 +550,11 @@ export const Home = () => {
               }} 
             />
             
-            <div style={{ position: 'absolute', inset: '15% 12% 15% 12%', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', zIndex: 10 }}>
+            <div style={{ position: 'absolute', inset: '15% 2% 15% 22%', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', zIndex: 10 }}>
               {showcaseCharacters.map((char, idx) => {
                 const c = idx % 5;
                 const r = Math.floor(idx / 5);
-                const bgPosX = ((12 + c * 15.2) / 84.8) * 100;
+                const bgPosX = ((22 + c * 15.2) / 84.8) * 100;
                 const bgPosY = ((15 + r * 35) / 65) * 100;
                 
                 return (
