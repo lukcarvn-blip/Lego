@@ -550,8 +550,14 @@ export const Home = () => {
               }} 
             />
             
-            <div style={{ position: 'absolute', inset: '15% 0 15% 0', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', zIndex: 10 }}>
-              {showcaseCharacters.map((char, idx) => (
+            <div style={{ position: 'absolute', inset: '15% 6% 15% 6%', display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gridTemplateRows: 'repeat(2, 1fr)', zIndex: 10 }}>
+              {showcaseCharacters.map((char, idx) => {
+                const c = idx % 5;
+                const r = Math.floor(idx / 5);
+                const bgPosX = ((6 + c * 17.6) / 82.4) * 100;
+                const bgPosY = ((15 + r * 35) / 65) * 100;
+                
+                return (
                 <div 
                   key={idx} 
                   className="showcase-hitbox" 
@@ -567,8 +573,8 @@ export const Home = () => {
                           position: 'absolute', 
                           inset: 0,
                           backgroundImage: `url(${settings.middleBannerImage || settings.middleBannerImageMobile || ''})`,
-                          backgroundSize: '500% 285.71428%',
-                          backgroundPosition: `${(idx % 5) * 25}% ${((15 + Math.floor(idx / 5) * 35) / 65) * 100}%`,
+                          backgroundSize: '568.1818% 285.71428%',
+                          backgroundPosition: `${bgPosX}% ${bgPosY}%`,
                           opacity: hoveredChar === idx ? 1 : 0,
                           transform: hoveredChar === idx ? 'scale(1.12)' : 'scale(1)',
                           transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease',
@@ -591,7 +597,7 @@ export const Home = () => {
                     </div>
                   </div>
                 </div>
-              ))}
+              );})}
             </div>
             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(10,10,10,0.9) 0%, transparent 15%, transparent 85%, rgba(10,10,10,0.9) 100%)', pointerEvents: 'none' }} />
           </motion.div>
