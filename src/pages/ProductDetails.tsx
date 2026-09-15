@@ -1129,19 +1129,7 @@ export const ProductDetails = () => {
                         )}
                       </div>
 
-                    <div style={{ marginTop: '1.5rem', paddingTop: '1rem', borderTop: '1px solid var(--glass-border)' }}>
-                      {user ? (
-                        <div style={{ display: 'flex', gap: '0.5rem' }}>
-                          <input type="text" placeholder={language === 'vi' ? 'Viết đánh giá của bạn...' : 'Write your review...'} style={{ flex: 1, padding: '0.75rem', borderRadius: '4px', border: '1px solid var(--glass-border)', background: 'rgba(0,0,0,0.2)', color: '#fff' }} />
-                          <button style={{ padding: '0 1.5rem', background: 'var(--color-accent)', color: '#000', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>{language === 'vi' ? 'Gửi' : 'Submit'}</button>
-                        </div>
-                      ) : (
-                        <div style={{ textAlign: 'center', padding: '1rem', background: 'rgba(239, 68, 68, 0.1)', border: '1px dashed #ef4444', borderRadius: '8px' }}>
-                          <p style={{ margin: '0 0 0.5rem 0', color: '#ef4444', fontWeight: 600 }}>{language === 'vi' ? 'Vui lòng đăng nhập để đánh giá' : 'Please login to review'}</p>
-                          <button onClick={() => navigate('/auth')} style={{ padding: '0.5rem 1.5rem', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '4px', fontWeight: 'bold', cursor: 'pointer' }}>{language === 'vi' ? 'ĐĂNG NHẬP' : 'LOGIN'}</button>
-                        </div>
-                      )}
-                    </div>
+                    
                   </motion.div>
                 </>
               )}
