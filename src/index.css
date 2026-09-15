@@ -1765,6 +1765,12 @@ h2 {
 }
 .tech-box-wrapper {
   position: absolute;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
+}
+
+.tech-box-wrapper:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 15px rgba(36, 214, 115, 0.4);
   padding: 2px;
   background: rgba(36, 214, 115, 0.4);
   clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
