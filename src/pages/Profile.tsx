@@ -1,3 +1,5 @@
+import { UniverseSpace } from '../components/UniverseSpace';
+import { Sparkles } from 'lucide-react';
 ﻿import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -5,9 +7,9 @@ import { User, ShoppingBag, ShoppingCart, Bell, Clock, ChevronRight, Package, Tr
 import { useNavigate } from 'react-router-dom';
 
 export const Profile = () => {
-  const { user, orders, savedCarts, notifications, language, formatPrice, logout } = useStore();
+  const { user, orders, savedCarts, notifications, language, formatPrice, logout, products, settings } = useStore();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'orders' | 'saved_carts'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'orders' | 'saved_carts' | 'universe'>('dashboard');
 
   // If no user is logged in, redirect to auth or show error
   if (!user) {
@@ -264,6 +266,7 @@ export const Profile = () => {
             {activeTab === 'dashboard' && <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{renderDashboard()}</motion.div>}
             {activeTab === 'orders' && <motion.div key="orders" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{renderOrders()}</motion.div>}
             {activeTab === 'saved_carts' && <motion.div key="saved_carts" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>{renderSavedCarts()}</motion.div>}
+            {activeTab === 'universe' && <motion.div key="universe" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><UniverseSpace user={user} products={products} settings={settings} language={language} /></motion.div>}
           </AnimatePresence>
         </div>
 

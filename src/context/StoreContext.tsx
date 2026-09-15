@@ -613,7 +613,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     if (saved.includes(productId)) {
       try {
         await updateDoc(doc(db, 'users', user.uid), {
-          savedCharacters: saved.filter(id => id !== productId)
+          savedCharacters: saved.filter((id: string) => id !== productId)
         });
         showToast(language === 'vi' ? 'Đã xóa khỏi Không Gian Vũ Trụ' : 'Removed from Universe Space');
       } catch (e) {
@@ -732,7 +732,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         cart, addToCart, removeFromCart, clearCart, 
         orders, savedCarts, notifications, createOrder, updateOrder, updateOrderStatus,
         blogPosts, addBlogPost, updateBlogPost, deleteBlogPost,
-        reviews, addReview, updateReviewStatus, deleteReview,
+        reviews, addReview, updateReviewStatus, deleteReview, saveCharacter, unsaveCharacter,
         language,
         setLanguage,
         getSizeMultiplier,
