@@ -94,7 +94,7 @@ export const ProductDetails = () => {
     return () => clearTimeout(timer);
   }, []);
   const navigate = useNavigate();
-  const { products, updateProduct, addToCart, saveCharacter, unsaveCharacter, t, language, formatPrice, showToast, settings, user, reviews, addReview, getSizeMultiplier, getSizeDetails: getStoreSizeDetails } = useStore();
+  const { products, updateProduct, addToCart, saveCharacter, unsaveCharacter, t, language, formatPrice, showToast, settings, user, reviews, orders, addReview, getSizeMultiplier, getSizeDetails: getStoreSizeDetails } = useStore();
   
   const relatedRef = useRef<HTMLDivElement>(null);
   const bestSellersRef = useRef<HTMLDivElement>(null);
@@ -1112,14 +1112,32 @@ export const ProductDetails = () => {
 
                       <div style={{ marginTop: '2rem', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
                         <h4 style={{ margin: '0 0 1rem 0' }}>{language === 'vi' ? 'Viết đánh giá của bạn' : 'Write a review'}</h4>
-                        {!user ? (
-                          <div style={{ textAlign: 'center', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
-                            <p style={{ margin: '0 0 1rem 0', color: 'var(--color-text-muted)' }}>{language === 'vi' ? 'Vui lòng đăng nhập để đánh giá sản phẩm này.' : 'Please login to review this product.'}</p>
-                            <button onClick={() => { handleCloseReview(); document.getElementById('auth-btn')?.click(); }} className="btn-primary" style={{ padding: '0.5rem 1rem' }}>
-                              {language === 'vi' ? 'Đăng nhập' : 'Login'}
-                            </button>
-                          </div>
-                        ) : (
+                        {(() => {
+                          const hasPurchased = user && orders?.some(order => 
+                            (order.userId === user.uid || order.customerName === user.email) && 
+                            order.items.some(item => item.product.id === product.id)
+                          );
+                          
+                          if (!user) {
+                            return (
+                              <div style={{ textAlign: 'center', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
+                                <p style={{ margin: '0 0 1rem 0', color: 'var(--color-text-muted)' }}>{language === 'vi' ? 'Vui lòng đăng nhập để đánh giá sản phẩm này.' : 'Please login to review this product.'}</p>
+                                <button onClick={() => { handleCloseReview(); document.getElementById('auth-btn')?.click(); }} className="btn-primary" style={{ padding: '0.5rem 1rem' }}>
+                                  {language === 'vi' ? 'Đăng nhập' : 'Login'}
+                                </button>
+                              </div>
+                            );
+                          }
+                          
+                          if (!hasPurchased) {
+                            return (
+                              <div style={{ textAlign: 'center', padding: '1rem', background: 'rgba(255,255,255,0.02)', borderRadius: '8px' }}>
+                                <p style={{ margin: '0', color: 'var(--color-text-muted)' }}>{language === 'vi' ? 'Chỉ những khách hàng đã mua sản phẩm này mới có thể viết đánh giá.' : 'Only customers who have purchased this product can write a review.'}</p>
+                              </div>
+                            );
+                          }
+                          
+                          return (
                           <form onSubmit={handleSubmitReview} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                               <span style={{ fontSize: '0.9rem' }}>{language === 'vi' ? 'Điểm đánh giá:' : 'Rating:'}</span>
@@ -1179,7 +1197,8 @@ export const ProductDetails = () => {
                               {isSubmittingReview ? '...' : (language === 'vi' ? 'Gửi đánh giá' : 'Submit Review')}
                             </button>
                           </form>
-                        )}
+                        );
+                        })()}
                       </div>
 
                     
