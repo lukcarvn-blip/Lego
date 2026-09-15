@@ -493,6 +493,21 @@ export const ProductDetails = () => {
                 </div>
               );
             })()}
+            {/* Info Badge (Scroll to tabs) */}
+            <div 
+              className="hover-jump" 
+              onClick={() => {
+                const tabsEl = document.getElementById('product-tabs-section');
+                if (tabsEl) {
+                  tabsEl.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+              title={language === 'vi' ? 'Xem thông tin chi tiết' : 'View specifications'}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', width: 'auto', minWidth: '75px', height: '75px', padding: '0 10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', pointerEvents: 'auto', textAlign: 'center', cursor: 'pointer' }}
+            >
+              <Icons.Info size={22} style={{ marginBottom: '2px' }} />
+              <span style={{ fontSize: '0.55rem', lineHeight: 1.1 }}>{language === 'vi' ? 'CHI TIẾT' : 'INFO'}</span>
+            </div>
           </div>
 
           
@@ -1585,7 +1600,7 @@ export const ProductDetails = () => {
           {/* Buy button moved to left column */}
 
           {/* Tabs Section */}
-          <div style={{ marginTop: '2.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', overflow: 'hidden' }}>
+          <div id="product-tabs-section" style={{ marginTop: '2.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)', overflow: 'hidden' }}>
             {/* Tab Headers */}
             <div style={{ display: 'flex', borderBottom: '1px solid var(--glass-border)', overflowX: 'auto' }} className="hide-scrollbar">
               {product.description?.[language] && (
