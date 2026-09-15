@@ -202,8 +202,8 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [settings, setSettings] = useState<StoreSettings>({
     logoText: 'LEGATO',
       sizes: [
-      { id: 'NORMAL', name: 'NORMAL: 30-45cm', multiplier: 1, heightCm: 45, scaleGraphic: 0.7 },
-      { id: 'PREMIUM', name: 'PREMIUM: 75-90cm', multiplier: 2.5, heightCm: 90, scaleGraphic: 1.2 }
+      { id: 'SCALE_1_10', name: '1:10 — 45cm', multiplier: 1, heightCm: 45, scaleGraphic: 0.7 },
+      { id: 'SCALE_1_18', name: '1:18 — 80cm', multiplier: 2.5, heightCm: 80, scaleGraphic: 1.2 }
     ],
     logoImage: '/images/custom-logo.png',
     heroVideoUrl: 'https://cdn.pixabay.com/video/2021/08/04/83894-585141019_large.mp4',
@@ -271,6 +271,9 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     if (sizeId.includes('300')) return { id: sizeId, name: 'Size 300', multiplier: 0.75, heightCm: 21, scaleGraphic: 0.6 };
     if (sizeId.includes('400')) return { id: sizeId, name: 'Size 400', multiplier: 1, heightCm: 28, scaleGraphic: 0.8 };
     if (sizeId.includes('1000')) return { id: sizeId, name: 'Size 1000', multiplier: 2.5, heightCm: 70, scaleGraphic: 1.2 };
+    // Map old NORMAL/PREMIUM
+    if (sizeId === 'NORMAL') return { id: 'SCALE_1_10', name: '1:10 — 45cm', multiplier: 1, heightCm: 45, scaleGraphic: 0.7 };
+    if (sizeId === 'PREMIUM') return { id: 'SCALE_1_18', name: '1:18 — 80cm', multiplier: 2.5, heightCm: 80, scaleGraphic: 1.2 };
     return { id: sizeId, name: sizeId, multiplier: 1, heightCm: 30, scaleGraphic: 0.8 };
   };
 

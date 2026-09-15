@@ -1238,7 +1238,7 @@ export const ProductDetails = () => {
               <h2 style={{ marginBottom: '1.5rem' }}>{t('size')}</h2>
               
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'stretch', flexWrap: 'nowrap' }}>
-                {/* Single Animated Icon Container */}
+                {/* Ruler + Silhouette Container */}
                 <div style={{ 
                   flex: '0 0 clamp(120px, 45%, 170px)', 
                   minHeight: '190px', 
@@ -1251,71 +1251,59 @@ export const ProductDetails = () => {
                   paddingBottom: '0px',
                   position: 'relative'
                 }}>
-                  {/* Fixed Ruler with pre-defined ticks */}
+                  {/* Ruler */}
                   <div style={{
-                    position: 'absolute',
-                    left: '10px',
-                    bottom: '0px',
-                    height: `${135 * Math.max(...product.availableSizes.map(s => getStoreSizeDetails(s)?.scaleGraphic || 1)) + 10}px`,
+                    position: 'absolute', left: '10px', bottom: '0px',
+                    height: isEffectivelyCrafting ? '175px' : '110px',
                     borderLeft: '2px solid rgba(251, 191, 36, 0.5)'
                   }}>
-                    {/* Minor ticks */}
-                    {Array.from({ length: Math.floor((135 * Math.max(...product.availableSizes.map(s => getStoreSizeDetails(s)?.scaleGraphic || 1))) / 10) }).map((_, i) => (
+                    {Array.from({ length: 14 }).map((_, i) => (
                       <div key={`tick-${i}`} style={{
-                        position: 'absolute',
-                        bottom: `${(i + 1) * 10}px`,
-                        left: 0,
+                        position: 'absolute', bottom: `${(i + 1) * 12}px`, left: 0,
                         width: (i + 1) % 5 === 0 ? '7px' : '4px',
-                        height: '1px',
-                        background: 'rgba(251, 191, 36, 0.3)'
+                        height: '1px', background: 'rgba(251, 191, 36, 0.3)'
                       }}></div>
                     ))}
 
-                    {/* Main size ticks */}
-                    {product.availableSizes.map(size => {
-                      const sizeDetails = getStoreSizeDetails(size);
-                      const tickHeight = 135 * (sizeDetails?.scaleGraphic || 1);
-                      const isSelected = selectedSize === size;
-                      return (
-                        <React.Fragment key={size}>
-                          <div style={{ 
-                            position: 'absolute', 
-                            bottom: `${tickHeight}px`, 
-                            left: 0, 
-                            width: '16px', 
-                            height: '2px', 
-                            background: isSelected ? '#fbbf24' : 'rgba(251, 191, 36, 0.8)', 
-                            transition: 'all 0.3s',
-                            zIndex: 2
-                          }}></div>
-                          <span style={{ 
-                            position: 'absolute', 
-                            bottom: `${tickHeight - 10}px`, 
-                            left: '22px', 
-                            fontSize: '1rem', 
-                            fontWeight: 700, 
-                            color: '#fbbf24', 
-                            transition: 'all 0.3s', 
-                            whiteSpace: 'nowrap',
-                            opacity: isSelected ? 1 : 0,
-                            transform: isSelected ? 'translateX(0)' : 'translateX(-5px)',
-                            textTransform: 'uppercase'
-                          }}>
-                            {(() => {
-                              const parts = (sizeDetails?.name || '').split(':');
-                              if (parts.length > 1) {
-                                return parts[1].trim();
-                              }
-                              return sizeDetails?.heightCm ? `${sizeDetails.heightCm} cm` : "";
-                            })()}
-                          </span>
-                        </React.Fragment>
-                      );
-                    })}
+                    {isEffectivelyCrafting ? (
+                      <>
+                        {[
+                          { label: '45cm', bottom: 84, active: selectedSize === 'SCALE_1_10' },
+                          { label: '80cm', bottom: 162, active: selectedSize === 'SCALE_1_18' },
+                        ].map(tick => (
+                          <React.Fragment key={tick.label}>
+                            <div style={{
+                              position: 'absolute', bottom: `${tick.bottom}px`, left: 0,
+                              width: '16px', height: '2px',
+                              background: tick.active ? '#fbbf24' : 'rgba(251,191,36,0.6)',
+                              transition: 'all 0.3s', zIndex: 2
+                            }}></div>
+                            <span style={{
+                              position: 'absolute', bottom: `${tick.bottom - 10}px`, left: '22px',
+                              fontSize: '0.9rem', fontWeight: 700, color: '#fbbf24',
+                              opacity: tick.active ? 1 : 0,
+                              transform: tick.active ? 'translateX(0)' : 'translateX(-5px)',
+                              transition: 'all 0.3s', whiteSpace: 'nowrap'
+                            }}>{tick.label}</span>
+                          </React.Fragment>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        <div style={{
+                          position: 'absolute', bottom: '84px', left: 0,
+                          width: '16px', height: '2px', background: '#fbbf24', zIndex: 2
+                        }}></div>
+                        <span style={{
+                          position: 'absolute', bottom: '74px', left: '22px',
+                          fontSize: '0.9rem', fontWeight: 700, color: '#fbbf24', whiteSpace: 'nowrap'
+                        }}>{product.dimensions || '?'}</span>
+                      </>
+                    )}
                   </div>
 
                   <motion.div
-                    animate={{ scale: getStoreSizeDetails(selectedSize || '300')?.scaleGraphic }}
+                    animate={{ scale: isEffectivelyCrafting ? (selectedSize === 'SCALE_1_18' ? 1.2 : 0.7) : 0.7 }}
                     transition={{ type: 'spring', stiffness: 400, damping: 15 }}
                     style={{ transformOrigin: 'bottom center', marginLeft: '60px' }}
                   >
@@ -1323,41 +1311,52 @@ export const ProductDetails = () => {
                   </motion.div>
                 </div>
 
-                {/* Vertical Size Options */}
+                {/* Size Options */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: 1, justifyContent: 'center' }}>
-                  {product.availableSizes.map(size => {
-                    const isSelected = selectedSize === size;
-                    const sizeDetails = getStoreSizeDetails(size);
-                    return (
-                      <button 
-                        key={size}
-                        onClick={() => { if(isEffectivelyCrafting) { setSelectedSize(size); setIsCartExpanded(true); } }}
-                        style={{
-                          display: 'flex',
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          padding: '0.75rem 1rem',
-                          borderRadius: 'var(--radius-md)',
-                          border: `2px solid ${isSelected ? 'var(--color-accent)' : 'var(--glass-border)'}`,
-                          background: isSelected ? 'rgba(74, 222, 128, 0.1)' : 'transparent',
-                          color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)',
-                          transition: 'all 0.2s',
-                          cursor: !isEffectivelyCrafting ? 'not-allowed' : 'pointer',
-                          opacity: !isEffectivelyCrafting && !isSelected ? 0.3 : 1
-                        }}
-                      >
-                        
-                        {(() => {
-                          const parts = (sizeDetails?.name || '').split(':');
-                          const displayName = parts[0].trim();
-                          return (
-                            <span style={{ fontWeight: 700, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{displayName}</span>
-                          );
-                        })()}
-
-                      </button>
-                    )
-                  })}
+                  {isEffectivelyCrafting ? (
+                    <>
+                      {[
+                        { id: 'SCALE_1_10', label: '1:10', cm: '45cm' },
+                        { id: 'SCALE_1_18', label: '1:18', cm: '80cm' },
+                      ].map(opt => {
+                        const isSelected = selectedSize === opt.id;
+                        return (
+                          <button
+                            key={opt.id}
+                            onClick={() => { setSelectedSize(opt.id); setIsCartExpanded(true); }}
+                            style={{
+                              display: 'flex', flexDirection: 'column',
+                              justifyContent: 'center', alignItems: 'center',
+                              padding: '0.75rem 1rem', borderRadius: 'var(--radius-md)',
+                              border: `2px solid ${isSelected ? 'var(--color-accent)' : 'var(--glass-border)'}`,
+                              background: isSelected ? 'rgba(74, 222, 128, 0.1)' : 'transparent',
+                              color: isSelected ? 'var(--color-accent)' : 'var(--color-text-muted)',
+                              transition: 'all 0.2s', cursor: 'pointer', gap: '2px'
+                            }}
+                          >
+                            <span style={{ fontWeight: 900, fontSize: 'clamp(1.1rem, 2.5vw, 1.35rem)', letterSpacing: '0.5px' }}>{opt.label}</span>
+                            <span style={{ fontSize: '0.8rem', opacity: 0.8, fontWeight: 600 }}>{opt.cm}</span>
+                          </button>
+                        );
+                      })}
+                    </>
+                  ) : (
+                    <div style={{
+                      display: 'flex', flexDirection: 'column',
+                      justifyContent: 'center', alignItems: 'center',
+                      padding: '1.25rem 1rem', borderRadius: 'var(--radius-md)',
+                      border: '2px solid var(--color-accent)',
+                      background: 'rgba(74, 222, 128, 0.05)',
+                      color: 'var(--color-accent)', gap: '4px'
+                    }}>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', opacity: 0.7, letterSpacing: '1px' }}>
+                        {language === 'vi' ? 'Kích thước thực' : 'Actual Size'}
+                      </span>
+                      <span style={{ fontWeight: 900, fontSize: 'clamp(1.2rem, 3vw, 1.6rem)', letterSpacing: '0.5px' }}>
+                        {product.dimensions || (language === 'vi' ? 'Liên hệ' : 'Contact us')}
+                      </span>
+                    </div>
+                  )}
                 </div>
               </div>
 
