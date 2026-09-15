@@ -565,16 +565,22 @@ export const Home = () => {
                         className="char-zoom-layer" 
                         style={{
                           position: 'absolute', 
-                          inset: '-2px', // Slight overlap to prevent seams
+                          inset: 0,
                           backgroundImage: `url(${settings.middleBannerImage || settings.middleBannerImageMobile || ''})`,
                           backgroundSize: '625% 285.71428%',
                           backgroundPosition: `${((10 + (idx % 5) * 16) / 84) * 100}% ${((15 + Math.floor(idx / 5) * 35) / 65) * 100}%`,
                           opacity: hoveredChar === idx ? 1 : 0,
-                          transform: hoveredChar === idx ? 'scale(1.15)' : 'scale(1)',
-                          transition: 'all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                          transform: hoveredChar === idx ? 'scale(1.12)' : 'scale(1)',
+                          transition: 'transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.4s ease',
                           pointerEvents: 'none'
                         }} 
                       />
+                  <div style={{ 
+                    position: 'absolute', inset: 0, 
+                    boxShadow: hoveredChar === idx ? 'inset 0 0 20px 8px rgba(0,0,0,0.8)' : 'none', 
+                    borderRadius: '4px', zIndex: 2, pointerEvents: 'none',
+                    transition: 'box-shadow 0.5s ease'
+                  }} />
                   </div>
                   <div className="tech-tooltip-wrapper" style={{ zIndex: 10 }}>
                     <div className="tech-tooltip-inner">
