@@ -94,7 +94,7 @@ export const ProductDetails = () => {
     return () => clearTimeout(timer);
   }, []);
   const navigate = useNavigate();
-  const { products, updateProduct, addToCart, t, language, formatPrice, showToast, settings, user, reviews, addReview } = useStore();
+  const { products, updateProduct, addToCart, t, language, formatPrice, showToast, settings, user, reviews, addReview, getSizeMultiplier, getSizeDetails: getStoreSizeDetails } = useStore();
   
   const relatedRef = useRef<HTMLDivElement>(null);
   const bestSellersRef = useRef<HTMLDivElement>(null);
@@ -259,7 +259,7 @@ export const ProductDetails = () => {
   };
   const qtyDiscount = getQuantityDiscount(quantity);
 
-  const baseUnitCost = product ? product.price * parseSizePercentage(selectedSize) * (selectedMaterial === 'PETG' ? 1.2 : 1) * (isFastCrafting ? 1.1 : 1) : 0;
+  const baseUnitCost = product ? product.price * getSizeMultiplier(selectedSize) * (selectedMaterial === 'PETG' ? 1.2 : 1) * (isFastCrafting ? 1.1 : 1) : 0;
   const boxUnitCost = selectedMicaBox === 'standard' ? 150000 / 25400 : selectedMicaBox === 'led' ? 250000 / 25400 : 0;
   const totalPriceUSD = (baseUnitCost + boxUnitCost) * quantity * (1 - qtyDiscount);
 
@@ -464,12 +464,12 @@ export const ProductDetails = () => {
             
             {/* Size Badge */}
             {selectedSize && (() => {
-              const details = getSizeDetails(selectedSize);
+              const details = getStoreSizeDetails(selectedSize);
               return (
                 <div className="hover-jump" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', width: '75px', height: '75px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', borderRadius: '12px', fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', pointerEvents: 'auto', textAlign: 'center' }}>
                   <Icons.Maximize size={22} style={{ marginBottom: '2px' }} />
-                  <span style={{ lineHeight: 1.1 }}>{details.label}</span>
-                  {details.height && <span style={{ fontSize: '0.45rem', opacity: 0.7, lineHeight: 1 }}>({details.height})</span>}
+                  <span style={{ lineHeight: 1.1 }}>{details?.name}</span>
+                  {details?.heightCm && <span style={{ fontSize: '0.45rem', opacity: 0.7, lineHeight: 1 }}>({details?.heightCm ? `${details.heightCm} cm` : ""})</span>}
                 </div>
               );
             })()}
@@ -1247,11 +1247,11 @@ export const ProductDetails = () => {
                     position: 'absolute',
                     left: '10px',
                     bottom: '0px',
-                    height: `${135 * Math.max(...product.availableSizes.map(s => getSizeDetails(s).scale)) + 10}px`,
+                    height: `${135 * Math.max(...product.availableSizes.map(s => getStoreSizeDetails(s)?.scaleGraphic || 1)) + 10}px`,
                     borderLeft: '2px solid rgba(251, 191, 36, 0.5)'
                   }}>
                     {/* Minor ticks */}
-                    {Array.from({ length: Math.floor((135 * Math.max(...product.availableSizes.map(s => getSizeDetails(s).scale))) / 10) }).map((_, i) => (
+                    {Array.from({ length: Math.floor((135 * Math.max(...product.availableSizes.map(s => getStoreSizeDetails(s)?.scaleGraphic || 1))) / 10) }).map((_, i) => (
                       <div key={`tick-${i}`} style={{
                         position: 'absolute',
                         bottom: `${(i + 1) * 10}px`,
@@ -1264,8 +1264,8 @@ export const ProductDetails = () => {
 
                     {/* Main size ticks */}
                     {product.availableSizes.map(size => {
-                      const sizeDetails = getSizeDetails(size);
-                      const tickHeight = 135 * sizeDetails.scale;
+                      const sizeDetails = getStoreSizeDetails(size);
+                      const tickHeight = 135 * (sizeDetails?.scaleGraphic || 1);
                       const isSelected = selectedSize === size;
                       return (
                         <React.Fragment key={size}>
@@ -1292,7 +1292,7 @@ export const ProductDetails = () => {
                             transform: isSelected ? 'translateX(0)' : 'translateX(-5px)',
                             textTransform: 'uppercase'
                           }}>
-                            {sizeDetails.height}
+                            {sizeDetails?.heightCm ? `${sizeDetails.heightCm} cm` : ""}
                           </span>
                         </React.Fragment>
                       );
@@ -1300,7 +1300,7 @@ export const ProductDetails = () => {
                   </div>
 
                   <motion.div
-                    animate={{ scale: getSizeDetails(selectedSize || '300').scale }}
+                    animate={{ scale: getStoreSizeDetails(selectedSize || '300')?.scaleGraphic }}
                     transition={{ type: 'spring', stiffness: 400, damping: 15 }}
                     style={{ transformOrigin: 'bottom center', marginLeft: '60px' }}
                   >
@@ -1312,7 +1312,7 @@ export const ProductDetails = () => {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', flex: 1, justifyContent: 'center' }}>
                   {product.availableSizes.map(size => {
                     const isSelected = selectedSize === size;
-                    const sizeDetails = getSizeDetails(size);
+                    const sizeDetails = getStoreSizeDetails(size);
                     return (
                       <button 
                         key={size}
@@ -1331,7 +1331,7 @@ export const ProductDetails = () => {
                           opacity: !isEffectivelyCrafting && !isSelected ? 0.3 : 1
                         }}
                       >
-                        <span style={{ fontWeight: 700, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{sizeDetails.label}</span>
+                        <span style={{ fontWeight: 700, fontSize: 'clamp(1rem, 2.5vw, 1.25rem)' }}>{sizeDetails?.name}</span>
                       </button>
                     )
                   })}

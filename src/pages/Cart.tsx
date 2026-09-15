@@ -25,7 +25,7 @@ const PROVINCES = [
 
 
 export const Cart = () => {
-  const { cart, removeFromCart, createOrder, updateOrder, t, language, showToast, formatPrice, user, clearCart, settings, loginWithGoogle } = useStore();
+  const { getSizeMultiplier, cart, removeFromCart, createOrder, updateOrder, t, language, showToast, formatPrice, user, clearCart, settings, loginWithGoogle } = useStore();
   const navigate = useNavigate();
   
   const [searchParams, setSearchParams] = useSearchParams();
@@ -111,7 +111,7 @@ export const Cart = () => {
     return boxType === 'standard' ? 150000 / 25400 : boxType === 'led' ? 250000 / 25400 : 0;
   };
 
-  const subtotal = cart.reduce((sum, item) => sum + (item.product.price * parseSizePercentage(item.size) * (item.material === 'PETG' ? 1.2 : 1) * (item.isFastCrafting ? 1.1 : 1) + getBoxUnitCost(item.micaBox)) * item.quantity, 0);
+  const subtotal = cart.reduce((sum, item) => sum + (item.product.price * getSizeMultiplier(item.size) * (item.material === 'PETG' ? 1.2 : 1) * (item.isFastCrafting ? 1.1 : 1) + getBoxUnitCost(item.micaBox)) * item.quantity, 0);
   const shippingFee = paymentType === 'FULL' ? 0 : 5; // Free shipping if paid in full, else $5
   const total = subtotal + shippingFee;
   const amountToPayNow = paymentType === 'FULL' ? total : total / 2;
@@ -298,7 +298,7 @@ export const Cart = () => {
                           border: '1px solid rgba(239,68,68,0.3)',
                           display: 'inline-block'
                         }}>
-                          {formatPrice((item.product.price * parseSizePercentage(item.size) * (item.material === 'PETG' ? 1.2 : 1) * (item.isFastCrafting ? 1.1 : 1)) * item.quantity).current}
+                          {formatPrice((item.product.price * getSizeMultiplier(item.size) * (item.material === 'PETG' ? 1.2 : 1) * (item.isFastCrafting ? 1.1 : 1)) * item.quantity).current}
                         </span>
                       </div>
                     </div>

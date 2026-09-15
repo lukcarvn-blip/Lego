@@ -1,4 +1,4 @@
-export type ProductSize = 'Size 300' | 'Size 400' | 'Size 1000' | 'Standard';
+export type ProductSize = string;
 
 export interface LocalizedString {
   vi: string;
@@ -65,7 +65,7 @@ export const mockProducts: Product[] = [
       vi: "Mô hình Toad cổ điển từ vũ trụ Super Mario, được chế tác tinh xảo với độ hoàn thiện cực cao. Phù hợp để trang trí bàn làm việc hoặc bộ sưu tập game.",
       en: "Classic Toad model from the Super Mario universe, exquisitely crafted with high finish. Perfect for desk decoration or gaming collection."
     },
-    availableSizes: ['Size 300', 'Size 400', 'Size 1000'],
+    availableSizes: ['NORMAL', 'PREMIUM'],
     stock: 12,
     saleType: 'FLASH_SALE',
     discountPercentage: 25,
@@ -100,7 +100,7 @@ export const mockProducts: Product[] = [
       vi: "Anh chàng bựa nhân được yêu thích nhất. Hoàn thiện với sắc đỏ rực rỡ và những chi tiết vũ khí được in 3D cực kỳ sắc nét.",
       en: "Everyone's favorite anti-hero. Finished in vibrant red with incredibly sharp 3D printed weapon details."
     },
-    availableSizes: ["Size 400", "Size 1000"],
+    availableSizes: ['Size 400', 'Size 1000'],
     stock: 8,
     saleType: 'FLASH_SALE',
     discountPercentage: 50
@@ -134,7 +134,7 @@ export const mockProducts: Product[] = [
       vi: "Nắm lấy sức mạnh symbiote. Nổi bật với miệng và biểu tượng nhện vô cùng chi tiết, tăng cường với lớp phủ bóng tối tinh xảo.",
       en: "Embrace the symbiote. Features an incredibly detailed mouth and spider emblem, enhanced with our glossy dark finish."
     },
-    availableSizes: ["Size 300", "Size 400", "Size 1000"],
+    availableSizes: ['Size 300', 'Size 400', 'Size 1000'],
     stock: 5,
   },
   {
@@ -166,7 +166,7 @@ export const mockProducts: Product[] = [
       vi: "Mang không khí Giáng Sinh ấm áp vào ngôi nhà của bạn với nhân vật Ông Già Noel LEGATO đặc biệt. Từng chi tiết nhỏ đều được hoàn thiện bằng liquid glass.",
       en: "Bring the warm Christmas spirit into your home with our special LEGATO Santa Claus figure. Every tiny detail is finished with liquid glass."
     },
-    availableSizes: ["Size 300", "Size 400", "Size 1000"],
+    availableSizes: ['Size 300', 'Size 400', 'Size 1000'],
     stock: 10,
   },
   {
@@ -198,7 +198,7 @@ export const mockProducts: Product[] = [
       vi: "Vị vua của Wakanda đã xuất hiện dưới hình dáng cực ngầu. Nổi bật với lớp sơn mờ đen huyền bí kết hợp cùng các chi tiết bạc rực rỡ.",
       en: "The king of Wakanda has arrived in an ultra-cool form. Features a mysterious matte black finish combined with brilliant silver details."
     },
-    availableSizes: ["Size 300", "Size 400", "Size 1000"],
+    availableSizes: ['Size 300', 'Size 400', 'Size 1000'],
     stock: 3,
   },
   {
@@ -221,7 +221,7 @@ export const mockProducts: Product[] = [
       vi: "Bambu Lab X1 Carbon Combo là siêu phẩm máy in 3D tốc độ cao, được trang bị hệ thống AMS cho phép in đa sắc màu lên đến 16 màu. Tích hợp AI Lidar quét lớp in đầu tiên cực kỳ chính xác. Phù hợp cho dân chuyên nghiệp và xưởng in nhỏ.",
       en: "Bambu Lab X1 Carbon Combo is a high-speed 3D printer masterpiece, equipped with the AMS system allowing multi-color printing up to 16 colors. Features AI Lidar for precise first-layer scanning. Perfect for professionals and small print farms."
     },
-    availableSizes: ["Standard"],
+    availableSizes: ['Standard'],
     stock: 5,
     saleType: 'FLASH_SALE',
     discountPercentage: 10
@@ -246,7 +246,7 @@ export const mockProducts: Product[] = [
       vi: "K1 Max là cỗ máy in 3D CoreXY khổng lồ từ Creality với khổ in lớn 300x300x300mm. Tốc độ kinh hoàng 600mm/s và tích hợp sẵn camera AI theo dõi lỗi in theo thời gian thực.",
       en: "The K1 Max is a giant CoreXY 3D printer from Creality with a large 300x300x300mm build volume. Blazing fast 600mm/s speed and built-in AI camera for real-time print failure detection."
     },
-    availableSizes: ["Standard"],
+    availableSizes: ['Standard'],
     stock: 12
   },
   {
@@ -269,7 +269,7 @@ export const mockProducts: Product[] = [
       vi: "Ultimaker S5 là dòng máy in 3D công nghiệp để bàn, cung cấp độ tin cậy tuyệt đối và hiệu suất vượt trội. Hỗ trợ hàng loạt vật liệu kỹ thuật cao, hệ thống lõi đùn kép siêu thông minh.",
       en: "The Ultimaker S5 is a desktop industrial 3D printer delivering ultimate reliability and performance. Supports a wide range of engineering materials with an ultra-smart dual extrusion system."
     },
-    availableSizes: ["Standard"],
+    availableSizes: ['Standard'],
     stock: 2
   }
 ];

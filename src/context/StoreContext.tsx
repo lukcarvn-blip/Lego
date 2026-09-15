@@ -95,8 +95,17 @@ export interface CollectionItem {
   image?: string;
 }
 
+export interface StoreSize {
+  id: string;
+  name: string;
+  multiplier: number;
+  heightCm: number;
+  scaleGraphic: number;
+}
+
 export interface StoreSettings {
   logoText: string;
+    sizes: StoreSize[];
   logoImage?: string; // Optional image URL
   heroVideoUrl: string;
   contactHotline?: string;
@@ -162,6 +171,8 @@ interface StoreContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
   t: (key: keyof typeof translations['vi']) => string;
+    getSizeMultiplier: (sizeId: string | null) => number;
+    getSizeDetails: (sizeId: string | null) => StoreSize | undefined;
   settings: StoreSettings;
   updateSettings: (newSettings: Partial<StoreSettings>) => void;
   previewSettings: StoreSettings | null;
@@ -187,6 +198,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const [previewSettings, setPreviewSettings] = useState<StoreSettings | null>(null);
   const [settings, setSettings] = useState<StoreSettings>({
     logoText: 'LEGATO',
+      sizes: [
+      { id: 'NORMAL', name: 'NORMAL: 30-45cm', multiplier: 1, heightCm: 45, scaleGraphic: 0.7 },
+      { id: 'PREMIUM', name: 'PREMIUM: 75-90cm', multiplier: 2.5, heightCm: 90, scaleGraphic: 1.2 }
+    ],
     logoImage: '/images/custom-logo.png',
     heroVideoUrl: 'https://cdn.pixabay.com/video/2021/08/04/83894-585141019_large.mp4',
     contactHotline: '0586339686',
@@ -242,6 +257,25 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   const [language, setLanguage] = useState<Language>('vi');
   const [user, setUser] = useState<any>(null);
+
+  const getSizeDetails = (sizeId: string | null) => {
+    if (!sizeId) return undefined;
+    if (activeSettings.sizes) {
+      const s = activeSettings.sizes.find(sz => sz.id === sizeId || sz.name === sizeId);
+      if (s) return s;
+    }
+    // Fallback for old sizes
+    if (sizeId.includes('300')) return { id: sizeId, name: 'Size 300', multiplier: 0.75, heightCm: 21, scaleGraphic: 0.6 };
+    if (sizeId.includes('400')) return { id: sizeId, name: 'Size 400', multiplier: 1, heightCm: 28, scaleGraphic: 0.8 };
+    if (sizeId.includes('1000')) return { id: sizeId, name: 'Size 1000', multiplier: 2.5, heightCm: 70, scaleGraphic: 1.2 };
+    return { id: sizeId, name: sizeId, multiplier: 1, heightCm: 30, scaleGraphic: 0.8 };
+  };
+
+  const getSizeMultiplier = (sizeId: string | null) => {
+    const details = getSizeDetails(sizeId);
+    return details ? details.multiplier : 1;
+  };
+
   const [isDataLoading, setIsDataLoading] = useState(true);
   const [dataError, setDataError] = useState<string | null>(null);
 
@@ -452,15 +486,10 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const clearCart = () => setCart([]);
 
   const createOrder = async (customerName: string, paymentMethod: string = 'COD', additionalInfo: any = {}) => {
-    const parseSizePercentage = (sizeStr: string | null) => {
-      if (!sizeStr) return 1;
-      const num = parseInt(sizeStr.replace('Size ', ''), 10);
-      return isNaN(num) ? 1 : num / 400;
-    };
-    const getBoxUnitCost = (boxType?: string) => {
+        const getBoxUnitCost = (boxType?: string) => {
       return boxType === 'standard' ? 150000 / 25400 : boxType === 'led' ? 250000 / 25400 : 0;
     };
-    const total = cart.reduce((sum, item) => sum + (item.product.price * parseSizePercentage(item.size) * (item.material === 'PETG' ? 1.2 : 1) * (item.isFastCrafting ? 1.1 : 1) + getBoxUnitCost(item.micaBox)) * item.quantity, 0);
+    const total = cart.reduce((sum, item) => sum + (item.product.price * getSizeMultiplier(item.size) * (item.material === 'PETG' ? 1.2 : 1) * (item.isFastCrafting ? 1.1 : 1) + getBoxUnitCost(item.micaBox)) * item.quantity, 0);
     const newOrder = {
       items: [...cart],
       total,
@@ -661,6 +690,8 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         reviews, addReview, updateReviewStatus, deleteReview,
         language,
         setLanguage,
+        getSizeMultiplier,
+        getSizeDetails,
         t,
         settings,
         updateSettings,
