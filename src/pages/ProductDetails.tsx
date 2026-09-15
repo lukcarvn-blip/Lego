@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift, Plus, Minus, Info, Weight , Image as ImageIcon, Video, XCircle} from 'lucide-react';
+import { ShoppingBag, ChevronDown, ChevronUp, Star, Clock, Heart, ArrowLeft, Truck, Zap, ClipboardCheck, Hammer, Play, LayoutGrid, LayoutList, Rocket, ChevronLeft, ChevronRight, Home, Eye, Maximize, X, Gift, Plus, Minus, Info, Weight , Image as ImageIcon, Video, XCircle, Wrench, Package} from 'lucide-react';
 import { mockProducts, type ProductSize } from '../data/mockProducts';
 import { useStore, type ProductMaterial } from '../context/StoreContext';
 import { ProductCard } from '../components/ProductCard';
@@ -936,9 +936,9 @@ export const ProductDetails = () => {
                 <span>{(product.views || 0) * 2} {language === 'vi' ? 'lượt xem' : 'views'}</span>
               </div>
               {product.isReadyStock ? (
-                <span style={{ color: 'var(--color-accent)', fontWeight: 600 }}>📦 {product.stock} {language === 'vi' ? 'sẵn hàng' : 'in stock'}</span>
+                <span style={{ color: 'var(--color-accent)', fontWeight: 600 }}><Package size={16} style={{ marginRight: '4px', verticalAlign: 'text-bottom' }} /> {product.stock} {language === 'vi' ? 'sẵn hàng' : 'in stock'}</span>
               ) : (
-                <span style={{ color: '#f59e0b', fontWeight: 600 }}>🛠️ {language === 'vi' ? 'Chế tác theo yêu cầu' : 'Made to order'}</span>
+                <span style={{ color: '#f59e0b', fontWeight: 600 }}><Wrench size={16} style={{ marginRight: '4px', verticalAlign: 'text-bottom' }} /> {language === 'vi' ? 'Chế tác theo yêu cầu' : 'Made to order'}</span>
               )}
               {product.dimensions && (
                 <span style={{ 

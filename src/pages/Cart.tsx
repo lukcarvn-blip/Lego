@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useStore } from '../context/StoreContext';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { Trash2, ArrowRight, Mail, LogIn, ArrowLeft, CheckCircle, ChevronLeft, ChevronRight, Zap, ShieldCheck, PieChart, QrCode, Wallet, CreditCard, MapPin, Navigation, Loader2, FileText } from 'lucide-react';
+import { Trash2, ArrowRight, Mail, LogIn, ArrowLeft, CheckCircle, ChevronLeft, ChevronRight, Zap, ShieldCheck, PieChart, QrCode, Wallet, CreditCard, MapPin, Navigation, Loader2, FileText , Ruler, Layers} from 'lucide-react';
 import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 
@@ -304,8 +304,8 @@ export const Cart = () => {
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '1rem', marginTop: '0.5rem' }}>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,255,255,0.06)', padding: '0.25rem 0.6rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,255,255,0.08)' }}>📏 Size {item.size}</span>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,255,255,0.06)', padding: '0.25rem 0.6rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,255,255,0.08)' }}>🧵 {item.material}</span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,255,255,0.06)', padding: '0.25rem 0.6rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,255,255,0.08)' }}><Ruler size={14} style={{ marginRight: '4px' }} />Size {item.size}</span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', background: 'rgba(255,255,255,0.06)', padding: '0.25rem 0.6rem', borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,255,255,0.08)' }}><Layers size={14} style={{ marginRight: '4px' }} />{item.material}</span>
                       </div>
                       
                       {item.isFastCrafting && (
@@ -740,7 +740,7 @@ export const Cart = () => {
                   <div style={{ height: '1px', background: 'var(--glass-border)', margin: '0.25rem 0' }} />
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', borderRadius: 'var(--radius-sm)', background: 'rgba(74,222,128,0.12)', border: '1px solid rgba(74,222,128,0.3)' }}>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
-                      <span style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--color-accent)' }}>⚡ {language === 'vi' ? 'Thanh toán ngay' : 'Pay Now'}</span>
+                      <span style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '1.5px', textTransform: 'uppercase', color: 'var(--color-accent)' }}><Zap size={14} style={{ marginRight: '4px', fill: 'currentColor' }} /> {language === 'vi' ? 'Thanh toán ngay' : 'Pay Now'}</span>
                       <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{language === 'vi' ? 'Bao gồm phí vận chuyển' : 'Incl. shipping'}</span>
                     </div>
                     <span style={{ fontWeight: 800, fontSize: '1.4rem', color: '#ef4444' }}>{formatPrice(amountToPayNow).current}</span>
