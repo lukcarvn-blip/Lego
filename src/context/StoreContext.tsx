@@ -77,6 +77,7 @@ export interface BlogPost {
 
 export interface AppUser {
   uid: string;
+  savedCharacters?: string[];
   email: string;
   displayName: string;
   photoURL: string;
@@ -166,6 +167,8 @@ interface StoreContextType {
   deleteBlogPost: (id: string) => Promise<void>;
   reviews: Review[];
   addReview: (review: Omit<Review, 'id' | 'createdAt' | 'status'>) => Promise<void>;
+  saveCharacter: (productId: string) => Promise<void>;
+  unsaveCharacter: (productId: string) => Promise<void>;
   updateReviewStatus: (id: string, status: 'PENDING' | 'APPROVED' | 'REJECTED') => Promise<void>;
   deleteReview: (id: string) => Promise<void>;
   language: Language;
@@ -585,6 +588,40 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       showToast(language === 'vi' ? 'Đã cập nhật trạng thái' : 'Status updated');
     } catch (e) { console.error(e); }
   };
+
+  const saveCharacter = async (productId: string) => {
+    if (!user) {
+      showToast(language === 'vi' ? 'Vui lòng đăng nhập để lưu' : 'Please login to save');
+      return;
+    }
+    const saved = user.savedCharacters || [];
+    if (!saved.includes(productId)) {
+      try {
+        await updateDoc(doc(db, 'users', user.uid), {
+          savedCharacters: [...saved, productId]
+        });
+        showToast(language === 'vi' ? 'Đã thêm vào Không Gian Vũ Trụ' : 'Added to Universe Space');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  const unsaveCharacter = async (productId: string) => {
+    if (!user) return;
+    const saved = user.savedCharacters || [];
+    if (saved.includes(productId)) {
+      try {
+        await updateDoc(doc(db, 'users', user.uid), {
+          savedCharacters: saved.filter(id => id !== productId)
+        });
+        showToast(language === 'vi' ? 'Đã xóa khỏi Không Gian Vũ Trụ' : 'Removed from Universe Space');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
 
   const deleteReview = async (id: string) => {
     try {

@@ -94,7 +94,7 @@ export const ProductDetails = () => {
     return () => clearTimeout(timer);
   }, []);
   const navigate = useNavigate();
-  const { products, updateProduct, addToCart, t, language, formatPrice, showToast, settings, user, reviews, addReview, getSizeMultiplier, getSizeDetails: getStoreSizeDetails } = useStore();
+  const { products, updateProduct, addToCart, saveCharacter, unsaveCharacter, t, language, formatPrice, showToast, settings, user, reviews, addReview, getSizeMultiplier, getSizeDetails: getStoreSizeDetails } = useStore();
   
   const relatedRef = useRef<HTMLDivElement>(null);
   const bestSellersRef = useRef<HTMLDivElement>(null);
@@ -650,21 +650,28 @@ export const ProductDetails = () => {
                 
                 <motion.button 
                   whileTap={{ scale: 0.9 }}
-                  onClick={handleLike}
+                  onClick={() => {
+                    const isSaved = user?.savedCharacters?.includes(product.id);
+                    if (isSaved) {
+                      unsaveCharacter(product.id);
+                    } else {
+                      saveCharacter(product.id);
+                    }
+                  }}
                   style={{
                     position: 'absolute', top: '1.5rem', right: '1.5rem', zIndex: 30,
-                    background: isLiked ? 'rgba(245, 158, 11, 0.9)' : 'rgba(0,0,0,0.6)', 
-                    border: isLiked ? '1px solid #fbbf24' : '1px solid var(--glass-border)',
+                    background: user?.savedCharacters?.includes(product.id) ? 'rgba(36, 214, 115, 0.9)' : 'rgba(0,0,0,0.6)', 
+                    border: user?.savedCharacters?.includes(product.id) ? '1px solid var(--color-accent)' : '1px solid var(--glass-border)',
                     borderRadius: '20px', padding: '8px 12px',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                     cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.2s',
-                    boxShadow: isLiked ? '0 0 15px rgba(245, 158, 11, 0.5)' : 'none'
+                    boxShadow: user?.savedCharacters?.includes(product.id) ? '0 0 15px rgba(36, 214, 115, 0.5)' : 'none'
                   }}
-                  onMouseEnter={e => { if (!isLiked) { e.currentTarget.style.background = 'rgba(0,0,0,0.8)'; } }}
-                  onMouseLeave={e => { if (!isLiked) { e.currentTarget.style.background = 'rgba(0,0,0,0.6)'; } }}
+                  onMouseEnter={e => { if (!user?.savedCharacters?.includes(product.id)) { e.currentTarget.style.background = 'rgba(0,0,0,0.8)'; } }}
+                  onMouseLeave={e => { if (!user?.savedCharacters?.includes(product.id)) { e.currentTarget.style.background = 'rgba(0,0,0,0.6)'; } }}
                 >
-                  <Star size={16} color="#fff" fill={isLiked ? '#fff' : 'none'} />
-                  <span style={{ color: '#fff', fontSize: '13px', fontWeight: 'bold' }}>{language === 'vi' ? 'Fan Cứng' : 'Top Fan'}</span>
+                  <Gift size={16} color="#fff" />
+                  <span style={{ color: '#fff', fontSize: '13px', fontWeight: 'bold' }}>{language === 'vi' ? (user?.savedCharacters?.includes(product.id) ? 'Đã lưu' : 'Lưu bộ sưu tập') : (user?.savedCharacters?.includes(product.id) ? 'Saved' : 'Add to Collection')}</span>
                 </motion.button>
               </>
             )}

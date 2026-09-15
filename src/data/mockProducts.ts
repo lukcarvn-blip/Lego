@@ -25,6 +25,9 @@ export interface Product {
   saleType?: 'SALE' | 'FLASH_SALE' | null;
   discountPercentage?: number;
   video?: string;
+  biography?: { vi: string; en: string };
+  powerRanking?: number;
+  alignment?: 'Hero' | 'Villain' | 'Neutral';
   videos?: string[];
   availableMaterials?: string[];
   dimensions?: string;
