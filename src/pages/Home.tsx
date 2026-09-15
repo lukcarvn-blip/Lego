@@ -273,12 +273,12 @@ export const Home = () => {
             <div style={{ pointerEvents: 'auto' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
             <div style={{ display: 'flex', gap: '1rem' }}>
-              <button className="hero-prev tech-box-wrapper hover-jump" style={{ position: 'relative', width: '45px', height: '45px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: 'none', padding: 0, marginTop: 0, left: 'auto', right: 'auto' }}>
+              <button className="hero-prev tech-box-wrapper" style={{ position: 'relative', width: '45px', height: '45px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: 'none', padding: 0, marginTop: 0, left: 'auto', right: 'auto' }}>
                 <div className="tech-box" style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)' }}>
                   <Icons.ChevronLeft color="var(--color-accent)" size={24} />
                 </div>
               </button>
-              <button className="hero-next tech-box-wrapper hover-jump" style={{ position: 'relative', width: '45px', height: '45px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: 'none', padding: 0, marginTop: 0, left: 'auto', right: 'auto' }}>
+              <button className="hero-next tech-box-wrapper" style={{ position: 'relative', width: '45px', height: '45px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: 'none', padding: 0, marginTop: 0, left: 'auto', right: 'auto' }}>
                 <div className="tech-box" style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, clipPath: 'polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)' }}>
                   <Icons.ChevronRight color="var(--color-accent)" size={24} />
                 </div>

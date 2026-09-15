@@ -1769,12 +1769,13 @@ h2 {
 }
 
 .tech-box-wrapper:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 15px rgba(36, 214, 115, 0.4);
-  padding: 2px;
-  background: rgba(36, 214, 115, 0.4);
-  clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 15px rgba(36, 214, 115, 0.3);
+}
+
+.tech-box-wrapper.box-tr-loading:hover {
+  transform: none !important;
+  box-shadow: none !important;
 }
 .hero-4boxes-container .tech-box-wrapper {
   position: relative !important;
