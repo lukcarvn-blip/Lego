@@ -106,7 +106,7 @@ export const Footer = () => {
       <div className="container" style={{
         borderTop: '1px solid var(--glass-border)',
         paddingTop: '1rem',
-        paddingBottom: '1.5rem',
+        paddingBottom: '0.5rem',
         textAlign: 'center',
         color: 'var(--color-text-muted)',
         fontSize: '0.875rem'

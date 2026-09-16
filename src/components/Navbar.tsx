@@ -309,9 +309,7 @@ export const Navbar = () => {
             color: var(--color-accent);
           }
           /* Adjust main container padding for mobile so bottom content is not hidden by the bottom nav */
-          body {
-            padding-bottom: 80px;
-          }
+          
         }
       `}</style>
     </>
