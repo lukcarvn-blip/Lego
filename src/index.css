@@ -2316,5 +2316,3 @@ h2 {
 }
 
 
-.pd-main-grid.has-banner { position: relative; z-index: 10; }
-@media (min-width: 1024px) { .pd-main-grid.has-banner { margin-top: -180px; } }
