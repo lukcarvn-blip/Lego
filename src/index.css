@@ -1728,7 +1728,7 @@ h2 {
   gap: 0.5rem;
   align-items: flex-end;
 }
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .product-detail-badges {
     top: 50%;
     bottom: auto;
@@ -2351,7 +2351,7 @@ h2 {
 .product-detail-banner.is-initial-load .pd-badge:nth-child(5) { animation-delay: 3.8s; }
 .product-detail-banner.is-initial-load .pd-badge:nth-child(6) { animation-delay: 3.95s; }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .product-detail-badges {
     top: auto !important;
     bottom: 2rem !important;

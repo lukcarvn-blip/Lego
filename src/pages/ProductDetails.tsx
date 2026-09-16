@@ -548,7 +548,7 @@ export const ProductDetails = () => {
             })()}
             {/* Info Badge (Scroll to tabs) */}
             <div 
-              className="hover-jump" 
+              className="pd-badge hover-jump" 
               onClick={() => {
                 const tabsEl = document.getElementById('product-tabs-section');
                 if (tabsEl) {
