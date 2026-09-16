@@ -91,7 +91,7 @@ export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   useEffect(() => {
-    const timer = setTimeout(() => setIsInitialLoad(false), 3000);
+    const timer = setTimeout(() => setIsInitialLoad(false), 5000);
     return () => clearTimeout(timer);
   }, []);
   const navigate = useNavigate();
