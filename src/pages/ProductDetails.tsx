@@ -477,7 +477,7 @@ export const ProductDetails = () => {
               const IconComponent = Icons[col.iconName as keyof typeof Icons] as any || Icons.Folder;
               return (
                 <div 
-                  className="pd-badge hover-jump" onClick={(e) => handleTopFanClick(e, col.name)}
+                  className="pd-badge hover-jump fan-cung-shine" onClick={(e) => handleTopFanClick(e, col.name)}
                   title={language === 'vi' ? 'Nhấn để trở thành Fan cứng' : 'Click to become a Top Fan'}
                   style={{ 
                     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', 

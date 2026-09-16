@@ -2381,11 +2381,11 @@ h2 {
 }
 
 
-.pd-badge, .flash-badge {
+.fan-cung-shine {
   position: relative;
   overflow: hidden;
 }
-.pd-badge::after, .flash-badge::after {
+.fan-cung-shine::after {
   content: '';
   position: absolute;
   top: 0;
