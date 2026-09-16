@@ -456,19 +456,17 @@ export const ProductDetails = () => {
           </div>
           
           {/* Badges Container */}
-          <div className="product-detail-badges pd-hud-delayed">
+          <div className="product-detail-badges">
             {/* Collection Badge */}
             {product.collection && settings.collections?.find((c: any) => c.name === product.collection) && (() => {
               const col = settings.collections!.find((c: any) => c.name === product.collection); if (!col) return null;
               const IconComponent = Icons[col.iconName as keyof typeof Icons] as any || Icons.Folder;
               return (
                 <div 
-                  className="hover-jump" 
-                  onClick={(e) => handleTopFanClick(e, col.name)}
+                  className="pd-badge hover-jump" onClick={(e) => handleTopFanClick(e, col.name)}
                   title={language === 'vi' ? 'Nhấn để trở thành Fan cứng' : 'Click to become a Top Fan'}
                   style={{ 
                     display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', 
-                    width: '75px', height: '75px', 
                     background: isTopFan ? 'linear-gradient(135deg, #fbbf24 0%, #d97706 100%)' : (col.bg || 'rgba(255,255,255,0.1)'), 
                     border: isTopFan ? '1px solid #fef3c7' : `1px solid ${col.border || 'rgba(255,255,255,0.2)'}`, 
                     color: isTopFan ? '#000' : (col.color || '#fff'), 
@@ -502,14 +500,14 @@ export const ProductDetails = () => {
 
             {/* Category Badge */}
             {product.category && (
-              <div className="hover-jump" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', width: '75px', height: '75px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', borderRadius: '12px', fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', pointerEvents: 'auto', textAlign: 'center' }}>
+              <div className="pd-badge hover-jump" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', borderRadius: '12px', fontSize: '0.55rem', fontWeight: 800, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', pointerEvents: 'auto', textAlign: 'center' }}>
                 <Icons.Layers size={24} />
                 <span style={{ lineHeight: 1.1 }}>{product.category.toUpperCase()}</span>
               </div>
             )}
             
             {/* 3D Printed Badge */}
-            <div className="hover-jump" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', width: '75px', height: '75px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', borderRadius: '12px', fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', pointerEvents: 'auto', textAlign: 'center' }}>
+            <div className="pd-badge hover-jump" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.4rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', borderRadius: '12px', fontSize: '0.55rem', fontWeight: 900, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', pointerEvents: 'auto', textAlign: 'center' }}>
               <div style={{ width: '28px', height: '28px', perspective: '200px', display: 'inline-block', flexShrink: 0 }}>
                 <div style={{ width: '100%', height: '100%', position: 'relative', transformStyle: 'preserve-3d', transform: 'rotateX(-20deg) rotateY(-45deg)' }}>
                   <div style={{ position: 'absolute', width: '100%', height: '100%', border: '2px solid #fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 900, transform: 'translateZ(14px)', color: '#fff', boxSizing: 'border-box', background: 'rgba(0,0,0,0.4)' }}>3D</div>
@@ -533,7 +531,7 @@ export const ProductDetails = () => {
               if (!displaySize) return null;
               
               return (
-                <div className="hover-jump" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', width: 'auto', minWidth: '75px', height: '75px', padding: '0 10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', pointerEvents: 'auto', textAlign: 'center' }}>
+                <div className="pd-badge hover-jump" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', width: 'auto', minWidth: '75px', height: '75px', padding: '0 10px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.9)', borderRadius: '12px', fontSize: '0.85rem', fontWeight: 800, letterSpacing: '0.5px', backdropFilter: 'blur(12px)', pointerEvents: 'auto', textAlign: 'center' }}>
                   <Icons.Maximize size={22} style={{ marginBottom: '2px' }} />
                   <span style={{ lineHeight: 1.1, whiteSpace: 'nowrap' }}>{displaySize}</span>
                 </div>
