@@ -47,6 +47,7 @@ export const mockProducts: Product[] = [
       en: "Toad - Classic Mushroom Kingdom" 
     },
     category: "Classic",
+    collection: "Anime",
     price: 83.99, // original 139.99
     rating: 4.8,
     reviews: 128,
@@ -82,6 +83,7 @@ export const mockProducts: Product[] = [
       en: "Deadpool - Merc with a Mouth" 
     },
     category: "Superheroes",
+    collection: "Marvel",
     price: 119.99, // original 199.99
     rating: 4.9,
     reviews: 210,
@@ -116,6 +118,7 @@ export const mockProducts: Product[] = [
       en: "Venom - Symbiote Nightmare" 
     },
     category: "Superheroes",
+    collection: "Marvel",
     price: 131.99, // original 219.99
     rating: 5.0,
     reviews: 320,
@@ -180,6 +183,7 @@ export const mockProducts: Product[] = [
       en: "Black Panther - Wakanda Forever" 
     },
     category: "Superheroes",
+    collection: "Avengers",
     price: 143.99, // original 239.99
     rating: 5.0,
     reviews: 410,
