@@ -557,7 +557,6 @@ export const Home = () => {
                   onMouseLeave={() => setHoveredChar(null)}
                 >
                   
-                  <div style={{ position: 'absolute', inset: 0, border: hoveredChar === idx ? '2px solid rgba(255,255,255,0.4)' : 'none', borderRadius: '4px', zIndex: 1, pointerEvents: 'none', transition: 'border 0.3s ease', boxShadow: hoveredChar === idx ? 'inset 0 0 20px rgba(255,255,255,0.2), 0 0 15px rgba(255,255,255,0.1)' : 'none' }} />
                   <div className="tech-tooltip-wrapper" style={{ zIndex: 10 }}>
                     <div className="tech-tooltip-inner">
                       <div className="tech-tooltip-title">{char.name}</div>
