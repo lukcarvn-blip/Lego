@@ -2320,7 +2320,8 @@ h2 {
 
 
 
-.hero-blog-swiper .swiper-slide:not(.swiper-slide-active) * { pointer-events: none !important; }
+.hero-blog-swiper .swiper-slide:not(.swiper-slide-active) *,
+.flash-sale-swiper .swiper-slide:not(.swiper-slide-active) * { pointer-events: none !important; }
 
 
 @keyframes badge-bounce-zoom {
