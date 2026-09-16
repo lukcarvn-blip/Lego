@@ -96,7 +96,15 @@ export const ProductDetails = () => {
   }, []);
   const navigate = useNavigate();
   const { products, updateProduct, addToCart, saveCharacter, unsaveCharacter, t, language, formatPrice, showToast, settings, user, reviews, orders, addReview, getSizeMultiplier, getSizeDetails: getStoreSizeDetails } = useStore();
+    let product = products.find(p => p.id === id) || mockProducts.find(p => p.id === id);
   const [isTopFan, setIsTopFan] = useState(false);
+  
+  useEffect(() => {
+    if (product?.collection) {
+      const fans = JSON.parse(localStorage.getItem('top_fans') || '[]');
+      setIsTopFan(fans.includes(product.collection));
+    }
+  }, [product?.collection]);
   
   const handleTopFanClick = (e: React.MouseEvent, colName: string) => {
     e.stopPropagation();
@@ -106,6 +114,13 @@ export const ProductDetails = () => {
     }
     
     setIsTopFan(true);
+    if (product?.collection) {
+      const fans = JSON.parse(localStorage.getItem('top_fans') || '[]');
+      if (!fans.includes(product.collection)) {
+        fans.push(product.collection);
+        localStorage.setItem('top_fans', JSON.stringify(fans));
+      }
+    }
     
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const x = (rect.left + rect.width / 2) / window.innerWidth;
@@ -133,7 +148,6 @@ export const ProductDetails = () => {
     }
   };
 
-  let product = products.find(p => p.id === id) || mockProducts.find(p => p.id === id);
   
   // Randomly select a banner image if multiple exist
   const selectedBanner = useMemo(() => {
@@ -480,19 +494,14 @@ export const ProductDetails = () => {
                   <span style={{ lineHeight: 1.1, marginTop: '2px' }}>{col.name}</span>
                   
                   {isTopFan ? (
-                    <span style={{ fontSize: '0.45rem', background: 'rgba(0,0,0,0.2)', color: '#fff', padding: '2px 6px', borderRadius: '10px', marginTop: '2px' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', fontSize: '0.45rem', background: 'rgba(0,0,0,0.2)', color: '#fff', padding: '2px 6px', borderRadius: '10px', marginTop: '2px' }}>
+                      <Icons.Star size={8} fill="#fff" style={{ marginRight: '3px' }} />
                       {language === 'vi' ? 'FAN CỨNG' : 'TOP FAN'}
                     </span>
                   ) : (
                     <span style={{ fontSize: '0.45rem', opacity: 0.6, marginTop: '2px', borderBottom: '1px dotted rgba(255,255,255,0.4)' }}>
-                      {language === 'vi' ? 'THAM GIA?' : 'JOIN FAN?'}
+                      {language === 'vi' ? 'FAN CỨNG' : 'TOP FAN'}
                     </span>
-                  )}
-                  
-                  {isTopFan && (
-                    <div style={{ position: 'absolute', top: '-5px', right: '-5px', background: '#fff', color: '#f59e0b', borderRadius: '50%', padding: '2px', boxShadow: '0 2px 5px rgba(0,0,0,0.3)' }}>
-                      <Icons.Crown size={12} fill="#f59e0b" />
-                    </div>
                   )}
                 </div>
               )
