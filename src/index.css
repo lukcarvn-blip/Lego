@@ -278,13 +278,6 @@ button {
   }
 }
 
-/* 3D hover group effect: dim siblings when one card is hovered */
-.product-grid:has(.product-card-wrapper:hover) .product-card-wrapper:not(:hover) {
-  opacity: 0.45;
-  filter: blur(1.5px) brightness(0.6);
-  transform: scale(0.96);
-  transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
-}
 
 .product-card-wrapper {
   transition: opacity 0.35s ease, filter 0.35s ease, transform 0.35s ease;
