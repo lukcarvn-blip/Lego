@@ -22,6 +22,7 @@ import { NewsDetail } from './pages/NewsDetail';
 import { Technology } from './pages/Technology';
 import { Partnership } from './pages/Partnership';
 import { Profile } from './pages/Profile';
+import { Community } from './pages/Community';
 import { Leaderboard } from './pages/Leaderboard';
 import { NotFound } from './pages/NotFound';
 import { ErrorBoundary } from './components/ErrorBoundary';
@@ -124,6 +125,7 @@ function AppContent() {
           <Route path="/news" element={<News />} />
           <Route path="/news/:id" element={<NewsDetail />} />
           <Route path="/technology" element={<Technology />} />
+          <Route path="/community" element={<Community />} />
           <Route path="/partnership" element={<Partnership />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
