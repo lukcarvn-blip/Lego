@@ -251,21 +251,23 @@ export const Community = () => {
                               slideShadows: true,
                             }}
                             pagination={{ clickable: true, dynamicBullets: true }}
-                            navigation={true}
-                            modules={[EffectCoverflow, Pagination, Navigation]}
+                            navigation={false}
+                            slideToClickedSlide={true}
+                            modules={[EffectCoverflow, Pagination]}
                             className="leaderboard-coverflow-swiper"
                           >
                           {(() => {
-                            let displayProducts = col.products;
+                            let displayProducts = col.products.map((p: any, i: number) => ({...p, rank: i + 1}));
                             if (displayProducts.length > 0 && displayProducts.length < 10) {
+                              const original = [...displayProducts];
                               while (displayProducts.length < 10) {
-                                displayProducts = [...displayProducts, ...col.products];
+                                displayProducts = [...displayProducts, ...original];
                               }
                             }
                             return displayProducts.map((char: any, idx: number) => (
                               <SwiperSlide key={`${char.id}-${idx}`} style={{ width: '280px', height: 'auto' }}>
-
-                            <div onClick={() => navigate(`/product/${char.id}`)}
+                              {({ isActive }) => (
+                                <div onClick={() => isActive && navigate(`/product/${char.id}`)}
                               style={{ 
                                 display: 'flex', flexDirection: 'column', 
                                 background: 'rgba(0,0,0,0.4)', borderRadius: '16px', border: '1px solid var(--glass-border)',
@@ -317,6 +319,7 @@ export const Community = () => {
                                 </div>
                               </div>
                             </div>
+                            )}
                             </SwiperSlide>
                           ))})()}
                           </Swiper>
