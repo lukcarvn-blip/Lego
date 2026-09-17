@@ -6,6 +6,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Trophy, Zap, Shield, Crosshair, HelpCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import * as Icons from 'lucide-react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+import 'swiper/css/navigation';
+
 
 export const Community = () => {
   const { products, settings, language } = useStore();
@@ -227,11 +234,27 @@ export const Community = () => {
                         exit={{ height: 0, opacity: 0 }}
                         style={{ overflow: 'hidden' }}
                       >
-                        <div style={{ padding: '0 1.5rem 1.5rem 1.5rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', marginTop: '0.5rem', paddingTop: '1.5rem' }}>
+                        <div style={{ padding: '0 1.5rem 2.5rem 1.5rem', borderTop: '1px solid rgba(255,255,255,0.05)', marginTop: '0.5rem', paddingTop: '1.5rem' }}>
+                          <Swiper
+                            effect={'coverflow'}
+                            grabCursor={true}
+                            centeredSlides={true}
+                            slidesPerView={'auto'}
+                            coverflowEffect={{
+                              rotate: 0,
+                              stretch: 0,
+                              depth: 150,
+                              modifier: 2,
+                              slideShadows: true,
+                            }}
+                            pagination={{ clickable: true, dynamicBullets: true }}
+                            navigation={true}
+                            modules={[EffectCoverflow, Pagination, Navigation]}
+                            className="leaderboard-coverflow-swiper"
+                          >
                           {col.products.map(char => (
-                            <div 
-                              key={char.id}
-                              onClick={() => navigate(`/product/${char.id}`)}
+                            <SwiperSlide key={char.id} style={{ width: '280px', height: 'auto' }}>
+                            <div onClick={() => navigate(`/product/${char.id}`)}
                               style={{ 
                                 display: 'flex', flexDirection: 'column', 
                                 background: 'rgba(0,0,0,0.4)', borderRadius: '16px', border: '1px solid var(--glass-border)',
@@ -283,7 +306,9 @@ export const Community = () => {
                                 </div>
                               </div>
                             </div>
+                            </SwiperSlide>
                           ))}
+                          </Swiper>
                         </div>
                       </motion.div>
                     )}

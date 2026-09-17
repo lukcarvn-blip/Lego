@@ -2461,3 +2461,45 @@ h2 {
     gap: 1.5rem !important;
   }
 }
+
+
+/* Leaderboard Coverflow Swiper */
+.leaderboard-coverflow-swiper {
+  width: 100%;
+  padding-bottom: 3rem !important; /* Space for pagination */
+  padding-top: 1rem !important;
+}
+
+.leaderboard-coverflow-swiper .swiper-slide {
+  background-position: center;
+  background-size: cover;
+  width: 280px;
+  height: auto;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+
+.leaderboard-coverflow-swiper .swiper-slide-active {
+  opacity: 1;
+}
+
+/* Custom Navigation colors */
+.leaderboard-coverflow-swiper .swiper-button-next,
+.leaderboard-coverflow-swiper .swiper-button-prev {
+  color: var(--color-accent);
+  background: rgba(0,0,0,0.5);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.leaderboard-coverflow-swiper .swiper-button-next:after,
+.leaderboard-coverflow-swiper .swiper-button-prev:after {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.leaderboard-coverflow-swiper .swiper-pagination-bullet {
+  background: #fff;
+}
+.leaderboard-coverflow-swiper .swiper-pagination-bullet-active {
+  background: var(--color-accent);
+}
