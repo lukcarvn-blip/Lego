@@ -50,11 +50,8 @@ export const Community = () => {
   return (
     <div style={{ paddingTop: '120px', paddingBottom: '4rem', minHeight: '100vh' }}>
       <div className="container">
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          style={{ maxWidth: '800px', margin: '0 auto' }}
-        >
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ width: "100%" }}>
+          <div style={{ maxWidth: "1000px", margin: "0 auto", textAlign: "center", marginBottom: "4rem" }}>
           {/* Header */}
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(74, 222, 128, 0.1)', color: 'var(--color-accent)', marginBottom: '1.5rem' }}>
@@ -89,6 +86,8 @@ export const Community = () => {
           </div>
 
           
+          </div>
+
           {/* Bảng xếp hạng */}
           <div id="leaderboard"></div>
           <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '2rem', marginTop: '4rem' }}>
@@ -296,6 +295,7 @@ export const Community = () => {
         </div>
           </div>
 
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           {/* Exclusive Policies */}
           <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '2rem' }}>
             {language === 'vi' ? 'Đặc Quyền & Chính Sách' : 'Exclusive Policies'}
@@ -339,6 +339,9 @@ export const Community = () => {
             </div>
           </div>
 
+          </div>
+
+          <div style={{ maxWidth: "800px", margin: "0 auto" }}>
           {/* Request Form */}
           <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px', border: '1px solid var(--color-accent)', background: 'rgba(74, 222, 128, 0.05)' }}>
             <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
@@ -405,7 +408,7 @@ export const Community = () => {
               </form>
             )}
           </div>
-          
+          </div>
         </motion.div>
       </div>
     </div>
