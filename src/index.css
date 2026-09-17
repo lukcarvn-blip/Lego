@@ -2551,3 +2551,6 @@ h2 {
 @media (min-width: 1024px) { .community-bottom-split { grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; } }
 .community-request-side { width: 100%; }
 .community-policies-side { width: 100%; }
+
+@keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+.request-card-bg { background: linear-gradient(45deg, #064e3b, #0f172a, #065f46, #064e3b); background-size: 300% 300%; animation: gradientBG 6s ease infinite; }
