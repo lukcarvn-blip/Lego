@@ -109,7 +109,7 @@ export const ProductDetails = () => {
   const handleTopFanClick = (e: React.MouseEvent, colName: string) => {
     e.stopPropagation();
     if (isTopFan) {
-      navigate('/leaderboard');
+      navigate('/community');
       return;
     }
     

@@ -1,6 +1,6 @@
 ﻿import { AlertTriangle } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { StoreProvider, useStore } from './context/StoreContext';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/Navbar';
@@ -115,7 +115,7 @@ function AppContent() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/leaderboard" element={<Navigate to="/community" replace />} />
           <Route path="/checkout/success/:orderId" element={<CheckoutSuccess />} />
           <Route path="/hoang" element={<Admin />} />
           <Route path="/faq" element={<FAQ />} />
