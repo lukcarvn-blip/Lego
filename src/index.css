@@ -2512,7 +2512,7 @@ h2 {
 }
 @media (min-width: 1024px) {
   .community-top-split {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 4fr 6fr;
     gap: 4rem;
     align-items: start;
   }
