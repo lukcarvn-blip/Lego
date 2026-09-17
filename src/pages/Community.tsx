@@ -147,7 +147,7 @@ export const Community = () => {
                     </div>
                     
                     {/* Info */}
-                    <div style={{ width: '220px', flexShrink: 0 }}>
+                    <div style={{ width: '140px', flexShrink: 0 }}>
                       <div style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '1px', color: col.color, fontWeight: 700, marginBottom: '0.25rem' }}>
                         {language === 'vi' ? 'BỘ SƯU TẬP' : 'COLLECTION'}
                       </div>
@@ -155,8 +155,8 @@ export const Community = () => {
                     </div>
                     
                     {/* Character Avatars */}
-                    <div className="leaderboard-avatars-mobile-hide" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '2rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'wrap' }}>
+                    <div className="leaderboard-avatars-mobile-hide" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', paddingLeft: '0.5rem', overflow: 'hidden' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', flexWrap: 'nowrap' }}>
                         {col.products.slice(0, 10).map((char: any, i: number) => (
                           <div 
                             key={char.id} 
