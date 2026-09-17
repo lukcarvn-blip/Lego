@@ -89,6 +89,8 @@ const blockGlitch = {
 
 export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
+  const [policiesExpanded, setPoliciesExpanded] = useState(true);
+  const [craftingExpanded, setCraftingExpanded] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => setIsInitialLoad(false), 5000);
@@ -1475,9 +1477,25 @@ export const ProductDetails = () => {
             style={{ marginBottom: '2rem', marginTop: '2rem' }}
           >
             <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '2.5rem' }}>
-              {language === 'vi' ? 'Đặc Quyền & Chính Sách' : 'Exclusive Policies'}
-            </h3>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: policiesExpanded ? '2.5rem' : '0', cursor: 'pointer' }} onClick={() => setPoliciesExpanded(!policiesExpanded)}>
+              <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', margin: 0 }}>
+                {language === 'vi' ? 'Đặc Quyền & Chính Sách' : 'Exclusive Policies'}
+              </h3>
+              <button 
+                style={{ background: 'transparent', border: 'none', color: 'var(--color-text)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+              >
+                {policiesExpanded ? <Minus size={24} /> : <Plus size={24} />}
+              </button>
+            </div>
+            
+            <AnimatePresence>
+              {policiesExpanded && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  style={{ overflow: 'hidden' }}
+                >
             
             
             <div className="policies-grid">
@@ -1517,6 +1535,9 @@ export const ProductDetails = () => {
                 </p>
               </div>
             </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
           </motion.div>
 
@@ -1528,10 +1549,25 @@ export const ProductDetails = () => {
               transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.3 }}
               style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}
             >
-              <h2 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Clock size={20} color="#f59e0b" /> 
-                {language === 'vi' ? 'QUY TRÌNH CHẾ TÁC DỰ KIẾN' : 'Estimated Crafting Process'}
-              </h2>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: craftingExpanded ? '1rem' : '0', cursor: 'pointer' }} onClick={() => setCraftingExpanded(!craftingExpanded)}>
+                <h2 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Clock size={20} color="#f59e0b" /> 
+                  {language === 'vi' ? 'QUY TRÌNH CHẾ TÁC DỰ KIẾN' : 'Estimated Crafting Process'}
+                </h2>
+                <button 
+                  style={{ background: 'transparent', border: 'none', color: 'var(--color-text)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                >
+                  {craftingExpanded ? <Minus size={24} /> : <Plus size={24} />}
+                </button>
+              </div>
+              <AnimatePresence>
+                {craftingExpanded && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    style={{ overflow: 'hidden' }}
+                  >
               <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
                 {language === 'vi' ? `Tổng thời gian: khoảng ${craftTimeDays} ngày` : `Total time: approx ${craftTimeDays} days`}
               </p>
@@ -1594,6 +1630,9 @@ export const ProductDetails = () => {
                   </div>
                 </div>
               </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           )}
           
