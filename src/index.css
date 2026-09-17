@@ -395,7 +395,7 @@ button {
   /* Desktop: 50/50 split, 2 items per section */
   .bottom-split-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 4fr 6fr;
     gap: 3rem;
     margin-top: 5rem;
   }
