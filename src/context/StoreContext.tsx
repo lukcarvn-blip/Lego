@@ -597,7 +597,8 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
       showToast(language === 'vi' ? 'Vui lòng đăng nhập để lưu' : 'Please login to save');
       return;
     }
-    const saved = user.savedCharacters || [];
+    const appUser = appUsers.find(u => u.uid === user.uid);
+    const saved = appUser?.savedCharacters || [];
     if (!saved.includes(productId)) {
       try {
         await updateDoc(doc(db, 'users', user.uid), {
@@ -612,7 +613,8 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
 
   const unsaveCharacter = async (productId: string) => {
     if (!user) return;
-    const saved = user.savedCharacters || [];
+    const appUser = appUsers.find(u => u.uid === user.uid);
+    const saved = appUser?.savedCharacters || [];
     if (saved.includes(productId)) {
       try {
         await updateDoc(doc(db, 'users', user.uid), {
@@ -727,6 +729,12 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     }
   ] : [];
 
+  const combinedUser = React.useMemo(() => {
+    if (!user) return null;
+    const found = appUsers.find(u => u.uid === user.uid);
+    return found ? { ...user, ...found } : user;
+  }, [user, appUsers]);
+
   return (
     <StoreContext.Provider value={{
         previewSettings,
@@ -747,7 +755,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
         toasts,
         showToast,
         removeToast,
-        user,
+        user: combinedUser,
         appUsers,
         currentUserRole,
         updateUserRole,
