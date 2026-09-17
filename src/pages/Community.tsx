@@ -58,9 +58,10 @@ export const Community = () => {
     <div style={{ paddingTop: '120px', paddingBottom: '4rem', minHeight: '100vh' }}>
       <div className="container">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ width: "100%" }}>
-          <div style={{ maxWidth: "1000px", margin: "0 auto", textAlign: "center", marginBottom: "4rem" }}>
+          <div className="community-top-split">
+            <div className="community-intro-side">
           {/* Header */}
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <div style={{ textAlign: 'left', marginBottom: '3rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(74, 222, 128, 0.1)', color: 'var(--color-accent)', marginBottom: '1.5rem' }}>
               <Layers size={40} />
             </div>
@@ -93,11 +94,12 @@ export const Community = () => {
           </div>
 
           
-          </div>
-
-          {/* Bảng xếp hạng */}
+            </div>
+            
+            <div className="community-leaderboard-side">
+              {/* Bảng xếp hạng */}
           <div id="leaderboard"></div>
-          <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '2rem', marginTop: '4rem' }}>
+          <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'left', marginBottom: '2rem', marginTop: 0 }}>
             {language === 'vi' ? 'BẢNG XẾP HẠNG VŨ TRỤ' : 'UNIVERSE LEADERBOARD'}
           </h3>
           <div style={{ marginBottom: '4rem' }}>
@@ -319,6 +321,8 @@ export const Community = () => {
             })}
           </AnimatePresence>
         </div>
+            </div>
+          </div>
           </div>
 
           <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
