@@ -255,8 +255,16 @@ export const Community = () => {
                             modules={[EffectCoverflow, Pagination, Navigation]}
                             className="leaderboard-coverflow-swiper"
                           >
-                          {col.products.map(char => (
-                            <SwiperSlide key={char.id} style={{ width: '280px', height: 'auto' }}>
+                          {(() => {
+                            let displayProducts = col.products;
+                            if (displayProducts.length > 0 && displayProducts.length < 10) {
+                              while (displayProducts.length < 10) {
+                                displayProducts = [...displayProducts, ...col.products];
+                              }
+                            }
+                            return displayProducts.map((char: any, idx: number) => (
+                              <SwiperSlide key={`${char.id}-${idx}`} style={{ width: '280px', height: 'auto' }}>
+
                             <div onClick={() => navigate(`/product/${char.id}`)}
                               style={{ 
                                 display: 'flex', flexDirection: 'column', 
@@ -310,7 +318,7 @@ export const Community = () => {
                               </div>
                             </div>
                             </SwiperSlide>
-                          ))}
+                          ))})()}
                           </Swiper>
                         </div>
                       </motion.div>
