@@ -1474,13 +1474,15 @@ export const ProductDetails = () => {
             transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.2 }}
             style={{ marginBottom: '2rem', marginTop: '2rem' }}
           >
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '2rem' }}>
+            <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px' }}>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '2.5rem' }}>
               {language === 'vi' ? 'Đặc Quyền & Chính Sách' : 'Exclusive Policies'}
             </h3>
             
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
+            
+            <div className="policies-grid">
               {/* Policy 1 */}
-              <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', textAlign: 'center' }}>
+              <div style={{ textAlign: 'center', padding: '0.5rem' }}>
                 <ShieldCheck size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
                 <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Bảo hành rơi vỡ' : 'Breakage Warranty'}</h4>
                 <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
@@ -1489,7 +1491,7 @@ export const ProductDetails = () => {
               </div>
               
               {/* Policy 2 */}
-              <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', textAlign: 'center' }}>
+              <div style={{ textAlign: 'center', padding: '0.5rem' }}>
                 <Wrench size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
                 <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Chế tác lại trọn đời' : 'Lifetime Re-crafting'}</h4>
                 <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
@@ -1498,7 +1500,7 @@ export const ProductDetails = () => {
               </div>
 
               {/* Policy 3 */}
-              <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', textAlign: 'center' }}>
+              <div style={{ textAlign: 'center', padding: '0.5rem' }}>
                 <Gift size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
                 <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Dấu ấn cá nhân' : 'Personal Mark'}</h4>
                 <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
@@ -1507,7 +1509,7 @@ export const ProductDetails = () => {
               </div>
 
               {/* Policy 4 */}
-              <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '12px', textAlign: 'center' }}>
+              <div style={{ textAlign: 'center', padding: '0.5rem' }}>
                 <RefreshCw size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
                 <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Thu mua lại' : 'Trade-in Support'}</h4>
                 <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
@@ -1515,6 +1517,7 @@ export const ProductDetails = () => {
                 </p>
               </div>
             </div>
+          </div>
           </motion.div>
 
           {/* Crafting Progress Bar UI */}

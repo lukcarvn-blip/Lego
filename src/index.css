@@ -2554,3 +2554,7 @@ h2 {
 
 @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 .request-card-bg { background: linear-gradient(45deg, #064e3b, #0f172a, #065f46, #064e3b); background-size: 300% 300%; animation: gradientBG 6s ease infinite; }
+
+.policies-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+@media (min-width: 1024px) { .policies-grid { grid-template-columns: repeat(4, 1fr); } }
+.policies-grid-half { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
