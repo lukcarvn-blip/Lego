@@ -2526,3 +2526,28 @@ h2 {
   width: 100%;
   min-width: 0;
 }
+
+.community-bottom-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  margin-bottom: 4rem;
+}
+@media (min-width: 1024px) {
+  .community-bottom-split {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+}
+.community-request-side {
+  width: 100%;
+}
+.community-policies-side {
+  width: 100%;
+}
+
+.community-bottom-split { display: grid; grid-template-columns: 1fr; gap: 3rem; margin-bottom: 4rem; }
+@media (min-width: 1024px) { .community-bottom-split { grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; } }
+.community-request-side { width: 100%; }
+.community-policies-side { width: 100%; }
