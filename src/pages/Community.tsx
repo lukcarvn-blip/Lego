@@ -258,6 +258,12 @@ export const Community = () => {
                           >
                           {(() => {
                             let displayProducts = col.products.map((p: any, i: number) => ({...p, rank: i + 1}));
+                            if (displayProducts.length > 0 && displayProducts.length < 10) {
+                              const orig = [...displayProducts];
+                              while (displayProducts.length < 10) {
+                                displayProducts = [...displayProducts, ...orig];
+                              }
+                            }
                             return displayProducts.map((char: any, idx: number) => (
                               <SwiperSlide key={`${char.id}-${idx}`} style={{ width: '280px', height: 'auto' }}>
                               {({ isActive }) => (
