@@ -1,10 +1,20 @@
 const fs = require('fs');
-let code = fs.readFileSync('src/pages/Home.tsx', 'utf8');
 
-code = code.replace('<Swiper\n          modules={[Autoplay, Navigation, EffectFade]}\n          effect="fade"\n          spaceBetween={0}',
-                    '<Swiper\n          className="hero-blog-swiper"\n          modules={[Autoplay, Navigation, EffectFade]}\n          effect="fade"\n          spaceBetween={0}');
-code = code.replace('<Swiper\r\n          modules={[Autoplay, Navigation, EffectFade]}\r\n          effect="fade"\r\n          spaceBetween={0}',
-                    '<Swiper\r\n          className="hero-blog-swiper"\r\n          modules={[Autoplay, Navigation, EffectFade]}\r\n          effect="fade"\r\n          spaceBetween={0}');
+let lines = fs.readFileSync('src/pages/Community.tsx', 'utf8').split('\n');
 
-fs.writeFileSync('src/pages/Home.tsx', code, 'utf8');
-console.log('Fixed Swiper className');
+const lineIndex = lines.findIndex(l => l.includes('let displayProducts = col.products.map'));
+
+if (lineIndex !== -1) {
+  const insert = `                            let displayProducts = col.products.map((p: any, i: number) => ({...p, rank: i + 1}));
+                            if (displayProducts.length > 0 && displayProducts.length < 10) {
+                              const orig = [...displayProducts];
+                              while (displayProducts.length < 10) {
+                                displayProducts = [...displayProducts, ...orig];
+                              }
+                            }`;
+  lines[lineIndex] = insert;
+  fs.writeFileSync('src/pages/Community.tsx', lines.join('\n'), 'utf8');
+  console.log('Fixed Swiper loop glitch');
+} else {
+  console.log('Could not find line');
+}

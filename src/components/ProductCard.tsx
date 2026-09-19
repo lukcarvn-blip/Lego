@@ -13,7 +13,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, listMode = false }) => {
-  const { language, formatPrice, addToCart, showToast, settings } = useStore();
+  const { language, formatPrice, addToCart, showToast, settings, user, saveCharacter, unsaveCharacter } = useStore();
   const [craftHovered, setCraftHovered] = useState(false);
   const [displayDay, setDisplayDay] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);

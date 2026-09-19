@@ -712,7 +712,30 @@ export const ProductDetails = () => {
                   />
                 </AnimatePresence>
 
-                {/* Horizontal Slider Counter (PC Only) */}
+                                {/* Save Button (Moved to bottom right) */}
+                <motion.button 
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => {
+                    const isSaved = user?.savedCharacters?.includes(product.id);
+                    if (isSaved) unsaveCharacter(product.id);
+                    else saveCharacter(product.id);
+                  }}
+                  style={{
+                    position: 'absolute', bottom: '1.5rem', right: '1.5rem', zIndex: 30,
+                    background: user?.savedCharacters?.includes(product.id) ? 'rgba(36, 214, 115, 0.9)' : 'rgba(0,0,0,0.6)', 
+                    border: user?.savedCharacters?.includes(product.id) ? '1px solid var(--color-accent)' : '1px solid var(--glass-border)',
+                    borderRadius: '50%', width: '40px', height: '40px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    cursor: 'pointer', backdropFilter: 'blur(5px)', transition: 'all 0.2s',
+                    boxShadow: user?.savedCharacters?.includes(product.id) ? '0 0 15px rgba(36, 214, 115, 0.5)' : 'none'
+                  }}
+                  onMouseEnter={e => { if (!user?.savedCharacters?.includes(product.id)) { e.currentTarget.style.background = 'rgba(0,0,0,0.8)'; } }}
+                  onMouseLeave={e => { if (!user?.savedCharacters?.includes(product.id)) { e.currentTarget.style.background = 'rgba(0,0,0,0.6)'; } }}
+                  title={language === 'vi' ? 'Lưu bộ sưu tập' : 'Save to Collection'}
+                >
+                  {user?.savedCharacters?.includes(product.id) ? <Icons.Check size={20} color="#fff" /> : <Heart size={20} color="#fff" />}
+                </motion.button>
+{/* Horizontal Slider Counter (PC Only) */}
                 {displayImages.length > 1 && (
                   <div style={{
                     position: 'absolute', bottom: '1.5rem', left: '50%', transform: 'translateX(-50%)',
