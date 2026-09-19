@@ -342,7 +342,55 @@ export const Community = () => {
           </div>
 
           <div className="community-bottom-split">
-  <div className="community-request-side">
+  <div className="community-policies-side">
+    
+          {/* Exclusive Policies */}
+          <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px' }}>
+            <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '2.5rem' }}>
+            {language === 'vi' ? 'Đặc Quyền & Chính Sách' : 'Exclusive Policies'}
+          </h3>
+          
+          
+            <div className="policies-grid-half">
+            {/* Policy 1 */}
+            <div style={{ textAlign: 'center', padding: '0.5rem' }}>
+              <ShieldCheck size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
+              <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Bảo hành rơi vỡ' : 'Breakage Warranty'}</h4>
+              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
+                {language === 'vi' ? 'Bảo hành rơi vỡ 1 lần miễn phí cho mọi sản phẩm.' : '1-time free replacement/warranty for accidental breakage.'}
+              </p>
+            </div>
+            
+            {/* Policy 2 */}
+            <div style={{ textAlign: 'center', padding: '0.5rem' }}>
+              <Wrench size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
+              <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Chế tác lại trọn đời' : 'Lifetime Re-crafting'}</h4>
+              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
+                {language === 'vi' ? 'Hỗ trợ chế tác lại sản phẩm với giá tốt ưu đãi trọn đời.' : 'Lifetime support for re-crafting products at a favorable price.'}
+              </p>
+            </div>
+
+            {/* Policy 3 */}
+            <div style={{ textAlign: 'center', padding: '0.5rem' }}>
+              <Gift size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
+              <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Dấu ấn cá nhân' : 'Personal Mark'}</h4>
+              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
+                {language === 'vi' ? 'Khắc tên miễn phí lên mô hình cho bản thân hoặc làm quà tặng.' : 'Free name engraving on the model for yourself or as a gift.'}
+              </p>
+            </div>
+
+            {/* Policy 4 */}
+            <div style={{ textAlign: 'center', padding: '0.5rem' }}>
+              <RefreshCw size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
+              <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Thu mua lại' : 'Trade-in Support'}</h4>
+              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
+                {language === 'vi' ? 'Hỗ trợ thu mua lại các sản phẩm tùy theo tình trạng thực tế.' : 'Support for buying back products depending on their actual condition.'}
+              </p>
+            </div>
+          
+  </div>
+          </div>
+<div className="community-request-side">
     
           {/* Request Form */}
           <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px', border: '1px solid var(--color-accent)', background: 'rgba(74, 222, 128, 0.05)' }}>
@@ -413,55 +461,7 @@ export const Community = () => {
           
     </div>
   </div>
-  <div className="community-policies-side">
-    
-          {/* Exclusive Policies */}
-          <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '2.5rem' }}>
-            {language === 'vi' ? 'Đặc Quyền & Chính Sách' : 'Exclusive Policies'}
-          </h3>
-          
-          
-            <div className="policies-grid-half">
-            {/* Policy 1 */}
-            <div style={{ textAlign: 'center', padding: '0.5rem' }}>
-              <ShieldCheck size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
-              <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Bảo hành rơi vỡ' : 'Breakage Warranty'}</h4>
-              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-                {language === 'vi' ? 'Bảo hành rơi vỡ 1 lần miễn phí cho mọi sản phẩm.' : '1-time free replacement/warranty for accidental breakage.'}
-              </p>
-            </div>
-            
-            {/* Policy 2 */}
-            <div style={{ textAlign: 'center', padding: '0.5rem' }}>
-              <Wrench size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
-              <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Chế tác lại trọn đời' : 'Lifetime Re-crafting'}</h4>
-              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-                {language === 'vi' ? 'Hỗ trợ chế tác lại sản phẩm với giá tốt ưu đãi trọn đời.' : 'Lifetime support for re-crafting products at a favorable price.'}
-              </p>
-            </div>
-
-            {/* Policy 3 */}
-            <div style={{ textAlign: 'center', padding: '0.5rem' }}>
-              <Gift size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
-              <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Dấu ấn cá nhân' : 'Personal Mark'}</h4>
-              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-                {language === 'vi' ? 'Khắc tên miễn phí lên mô hình cho bản thân hoặc làm quà tặng.' : 'Free name engraving on the model for yourself or as a gift.'}
-              </p>
-            </div>
-
-            {/* Policy 4 */}
-            <div style={{ textAlign: 'center', padding: '0.5rem' }}>
-              <RefreshCw size={36} style={{ color: 'var(--color-accent)', margin: '0 auto 1rem auto' }} />
-              <h4 style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{language === 'vi' ? 'Thu mua lại' : 'Trade-in Support'}</h4>
-              <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-                {language === 'vi' ? 'Hỗ trợ thu mua lại các sản phẩm tùy theo tình trạng thực tế.' : 'Support for buying back products depending on their actual condition.'}
-              </p>
-            </div>
-          
   </div>
-          </div>
-</div>
         </motion.div>
       </div>
     </div>
