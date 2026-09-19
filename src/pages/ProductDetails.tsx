@@ -89,8 +89,8 @@ const blockGlitch = {
 
 export const ProductDetails = () => {
   const { id } = useParams<{ id: string }>();
-  const [policiesExpanded, setPoliciesExpanded] = useState(true);
-  const [craftingExpanded, setCraftingExpanded] = useState(true);
+  const [policiesExpanded, setPoliciesExpanded] = useState(false);
+  const [craftingExpanded, setCraftingExpanded] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   useEffect(() => {
     const timer = setTimeout(() => setIsInitialLoad(false), 5000);
@@ -1478,9 +1478,10 @@ export const ProductDetails = () => {
           >
             <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: policiesExpanded ? '2.5rem' : '0', cursor: 'pointer' }} onClick={() => setPoliciesExpanded(!policiesExpanded)}>
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', margin: 0 }}>
-                {language === 'vi' ? 'Đặc Quyền & Chính Sách' : 'Exclusive Policies'}
-              </h3>
+              <h2 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', textTransform: 'uppercase' }}>
+                <ShieldCheck size={20} color="var(--color-accent)" /> 
+                {language === 'vi' ? 'ĐẶC QUYỀN & CHÍNH SÁCH' : 'EXCLUSIVE POLICIES'}
+              </h2>
               <button 
                 style={{ background: 'transparent', border: 'none', color: 'var(--color-text)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
               >
