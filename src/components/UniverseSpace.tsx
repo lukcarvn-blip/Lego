@@ -112,7 +112,7 @@ export const UniverseSpace: React.FC<UniverseSpaceProps> = ({ user, products, se
 
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 300px', gap: '2rem', alignItems: 'start' }} className="universe-layout">
         {/* Character Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: viewMode === 'grid' ? 'repeat(auto-fill, minmax(220px, 1fr))' : '1fr', gap: '1.5rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: viewMode === 'grid' ? 'repeat(auto-fill, minmax(160px, 1fr))' : '1fr', gap: '1.5rem' }}>
           <AnimatePresence mode="popLayout">
             {filteredProducts.map(p => (
               <motion.div
@@ -208,7 +208,7 @@ export const UniverseSpace: React.FC<UniverseSpaceProps> = ({ user, products, se
         }
         @media (max-width: 900px) {
           .universe-layout {
-            grid-template-columns: 1fr !important;
+            grid-template-columns: minmax(0, 1fr) !important;
           }
         }
       `}</style>

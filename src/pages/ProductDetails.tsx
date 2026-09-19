@@ -100,6 +100,15 @@ export const ProductDetails = () => {
   const { products, updateProduct, addToCart, saveCharacter, unsaveCharacter, t, language, formatPrice, showToast, settings, user, reviews, orders, addReview, getSizeMultiplier, getSizeDetails: getStoreSizeDetails } = useStore();
     let product = products.find(p => p.id === id) || mockProducts.find(p => p.id === id);
   const [isTopFan, setIsTopFan] = useState(false);
+
+  useEffect(() => {
+    // Reset states when changing products
+    setPoliciesExpanded(false);
+    setCraftingExpanded(false);
+    setIsLiked(!!localStorage.getItem('liked_' + id));
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [id]);
+
   
   useEffect(() => {
     if (product?.collection) {

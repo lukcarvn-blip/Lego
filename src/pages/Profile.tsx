@@ -216,7 +216,7 @@ export const Profile = () => {
 
   return (
     <div className="container profile-page" style={{ paddingTop: '120px', paddingBottom: '4rem' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr)', gap: '2rem' }}>
         
         {/* Profile Sidebar / Header */}
         <div className="glass-panel profile-sidebar" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', height: 'fit-content' }}>
@@ -287,7 +287,7 @@ export const Profile = () => {
       <style>{`
         @media (min-width: 768px) {
           .profile-page > div {
-            grid-template-columns: 300px 1fr !important;
+            grid-template-columns: 300px minmax(0, 1fr) !important;
             align-items: flex-start;
           }
           .profile-sidebar {
