@@ -2479,6 +2479,12 @@ h2 {
   transition: opacity 0.3s;
 }
 
+@media (max-width: 768px) {
+  .leaderboard-coverflow-swiper .swiper-slide {
+    width: 200px;
+  }
+}
+
 .leaderboard-coverflow-swiper .swiper-slide-active {
   opacity: 1;
 }

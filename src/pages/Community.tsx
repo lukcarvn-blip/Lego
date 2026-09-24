@@ -265,7 +265,7 @@ export const Community = () => {
                               }
                             }
                             return displayProducts.map((char: any, idx: number) => (
-                              <SwiperSlide key={`${char.id}-${idx}`} style={{ width: '280px', height: 'auto' }}>
+                              <SwiperSlide key={`${char.id}-${idx}`}>
                               {({ isActive }) => (
                                   <div onClick={() => isActive && navigate(`/product/${char.id}`)}
                                     style={{ 
