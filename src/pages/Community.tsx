@@ -81,10 +81,10 @@ export const Community = () => {
           <div className="community-header-vision">
           {/* Development Vision */}
           <div className="glass-panel" style={{ padding: '2rem', borderRadius: '16px', marginBottom: '3rem' }}>
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-accent)' }}>
+            <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-accent)' }}>
               <Star size={24} /> 
               {language === 'vi' ? 'Định Hướng Phát Triển' : 'Development Vision'}
-            </h3>
+            </h2>
             <p style={{ color: 'var(--color-text)', lineHeight: 1.7, marginBottom: '1rem' }}>
               {language === 'vi' 
                 ? 'Vì đây là mô hình tự thiết kế độc quyền, lượng thiết kế hiện tại còn hạn chế. Tuy nhiên, chúng tôi cam kết sẽ phát triển thiết kế thêm nhiều nhân vật mới mỗi tháng.'
@@ -104,9 +104,9 @@ export const Community = () => {
             <div className="community-leaderboard-side">
               {/* Bảng xếp hạng */}
           <div id="leaderboard"></div>
-          <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'left', marginBottom: '2rem', marginTop: 0 }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'left', marginBottom: '2rem', marginTop: 0 }}>
             {language === 'vi' ? 'BẢNG XẾP HẠNG VŨ TRỤ' : 'UNIVERSE LEADERBOARD'}
-          </h3>
+          </h2>
           <div style={{ marginBottom: '4rem' }}>
             {/* List of Collections */}
         <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
@@ -357,9 +357,9 @@ export const Community = () => {
     
           {/* Exclusive Policies */}
           <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '2.5rem' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'center', marginBottom: '2.5rem' }}>
             {language === 'vi' ? 'Đặc Quyền & Chính Sách' : 'Exclusive Policies'}
-          </h3>
+          </h2>
           
           
             <div className="policies-grid-half">
@@ -409,9 +409,9 @@ export const Community = () => {
           <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px', border: '1px solid var(--color-accent)', background: 'rgba(74, 222, 128, 0.05)' }}>
             <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
               <MessageSquarePlus size={32} style={{ color: 'var(--color-accent)', marginBottom: '0.5rem' }} />
-              <h3 style={{ fontSize: '1.5rem', fontWeight: 800 }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>
                 {language === 'vi' ? 'Gửi Đề Xuất Nhân Vật Mới' : 'Submit New Character Request'}
-              </h3>
+              </h2>
               <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginTop: '0.5rem' }}>
                 {language === 'vi' 
                   ? 'Hãy cho chúng tôi biết bạn muốn LEGATO chế tác nhân vật nào tiếp theo!'
