@@ -62,12 +62,14 @@ export const Community = () => {
           <div className="community-header-intro">
           {/* Header */}
           <div style={{ textAlign: 'left', marginBottom: '3rem' }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(74, 222, 128, 0.1)', color: 'var(--color-accent)', marginBottom: '1.5rem' }}>
-              <Layers size={40} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.5rem' }}>
+              <div style={{ flexShrink: 0, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '64px', height: '64px', borderRadius: '50%', background: 'rgba(74, 222, 128, 0.1)', color: 'var(--color-accent)' }}>
+                <Layers size={32} />
+              </div>
+              <h2 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#fff', margin: 0, lineHeight: 1.3 }}>
+                {language === 'vi' ? 'Sân chơi Mô hình Up-scale Cao cấp' : 'High-end Up-scale Model Playground'}
+              </h2>
             </div>
-            <h1 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '1rem', color: '#fff' }}>
-              {language === 'vi' ? 'Sân chơi Mô hình Up-scale Cao cấp' : 'High-end Up-scale Model Playground'}
-            </h1>
             <p style={{ fontSize: '1.1rem', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>
               {language === 'vi' 
                 ? 'Mục tiêu của chúng tôi là xây dựng một sân chơi mô hình được up-scale tương tự như các mô hình của BEARBRICK cao cấp. Chúng tôi muốn tạo ra một cộng đồng sưu tầm các mô hình độc bản được chế tác bằng công nghệ máy in 3D đa màu sắc tiên tiến nhất.' 
