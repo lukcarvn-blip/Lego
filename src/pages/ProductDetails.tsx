@@ -483,8 +483,14 @@ export const ProductDetails = () => {
           {/* Badges Container */}
           <div className="product-detail-badges">
             {/* Collection Badge */}
-            {product.collection && settings.collections?.find((c: any) => c.name === product.collection) && (() => {
-              const col = settings.collections!.find((c: any) => c.name === product.collection); if (!col) return null;
+            {product.collection && (() => {
+              const col = settings.collections?.find((c: any) => c.name === product.collection) || {
+                name: product.collection,
+                iconName: 'Folder',
+                bg: 'rgba(255,255,255,0.1)',
+                border: 'rgba(255,255,255,0.2)',
+                color: '#fff'
+              };
               const IconComponent = Icons[col.iconName as keyof typeof Icons] as any || Icons.Folder;
               return (
                 <div 
