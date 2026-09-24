@@ -58,9 +58,8 @@ export const Community = () => {
     <div style={{ paddingTop: '120px', paddingBottom: '4rem', minHeight: '100vh' }}>
       <div className="container">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ width: "100%" }}>
-        <div className="community-main-layout">
-          <div className="community-left-col">
-            <div className="community-intro-side">
+        <div className="community-header-split">
+          <div className="community-header-intro">
           {/* Header */}
           <div style={{ textAlign: 'left', marginBottom: '3rem' }}>
             <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(74, 222, 128, 0.1)', color: 'var(--color-accent)', marginBottom: '1.5rem' }}>
@@ -76,6 +75,8 @@ export const Community = () => {
             </p>
           </div>
 
+          </div>
+          <div className="community-header-vision">
           {/* Development Vision */}
           <div className="glass-panel" style={{ padding: '2rem', borderRadius: '16px', marginBottom: '3rem' }}>
             <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-accent)' }}>
@@ -95,7 +96,10 @@ export const Community = () => {
           </div>
 
           
-            </div>
+          </div>
+        </div>
+        <div className="community-main-layout">
+          <div className="community-left-col">
             
   <div className="community-policies-side">
     
