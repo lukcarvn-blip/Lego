@@ -2591,7 +2591,7 @@ h2 {
 .community-header-intro, .community-header-vision {
   width: 100%;
 }
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .community-header-split {
     flex-direction: row;
     gap: 4rem;
@@ -2616,7 +2616,7 @@ h2 {
 .community-footer-policies, .community-footer-request {
   width: 100%;
 }
-@media (min-width: 1024px) {
+@media (min-width: 768px) {
   .community-footer-split {
     flex-direction: row;
     gap: 4rem;
