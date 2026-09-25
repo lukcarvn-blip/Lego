@@ -347,9 +347,8 @@ export const Community = () => {
             </div>
           </div>
         </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', width: '100%', marginBottom: '4rem', alignItems: 'stretch' }}>
-          <div style={{ flex: '1 1 45%', minWidth: '300px' }}>
-  <div className="community-policies-side">
+        <div className="community-footer-split">
+          <div className="community-footer-policies">
     
           {/* Exclusive Policies */}
           <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px' }}>
@@ -396,10 +395,7 @@ export const Community = () => {
             </div>
           
   </div>
-          </div>
-          </div>
-          <div style={{ flex: '1 1 45%', minWidth: '300px' }}>
-<div className="community-request-side">
+          <div className="community-footer-request">
     
           {/* Request Form */}
           <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px', border: '1px solid var(--color-accent)', background: 'rgba(74, 222, 128, 0.05)' }}>
