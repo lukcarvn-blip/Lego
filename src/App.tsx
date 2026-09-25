@@ -72,6 +72,16 @@ function AppContent() {
 
   const isAdmin = pathname.toLowerCase().startsWith('/hoang');
 
+  useEffect(() => {
+    // Apply 90% scale to the whole website except admin
+    if (!isAdmin) {
+      document.body.style.zoom = '0.9';
+    } else {
+      document.body.style.zoom = '1';
+    }
+    return () => { document.body.style.zoom = '1'; }
+  }, [isAdmin]);
+
   // Show full-page spinner only on first data load
   if (isDataLoading) {
     return <LoadingScreen isVisible={true} />;
