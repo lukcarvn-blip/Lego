@@ -72,15 +72,7 @@ function AppContent() {
 
   const isAdmin = pathname.toLowerCase().startsWith('/hoang');
 
-  useEffect(() => {
-    // Apply 90% scale to the whole website except admin
-    if (!isAdmin) {
-      document.body.style.zoom = '0.9';
-    } else {
-      document.body.style.zoom = '1';
-    }
-    return () => { document.body.style.zoom = '1'; }
-  }, [isAdmin]);
+
 
   // Show full-page spinner only on first data load
   if (isDataLoading) {
@@ -111,6 +103,7 @@ function AppContent() {
         )}
       </AnimatePresence>
 
+      <div style={!isAdmin ? { transform: 'scale(0.9)', transformOrigin: 'top center', width: '111.11%', marginLeft: '-5.55%' } : {}}>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', opacity: isNavLoading ? 0 : 1, transition: 'opacity 0.3s ease-in-out' }}>
         {!isAdmin && <Navbar />}
         <main style={{ flex: 1 }}>
@@ -143,6 +136,7 @@ function AppContent() {
         {!isAdmin && <Footer />}
         {!isAdmin && <FloatingActions />}
         <StarBurst />
+      </div>
       </div>
     </>
   );
