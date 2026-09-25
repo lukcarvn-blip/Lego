@@ -2001,7 +2001,7 @@ export const ProductDetails = () => {
           .sticky-cart-wrapper {
             position: fixed;
             top: auto !important;
-            bottom: 20px;
+            bottom: calc(65px + 20px);
             left: 1rem;
             right: 1rem;
             z-index: 999;

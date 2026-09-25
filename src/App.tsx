@@ -103,7 +103,7 @@ function AppContent() {
         )}
       </AnimatePresence>
 
-      <div style={!isAdmin ? { transform: 'scale(0.9)', transformOrigin: 'top center', width: '111.11%', marginLeft: '-5.55%' } : {}}>
+      <div style={!isAdmin ? { zoom: 0.9, width: '111.11%', margin: '0 auto', overflowX: 'hidden' } : {}}>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', opacity: isNavLoading ? 0 : 1, transition: 'opacity 0.3s ease-in-out' }}>
         {!isAdmin && <Navbar />}
         <main style={{ flex: 1 }}>
