@@ -1493,7 +1493,7 @@ export const ProductDetails = () => {
             transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.2 }}
             style={{ marginBottom: '2rem', marginTop: '2rem' }}
           >
-            <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px' }}>
+            <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: policiesExpanded ? '2.5rem' : '0', cursor: 'pointer' }} onClick={() => setPoliciesExpanded(!policiesExpanded)}>
               <h2 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem', textTransform: 'uppercase' }}>
                 <ShieldCheck size={20} color="var(--color-accent)" /> 
@@ -1565,7 +1565,7 @@ export const ProductDetails = () => {
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ type: 'spring', stiffness: 100, damping: 15, delay: 0.3 }}
-              style={{ padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: 'var(--radius-md)', border: '1px solid var(--glass-border)' }}
+              className="glass-panel" style={{ padding: '1.5rem', borderRadius: '16px' }}
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: craftingExpanded ? '1rem' : '0', cursor: 'pointer' }} onClick={() => setCraftingExpanded(!craftingExpanded)}>
                 <h2 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
