@@ -395,8 +395,10 @@ export const Community = () => {
             </div>
           
   </div>
-          <div className="community-footer-request">
-    
+            </div>
+          </div>
+        </div>
+        <div className="community-footer-request">
           {/* Request Form */}
           <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px', border: '1px solid var(--color-accent)', background: 'rgba(74, 222, 128, 0.05)' }}>
             <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
@@ -463,13 +465,9 @@ export const Community = () => {
               </form>
             )}
           </div>
-          
-    </div>
-          </div>
-          </div>
         </div>
-        </motion.div>
-      </div>
+      </motion.div>
     </div>
+  </div>
   );
 };
