@@ -72,11 +72,31 @@ function AppContent() {
 
   const isAdmin = pathname.toLowerCase().startsWith('/hoang');
 
-  useEffect(() => {
+    useEffect(() => {
     if (!isAdmin) {
-      document.documentElement.style.zoom = '0.9';
+      document.documentElement.style.zoom = '';
+      document.documentElement.style.width = '';
+      document.documentElement.style.overflowX = '';
+      document.documentElement.style.minHeight = '';
+      
+      document.body.style.margin = '0';
+      document.body.style.width = '111.11vw';
+      document.body.style.minHeight = '111.11vh';
+      document.body.style.transform = 'scale(0.9)';
+      document.body.style.transformOrigin = 'top left';
+      document.body.style.overflowX = 'hidden';
     } else {
-      document.documentElement.style.zoom = '1';
+      document.documentElement.style.zoom = '';
+      document.documentElement.style.width = '';
+      document.documentElement.style.overflowX = '';
+      document.documentElement.style.minHeight = '';
+      
+      document.body.style.width = '';
+      document.body.style.minHeight = '';
+      document.body.style.transform = '';
+      document.body.style.transformOrigin = '';
+      document.body.style.overflowX = '';
+      document.body.style.margin = '0';
     }
   }, [isAdmin]);
 
