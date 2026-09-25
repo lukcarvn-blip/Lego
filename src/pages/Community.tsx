@@ -99,7 +99,8 @@ export const Community = () => {
             <div className="community-leaderboard-side">
               {/* Bảng xếp hạng */}
           <div id="leaderboard"></div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, textAlign: 'left', marginBottom: '2rem', marginTop: 0 }}>
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.75rem', marginBottom: '2rem', marginTop: 0 }}>
+            <Trophy size={28} style={{ color: 'var(--color-accent)' }} />
             {language === 'vi' ? 'BẢNG XẾP HẠNG VŨ TRỤ' : 'UNIVERSE LEADERBOARD'}
           </h2>
           <div style={{ marginBottom: '4rem' }}>
