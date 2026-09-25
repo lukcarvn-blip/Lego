@@ -58,8 +58,8 @@ export const Community = () => {
     <div style={{ paddingTop: '120px', paddingBottom: '4rem', minHeight: '100vh' }}>
       <div className="container">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ width: "100%" }}>
-        <div className="community-header-split">
-          <div className="community-header-intro">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', width: '100%', marginBottom: '4rem', alignItems: 'stretch' }}>
+          <div style={{ flex: '1 1 45%', minWidth: '300px' }}>
           {/* Header */}
           <div className="glass-panel" style={{ padding: '2rem', borderRadius: '16px', height: '100%', boxSizing: 'border-box' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-accent)' }}>
@@ -73,7 +73,7 @@ export const Community = () => {
             </p>
           </div>
           </div>
-          <div className="community-header-vision">
+          <div style={{ flex: '1 1 45%', minWidth: '300px' }}>
           {/* Development Vision */}
           <div className="glass-panel" style={{ padding: '2rem', borderRadius: '16px', height: '100%', boxSizing: 'border-box' }}>
             <h2 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--color-accent)' }}>
@@ -347,8 +347,8 @@ export const Community = () => {
             </div>
           </div>
         </div>
-        <div className="community-footer-split">
-          <div className="community-footer-policies">
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', width: '100%', marginBottom: '4rem', alignItems: 'stretch' }}>
+          <div style={{ flex: '1 1 45%', minWidth: '300px' }}>
   <div className="community-policies-side">
     
           {/* Exclusive Policies */}
@@ -398,7 +398,7 @@ export const Community = () => {
   </div>
           </div>
           </div>
-          <div className="community-footer-request">
+          <div style={{ flex: '1 1 45%', minWidth: '300px' }}>
 <div className="community-request-side">
     
           {/* Request Form */}
