@@ -32,15 +32,6 @@ import { StarBurst } from './components/StarBurst';
 import { LoadingScreen } from './components/LoadingScreen';
 
 function AppContent() {
-  const { isAdmin } = useStore();
-  
-  useEffect(() => {
-    if (!isAdmin) {
-      document.documentElement.style.zoom = '0.9';
-    } else {
-      document.documentElement.style.zoom = '1';
-    }
-  }, [isAdmin]);
   const { pathname } = useLocation();
   const { settings, isDataLoading, dataError } = useStore();
   const [isNavLoading, setIsNavLoading] = useState(false);
@@ -80,6 +71,14 @@ function AppContent() {
   }, [settings.seoTitle, settings.seoDescription, settings.favicon]);
 
   const isAdmin = pathname.toLowerCase().startsWith('/hoang');
+
+  useEffect(() => {
+    if (!isAdmin) {
+      document.documentElement.style.zoom = '0.9';
+    } else {
+      document.documentElement.style.zoom = '1';
+    }
+  }, [isAdmin]);
 
 
 
