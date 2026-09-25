@@ -1024,7 +1024,8 @@ export const ProductDetails = () => {
           style={{ display: 'flex', flexDirection: 'column', gap: '2rem', minWidth: 0, width: '100%' }}
         >
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div className="pd-title-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div className="pd-title-col">
               <h1 style={{ marginBottom: '0.5rem', lineHeight: 1.2 }}>
                 {product.alignment && (
                   <span style={{ 
@@ -1041,8 +1042,8 @@ export const ProductDetails = () => {
                 )}
                 {product.name[language]}
               </h1>
-              
-              <button 
+              </div>
+              <button className="pd-review-btn" 
                 onClick={handleOpenReview}
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',

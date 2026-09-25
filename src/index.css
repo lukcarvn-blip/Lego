@@ -2627,3 +2627,43 @@ h2 {
     min-width: 0;
   }
 }
+
+/* Product detail title row - mobile 8/2 split */
+.pd-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.pd-title-col {
+  flex: 1;
+  min-width: 0;
+}
+.pd-review-btn {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1024px) {
+  .pd-title-row {
+    flex-direction: row;
+    gap: 0.75rem;
+    align-items: flex-start;
+  }
+  .pd-title-col {
+    flex: 0 0 80%;
+    max-width: 80%;
+  }
+  .pd-review-btn {
+    flex: 0 0 20%;
+    max-width: 20%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    width: 100%;
+  }
+  .pd-review-btn > * {
+    width: 80% !important;
+    box-sizing: border-box;
+  }
+}
