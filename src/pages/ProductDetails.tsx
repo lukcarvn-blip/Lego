@@ -765,7 +765,7 @@ export const ProductDetails = () => {
                     }
                   }}
                   style={{
-                    position: 'absolute', top: '1.5rem', right: '1.5rem', zIndex: 30,
+                    position: 'absolute', top: '1.5rem', left: '1.5rem', zIndex: 30,
                     background: user?.savedCharacters?.includes(product.id) ? 'rgba(36, 214, 115, 0.9)' : 'rgba(0,0,0,0.6)', 
                     border: user?.savedCharacters?.includes(product.id) ? '1px solid var(--color-accent)' : '1px solid var(--glass-border)',
                     borderRadius: '50%', width: '40px', height: '40px',
