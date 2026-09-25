@@ -32,6 +32,15 @@ import { StarBurst } from './components/StarBurst';
 import { LoadingScreen } from './components/LoadingScreen';
 
 function AppContent() {
+  const { isAdmin } = useStore();
+  
+  useEffect(() => {
+    if (!isAdmin) {
+      document.documentElement.style.zoom = '0.9';
+    } else {
+      document.documentElement.style.zoom = '1';
+    }
+  }, [isAdmin]);
   const { pathname } = useLocation();
   const { settings, isDataLoading, dataError } = useStore();
   const [isNavLoading, setIsNavLoading] = useState(false);
@@ -103,7 +112,7 @@ function AppContent() {
         )}
       </AnimatePresence>
 
-      <div style={!isAdmin ? { zoom: 0.9, width: '111.11%', margin: '0 auto', overflowX: 'hidden' } : {}}>
+      <div>
       <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', opacity: isNavLoading ? 0 : 1, transition: 'opacity 0.3s ease-in-out' }}>
         {!isAdmin && <Navbar />}
         <main style={{ flex: 1 }}>
