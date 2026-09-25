@@ -74,30 +74,43 @@ function AppContent() {
 
     useEffect(() => {
     if (!isAdmin) {
-      document.documentElement.style.zoom = '';
-      document.documentElement.style.width = '';
-      document.documentElement.style.overflowX = '';
-      document.documentElement.style.minHeight = '';
+      let style = document.getElementById('scale-style');
+      if (!style) {
+        style = document.createElement('style');
+        style.id = 'scale-style';
+        document.head.appendChild(style);
+      }
+      style.innerHTML = `
+        html {
+          overflow-x: hidden !important;
+        }
+        body {
+          margin: 0 !important;
+          width: 111.11vw !important;
+          max-width: 111.11vw !important;
+          min-height: 111.11vh !important;
+          transform: scale(0.9) !important;
+          transform-origin: top left !important;
+          overflow-x: hidden !important;
+        }
+        #root {
+          width: 111.11vw !important;
+          max-width: 111.11vw !important;
+        }
+      `;
       
-      document.body.style.margin = '0';
-      document.body.style.width = '111.11vw';
-      document.body.style.minHeight = '111.11vh';
-      document.body.style.transform = 'scale(0.9)';
-      document.body.style.transformOrigin = 'top left';
-      document.body.style.overflowX = 'hidden';
+      // Clean up inline styles from previous iterations
+      document.documentElement.style.cssText = '';
+      document.body.style.cssText = '';
     } else {
-      document.documentElement.style.zoom = '';
-      document.documentElement.style.width = '';
-      document.documentElement.style.overflowX = '';
-      document.documentElement.style.minHeight = '';
-      
-      document.body.style.width = '';
-      document.body.style.minHeight = '';
-      document.body.style.transform = '';
-      document.body.style.transformOrigin = '';
-      document.body.style.overflowX = '';
-      document.body.style.margin = '0';
+      const style = document.getElementById('scale-style');
+      if (style) style.remove();
     }
+    
+    return () => {
+      // Don't remove on unmount because AppContent is always mounted, 
+      // but if we need to, we can. Actually, we shouldn't because React might remount.
+    };
   }, [isAdmin]);
 
 
