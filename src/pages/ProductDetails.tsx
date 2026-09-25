@@ -1042,24 +1042,7 @@ export const ProductDetails = () => {
                 )}
                 {product.name[language]}
               </h1>
-              </div>
-              <button className="pd-review-btn" 
-                onClick={handleOpenReview}
-                style={{
-                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
-                  padding: '0.25rem 0.5rem', background: 'transparent',
-                  border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)',
-                  cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-              >
-                <div style={{ display: 'flex', color: '#fbbf24', fontSize: '1rem', letterSpacing: '1px' }}>★★★★★</div>
-                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>{productReviews.length} Review</span>
-              </button>
-            </div>
-            
-            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--color-text-muted)', marginBottom: '1rem', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: 'var(--color-text-muted)', marginBottom: '1rem', flexWrap: 'wrap' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#f59e0b' }}>
                 
                 <Star size={18} fill="currentColor" />
@@ -1105,8 +1088,25 @@ export const ProductDetails = () => {
               )}
             </div>
           </div>
-
-          <div className="material-size-wrapper" ref={reviewBoxRef} style={{ position: 'relative' }}>
+              </div>
+              <button className="pd-review-btn" 
+                onClick={handleOpenReview}
+                style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
+                  padding: '0.25rem 0.5rem', background: 'transparent',
+                  border: '1px solid var(--glass-border)', borderRadius: 'var(--radius-sm)',
+                  cursor: 'pointer', transition: 'all 0.2s', flexShrink: 0
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              >
+                <div style={{ display: 'flex', color: '#fbbf24', fontSize: '1rem', letterSpacing: '1px' }}>★★★★★</div>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>{productReviews.length} Review</span>
+              </button>
+            </div>
+            
+          <div className="material-size-wrapper"
+ ref={reviewBoxRef} style={{ position: 'relative' }}>
             <AnimatePresence>
               {isReviewOverlayOpen && (
                 <>
