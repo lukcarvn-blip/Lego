@@ -408,8 +408,8 @@ export const Community = () => {
           {/* Request Form */}
           <div className="glass-panel" style={{ padding: '2.5rem', borderRadius: '16px', border: '1px solid var(--color-accent)', background: 'rgba(74, 222, 128, 0.05)' }}>
             <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-              <MessageSquarePlus size={32} style={{ color: 'var(--color-accent)', marginBottom: '0.5rem' }} />
-              <h2 style={{ fontSize: '1.5rem', fontWeight: 800 }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 800, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: 0 }}>
+                <MessageSquarePlus size={32} style={{ color: 'var(--color-accent)' }} />
                 {language === 'vi' ? 'Gửi Đề Xuất Nhân Vật Mới' : 'Submit New Character Request'}
               </h2>
               <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', marginTop: '0.5rem' }}>
