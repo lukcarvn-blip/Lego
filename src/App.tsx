@@ -89,8 +89,7 @@ function AppContent() {
           width: 111.11vw !important;
           max-width: 111.11vw !important;
           min-height: 111.11vh !important;
-          transform: scale(0.9) !important;
-          transform-origin: top left !important;
+          zoom: 0.9 !important;
           overflow-x: hidden !important;
         }
         #root {
