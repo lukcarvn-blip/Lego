@@ -119,6 +119,10 @@ export const ProductDetails = () => {
   
   const handleTopFanClick = (e: React.MouseEvent, colName: string) => {
     e.stopPropagation();
+    if (!user) {
+      loginWithGoogle();
+      return;
+    }
     if (isTopFan) {
       navigate('/community');
       return;

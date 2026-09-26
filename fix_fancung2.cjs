@@ -1,9 +1,7 @@
 const fs = require('fs');
 let code = fs.readFileSync('src/pages/ProductDetails.tsx', 'utf8');
 
-const target = `const handleTopFanClick = (e: React.MouseEvent, colName: string) => {
-    e.stopPropagation();
-    if (isTopFan) {`;
+const regex = /const handleTopFanClick = \(e: React\.MouseEvent, colName: string\) => \{\s*e\.stopPropagation\(\);\s*if \(isTopFan\) \{/;
 
 const replacement = `const handleTopFanClick = (e: React.MouseEvent, colName: string) => {
     e.stopPropagation();
@@ -13,10 +11,10 @@ const replacement = `const handleTopFanClick = (e: React.MouseEvent, colName: st
     }
     if (isTopFan) {`;
 
-if (code.includes(target)) {
-  code = code.replace(target, replacement);
+if (regex.test(code)) {
+  code = code.replace(regex, replacement);
   fs.writeFileSync('src/pages/ProductDetails.tsx', code, 'utf8');
-  console.log('Fixed handleTopFanClick');
+  console.log('Fixed handleTopFanClick with regex');
 } else {
-  console.log('Target not found for handleTopFanClick');
+  console.log('Target not found for handleTopFanClick regex');
 }
