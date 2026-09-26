@@ -81,7 +81,7 @@ function AppContent() {
         document.head.appendChild(style);
       }
       style.innerHTML = `
-        @media (min-width: 769px) {
+        @media (min-width: 1025px) {
           html {
             overflow-x: hidden !important;
           }

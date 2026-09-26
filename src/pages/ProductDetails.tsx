@@ -253,6 +253,12 @@ export const ProductDetails = () => {
   const [wantsToCraft, setWantsToCraft] = useState(false);
   const isEffectivelyCrafting = !product?.isReadyStock || wantsToCraft;
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);
   const [isReviewOverlayOpen, setIsReviewOverlayOpen] = useState(false);
@@ -752,7 +758,11 @@ export const ProductDetails = () => {
                   </div>
                 )}
                 
-                {/* Heart Button */}
+                
+              </>
+            )}
+            
+            {/* Heart Button */}
                 
                 <motion.button 
                   whileTap={{ scale: 0.9 }}
@@ -779,8 +789,6 @@ export const ProductDetails = () => {
                 >
                   {user?.savedCharacters?.includes(product.id) ? <Icons.Check size={20} color="#fff" /> : <Plus size={20} color="#fff" />}
                 </motion.button>
-              </>
-            )}
           </motion.div>
           
           {/* Video Section below image */}
@@ -1033,7 +1041,7 @@ export const ProductDetails = () => {
         <motion.div 
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
-          style={{ display: 'flex', flexDirection: 'column', gap: '2rem', minWidth: 0, width: '100%' }}
+          style={{ display: 'flex', flexDirection: 'column', gap: '2rem', minWidth: 0, flex: 1 }}
         >
           <div>
             <div className="pd-title-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
