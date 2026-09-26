@@ -81,20 +81,22 @@ function AppContent() {
         document.head.appendChild(style);
       }
       style.innerHTML = `
-        html {
-          overflow-x: hidden !important;
-        }
-        body {
-          margin: 0 !important;
-          width: 111.11vw !important;
-          max-width: 111.11vw !important;
-          min-height: 111.11vh !important;
-          zoom: 0.9 !important;
-          overflow-x: hidden !important;
-        }
-        #root {
-          width: 111.11vw !important;
-          max-width: 111.11vw !important;
+        @media (min-width: 769px) {
+          html {
+            overflow-x: hidden !important;
+          }
+          body {
+            margin: 0 !important;
+            width: 111.11vw !important;
+            max-width: 111.11vw !important;
+            min-height: 111.11vh !important;
+            zoom: 0.9 !important;
+            overflow-x: hidden !important;
+          }
+          #root {
+            width: 111.11vw !important;
+            max-width: 111.11vw !important;
+          }
         }
       `;
       

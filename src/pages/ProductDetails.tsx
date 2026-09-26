@@ -765,7 +765,7 @@ export const ProductDetails = () => {
                     }
                   }}
                   style={{
-                    position: 'absolute', top: '1.5rem', left: '1.5rem', zIndex: 30,
+                    position: 'absolute', top: '1.5rem', right: '1.5rem', zIndex: 30,
                     background: user?.savedCharacters?.includes(product.id) ? 'rgba(36, 214, 115, 0.9)' : 'rgba(0,0,0,0.6)', 
                     border: user?.savedCharacters?.includes(product.id) ? '1px solid var(--color-accent)' : '1px solid var(--glass-border)',
                     borderRadius: '50%', width: '40px', height: '40px',
@@ -1100,8 +1100,7 @@ export const ProductDetails = () => {
               )}
             </div>
           </div>
-              </div>
-              <button className="pd-review-btn" 
+          <button className="pd-review-btn" 
                 onClick={handleOpenReview}
                 style={{
                   display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem',
@@ -1115,7 +1114,8 @@ export const ProductDetails = () => {
                 <div style={{ display: 'flex', color: '#fbbf24', fontSize: '1rem', letterSpacing: '1px' }}>★★★★★</div>
                 <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>{productReviews.length} Review</span>
               </button>
-            </div>
+        </div>
+      </div>
             
           <div className="material-size-wrapper"
  ref={reviewBoxRef} style={{ position: 'relative' }}>
