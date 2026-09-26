@@ -97,7 +97,7 @@ export const ProductDetails = () => {
     return () => clearTimeout(timer);
   }, []);
   const navigate = useNavigate();
-  const { products, updateProduct, addToCart, saveCharacter, unsaveCharacter, t, language, formatPrice, showToast, settings, user, reviews, orders, addReview, getSizeMultiplier, getSizeDetails: getStoreSizeDetails } = useStore();
+  const { products, updateProduct, addToCart, saveCharacter, unsaveCharacter, t, language, formatPrice, showToast, settings, user, reviews, orders, addReview, getSizeMultiplier, getSizeDetails: getStoreSizeDetails, loginWithGoogle } = useStore();
     let product = products.find(p => p.id === id) || mockProducts.find(p => p.id === id);
   const [isTopFan, setIsTopFan] = useState(false);
 
@@ -766,7 +766,12 @@ export const ProductDetails = () => {
                 
                 <motion.button 
                   whileTap={{ scale: 0.9 }}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (!user) {
+                      loginWithGoogle();
+                      return;
+                    }
                     const isSaved = user?.savedCharacters?.includes(product.id);
                     if (isSaved) {
                       unsaveCharacter(product.id);

@@ -6,8 +6,7 @@ code = code.replace(/const { products, updateProduct, addToCart, saveCharacter, 
 'const { products, updateProduct, addToCart, saveCharacter, unsaveCharacter, t, language, formatPrice, showToast, settings, user, reviews, orders, addReview, getSizeMultiplier, getSizeDetails: getStoreSizeDetails, loginWithGoogle } = useStore();');
 
 // Find the save button onClick and update it
-const target = `                  onClick={(e) => {
-                    e.stopPropagation();
+const target = `                  onClick={() => {
                     const isSaved = user?.savedCharacters?.includes(product.id);
                     if (isSaved) {
                       unsaveCharacter(product.id);
