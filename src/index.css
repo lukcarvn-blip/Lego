@@ -658,7 +658,7 @@ button {
 /* ── GLOBAL OVERFLOW GUARD ────────────────────────────────────── */
 html, body {
   overflow-x: hidden;
-  max-width: 100vw;
+  max-width: 100%;
 }
 
 /* ── CATEGORIES + COLLECTIONS RESPONSIVE ─────────────────────── */
@@ -1197,7 +1197,7 @@ input:focus, select:focus, textarea:focus {
     width: 100% !important;
     height: 100% !important;
     max-height: 100vh !important;
-    max-width: 100vw !important;
+    max-width: 100% !important;
     border-radius: 0 !important;
     padding: 1.25rem !important;
     overflow-y: auto;
@@ -1422,14 +1422,14 @@ input:focus, select:focus, textarea:focus {
 @media (max-width: 768px) {
   html, body, #root {
     overflow-x: hidden !important;
-    max-width: 100vw !important;
+    max-width: 100% !important;
     font-size: 14px !important;
   }
   
   /* Fix layout overflowing */
   .admin-layout {
     overflow-x: hidden !important;
-    max-width: 100vw !important;
+    max-width: 100% !important;
   }
 
   .admin-content {

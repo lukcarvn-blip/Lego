@@ -589,7 +589,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, idx = 0, list
               }}
             >
               <ShoppingCart size={16} style={{ flexShrink: 0 }} />
-              <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0, flexShrink: 1 }}>
                 {language === 'vi' ? 'THÊM VÀO GIỎ' : 'ADD TO CART'}
               </span>
             </button>
